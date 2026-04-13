@@ -1,0 +1,20 @@
+{
+  "HealthRecord": {
+    "id": "string",
+    "user_id": "string",
+    "household_id": "string",
+
+    "type": "medication | appointment | symptom | note",
+
+    "title": "string",
+    "description": "string",
+
+    "date": "string",
+
+    "severity": "low | medium | high | null",
+
+    "linked_event_id": "string | null",
+
+    "metadata": {}
+  }
+}

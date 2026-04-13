@@ -1,0 +1,25 @@
+{
+  "Event": {
+    "id": "string",
+    "user_id": "string",
+    "household_id": "string",
+
+    "title": "string",
+    "description": "string",
+
+    "start_time": "string",
+    "end_time": "string",
+
+    "timezone": "string",
+
+    "recurrence": "string | null",
+
+    "status": "scheduled | completed | canceled",
+
+    "source": "manual | email | system | agent",
+
+    "linked_tasks": ["string"],
+
+    "metadata": {}
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "User": {
+    "id": "string",
+    "household_id": "string",
+
+    "name": "string",
+    "role": "admin | adult | child | guest",
+
+    "email": "string",
+
+    "preferences": {},
+
+    "status": "active | inactive",
+
+    "metadata": {}
+  }
+}

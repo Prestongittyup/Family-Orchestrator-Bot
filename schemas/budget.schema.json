@@ -1,0 +1,22 @@
+{
+  "BudgetEntry": {
+    "id": "string",
+    "user_id": "string",
+    "household_id": "string",
+
+    "type": "income | expense",
+
+    "amount": "number",
+    "currency": "string",
+
+    "category": "string",
+
+    "date": "string",
+
+    "source": "manual | bank_sync | receipt",
+
+    "linked_task_id": "string | null",
+
+    "metadata": {}
+  }
+}

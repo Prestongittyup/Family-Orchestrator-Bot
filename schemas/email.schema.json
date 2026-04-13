@@ -1,0 +1,27 @@
+{
+  "Email": {
+    "id": "string",
+    "user_id": "string",
+    "household_id": "string",
+
+    "from": "string",
+    "to": ["string"],
+    "cc": ["string"],
+
+    "subject": "string",
+    "body": "string",
+
+    "received_at": "string",
+
+    "status": "unread | processed | archived | action_required",
+
+    "classification": "personal | work | finance | system | spam",
+
+    "linked_tasks": ["string"],
+    "linked_events": ["string"],
+
+    "source": "gmail | outlook | other",
+
+    "metadata": {}
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "SystemEvent": {
+    "id": "string",
+    "household_id": "string",
+
+    "type": "email_received | task_created | event_triggered | workflow_executed",
+
+    "source": "agent | system | user | external",
+
+    "payload": {},
+
+    "timestamp": "string",
+
+    "severity": "info | warning | critical",
+
+    "related_ids": ["string"],
+
+    "metadata": {}
+  }
+}
