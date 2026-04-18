@@ -1,0 +1,75 @@
+{
+  "household_id": "hh-alpha",
+  "orchestrator_output": {
+    "proposals": [
+      {
+        "id": "a-task-1",
+        "type": "task_action",
+        "title": "Morning meds",
+        "description": "reference=a-task-1; time_window=2026-04-16T08:00:00->2026-04-16T09:00:00",
+        "priority": 5,
+        "normalized_priority": 5.0,
+        "source_module": "task_module",
+        "duration": 1,
+        "effort": "low",
+        "category": "health"
+      },
+      {
+        "id": "a-cal-1",
+        "type": "prepare_for_event",
+        "title": "Prep school run",
+        "description": "reference=a-cal-1; time_window=2026-04-16T09:00:00->2026-04-16T10:00:00",
+        "priority": 4,
+        "normalized_priority": 4.0,
+        "source_module": "calendar_module",
+        "duration": 1,
+        "effort": "medium",
+        "category": "event_prep"
+      },
+      {
+        "id": "a-task-2",
+        "type": "task_action",
+        "title": "Laundry",
+        "description": "reference=a-task-2; time_window=2026-04-16T10:00:00->2026-04-16T11:00:00",
+        "priority": 3,
+        "normalized_priority": 3.0,
+        "source_module": "task_module",
+        "duration": 1,
+        "effort": "medium",
+        "category": "task"
+      }
+    ],
+    "signals": [
+      {
+        "id": "as1",
+        "type": "events_today",
+        "message": "events_today=1",
+        "severity": "medium",
+        "source_module": "calendar_module"
+      },
+      {
+        "id": "as2",
+        "type": "high_priority_events",
+        "message": "high_priority_events=0",
+        "severity": "low",
+        "source_module": "calendar_module"
+      }
+    ],
+    "semantic_layer": {
+      "ordering_index": [
+        {
+          "proposal_id": "a-task-1",
+          "position": 0
+        },
+        {
+          "proposal_id": "a-cal-1",
+          "position": 1
+        },
+        {
+          "proposal_id": "a-task-2",
+          "position": 2
+        }
+      ]
+    }
+  }
+}

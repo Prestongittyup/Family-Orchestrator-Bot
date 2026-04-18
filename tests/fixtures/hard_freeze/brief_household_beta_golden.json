@@ -1,0 +1,295 @@
+{
+  "household_id": "hh-beta",
+  "orchestrator_output": {
+    "proposals": [
+      {
+        "id": "b-task-1",
+        "type": "task_action",
+        "title": "Pay rent",
+        "description": "reference=b-task-1; time_window=2026-04-16T08:00:00->2026-04-16T09:00:00",
+        "priority": 5,
+        "normalized_priority": 5.0,
+        "source_module": "task_module",
+        "duration": 1,
+        "effort": "medium",
+        "category": "task"
+      },
+      {
+        "id": "b-cal-1",
+        "type": "leave_buffer_time",
+        "title": "Travel buffer",
+        "description": "reference=b-cal-1; time_window=2026-04-16T09:00:00->2026-04-16T10:00:00",
+        "priority": 4,
+        "normalized_priority": 4.0,
+        "source_module": "calendar_module",
+        "duration": 1,
+        "effort": "low",
+        "category": "event_prep"
+      },
+      {
+        "id": "b-task-2",
+        "type": "task_action",
+        "title": "Garage clean",
+        "description": "reference=b-task-2; time_window=2026-04-16T10:00:00->2026-04-16T12:00:00",
+        "priority": 3,
+        "normalized_priority": 3.0,
+        "source_module": "task_module",
+        "duration": 2,
+        "effort": "high",
+        "category": "maintenance"
+      }
+    ],
+    "signals": [
+      {
+        "id": "bs1",
+        "type": "events_today",
+        "message": "events_today=2",
+        "severity": "medium",
+        "source_module": "calendar_module"
+      },
+      {
+        "id": "bs2",
+        "type": "high_priority_events",
+        "message": "high_priority_events=1",
+        "severity": "high",
+        "source_module": "calendar_module"
+      }
+    ],
+    "semantic_layer": {
+      "ordering_index": [
+        {
+          "proposal_id": "b-task-1",
+          "position": 0
+        },
+        {
+          "proposal_id": "b-cal-1",
+          "position": 1
+        },
+        {
+          "proposal_id": "b-task-2",
+          "position": 2
+        }
+      ]
+    }
+  },
+  "expected": {
+    "date": "2026-04-15",
+    "financial": {
+      "items": []
+    },
+    "household_id": "hh-beta",
+    "interrupts": [],
+    "meals": {
+      "items": []
+    },
+    "meta": {
+      "decision_count": 3,
+      "deferred_count": 0,
+      "scheduled_count": 3
+    },
+    "personal_agendas": {
+      "notifications": [],
+      "tasks": [
+        {
+          "confidence": 0.6125,
+          "decision_type": "scheduled",
+          "description": "reference=b-task-1; time_window=2026-04-16T08:00:00->2026-04-16T09:00:00",
+          "duration": 1,
+          "duration_units": 1,
+          "end_time": "2026-04-16T09:00:00",
+          "normalized_priority": 5.0,
+          "ordering_position": 0,
+          "proposal_id": "b-task-1",
+          "reason": "scheduled_within_capacity",
+          "score": 0.6125,
+          "source_module": "task_module",
+          "start_time": "2026-04-16T08:00:00",
+          "time_bucket": "morning",
+          "title": "Pay rent"
+        },
+        {
+          "confidence": 0.4175,
+          "decision_type": "scheduled",
+          "description": "reference=b-task-2; time_window=2026-04-16T10:00:00->2026-04-16T12:00:00",
+          "duration": 2,
+          "duration_units": 2,
+          "end_time": "2026-04-16T13:00:00",
+          "normalized_priority": 3.0,
+          "ordering_position": 2,
+          "proposal_id": "b-task-2",
+          "reason": "scheduled_within_capacity",
+          "score": 0.4175,
+          "source_module": "task_module",
+          "start_time": "2026-04-16T11:00:00",
+          "time_bucket": "morning",
+          "title": "Garage clean"
+        }
+      ]
+    },
+    "priorities": [
+      {
+        "context_score": 0.55,
+        "normalized_priority": 0.6125,
+        "proposal_id": "b-task-1",
+        "rank": 1,
+        "score": 0.6125,
+        "source_module": "task_module",
+        "title": "Pay rent",
+        "urgency_score": 0.65
+      },
+      {
+        "context_score": 1.0,
+        "normalized_priority": 0.6125,
+        "proposal_id": "b-cal-1",
+        "rank": 2,
+        "score": 0.6125,
+        "source_module": "calendar_module",
+        "title": "Travel buffer",
+        "urgency_score": 0.65
+      },
+      {
+        "context_score": 0.55,
+        "normalized_priority": 0.4175,
+        "proposal_id": "b-task-2",
+        "rank": 3,
+        "score": 0.4175,
+        "source_module": "task_module",
+        "title": "Garage clean",
+        "urgency_score": 0.5
+      }
+    ],
+    "risks": [],
+    "schedule": [
+      {
+        "confidence": 0.6125,
+        "decision_type": "scheduled",
+        "description": "reference=b-cal-1; time_window=2026-04-16T09:00:00->2026-04-16T10:00:00",
+        "duration": 1,
+        "duration_units": 1,
+        "end_time": "2026-04-16T11:00:00",
+        "normalized_priority": 4.0,
+        "ordering_position": 1,
+        "proposal_id": "b-cal-1",
+        "reason": "scheduled_within_capacity",
+        "score": 0.6125,
+        "source_module": "calendar_module",
+        "start_time": "2026-04-16T10:00:00",
+        "time_bucket": "morning",
+        "title": "Travel buffer"
+      }
+    ],
+    "suggested_actions": [
+      {
+        "confidence": 0.6125,
+        "decision_type": "scheduled",
+        "description": "reference=b-task-1; time_window=2026-04-16T08:00:00->2026-04-16T09:00:00",
+        "duration": 1,
+        "duration_units": 1,
+        "end_time": "2026-04-16T09:00:00",
+        "normalized_priority": 5.0,
+        "ordering_position": 0,
+        "proposal_id": "b-task-1",
+        "reason": "scheduled_within_capacity",
+        "score": 0.6125,
+        "source_module": "task_module",
+        "start_time": "2026-04-16T08:00:00",
+        "time_bucket": "morning",
+        "title": "Pay rent"
+      },
+      {
+        "confidence": 0.6125,
+        "decision_type": "scheduled",
+        "description": "reference=b-cal-1; time_window=2026-04-16T09:00:00->2026-04-16T10:00:00",
+        "duration": 1,
+        "duration_units": 1,
+        "end_time": "2026-04-16T11:00:00",
+        "normalized_priority": 4.0,
+        "ordering_position": 1,
+        "proposal_id": "b-cal-1",
+        "reason": "scheduled_within_capacity",
+        "score": 0.6125,
+        "source_module": "calendar_module",
+        "start_time": "2026-04-16T10:00:00",
+        "time_bucket": "morning",
+        "title": "Travel buffer"
+      },
+      {
+        "confidence": 0.4175,
+        "decision_type": "scheduled",
+        "description": "reference=b-task-2; time_window=2026-04-16T10:00:00->2026-04-16T12:00:00",
+        "duration": 2,
+        "duration_units": 2,
+        "end_time": "2026-04-16T13:00:00",
+        "normalized_priority": 3.0,
+        "ordering_position": 2,
+        "proposal_id": "b-task-2",
+        "reason": "scheduled_within_capacity",
+        "score": 0.4175,
+        "source_module": "task_module",
+        "start_time": "2026-04-16T11:00:00",
+        "time_bucket": "morning",
+        "title": "Garage clean"
+      }
+    ],
+    "suggestions": [],
+    "summary_text": "3 scheduled actions, 0 deferred actions, 0 warnings, 0 risks.",
+    "time_based_schedule": {
+      "afternoon": [],
+      "evening": [],
+      "morning": [
+        {
+          "confidence": 0.6125,
+          "decision_type": "scheduled",
+          "description": "reference=b-task-1; time_window=2026-04-16T08:00:00->2026-04-16T09:00:00",
+          "duration": 1,
+          "duration_units": 1,
+          "end_time": "2026-04-16T09:00:00",
+          "normalized_priority": 5.0,
+          "ordering_position": 0,
+          "proposal_id": "b-task-1",
+          "reason": "scheduled_within_capacity",
+          "score": 0.6125,
+          "source_module": "task_module",
+          "start_time": "2026-04-16T08:00:00",
+          "time_bucket": "morning",
+          "title": "Pay rent"
+        },
+        {
+          "confidence": 0.6125,
+          "decision_type": "scheduled",
+          "description": "reference=b-cal-1; time_window=2026-04-16T09:00:00->2026-04-16T10:00:00",
+          "duration": 1,
+          "duration_units": 1,
+          "end_time": "2026-04-16T11:00:00",
+          "normalized_priority": 4.0,
+          "ordering_position": 1,
+          "proposal_id": "b-cal-1",
+          "reason": "scheduled_within_capacity",
+          "score": 0.6125,
+          "source_module": "calendar_module",
+          "start_time": "2026-04-16T10:00:00",
+          "time_bucket": "morning",
+          "title": "Travel buffer"
+        },
+        {
+          "confidence": 0.4175,
+          "decision_type": "scheduled",
+          "description": "reference=b-task-2; time_window=2026-04-16T10:00:00->2026-04-16T12:00:00",
+          "duration": 2,
+          "duration_units": 2,
+          "end_time": "2026-04-16T13:00:00",
+          "normalized_priority": 3.0,
+          "ordering_position": 2,
+          "proposal_id": "b-task-2",
+          "reason": "scheduled_within_capacity",
+          "score": 0.4175,
+          "source_module": "task_module",
+          "start_time": "2026-04-16T11:00:00",
+          "time_bucket": "morning",
+          "title": "Garage clean"
+        }
+      ]
+    },
+    "warnings": []
+  }
+}

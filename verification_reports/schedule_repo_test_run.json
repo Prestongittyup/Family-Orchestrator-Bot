@@ -1,0 +1,170 @@
+{
+  "run_id": "4502effa-c65b-5fd5-bf18-8a98b3ae948e",
+  "timestamp": "2026-04-14T12:00:00+00:00",
+  "environment": "test",
+  "tests": [
+    {
+      "test_id": 1,
+      "name": "Create Valid Schedule",
+      "result": "PASS",
+      "expected_state": {
+        "row_count": 1,
+        "row": {
+          "schedule_id": "11111111-1111-1111-1111-111111111111",
+          "status": "pending",
+          "retry_count": 0,
+          "max_retries": 3,
+          "run_at": "2026-04-14T10:00:00+00:00",
+          "idempotency_key": "key-1"
+        }
+      },
+      "actual_state": {
+        "row_count": 1,
+        "row": {
+          "schedule_id": "11111111-1111-1111-1111-111111111111",
+          "status": "pending",
+          "retry_count": 0,
+          "max_retries": 3,
+          "run_at": "2026-04-14T10:00:00+00:00",
+          "idempotency_key": "key-1"
+        }
+      },
+      "diff": {
+        "missing_fields": [],
+        "unexpected_fields": [],
+        "mismatched_values": {}
+      }
+    },
+    {
+      "test_id": 2,
+      "name": "Idempotency Enforcement",
+      "result": "PASS",
+      "expected_state": {
+        "error_type": "FakeUniqueViolation",
+        "row_count": 1
+      },
+      "actual_state": {
+        "error_type": "FakeUniqueViolation",
+        "row_count": 1
+      },
+      "diff": {
+        "missing_fields": [],
+        "unexpected_fields": [],
+        "mismatched_values": {}
+      }
+    },
+    {
+      "test_id": 3,
+      "name": "Valid Status Transition",
+      "result": "PASS",
+      "expected_state": {
+        "status": "claimed",
+        "updated_at_changed": true
+      },
+      "actual_state": {
+        "status": "claimed",
+        "updated_at_changed": true
+      },
+      "diff": {
+        "missing_fields": [],
+        "unexpected_fields": [],
+        "mismatched_values": {}
+      }
+    },
+    {
+      "test_id": 4,
+      "name": "Invalid Status Rejected",
+      "result": "PASS",
+      "expected_state": {
+        "error_type": "FakeEnumViolation",
+        "status": "pending"
+      },
+      "actual_state": {
+        "error_type": "FakeEnumViolation",
+        "status": "pending"
+      },
+      "diff": {
+        "missing_fields": [],
+        "unexpected_fields": [],
+        "mismatched_values": {}
+      }
+    },
+    {
+      "test_id": 5,
+      "name": "Increment Retry",
+      "result": "PASS",
+      "expected_state": {
+        "retry_count": 1,
+        "returned_retry_count": 1
+      },
+      "actual_state": {
+        "retry_count": 1,
+        "returned_retry_count": 1
+      },
+      "diff": {
+        "missing_fields": [],
+        "unexpected_fields": [],
+        "mismatched_values": {}
+      }
+    },
+    {
+      "test_id": 6,
+      "name": "Update Run Time",
+      "result": "PASS",
+      "expected_state": {
+        "run_at": "2026-04-14T11:00:00+00:00",
+        "updated_at_changed": true,
+        "other_fields_unchanged": true
+      },
+      "actual_state": {
+        "run_at": "2026-04-14T11:00:00+00:00",
+        "updated_at_changed": true,
+        "other_fields_unchanged": true
+      },
+      "diff": {
+        "missing_fields": [],
+        "unexpected_fields": [],
+        "mismatched_values": {}
+      }
+    },
+    {
+      "test_id": 7,
+      "name": "Update Non-Existent Row",
+      "result": "PASS",
+      "expected_state": {
+        "error_type": "LookupError",
+        "row_count": 0
+      },
+      "actual_state": {
+        "error_type": "LookupError",
+        "row_count": 0
+      },
+      "diff": {
+        "missing_fields": [],
+        "unexpected_fields": [],
+        "mismatched_values": {}
+      }
+    },
+    {
+      "test_id": 8,
+      "name": "Observability Requirements",
+      "result": "PASS",
+      "expected_state": {
+        "log_count": 4,
+        "fields_valid": true,
+        "event_types_valid": true
+      },
+      "actual_state": {
+        "log_count": 4,
+        "fields_valid": true,
+        "event_types_valid": true
+      },
+      "diff": {
+        "missing_fields": [],
+        "unexpected_fields": [],
+        "mismatched_values": {}
+      }
+    }
+  ],
+  "final_result": "PASS"
+}

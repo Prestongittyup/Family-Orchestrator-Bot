@@ -27,3 +27,19 @@ def create_task(household_id: str, title: str) -> Task:
 
     finally:
         session.close()
+
+
+def update_task_metadata(task_id: str, priority: str, category: str | None = None) -> None:
+    """Update priority and metadata category on an existing task."""
+    session = SessionLocal()
+    try:
+        task = session.get(Task, task_id)
+        if task is None:
+            return
+        task.priority = priority
+        if category is not None:
+            task.description = category
+        session.commit()
+    finally:
+        session.close()
+

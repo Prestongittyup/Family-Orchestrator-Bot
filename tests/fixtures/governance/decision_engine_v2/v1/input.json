@@ -1,0 +1,68 @@
+{
+  "calendar_events": [
+    {
+      "start_time": "2026-04-16T09:00:00",
+      "end_time": "2026-04-16T10:00:00",
+      "source": "calendar_events"
+    },
+    {
+      "start_time": "2026-04-16T12:00:00",
+      "end_time": "2026-04-16T13:00:00",
+      "source": "calendar_events"
+    }
+  ],
+  "signals": [
+    {
+      "id": "s1",
+      "type": "events_today",
+      "message": "events_today=2",
+      "severity": "medium",
+      "source_module": "calendar_module"
+    },
+    {
+      "id": "s2",
+      "type": "high_priority_events",
+      "message": "high_priority_events=1",
+      "severity": "high",
+      "source_module": "calendar_module"
+    }
+  ],
+  "proposals": [
+    {
+      "id": "p1",
+      "type": "task_action",
+      "title": "Pay Electricity",
+      "description": "reference=p1; time_window=2026-04-16T10:00:00->2026-04-16T11:00:00",
+      "priority": 9.0,
+      "normalized_priority": 9.0,
+      "source_module": "task_module",
+      "duration": 1,
+      "effort": "medium",
+      "category": "task"
+    },
+    {
+      "id": "p2",
+      "type": "prepare_for_event",
+      "title": "Prepare for Meeting",
+      "description": "reference=evt-1; time_window=2026-04-16T11:00:00->2026-04-16T12:00:00",
+      "priority": 8.5,
+      "normalized_priority": 8.5,
+      "source_module": "calendar_module",
+      "duration": 1,
+      "effort": "low",
+      "category": "event_prep"
+    },
+    {
+      "id": "p3",
+      "type": "task_action",
+      "title": "Deep Cleaning",
+      "description": "reference=p3; time_window=2026-04-16T13:00:00->2026-04-16T15:00:00",
+      "priority": 6.0,
+      "normalized_priority": 6.0,
+      "source_module": "task_module",
+      "duration": 2,
+      "effort": "high",
+      "category": "maintenance"
+    }
+  ]
+}

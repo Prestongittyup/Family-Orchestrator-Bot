@@ -1,0 +1,262 @@
+{
+  "input": {
+    "calendar_events": [
+      {
+        "start_time": "2026-04-16T09:00:00",
+        "end_time": "2026-04-16T10:00:00",
+        "source": "calendar_events"
+      },
+      {
+        "start_time": "2026-04-16T12:00:00",
+        "end_time": "2026-04-16T13:00:00",
+        "source": "calendar_events"
+      }
+    ],
+    "signals": [
+      {
+        "id": "s1",
+        "type": "events_today",
+        "message": "events_today=2",
+        "severity": "medium",
+        "source_module": "calendar_module"
+      },
+      {
+        "id": "s2",
+        "type": "high_priority_events",
+        "message": "high_priority_events=1",
+        "severity": "high",
+        "source_module": "calendar_module"
+      }
+    ],
+    "proposals": [
+      {
+        "id": "p1",
+        "type": "task_action",
+        "title": "Pay Electricity",
+        "description": "reference=p1; time_window=2026-04-16T10:00:00->2026-04-16T11:00:00",
+        "priority": 9.0,
+        "normalized_priority": 9.0,
+        "source_module": "task_module",
+        "duration": 1,
+        "effort": "medium",
+        "category": "task"
+      },
+      {
+        "id": "p2",
+        "type": "prepare_for_event",
+        "title": "Prepare for Meeting",
+        "description": "reference=evt-1; time_window=2026-04-16T11:00:00->2026-04-16T12:00:00",
+        "priority": 8.5,
+        "normalized_priority": 8.5,
+        "source_module": "calendar_module",
+        "duration": 1,
+        "effort": "low",
+        "category": "event_prep"
+      },
+      {
+        "id": "p3",
+        "type": "task_action",
+        "title": "Deep Cleaning",
+        "description": "reference=p3; time_window=2026-04-16T13:00:00->2026-04-16T15:00:00",
+        "priority": 6.0,
+        "normalized_priority": 6.0,
+        "source_module": "task_module",
+        "duration": 2,
+        "effort": "high",
+        "category": "maintenance"
+      }
+    ]
+  },
+  "expected": {
+    "priorities": [
+      {
+        "rank": 1,
+        "proposal_id": "p2",
+        "source_module": "calendar_module",
+        "score": 0.8,
+        "priority_hint": 0.85,
+        "urgency_score": 0.5,
+        "context_score": 1.0,
+        "duration": 1,
+        "effort": "low",
+        "category": "event_prep"
+      },
+      {
+        "rank": 2,
+        "proposal_id": "p1",
+        "source_module": "task_module",
+        "score": 0.775,
+        "priority_hint": 0.9,
+        "urgency_score": 0.5,
+        "context_score": 0.55,
+        "duration": 1,
+        "effort": "medium",
+        "category": "task"
+      },
+      {
+        "rank": 3,
+        "proposal_id": "p3",
+        "source_module": "task_module",
+        "score": 0.5675,
+        "priority_hint": 0.6,
+        "urgency_score": 0.5,
+        "context_score": 0.55,
+        "duration": 2,
+        "effort": "high",
+        "category": "maintenance"
+      }
+    ],
+    "calendar_events": [
+      {
+        "start_time": "2026-04-16T09:00:00",
+        "end_time": "2026-04-16T10:00:00",
+        "source": "calendar_events"
+      },
+      {
+        "start_time": "2026-04-16T12:00:00",
+        "end_time": "2026-04-16T13:00:00",
+        "source": "calendar_events"
+      }
+    ],
+    "scheduled_actions": [
+      {
+        "proposal_id": "p2",
+        "source_module": "calendar_module",
+        "type": "prepare_for_event",
+        "priority_hint": 0.85,
+        "urgency_score": 0.5,
+        "context_score": 1.0,
+        "effort": "low",
+        "effort_weight": 1.0,
+        "category": "event_prep",
+        "score": 0.8,
+        "duration_units": 1,
+        "preferred_bucket": "morning",
+        "bucket": "morning",
+        "start_time": "2026-04-16T08:00:00",
+        "end_time": "2026-04-16T09:00:00"
+      },
+      {
+        "proposal_id": "p1",
+        "source_module": "task_module",
+        "type": "task_action",
+        "priority_hint": 0.9,
+        "urgency_score": 0.5,
+        "context_score": 0.55,
+        "effort": "medium",
+        "effort_weight": 0.9,
+        "category": "task",
+        "score": 0.775,
+        "duration_units": 1,
+        "preferred_bucket": "morning",
+        "bucket": "morning",
+        "start_time": "2026-04-16T10:00:00",
+        "end_time": "2026-04-16T11:00:00"
+      },
+      {
+        "proposal_id": "p3",
+        "source_module": "task_module",
+        "type": "task_action",
+        "priority_hint": 0.6,
+        "urgency_score": 0.5,
+        "context_score": 0.55,
+        "effort": "high",
+        "effort_weight": 0.75,
+        "category": "maintenance",
+        "score": 0.5675,
+        "duration_units": 2,
+        "preferred_bucket": "afternoon",
+        "bucket": "afternoon",
+        "start_time": "2026-04-16T13:00:00",
+        "end_time": "2026-04-16T15:00:00"
+      }
+    ],
+    "unscheduled_actions": [],
+    "warnings": [],
+    "risks": [
+      {
+        "type": "event_with_no_prep_buffer",
+        "reference": "evt-1",
+        "reason": "Preparation exists but buffer allocation was not scheduled."
+      }
+    ],
+    "day_1_schedule": [
+      {
+        "proposal_id": "p2",
+        "source_module": "calendar_module",
+        "type": "prepare_for_event",
+        "priority_hint": 0.85,
+        "urgency_score": 0.5,
+        "context_score": 1.0,
+        "effort": "low",
+        "effort_weight": 1.0,
+        "category": "event_prep",
+        "score": 0.8,
+        "duration_units": 1,
+        "preferred_bucket": "morning",
+        "bucket": "morning",
+        "start_time": "2026-04-16T08:00:00",
+        "end_time": "2026-04-16T09:00:00"
+      },
+      {
+        "proposal_id": "p1",
+        "source_module": "task_module",
+        "type": "task_action",
+        "priority_hint": 0.9,
+        "urgency_score": 0.5,
+        "context_score": 0.55,
+        "effort": "medium",
+        "effort_weight": 0.9,
+        "category": "task",
+        "score": 0.775,
+        "duration_units": 1,
+        "preferred_bucket": "morning",
+        "bucket": "morning",
+        "start_time": "2026-04-16T10:00:00",
+        "end_time": "2026-04-16T11:00:00"
+      },
+      {
+        "proposal_id": "p3",
+        "source_module": "task_module",
+        "type": "task_action",
+        "priority_hint": 0.6,
+        "urgency_score": 0.5,
+        "context_score": 0.55,
+        "effort": "high",
+        "effort_weight": 0.75,
+        "category": "maintenance",
+        "score": 0.5675,
+        "duration_units": 2,
+        "preferred_bucket": "afternoon",
+        "bucket": "afternoon",
+        "start_time": "2026-04-16T13:00:00",
+        "end_time": "2026-04-16T15:00:00"
+      }
+    ],
+    "day_2_schedule": [],
+    "day_3_schedule": [],
+    "backlog": [],
+    "_internal": {
+      "schedule_score": 3.0,
+      "baseline_schedule_score": 3.0,
+      "optimization_applied": false,
+      "daily_load_balancer": {
+        "day_1": {
+          "total_capacity_used": 4.0,
+          "remaining_slack": 7.0,
+          "overload_penalty": 0.0
+        },
+        "day_2": {
+          "total_capacity_used": 0.0,
+          "remaining_slack": 13.0,
+          "overload_penalty": 0.0
+        },
+        "day_3": {
+          "total_capacity_used": 0.0,
+          "remaining_slack": 13.0,
+          "overload_penalty": 0.0
+        }
+      }
+    }
+  }
+}

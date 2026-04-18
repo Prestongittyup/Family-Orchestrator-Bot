@@ -1,0 +1,75 @@
+{
+  "household_id": "hh-beta",
+  "orchestrator_output": {
+    "proposals": [
+      {
+        "id": "b-task-1",
+        "type": "task_action",
+        "title": "Pay rent",
+        "description": "reference=b-task-1; time_window=2026-04-16T08:00:00->2026-04-16T09:00:00",
+        "priority": 5,
+        "normalized_priority": 5.0,
+        "source_module": "task_module",
+        "duration": 1,
+        "effort": "medium",
+        "category": "task"
+      },
+      {
+        "id": "b-cal-1",
+        "type": "leave_buffer_time",
+        "title": "Travel buffer",
+        "description": "reference=b-cal-1; time_window=2026-04-16T09:00:00->2026-04-16T10:00:00",
+        "priority": 4,
+        "normalized_priority": 4.0,
+        "source_module": "calendar_module",
+        "duration": 1,
+        "effort": "low",
+        "category": "event_prep"
+      },
+      {
+        "id": "b-task-2",
+        "type": "task_action",
+        "title": "Garage clean",
+        "description": "reference=b-task-2; time_window=2026-04-16T10:00:00->2026-04-16T12:00:00",
+        "priority": 3,
+        "normalized_priority": 3.0,
+        "source_module": "task_module",
+        "duration": 2,
+        "effort": "high",
+        "category": "maintenance"
+      }
+    ],
+    "signals": [
+      {
+        "id": "bs1",
+        "type": "events_today",
+        "message": "events_today=2",
+        "severity": "medium",
+        "source_module": "calendar_module"
+      },
+      {
+        "id": "bs2",
+        "type": "high_priority_events",
+        "message": "high_priority_events=1",
+        "severity": "high",
+        "source_module": "calendar_module"
+      }
+    ],
+    "semantic_layer": {
+      "ordering_index": [
+        {
+          "proposal_id": "b-task-1",
+          "position": 0
+        },
+        {
+          "proposal_id": "b-cal-1",
+          "position": 1
+        },
+        {
+          "proposal_id": "b-task-2",
+          "position": 2
+        }
+      ]
+    }
+  }
+}

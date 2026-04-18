@@ -1,0 +1,7 @@
+{
+  "version": "v1",
+  "created_at_utc": "2026-04-15T20:09:08.317951Z",
+  "source_fixture": "tests/fixtures/hard_freeze/brief_household_alpha_golden.json",
+  "schema_hash": "aaea82a1340a315b326b3dcf5a617782e4f755b7cbd11f50efbed7fa062b2a26",
+  "value_hash": "16c68ad259d13edcb6131e0d2172701c593af6a1f2304bf151496e60a1a9b562"
+}

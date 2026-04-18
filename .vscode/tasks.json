@@ -1,0 +1,553 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run architecture tests",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/architecture/test_dependency_graph.py",
+				"tests/architecture/test_fetch_boundary.py",
+				"tests/architecture/test_single_fetch_source.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Run architecture tests",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/architecture/test_dependency_graph.py",
+				"tests/architecture/test_fetch_boundary.py",
+				"tests/architecture/test_single_fetch_source.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Run architecture tests",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/architecture/test_dependency_graph.py",
+				"tests/architecture/test_fetch_boundary.py",
+				"tests/architecture/test_single_fetch_source.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Run architecture tests",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/architecture/test_dependency_graph.py",
+				"tests/architecture/test_fetch_boundary.py",
+				"tests/architecture/test_single_fetch_source.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Run refactor impacted tests",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_google_calendar_integration_surface.py",
+				"tests/test_google_oauth_missing_config_safe_boot.py",
+				"tests/test_household_state.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Run refactor impacted tests",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_google_calendar_integration_surface.py",
+				"tests/test_google_oauth_missing_config_safe_boot.py",
+				"tests/test_household_state.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Run architecture+impacted tests",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/architecture/test_dependency_graph.py",
+				"tests/architecture/test_fetch_boundary.py",
+				"tests/architecture/test_single_fetch_source.py",
+				"tests/test_google_calendar_integration_surface.py",
+				"tests/test_google_oauth_missing_config_safe_boot.py",
+				"tests/test_household_state.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "pytest-brief-state-refactor",
+			"type": "shell",
+			"command": "c:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/.venv/Scripts/python.exe",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_brief_builder.py",
+				"tests/test_household_state.py",
+				"tests/test_google_calendar_integration_surface.py",
+				"tests/test_google_oauth_missing_config_safe_boot.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "pytest-architecture-brief-refactor",
+			"type": "shell",
+			"command": "c:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/.venv/Scripts/python.exe",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/architecture/test_dependency_graph.py",
+				"tests/architecture/test_fetch_boundary.py",
+				"tests/architecture/test_single_fetch_source.py",
+				"tests/test_brief_builder.py",
+				"tests/test_google_calendar_integration_surface.py",
+				"tests/test_google_oauth_missing_config_safe_boot.py",
+				"tests/test_household_state.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "pytest-state-windowing",
+			"type": "shell",
+			"command": "c:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/.venv/Scripts/python.exe",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_event_windowing.py",
+				"tests/test_household_state.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "pytest-architecture-windowing",
+			"type": "shell",
+			"command": "c:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/.venv/Scripts/python.exe",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/architecture/test_dependency_graph.py",
+				"tests/architecture/test_fetch_boundary.py",
+				"tests/architecture/test_single_fetch_source.py",
+				"tests/test_event_windowing.py",
+				"tests/test_household_state.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "pytest-state-windowing-rerun",
+			"type": "shell",
+			"command": "c:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/.venv/Scripts/python.exe",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_event_windowing.py",
+				"tests/test_household_state.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "pytest-architecture-windowing-rerun",
+			"type": "shell",
+			"command": "c:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/.venv/Scripts/python.exe",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/architecture/test_dependency_graph.py",
+				"tests/architecture/test_fetch_boundary.py",
+				"tests/architecture/test_single_fetch_source.py",
+				"tests/test_event_windowing.py",
+				"tests/test_household_state.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "pytest-oauth-refresh-flow",
+			"type": "shell",
+			"command": "c:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/.venv/Scripts/python.exe",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_google_oauth_env_config.py",
+				"tests/test_google_calendar_integration_surface.py",
+				"-q"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "pytest-brief-builder",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_brief_builder.py",
+				"-xvs"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-architecture",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_architecture_suite.py",
+				"-q"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-arch-guard",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_integration_architecture_guard.py",
+				"-q"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-core-suite",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_integration_core_suite.py",
+				"-q"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-brief-state-window",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_brief_builder.py",
+				"tests/test_household_state.py",
+				"tests/test_event_windowing.py",
+				"-q"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-brief-refactor",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_brief_builder.py",
+				"-xvs"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-verify-brief-refactor",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_integration_architecture_guard.py",
+				"tests/test_brief_builder.py",
+				"tests/test_household_state.py",
+				"-q"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-brief-demo",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_brief_builder.py::test_brief_uses_state_only",
+				"-xvs",
+				"--tb=short"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-logging-verify",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_brief_builder.py",
+				"tests/test_integration_architecture_guard.py",
+				"-xvs"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-logging-full",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_brief_builder.py",
+				"tests/test_household_state.py",
+				"tests/test_event_windowing.py",
+				"tests/test_integration_architecture_guard.py",
+				"-q"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-decision-engine",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_decision_engine.py",
+				"-xvs"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-decision-full",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_decision_engine.py",
+				"tests/test_brief_builder.py",
+				"tests/test_integration_architecture_guard.py",
+				"-q"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "verify-decision-imports",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-c",
+				"from apps.api.integration_core import DecisionEngine, DecisionContext, ScoredEvent, EventConflict; print('✓ All imports successful')"
+			],
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "verify-imports",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"verify_decision_engine.py"
+			],
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "pytest-decision-integration",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_decision_engine_integration.py",
+				"-xvs"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-decision-integration-2",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_decision_engine_integration.py",
+				"-xvs"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-decision-final",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_decision_engine_integration.py",
+				"-v"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-full-integration",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_brief_builder.py",
+				"tests/test_decision_engine.py",
+				"tests/test_decision_engine_integration.py",
+				"tests/test_integration_architecture_guard.py",
+				"-q"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-final-comprehensive",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_decision_engine_integration.py",
+				"tests/test_brief_builder.py",
+				"-v",
+				"--tb=short"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-decision-targeted",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/decision/test_decision_engine.py",
+				"tests/test_decision_engine.py",
+				"tests/test_decision_engine_integration.py",
+				"tests/test_brief_builder.py",
+				"-q"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-full-regression",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-required-regressions",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_integration_architecture_guard.py",
+				"tests/test_google_oauth_env_config.py",
+				"tests/test_household_state.py",
+				"tests/test_brief_builder.py",
+				"tests/decision/test_decision_engine.py",
+				"tests/test_decision_engine_integration.py",
+				"-q"
+			],
+			"problemMatcher": [
+				"$pytest"
+			],
+			"group": "test"
+		}
+	]
+}

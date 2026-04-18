@@ -1,0 +1,142 @@
+{
+  "report_type": "governance_diff_report",
+  "status": "pass",
+  "tracks": [
+    {
+      "track_id": "decision_engine_v2",
+      "version": "v1",
+      "classification": "SAFE",
+      "replay_deterministic": true,
+      "diff": {
+        "expected_schema_hash": "25cdff7078032245794c67c90f7931167ad79da2a679744fe54891a3adacb797",
+        "actual_schema_hash": "25cdff7078032245794c67c90f7931167ad79da2a679744fe54891a3adacb797",
+        "expected_value_hash": "d2eb98daa10c2bd3caedd24eaa0d7cae82b2ab2908d1d49a4eeabc4d40fe1c77",
+        "actual_value_hash": "d2eb98daa10c2bd3caedd24eaa0d7cae82b2ab2908d1d49a4eeabc4d40fe1c77",
+        "value_equal": true,
+        "schema_equal": true,
+        "expected_top_level_keys": [
+          "_internal",
+          "backlog",
+          "calendar_events",
+          "day_1_schedule",
+          "day_2_schedule",
+          "day_3_schedule",
+          "priorities",
+          "risks",
+          "scheduled_actions",
+          "unscheduled_actions",
+          "warnings"
+        ],
+        "actual_top_level_keys": [
+          "_internal",
+          "backlog",
+          "calendar_events",
+          "day_1_schedule",
+          "day_2_schedule",
+          "day_3_schedule",
+          "priorities",
+          "risks",
+          "scheduled_actions",
+          "unscheduled_actions",
+          "warnings"
+        ]
+      }
+    },
+    {
+      "track_id": "brief/household_alpha",
+      "version": "v1",
+      "classification": "SAFE",
+      "replay_deterministic": true,
+      "diff": {
+        "expected_schema_hash": "aaea82a1340a315b326b3dcf5a617782e4f755b7cbd11f50efbed7fa062b2a26",
+        "actual_schema_hash": "aaea82a1340a315b326b3dcf5a617782e4f755b7cbd11f50efbed7fa062b2a26",
+        "expected_value_hash": "16c68ad259d13edcb6131e0d2172701c593af6a1f2304bf151496e60a1a9b562",
+        "actual_value_hash": "16c68ad259d13edcb6131e0d2172701c593af6a1f2304bf151496e60a1a9b562",
+        "value_equal": true,
+        "schema_equal": true,
+        "expected_top_level_keys": [
+          "date",
+          "financial",
+          "household_id",
+          "interrupts",
+          "meals",
+          "meta",
+          "personal_agendas",
+          "priorities",
+          "risks",
+          "schedule",
+          "suggested_actions",
+          "suggestions",
+          "summary_text",
+          "time_based_schedule",
+          "warnings"
+        ],
+        "actual_top_level_keys": [
+          "date",
+          "financial",
+          "household_id",
+          "interrupts",
+          "meals",
+          "meta",
+          "personal_agendas",
+          "priorities",
+          "risks",
+          "schedule",
+          "suggested_actions",
+          "suggestions",
+          "summary_text",
+          "time_based_schedule",
+          "warnings"
+        ]
+      }
+    },
+    {
+      "track_id": "brief/household_beta",
+      "version": "v1",
+      "classification": "SAFE",
+      "replay_deterministic": true,
+      "diff": {
+        "expected_schema_hash": "647eca4dda11466e414ecae931ad4f08defa80bba7e72f46557a04e43fd4d5e2",
+        "actual_schema_hash": "647eca4dda11466e414ecae931ad4f08defa80bba7e72f46557a04e43fd4d5e2",
+        "expected_value_hash": "f1e0a0e111ea572b83bf84392e37bbfb097ff19985d2e2bbedbc963db764e7db",
+        "actual_value_hash": "f1e0a0e111ea572b83bf84392e37bbfb097ff19985d2e2bbedbc963db764e7db",
+        "value_equal": true,
+        "schema_equal": true,
+        "expected_top_level_keys": [
+          "date",
+          "financial",
+          "household_id",
+          "interrupts",
+          "meals",
+          "meta",
+          "personal_agendas",
+          "priorities",
+          "risks",
+          "schedule",
+          "suggested_actions",
+          "suggestions",
+          "summary_text",
+          "time_based_schedule",
+          "warnings"
+        ],
+        "actual_top_level_keys": [
+          "date",
+          "financial",
+          "household_id",
+          "interrupts",
+          "meals",
+          "meta",
+          "personal_agendas",
+          "priorities",
+          "risks",
+          "schedule",
+          "suggested_actions",
+          "suggestions",
+          "summary_text",
+          "time_based_schedule",
+          "warnings"
+        ]
+      }
+    }
+  ]
+}

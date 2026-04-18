@@ -1,0 +1,7 @@
+{
+  "version": "v1",
+  "created_at_utc": "2026-04-15T20:09:08.312446Z",
+  "source_fixture": "tests/fixtures/hard_freeze/decision_v2_golden.json",
+  "schema_hash": "25cdff7078032245794c67c90f7931167ad79da2a679744fe54891a3adacb797",
+  "value_hash": "d2eb98daa10c2bd3caedd24eaa0d7cae82b2ab2908d1d49a4eeabc4d40fe1c77"
+}
