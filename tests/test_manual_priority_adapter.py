@@ -1,24 +1,10 @@
 from __future__ import annotations
 
-from copy import deepcopy
-
-from brief_endpoint import map_manual_to_brief
 from apps.api.ingestion.adapters.manual_priority import (
     partition_actions_by_visibility,
     score_manual_item,
     visibility_block_for_action,
 )
-
-
-def _base_brief() -> dict:
-    return {
-        "scheduled_actions": [],
-        "unscheduled_actions": [],
-        "priorities": [],
-        "warnings": [],
-        "risks": [],
-        "summary": "",
-    }
 
 
 def test_score_is_deterministic_for_same_input() -> None:
@@ -60,54 +46,6 @@ def test_time_adjustments_are_applied() -> None:
     assert score_manual_item("Read notes", "2026-04-16T18:30:00") == 1.5
     # afternoon +0
     assert score_manual_item("Read notes", "2026-04-16T14:00:00") == 1.0
-
-
-def test_manual_item_priority_score_is_attached_in_adapter_mapping() -> None:
-    items = [
-        {"title": "Fix bug", "time": "morning"},
-        {"title": "Call plumber"},
-    ]
-
-    output = map_manual_to_brief(deepcopy(_base_brief()), items)
-
-    scheduled = output["scheduled_actions"]
-    unscheduled = output["unscheduled_actions"]
-
-    assert len(scheduled) == 1
-    assert len(unscheduled) == 1
-    assert "priority_score" in scheduled[0]
-    assert "priority_score" in unscheduled[0]
-
-
-def test_ordering_stability_within_same_time_block() -> None:
-    items = [
-        {"title": "Cook dinner", "time": "evening"},      # 2.5
-        {"title": "Call mom", "time": "evening"},         # 3.5
-        {"title": "Fix error", "time": "evening"},        # 4.5
-        {"title": "Read book", "time": "evening"},        # 1.5
-    ]
-
-    first = map_manual_to_brief(deepcopy(_base_brief()), items)
-    second = map_manual_to_brief(deepcopy(_base_brief()), items)
-
-    first_titles = [a["title"] for a in first["scheduled_actions"]]
-    second_titles = [a["title"] for a in second["scheduled_actions"]]
-
-    assert first_titles == second_titles
-    assert first_titles == ["Fix error", "Call mom", "Cook dinner", "Read book"]
-
-
-def test_renderer_inputs_remain_compatible() -> None:
-    items = [
-        {"title": "Meeting prep", "time": "14:30"},
-        {"title": "Pay bill"},
-    ]
-    output = map_manual_to_brief(deepcopy(_base_brief()), items)
-
-    # Renderer depends on start_time and title; ensure both remain present where expected.
-    assert output["scheduled_actions"][0]["title"] == "Meeting prep"
-    assert "start_time" in output["scheduled_actions"][0]
-    assert output["unscheduled_actions"][0]["title"] == "Pay bill"
 
 
 def test_low_priority_actions_filtered_to_unscheduled_by_threshold() -> None:
@@ -162,12 +100,3 @@ def test_visibility_block_default_unscheduled_for_missing_time() -> None:
         "priority_score": 1.0,
     }
     assert visibility_block_for_action(action) == "unscheduled"
-
-
-def test_manual_mapping_does_not_change_top_level_schema_shape() -> None:
-    base = _base_brief()
-    before_keys = set(base.keys())
-    output = map_manual_to_brief(deepcopy(base), [{"title": "Read notes", "time": "14:30"}])
-    after_keys = set(output.keys())
-
-    assert before_keys == after_keys

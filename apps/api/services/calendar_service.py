@@ -20,7 +20,7 @@ from sqlalchemy import text
 
 from apps.api.core.event_bus import get_event_bus
 from apps.api.core.database import SessionLocal
-from apps.api.core.shared_dependencies import get_til
+from apps.api.services.shared_dependencies import get_til
 from apps.api.schemas.event import SystemEvent
 from apps.api.services.event_log_service import log_system_event
 

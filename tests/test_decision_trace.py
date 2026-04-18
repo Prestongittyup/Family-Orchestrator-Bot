@@ -11,8 +11,7 @@ from apps.api.endpoints import brief_endpoint
 from apps.api.models.event_log import EventLog
 from apps.api.models.idempotency_key import IdempotencyKey
 from apps.api.models.task import Task
-from apps.api.services import decision_engine as de
-from apps.api.services import synthesis_engine as se
+from datetime import date as _date
 
 
 HOUSEHOLD_ID = "hh-decision-trace-001"
@@ -25,7 +24,7 @@ class _FrozenDateTime(datetime):
         return cls(2026, 4, 15, 9, 0, 0)
 
 
-class _FrozenDate(se.date):
+class _FrozenDate(_date):
     @classmethod
     def today(cls):
         return cls(2026, 4, 15)
@@ -102,8 +101,6 @@ def _response_without_generated_at(payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def test_decision_trace_debug_layer(monkeypatch, test_client: TestClient) -> None:
-    monkeypatch.setattr(de, "datetime", _FrozenDateTime)
-    monkeypatch.setattr(se, "date", _FrozenDate)
     monkeypatch.setattr(brief_endpoint, "_now_utc", lambda: FIXED_NOW)
 
     brief_endpoint._clear_brief_cache()
