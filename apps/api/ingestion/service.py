@@ -26,6 +26,9 @@ from apps.api.services.router_service import route_event
 from apps.api.schemas.event import SystemEvent
 
 
+LEGACY_ISOLATED = True
+
+
 def _debug_payload(enabled: bool, **data: Any) -> dict[str, Any] | None:
     if not enabled:
         return None

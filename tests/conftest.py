@@ -24,12 +24,18 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from apps.api import main
-from apps.api.core.database import SessionLocal
+from apps.api.core.database import Base, SessionLocal, engine
 from apps.api.core.event_bus import get_event_bus
 from apps.api.core.feature_flags import _reset_feature_flags_for_tests
 from apps.api.models.event_log import EventLog
 from apps.api.models.idempotency_key import IdempotencyKey
 from apps.api.models.task import Task
+
+
+@pytest.fixture(scope="session", autouse=True)
+def ensure_test_schema() -> None:
+    """Create database tables once for the test session before cleanup runs."""
+    Base.metadata.create_all(bind=engine)
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -67,7 +73,7 @@ def reset_event_bus():
 
 
 @pytest.fixture(scope="function", autouse=True)
-def clean_database():
+def clean_database(ensure_test_schema):
     """
     Clean database before and after each test.
     

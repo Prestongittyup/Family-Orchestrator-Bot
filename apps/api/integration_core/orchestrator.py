@@ -15,7 +15,9 @@ Rules:
 from __future__ import annotations
 
 import logging
+import time
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Any
 
 from apps.api.integration_core.decision_engine import DecisionContext, DecisionEngine
@@ -69,6 +71,17 @@ class Orchestrator:
         self.decision_engine = decision_engine
 
     def build_household_state(self, user_id: str) -> HouseholdState | tuple[HouseholdState, DecisionContext]:
+        started_at = datetime.utcnow().isoformat() + "Z"
+        run_started = time.perf_counter()
+        log.info(
+            "orchestrator_entry",
+            extra={
+                "user_id": user_id,
+                "request_type": "build_household_state",
+                "execution_start_time": started_at,
+                "execution_start_ts": started_at,
+            },
+        )
         state = self.state_builder.build(user_id)
         log.info(
             "state_built",
@@ -76,6 +89,15 @@ class Orchestrator:
         )
 
         if self.decision_engine is None:
+            execution_duration_ms = round((time.perf_counter() - run_started) * 1000.0, 3)
+            log.info(
+                "orchestrator_completion",
+                extra={
+                    "user_id": user_id,
+                    "request_type": "build_household_state",
+                    "execution_duration_ms": execution_duration_ms,
+                },
+            )
             return state
 
         decision_context = self.decision_engine.process(state)
@@ -84,6 +106,15 @@ class Orchestrator:
             extra={
                 "top_events": len(decision_context.top_events),
                 "conflicts": len(decision_context.conflicts),
+            },
+        )
+        execution_duration_ms = round((time.perf_counter() - run_started) * 1000.0, 3)
+        log.info(
+            "orchestrator_completion",
+            extra={
+                "user_id": user_id,
+                "request_type": "build_household_state",
+                "execution_duration_ms": execution_duration_ms,
             },
         )
         return state, decision_context

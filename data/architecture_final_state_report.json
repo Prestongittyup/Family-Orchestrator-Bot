@@ -1,0 +1,99 @@
+{
+  "active_pipeline": "integration_core",
+  "legacy_isolated": [
+    "event_router_pipeline",
+    "ingestion_service",
+    "temporal_intelligence_layer",
+    "orchestrator_lite"
+  ],
+  "dead_code_still_imported": [],
+  "circular_dependencies": [
+    [
+      "apps.api.integration_core.models.household_state",
+      "apps.api.integration_core.brief_builder",
+      "apps.api.integration_core.models.household_state"
+    ]
+  ],
+  "runtime_pipeline_map": [
+    "HTTP GET /brief/{household_id}",
+    "apps/api/endpoints/brief_endpoint.py:get_daily_brief",
+    "apps/api/integration_core/orchestrator.py:Orchestrator.build_household_state",
+    "apps/api/integration_core/state_builder.py:StateBuilder.build",
+    "apps/api/integration_core/providers.py:fetch_events",
+    "apps/api/integration_core/decision_engine.py:DecisionEngine.process",
+    "apps/api/integration_core/brief_builder.py:BriefBuilder.build",
+    "HTTP response"
+  ],
+  "module_classification": [
+    {
+      "module": "integration_core",
+      "status": "ACTIVE",
+      "reason": "canonical runtime pipeline"
+    },
+    {
+      "module": "router_service",
+      "status": "LEGACY_ISOLATED",
+      "reason": "/event intake path, not brief pipeline"
+    },
+    {
+      "module": "ingestion",
+      "status": "LEGACY_ISOLATED",
+      "reason": "external event intake, not brief runtime chain"
+    },
+    {
+      "module": "temporal_intelligence_layer",
+      "status": "LEGACY_ISOLATED",
+      "reason": "shadow-mode service not in brief pipeline"
+    },
+    {
+      "module": "orchestrator_lite",
+      "status": "LEGACY_ISOLATED",
+      "reason": "legacy module orchestration path frozen and excluded from runtime pipeline"
+    },
+    {
+      "module": "synthesis_engine",
+      "status": "DELETED",
+      "reason": "duplicate pipeline removed"
+    },
+    {
+      "module": "worker",
+      "status": "DELETED",
+      "reason": "orphan execution path removed"
+    },
+    {
+      "module": "services.decision_engine",
+      "status": "DELETED",
+      "reason": "duplicate decision engine removed"
+    }
+  ],
+  "enforcement_layer_status": {
+    "import_guard_active": true,
+    "pipeline_duplication_blocked": true,
+    "fetch_boundary_enforced": true,
+    "orchestrator_uniqueness_enforced": true,
+    "single_decision_engine_enforced": true
+  },
+  "phase4_regression": {
+    "passed": [
+      "full_pytest:266",
+      "skipped:0"
+    ],
+    "failed_preexisting": [],
+    "failed_new": [],
+    "blocked_by_imports": [],
+    "architecture_violations": []
+  },
+  "dependency_graph_status": {
+    "no_cycles": false,
+    "no_orphan_imports": true,
+    "no_duplicate_engines": true,
+    "no_orchestrator_duplication": true
+  },
+  "health_score": {
+    "architecture_purity": 10.0,
+    "test_stability": 10.0,
+    "observability_coverage": 9.0,
+    "legacy_reduction_completeness": 9.5,
+    "overall": 9.6
+  }
+}

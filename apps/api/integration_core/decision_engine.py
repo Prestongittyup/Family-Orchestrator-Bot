@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
+
+
+log = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -28,10 +32,14 @@ class DecisionEngine:
         now = self._resolve_now(state)
 
         scored: list[tuple[int, dict[str, Any]]] = []
+        rules_triggered_count = 0
         for event in events:
             score = self._score_event(event, now)
+            if score > 0:
+                rules_triggered_count += 1
             if self._event_has_conflict(event, events):
                 score += 30
+                rules_triggered_count += 1
             scored.append((score, event))
 
         scored.sort(key=lambda x: x[0], reverse=True)
@@ -41,6 +49,21 @@ class DecisionEngine:
         conflicts = self._detect_conflicts(sorted_events)
 
         next_event = self._get_next_event(sorted_events, now)
+
+        priority_distribution = {
+            "high": sum(1 for score, _ in scored if score >= 80),
+            "medium": sum(1 for score, _ in scored if 40 <= score < 80),
+            "low": sum(1 for score, _ in scored if score < 40),
+        }
+        log.info(
+            "decision_engine_metrics",
+            extra={
+                "decision_count": len(sorted_events),
+                "priority_distribution": priority_distribution,
+                "conflict_count": len(conflicts),
+                "rules_triggered_count": rules_triggered_count,
+            },
+        )
 
         return DecisionContext(
             top_events=sorted_events[:5],

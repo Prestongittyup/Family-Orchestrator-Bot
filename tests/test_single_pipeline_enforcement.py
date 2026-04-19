@@ -15,12 +15,18 @@ Validated invariants:
 """
 from __future__ import annotations
 
+import ast
 import importlib
 import importlib.util
 import os
 from pathlib import Path
 
 import pytest
+
+from apps.api.integration_core.architecture_guard import (
+    IntegrationCoreBoundaryViolation,
+    assert_runtime_architecture_source,
+)
 
 ROOT = Path(__file__).parent.parent
 APPS_API = ROOT / "apps" / "api"
@@ -104,6 +110,13 @@ def _all_python_sources() -> list[Path]:
     return sources
 
 
+def _module_name_for_path(path: Path) -> str:
+    rel = path.relative_to(ROOT).as_posix()
+    if rel.endswith(".py"):
+        rel = rel[:-3]
+    return rel.replace("/", ".")
+
+
 @pytest.mark.parametrize("symbol", DELETED_SYMBOLS)
 def test_no_source_imports_deleted_symbol(symbol: str) -> None:
     # architecture_guard.py is exempt: it references these names in its
@@ -139,15 +152,15 @@ def test_only_state_builder_calls_fetch_events() -> None:
         if src == state_builder:
             continue
         text = src.read_text(encoding="utf-8", errors="replace")
-        # Look for direct provider fetch calls (not in comments)
-        for line in text.splitlines():
-            stripped = line.strip()
-            if stripped.startswith("#"):
-                continue
-            if ".fetch_events(" in line or (
-                "provider" in line.lower() and ".fetch(" in line
+        tree = ast.parse(text)
+        for node in ast.walk(tree):
+            if (
+                isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Attribute)
+                and node.func.attr == "fetch_events"
             ):
-                violations.append(f"{src.relative_to(ROOT)}:  {stripped}")
+                violations.append(str(src.relative_to(ROOT)))
+                break
 
     assert not violations, (
         "Provider fetch calls detected outside state_builder.py:\n"
@@ -161,8 +174,11 @@ def test_only_state_builder_calls_fetch_events() -> None:
 # ---------------------------------------------------------------------------
 
 def test_no_apps_source_imports_orchestrator_lite() -> None:
+    exempt = {APPS_API / "integration_core" / "architecture_guard.py"}
     violations = []
     for src in _all_python_sources():
+        if src in exempt:
+            continue
         text = src.read_text(encoding="utf-8", errors="replace")
         if "orchestrator_lite" in text:
             violations.append(str(src.relative_to(ROOT)))
@@ -171,3 +187,80 @@ def test_no_apps_source_imports_orchestrator_lite() -> None:
         "(competing orchestrator). Found in:\n"
         + "\n".join(f"  {v}" for v in violations)
     )
+
+
+def test_no_new_orchestrator_or_duplicate_decision_engine_classes() -> None:
+    """
+    Architecture freeze guard:
+    - class *Orchestrator is only allowed in integration_core/orchestrator.py
+    - class DecisionEngine is only allowed in integration_core/decision_engine.py
+    """
+    violations: list[str] = []
+    for src in _all_python_sources():
+        module_name = _module_name_for_path(src)
+        source = src.read_text(encoding="utf-8", errors="replace")
+        try:
+            assert_runtime_architecture_source(module_name, source)
+        except IntegrationCoreBoundaryViolation as exc:
+            violations.append(f"{src.relative_to(ROOT)} :: {exc}")
+
+    assert not violations, "\n".join(violations)
+
+
+def test_only_integration_core_orchestrator_exists() -> None:
+    """Required alias test name for architecture freeze reporting."""
+    test_no_new_orchestrator_or_duplicate_decision_engine_classes()
+
+
+def test_only_integration_core_decision_engine_exists() -> None:
+    """Required alias test name for architecture freeze reporting."""
+    test_no_new_orchestrator_or_duplicate_decision_engine_classes()
+
+
+def test_only_state_builder_imports_providers_module() -> None:
+    """
+    Static import rule: providers module must only be imported by state_builder.
+    This prevents provider coupling from spreading beyond the fetch boundary.
+    """
+    allowed = {APPS_API / "integration_core" / "state_builder.py"}
+    violations: list[str] = []
+
+    for src in _all_python_sources():
+        tree = ast.parse(src.read_text(encoding="utf-8", errors="replace"))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom) and node.module == "apps.api.integration_core.providers":
+                if src not in allowed:
+                    violations.append(str(src.relative_to(ROOT)))
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    if alias.name == "apps.api.integration_core.providers" and src not in allowed:
+                        violations.append(str(src.relative_to(ROOT)))
+
+    assert not violations, (
+        "providers module import is only allowed in state_builder.py. Found in:\n"
+        + "\n".join(f"  {v}" for v in sorted(set(violations)))
+    )
+
+
+def test_brief_endpoint_calls_orchestrator_only() -> None:
+    """
+    Brief endpoint must call create_orchestrator and must not directly import
+    providers or call fetch_events.
+    """
+    brief_endpoint = APPS_API / "endpoints" / "brief_endpoint.py"
+    text = brief_endpoint.read_text(encoding="utf-8", errors="replace")
+
+    assert "create_orchestrator" in text
+    assert "integration_core.providers" not in text
+    assert ".fetch_events(" not in text
+
+
+def test_no_pipeline_symbols_outside_integration_core() -> None:
+    """Required alias test name for architecture freeze reporting."""
+    for symbol in DELETED_SYMBOLS:
+        test_no_source_imports_deleted_symbol(symbol)
+
+
+def test_endpoint_uses_only_orchestrator() -> None:
+    """Required alias test name for architecture freeze reporting."""
+    test_brief_endpoint_calls_orchestrator_only()

@@ -7,6 +7,8 @@ from typing import Any
 from modules.core.models.module_output import ModuleOutput, Proposal, Signal
 from modules.core.services.module_runner import run_all_modules
 
+LEGACY_ISOLATED = True
+
 
 class DuplicateModuleNameError(ValueError):
     """Raised when two ModuleOutput items share the same module name."""

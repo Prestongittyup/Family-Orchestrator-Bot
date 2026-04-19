@@ -78,6 +78,18 @@ class BriefBuilder:
             brief_output["top_events"] = decision_context.top_events
             brief_output["conflicts"] = decision_context.conflicts
 
+        log.info(
+            "brief_builder_metrics",
+            extra={
+                "final_event_count": len(brief_output.get("today_events", [])),
+                "task_count": len(state.tasks),
+                "tasks_count": len(state.tasks),
+                "alert_count": len(state.alerts),
+                "calendar_summary_size": len(calendar_section.get("events_today", []))
+                + len(calendar_section.get("upcoming", [])),
+            },
+        )
+
         return brief_output
 
     @staticmethod

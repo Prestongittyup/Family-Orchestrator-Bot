@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import logging
 import os
+import time
 from datetime import UTC, datetime, timedelta
 from typing import Any, Optional
 
@@ -261,6 +262,9 @@ class StateBuilder:
         Returns (raw_event_dicts, IntegrationHealth).
         """
         time_min, time_max = get_time_window(view)
+        fetch_started = time.perf_counter()
+        raw_before_filter_count = 0
+        filtered_count = 0
         try:
             raw = provider.fetch_events(
                 user_id=user_id,
@@ -270,6 +274,7 @@ class StateBuilder:
                 time_max=time_max,
             )
             raw_dicts = [dict(row) for row in raw if isinstance(row, dict)]
+            raw_before_filter_count = len(raw_dicts)
             logger.info(
                 "events_fetched",
                 extra={"user_id": user_id, "count": len(raw_dicts), "view": view.name},
@@ -280,6 +285,7 @@ class StateBuilder:
                 time_min=time_min,
                 time_max=time_max,
             )
+            filtered_count = len(raw_dicts)
             logger.info(
                 "events_after_filter",
                 extra={"user_id": user_id, "count": len(raw_dicts), "view": view.name},
@@ -289,6 +295,21 @@ class StateBuilder:
                 "[StateBuilder] provider fetch error for user=%s: %s", user_id, exc
             )
             raw_dicts = []
+            filtered_count = 0
+        finally:
+            provider_latency_ms = round((time.perf_counter() - fetch_started) * 1000.0, 3)
+            logger.info(
+                "state_builder_provider_metrics",
+                extra={
+                    "user_id": user_id,
+                    "provider_name": self._provider_name,
+                    "raw_event_count": raw_before_filter_count,
+                    "filtered_event_count": filtered_count,
+                    "provider_latency_ms": provider_latency_ms,
+                    "view": view.name,
+                    "window_type": f"{view.value}d",
+                },
+            )
 
         # Determine health from provider if supported
         if hasattr(provider, "get_runtime_status"):

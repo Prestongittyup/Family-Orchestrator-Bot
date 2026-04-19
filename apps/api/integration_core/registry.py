@@ -3,15 +3,9 @@ from __future__ import annotations
 from typing import Callable
 
 from apps.api.integration_core.credentials import CredentialStore
-from apps.api.integration_core.providers import (
-    GmailProviderMock,
-    GoogleCalendarProviderMock,
-    IntegrationProvider,
-    Provider,
-)
 
 
-ProviderFactory = Callable[[CredentialStore], Provider]
+ProviderFactory = Callable[[CredentialStore], object]
 
 
 class ProviderRegistry:
@@ -26,7 +20,7 @@ class ProviderRegistry:
     def register_provider(self, provider_name: str, factory: ProviderFactory) -> None:
         self._factories[str(provider_name)] = factory
 
-    def get_provider(self, provider_name: str) -> Provider:
+    def get_provider(self, provider_name: str) -> object:
         key = str(provider_name)
         if key not in self._factories:
             raise KeyError(f"provider not registered: {key}")
@@ -36,11 +30,11 @@ class ProviderRegistry:
         return tuple(sorted(self._factories.keys()))
 
     # Backward-compatible aliases used by existing tests/callers.
-    def register(self, provider_id: str, factory: Callable[[CredentialStore], IntegrationProvider]) -> None:
+    def register(self, provider_id: str, factory: Callable[[CredentialStore], object]) -> None:
         self.register_provider(provider_id, factory)
 
-    def create(self, provider_id: str) -> IntegrationProvider:
-        return self.get_provider(provider_id)  # type: ignore[return-value]
+    def create(self, provider_id: str) -> object:
+        return self.get_provider(provider_id)
 
     def list_registered(self) -> tuple[str, ...]:
         return self.list_providers()
@@ -51,7 +45,15 @@ class ProviderRegistry:
 
 
 def build_default_provider_registry(credential_store: CredentialStore) -> ProviderRegistry:
+    from apps.api.integration_core import providers as provider_module
+
     registry = ProviderRegistry(credential_store)
-    registry.register_provider("gmail", lambda store: GmailProviderMock(credential_store=store))
-    registry.register_provider("google_calendar", lambda store: GoogleCalendarProviderMock(credential_store=store))
+    registry.register_provider(
+        "gmail",
+        lambda store: provider_module.GmailProviderMock(credential_store=store),
+    )
+    registry.register_provider(
+        "google_calendar",
+        lambda store: provider_module.GoogleCalendarProviderMock(credential_store=store),
+    )
     return registry

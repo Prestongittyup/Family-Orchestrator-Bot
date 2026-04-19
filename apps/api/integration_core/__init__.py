@@ -38,14 +38,6 @@ from apps.api.integration_core.feature_flags import (
     is_enabled,
 )
 from apps.api.integration_core.os1_bridge import _IdempotencyStore, get_idempotency_store, ingest_external_events
-from apps.api.integration_core.providers import (
-    GmailProviderMock,
-    GmailPlaceholderProvider,
-    GoogleCalendarProviderMock,
-    GoogleCalendarPlaceholderProvider,
-    IntegrationProvider,
-    Provider,
-)
 from apps.api.integration_core.repository import IdentityRepository, InMemoryIdentityRepository
 from apps.api.integration_core.registry import ProviderRegistry, build_default_provider_registry
 from apps.api.integration_core.google_calendar_provider import (
@@ -96,12 +88,6 @@ __all__ = [
     "flag_default",
     "adapt_external_events",
     "external_event_to_os1_payload",
-    "Provider",
-    "IntegrationProvider",
-    "GmailProviderMock",
-    "GmailPlaceholderProvider",
-    "GoogleCalendarProviderMock",
-    "GoogleCalendarPlaceholderProvider",
     "ProviderRegistry",
     "build_default_provider_registry",
     "GoogleCalendarRealProvider",

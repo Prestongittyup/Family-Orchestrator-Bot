@@ -25,6 +25,9 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 
+LEGACY_ISOLATED = True
+
+
 class TemporalIntelligenceLayer:
     """
     Temporal Intelligence Layer (TIL)
