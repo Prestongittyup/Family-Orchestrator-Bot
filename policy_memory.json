@@ -1,0 +1,27 @@
+{
+  "household_id": "household-001",
+  "updated_at": "2026-04-19T05:00:16.151467Z",
+  "memory": {
+    "preferences": [
+      "medical_events_first",
+      "school_events_high_visibility",
+      "work_blocks_protected"
+    ],
+    "patterns": [
+      "cross_layer_drift_detected",
+      "priority_reordering_observed",
+      "simulation_instability_under_replay"
+    ],
+    "constraints": [
+      "avoid_priority_conflicts_in_dense_days",
+      "surface_conflicts_before_schedule_commitment",
+      "urgent_events_require_manual_review"
+    ],
+    "routines": [
+      "08:00 medical readiness review",
+      "08:30 school launch block",
+      "09:00 work focus block",
+      "18:00 household coordination review"
+    ]
+  }
+}

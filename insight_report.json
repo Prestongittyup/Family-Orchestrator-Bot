@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-04-19T05:00:16.151467Z",
+  "patterns_detected": 5,
+  "insights_generated": 5,
+  "recommendations": 5,
+  "system_health_summary": {
+    "stability_score": 1.0,
+    "conflict_rate": 0.0,
+    "priority_accuracy_estimate": 0.6
+  },
+  "top_risks": [
+    "Priority weighting appears inconsistent in high-conflict evaluation scenarios.",
+    "Simulation artifacts indicate instability or urgent-event reordering weakness under replayed load.",
+    "Coverage for omitted critical items is uneven between evaluation evidence and operational reporting.",
+    "Cross-layer signals indicate drift between measured evaluation quality, simulation behavior, and operational assurances."
+  ],
+  "cross_layer_findings": [
+    "Cross-layer signals indicate drift between measured evaluation quality, simulation behavior, and operational assurances."
+  ]
+}

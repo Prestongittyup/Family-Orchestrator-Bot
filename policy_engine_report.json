@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-04-19T05:00:16.151467Z",
+  "policies_generated": 4,
+  "memory_entries": 13,
+  "itinerary_blocks": 5,
+  "conflicts_detected": 3,
+  "system_behavior_summary": {
+    "priority_alignment_score": 0.6,
+    "schedule_efficiency_score": 1.0,
+    "conflict_reduction_score": 0.4
+  },
+  "top_recommendations": [
+    "Review household priority weighting whenever high-conflict or medical scenarios recur.",
+    "Protect school and work blocks with an explicit midday constraint review.",
+    "Escalate overlap-prone days for manual confirmation before finalizing daily plans.",
+    "Standardize morning readiness and evening review routines to reduce drift across the day."
+  ]
+}

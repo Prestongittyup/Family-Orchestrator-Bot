@@ -1,0 +1,107 @@
+{
+  "simulation_id": "sim-15-low",
+  "generated_at": "2026-04-20T14:17:17.501632Z",
+  "config": {
+    "seed": 15,
+    "household_size": 3,
+    "chaos_level": "low",
+    "event_density": 1,
+    "scenario_preset": "streamed"
+  },
+  "event_timeline": [
+    {
+      "event_id": "evt-1",
+      "timestamp": "2026-04-18T08:00:00Z",
+      "type": "work_event",
+      "title": "Work Sync",
+      "start_time": "2026-04-18T09:00:00Z",
+      "end_time": "2026-04-18T10:00:00Z",
+      "participants": [
+        "Member 1"
+      ],
+      "payload": {
+        "title": "Work Sync",
+        "start_time": "2026-04-18T09:00:00Z",
+        "end_time": "2026-04-18T10:00:00Z",
+        "priority_hint": "normal"
+      }
+    }
+  ],
+  "brief_outputs_over_time": [
+    {
+      "step": 1,
+      "event_id": "evt-1",
+      "brief": {
+        "status": "success",
+        "brief": {
+          "date": "2026-04-20",
+          "today_events": [],
+          "events": [],
+          "event_count": 0,
+          "next_upcoming_event": null,
+          "calendar": {
+            "events_today": [],
+            "upcoming": [],
+            "total_events": 0,
+            "next_event": null
+          },
+          "summary": {
+            "today_event_count": 0,
+            "calendar_event_count": 0,
+            "task_count": 0,
+            "alert_count": 0,
+            "has_alerts": false,
+            "has_upcoming_event": false
+          },
+          "next_event": null,
+          "top_events": [],
+          "conflicts": []
+        },
+        "generated_at": "2026-04-20T14:17:17.499857Z"
+      }
+    }
+  ],
+  "brief_evolution": [
+    {
+      "step": 1,
+      "event_id": "evt-1",
+      "top_event_titles": [],
+      "added_priorities": [],
+      "removed_priorities": [],
+      "conflict_count": 0
+    }
+  ],
+  "decision_drift_metrics": {
+    "decision_drift_score": 0.0,
+    "priority_flip_rate": 0.0,
+    "brief_instability_index": 0.0
+  },
+  "stability_scores": {
+    "stability_score": 1.0
+  },
+  "system_recovery_metrics": {
+    "recovery_time_steps": 1
+  },
+  "failure_patterns": [
+    "urgent_reordering_failure"
+  ],
+  "assertions": {
+    "priority_stability_under_change": true,
+    "correct_reordering_of_urgent_events": false,
+    "no_stale_event_persistence": true,
+    "correct_conflict_resolution_behavior": true,
+    "priority_flip_count": 0,
+    "stale_event_failures": []
+  },
+  "system_health": {
+    "pipeline_latency_ms": 3,
+    "decision_distribution": {
+      "stable": 1,
+      "changed": 0
+    },
+    "conflict_frequency": 0,
+    "stability_trend": [
+      0
+    ]
+  }
+}

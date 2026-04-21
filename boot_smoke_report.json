@@ -1,0 +1,1653 @@
+{
+  "timestamp": "2026-04-21T04:14:02Z",
+  "mode": "statistical_boot_validation",
+  "runs": 10,
+  "randomized_port_offset": true,
+  "random_start_delay": true,
+  "boot_invariant_score": {
+    "success_rate": 1.0,
+    "successful_runs": 10,
+    "total_runs": 10,
+    "failure_class_distribution": {
+      "BOOT_FAILURE": 0,
+      "CONTRACT_FAILURE": 0,
+      "STATE_FAILURE": 0,
+      "AUTH_FAILURE": 0,
+      "STREAM_FAILURE": 0
+    }
+  },
+  "system_classification": "DETERMINISTIC",
+  "deterministic_requirement": "success_rate == 1.0",
+  "runs_detail": [
+    {
+      "run_index": 1,
+      "port": 8019,
+      "classification": "NONE",
+      "reason": "all checks passed",
+      "passed": true,
+      "boot_probe": {
+        "overall": "ok",
+        "checked_live": true,
+        "database": "ok",
+        "identity_repo": "ok",
+        "household_repo": "ok",
+        "auth_middleware": "ok",
+        "broadcaster": "ok",
+        "repository_fresh_transaction": "ok",
+        "repository_fresh_transaction_error": null,
+        "sse_internal_probe": "ok",
+        "sse_internal_probe_error": null,
+        "migration_mode": "metadata_create_all",
+        "pool_status": "Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0",
+        "required_tables": [
+          "households",
+          "users",
+          "devices",
+          "memberships",
+          "session_tokens",
+          "idempotency_keys"
+        ],
+        "required_columns": {
+          "households": [
+            "household_id",
+            "name",
+            "timezone",
+            "created_at",
+            "updated_at"
+          ],
+          "users": [
+            "user_id",
+            "household_id",
+            "name",
+            "email",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "devices": [
+            "device_id",
+            "user_id",
+            "household_id",
+            "device_name",
+            "platform",
+            "user_agent",
+            "is_active",
+            "created_at",
+            "updated_at",
+            "last_seen_at"
+          ],
+          "memberships": [
+            "membership_id",
+            "household_id",
+            "user_id",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "session_tokens": [
+            "token_id",
+            "household_id",
+            "user_id",
+            "device_id",
+            "role",
+            "session_claims",
+            "is_valid",
+            "created_at",
+            "expires_at"
+          ],
+          "idempotency_keys": [
+            "key",
+            "household_id",
+            "event_type",
+            "created_at",
+            "expires_at"
+          ]
+        },
+        "checked_at": "2026-04-21T04:12:43.249086+00:00"
+      },
+      "checks": [
+        {
+          "name": "boot_server_ready",
+          "passed": true,
+          "status_code": 200,
+          "detail": "server ready"
+        },
+        {
+          "name": "state_boot_probe_components",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{\"auth_middleware\": \"ok\", \"broadcaster\": \"ok\", \"checked_at\": \"2026-04-21T04:12:43.249086+00:00\", \"checked_live\": true, \"database\": \"ok\", \"household_repo\": \"ok\", \"identity_repo\": \"ok\", \"migration_mode\": \"metadata_create_all\", \"overall\": \"ok\", \"pool_status\": \"Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0\", \"repository_fresh_transaction\": \"ok\", \"repository_fresh_transaction_error\": null, \"required_columns\": {\"devices\": [\"device_id\", \"user_id\", \"household_id\", \"device_name\", \"platform\", \"user_agent\", \"is_active\", \"created_at\", \"updated_at\", \"last_seen_at\"], \"households\": [\"household_id\", \"name\", \"timezone\", \"created_at\", \"updated_at\"], \"idempotency_keys\": [\"key\", \"household_id\", \"event_type\", \"created_at\", \"expires_at\"], \"memberships\": [\"membership_id\", \"household_id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"updated_at\"], \"session_tokens\": [\"token_id\", \"household_id\", \"user_id\", \"device_id\", \"role\", \"session_claims\", \"is_valid\", \"created_at\", \"expires_at\"], \"users\": [\"user_id\", \"household_id\", \"name\", \"email\", \"role\", \"is_active\", \"created_at\", \"updated_at\"]}, \"required_tables\": [\"households\", \"users\", \"devices\", \"memberships\", \"session_tokens\", \"idempotency_keys\"], \"sse_internal_probe\": \"ok\", \"sse_internal_probe_error\": null}"
+        },
+        {
+          "name": "contract_household_create_unique",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': '6b044f39-8f25-4936-b1e3-817f7389fb05', 'name': 'Boot Smoke af168d', 'timezone': 'UTC', 'member_count': 0}, 'founder_user': {'user_id': 'dbfaf9cc-66e1-48c5-8340-b0c766d16b6d', 'household_id': '6b044f39-8f25-4936-b1e3-817f7389fb05', 'name': 'Boot Founder', 'email': 'boot-smoke-1aa5a367@example.com', 'role': 'ADMIN', 'is_active': True}}"
+        },
+        {
+          "name": "contract_household_create_duplicate_400",
+          "passed": true,
+          "status_code": 400,
+          "detail": "{'detail': 'founder_email_already_exists: boot-smoke-1aa5a367@example.com'}"
+        },
+        {
+          "name": "contract_bootstrap_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': '6b044f39-8f25-4936-b1e3-817f7389fb05', 'name': 'Boot Smoke af168d', 'timezone': 'UTC', 'member_count': 1}, 'user': {'user_id': 'dbfaf9cc-66e1-48c5-8340-b0c766d16b6d', 'household_id': '6b044f39-8f25-4936-b1e3-817f7389fb05', 'name': 'Boot Founder', 'email': 'boot-smoke-1aa5a367@example.com', 'role': 'ADMIN', 'is_active': True}, 'device': {'device_id': '857892bd-1c0e-458c-a23e-c4ab30601209', 'user_id': 'dbfaf9cc-66e1-48c5-8340-b0c766d16b6d', 'household_id': '6b044f39-8f25-4936-b1e3-817f7389fb05', 'device_name': 'Primary Device', 'platform': 'Web', 'is_active': True, 'last_seen_at': None}, 'identity_context': {'household_id': '6b044f39-8f25-4936-b1e3-817f7389fb05', 'user_id': 'dbfaf9cc-66e1-48c5-8340-b0c766d16b6d', 'device_id': '857892bd-1c0e-458c-a23e-c4ab30601209', 'user_role': 'ADMIN', 'can_chat': True, 'can_execute_actions': True, 'can_override_conflicts': True, 'can_view_sensitive_cards': True}, 'session_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VfaWQiOiI4NTc4OTJiZC0xYzBlLTQ1OGMtYTIzZS1jNGFiMzA2MDEyMDkiLCJleHAiOjE3NzY3NDU2NjMsImhvdXNlaG9sZF9pZCI6IjZiMDQ0ZjM5LThmMjUtNDkzNi1iMWUzLTgxN2Y3Mzg5ZmIwNSIsImlhdCI6MTc3Njc0NDc2MywiaXNzIjoiaHBhbCIsImp0aSI6ImIwYTI5NzY4LTMyZGItNGY4OS1hYzMzLTUzYmRkNGI2ZDdjMyIsInJvbGUiOiJBRE1JTiIsInR5cCI6ImFjY2VzcyIsInVzZXJfaWQiOiJkYmZhZjljYy02NmUxLTQ4YzUtODM0MC1iMGM3NjZkMTZiNmQifQ.iA7KEaB_WkQ9NvHh0n4sabmLmepYrxDZDPrPwFB32SM'}"
+        },
+        {
+          "name": "auth_missing_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'missing_bearer_token'}"
+        },
+        {
+          "name": "auth_invalid_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'invalid_or_expired_token'}"
+        },
+        {
+          "name": "auth_valid_token_200",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'assistant_message': 'Schedule appointment for 2026-04-20 06:00-06:45. Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'action_cards': [{'id': 'card:assist-f8c630440cdf-primary:confirm', 'type': 'confirm', 'title': 'Confirm recommendation', 'description': 'Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'related_entity': 'assist-f8c630440cdf-primary', 'required_action_payload': {'group_id': 'assist-f8c630440cdf-group', 'action_ids': ['assist-f8c630440cdf-primary']}, 'risk_level': 'high'}, {'id': 'card:assist-f8c630440cdf-primary:reject', 'type': 'reject', 'title': 'Reject recommendation', 'description': 'Dismiss this recommendation without applying changes.', 'related_entity': 'assist-f8c630440cdf-primary', 'required_action_payload': {'action_ids': ['assist-f8c630440cdf-primary']}, 'risk_level': 'low'}, {'id': 'card:assist-f8c630440cdf-primary:reschedule', 'type': 'reschedule', 'title': 'Adjust schedule', 'description': 'Pick a different time for this recommendation.', 'related_entity': 'assist-f8c630440cdf-primary', 'required_action_payload': {'action_id': 'assist-f8c630440cdf-primary', 'current_schedule': '2026-04-20 06:00-06:45'}, 'risk_level': 'medium'}], 'ui_patch': [{'entity_type': 'family', 'entity_id': '6b044f39-8f25-4936-b1e3-817f7389fb05', 'change_type': 'replace', 'payload': {'family_id': '6b044f39-8f25-4936-b1e3-817f7389fb05', 'member_count': 0, 'member_names': [], 'default_time_zone': 'UTC'}, 'version': 189832485908494, 'source_timestamp': '2026-04-21T04:12:43.580500Z'}, {'entity_type': 'notification', 'entity_id': 'notif:stale:6b044f39-8f25-4936-b1e3-817f7389fb05', 'change_type': 'create', 'payload': {'notification_id': 'notif:stale:6b044f39-8f25-4936-b1e3-817f7389fb05', 'title': 'View refresh pending', 'message': 'A refreshed snapshot is pending.', 'level': 'info', 'related_entity': '6b044f39-8f25-4936-b1e3-817f7389fb05'}, 'version': 189832485908494, 'source_timestamp': '2026-04-21T04:12:43.580500Z'}], 'requires_confirmation': True, 'explanation_summary': []}"
+        },
+        {
+          "name": "stream_connect_valid_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household_id': '6b044f39-8f25-4936-b1e3-817f7389fb05', 'payload': {'status': 'connected'}, 'watermark': '1776744763612-0'}"
+        },
+        {
+          "name": "stream_reconnect_no_forced_resync_on_zero_sequence",
+          "passed": true,
+          "status_code": 200,
+          "detail": "first={'household_id': '6b044f39-8f25-4936-b1e3-817f7389fb05', 'payload': {'status': 'connected'}, 'watermark': '1776744763627-0'}, second_event=update"
+        },
+        {
+          "name": "stream_gap_requires_resync",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'message': 'Requested watermark is older than available replay buffer. Client must call full bootstrap.', 'reason': 'watermark_too_old'}"
+        },
+        {
+          "name": "stream_adversarial_mini_test",
+          "passed": true,
+          "status_code": 200,
+          "detail": "adversarial_sse_ok"
+        }
+      ]
+    },
+    {
+      "run_index": 2,
+      "port": 8065,
+      "classification": "NONE",
+      "reason": "all checks passed",
+      "passed": true,
+      "boot_probe": {
+        "overall": "ok",
+        "checked_live": true,
+        "database": "ok",
+        "identity_repo": "ok",
+        "household_repo": "ok",
+        "auth_middleware": "ok",
+        "broadcaster": "ok",
+        "repository_fresh_transaction": "ok",
+        "repository_fresh_transaction_error": null,
+        "sse_internal_probe": "ok",
+        "sse_internal_probe_error": null,
+        "migration_mode": "metadata_create_all",
+        "pool_status": "Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0",
+        "required_tables": [
+          "households",
+          "users",
+          "devices",
+          "memberships",
+          "session_tokens",
+          "idempotency_keys"
+        ],
+        "required_columns": {
+          "households": [
+            "household_id",
+            "name",
+            "timezone",
+            "created_at",
+            "updated_at"
+          ],
+          "users": [
+            "user_id",
+            "household_id",
+            "name",
+            "email",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "devices": [
+            "device_id",
+            "user_id",
+            "household_id",
+            "device_name",
+            "platform",
+            "user_agent",
+            "is_active",
+            "created_at",
+            "updated_at",
+            "last_seen_at"
+          ],
+          "memberships": [
+            "membership_id",
+            "household_id",
+            "user_id",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "session_tokens": [
+            "token_id",
+            "household_id",
+            "user_id",
+            "device_id",
+            "role",
+            "session_claims",
+            "is_valid",
+            "created_at",
+            "expires_at"
+          ],
+          "idempotency_keys": [
+            "key",
+            "household_id",
+            "event_type",
+            "created_at",
+            "expires_at"
+          ]
+        },
+        "checked_at": "2026-04-21T04:12:51.646195+00:00"
+      },
+      "checks": [
+        {
+          "name": "boot_server_ready",
+          "passed": true,
+          "status_code": 200,
+          "detail": "server ready"
+        },
+        {
+          "name": "state_boot_probe_components",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{\"auth_middleware\": \"ok\", \"broadcaster\": \"ok\", \"checked_at\": \"2026-04-21T04:12:51.646195+00:00\", \"checked_live\": true, \"database\": \"ok\", \"household_repo\": \"ok\", \"identity_repo\": \"ok\", \"migration_mode\": \"metadata_create_all\", \"overall\": \"ok\", \"pool_status\": \"Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0\", \"repository_fresh_transaction\": \"ok\", \"repository_fresh_transaction_error\": null, \"required_columns\": {\"devices\": [\"device_id\", \"user_id\", \"household_id\", \"device_name\", \"platform\", \"user_agent\", \"is_active\", \"created_at\", \"updated_at\", \"last_seen_at\"], \"households\": [\"household_id\", \"name\", \"timezone\", \"created_at\", \"updated_at\"], \"idempotency_keys\": [\"key\", \"household_id\", \"event_type\", \"created_at\", \"expires_at\"], \"memberships\": [\"membership_id\", \"household_id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"updated_at\"], \"session_tokens\": [\"token_id\", \"household_id\", \"user_id\", \"device_id\", \"role\", \"session_claims\", \"is_valid\", \"created_at\", \"expires_at\"], \"users\": [\"user_id\", \"household_id\", \"name\", \"email\", \"role\", \"is_active\", \"created_at\", \"updated_at\"]}, \"required_tables\": [\"households\", \"users\", \"devices\", \"memberships\", \"session_tokens\", \"idempotency_keys\"], \"sse_internal_probe\": \"ok\", \"sse_internal_probe_error\": null}"
+        },
+        {
+          "name": "contract_household_create_unique",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': 'e070c909-b074-4a02-8e62-d7ef4c01237b', 'name': 'Boot Smoke 29af87', 'timezone': 'UTC', 'member_count': 0}, 'founder_user': {'user_id': '4b563299-8983-4347-8eae-7e2a8a7c29b2', 'household_id': 'e070c909-b074-4a02-8e62-d7ef4c01237b', 'name': 'Boot Founder', 'email': 'boot-smoke-8595c7e9@example.com', 'role': 'ADMIN', 'is_active': True}}"
+        },
+        {
+          "name": "contract_household_create_duplicate_400",
+          "passed": true,
+          "status_code": 400,
+          "detail": "{'detail': 'founder_email_already_exists: boot-smoke-8595c7e9@example.com'}"
+        },
+        {
+          "name": "contract_bootstrap_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': 'e070c909-b074-4a02-8e62-d7ef4c01237b', 'name': 'Boot Smoke 29af87', 'timezone': 'UTC', 'member_count': 1}, 'user': {'user_id': '4b563299-8983-4347-8eae-7e2a8a7c29b2', 'household_id': 'e070c909-b074-4a02-8e62-d7ef4c01237b', 'name': 'Boot Founder', 'email': 'boot-smoke-8595c7e9@example.com', 'role': 'ADMIN', 'is_active': True}, 'device': {'device_id': '7263d5ff-e66d-4ffd-90fb-09a5d960a565', 'user_id': '4b563299-8983-4347-8eae-7e2a8a7c29b2', 'household_id': 'e070c909-b074-4a02-8e62-d7ef4c01237b', 'device_name': 'Primary Device', 'platform': 'Web', 'is_active': True, 'last_seen_at': None}, 'identity_context': {'household_id': 'e070c909-b074-4a02-8e62-d7ef4c01237b', 'user_id': '4b563299-8983-4347-8eae-7e2a8a7c29b2', 'device_id': '7263d5ff-e66d-4ffd-90fb-09a5d960a565', 'user_role': 'ADMIN', 'can_chat': True, 'can_execute_actions': True, 'can_override_conflicts': True, 'can_view_sensitive_cards': True}, 'session_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VfaWQiOiI3MjYzZDVmZi1lNjZkLTRmZmQtOTBmYi0wOWE1ZDk2MGE1NjUiLCJleHAiOjE3NzY3NDU2NzEsImhvdXNlaG9sZF9pZCI6ImUwNzBjOTA5LWIwNzQtNGEwMi04ZTYyLWQ3ZWY0YzAxMjM3YiIsImlhdCI6MTc3Njc0NDc3MSwiaXNzIjoiaHBhbCIsImp0aSI6IjAwYWNkZDI4LTMwNGUtNGVlYy1iM2U0LWZhNjQ5ODliNjY0MCIsInJvbGUiOiJBRE1JTiIsInR5cCI6ImFjY2VzcyIsInVzZXJfaWQiOiI0YjU2MzI5OS04OTgzLTQzNDctOGVhZS03ZTJhOGE3YzI5YjIifQ.gQ3jmB4ylVzVjjJhsiOqyBS0yI6aPd6pNce90g5WJ2k'}"
+        },
+        {
+          "name": "auth_missing_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'missing_bearer_token'}"
+        },
+        {
+          "name": "auth_invalid_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'invalid_or_expired_token'}"
+        },
+        {
+          "name": "auth_valid_token_200",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'assistant_message': 'Schedule appointment for 2026-04-20 06:00-06:45. Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'action_cards': [{'id': 'card:assist-47a48018af71-primary:confirm', 'type': 'confirm', 'title': 'Confirm recommendation', 'description': 'Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'related_entity': 'assist-47a48018af71-primary', 'required_action_payload': {'group_id': 'assist-47a48018af71-group', 'action_ids': ['assist-47a48018af71-primary']}, 'risk_level': 'high'}, {'id': 'card:assist-47a48018af71-primary:reject', 'type': 'reject', 'title': 'Reject recommendation', 'description': 'Dismiss this recommendation without applying changes.', 'related_entity': 'assist-47a48018af71-primary', 'required_action_payload': {'action_ids': ['assist-47a48018af71-primary']}, 'risk_level': 'low'}, {'id': 'card:assist-47a48018af71-primary:reschedule', 'type': 'reschedule', 'title': 'Adjust schedule', 'description': 'Pick a different time for this recommendation.', 'related_entity': 'assist-47a48018af71-primary', 'required_action_payload': {'action_id': 'assist-47a48018af71-primary', 'current_schedule': '2026-04-20 06:00-06:45'}, 'risk_level': 'medium'}], 'ui_patch': [{'entity_type': 'family', 'entity_id': 'e070c909-b074-4a02-8e62-d7ef4c01237b', 'change_type': 'replace', 'payload': {'family_id': 'e070c909-b074-4a02-8e62-d7ef4c01237b', 'member_count': 0, 'member_names': [], 'default_time_zone': 'UTC'}, 'version': 81821710206251, 'source_timestamp': '2026-04-21T04:12:51.935639Z'}, {'entity_type': 'notification', 'entity_id': 'notif:stale:e070c909-b074-4a02-8e62-d7ef4c01237b', 'change_type': 'create', 'payload': {'notification_id': 'notif:stale:e070c909-b074-4a02-8e62-d7ef4c01237b', 'title': 'View refresh pending', 'message': 'A refreshed snapshot is pending.', 'level': 'info', 'related_entity': 'e070c909-b074-4a02-8e62-d7ef4c01237b'}, 'version': 81821710206251, 'source_timestamp': '2026-04-21T04:12:51.935639Z'}], 'requires_confirmation': True, 'explanation_summary': []}"
+        },
+        {
+          "name": "stream_connect_valid_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household_id': 'e070c909-b074-4a02-8e62-d7ef4c01237b', 'payload': {'status': 'connected'}, 'watermark': '1776744771945-0'}"
+        },
+        {
+          "name": "stream_reconnect_no_forced_resync_on_zero_sequence",
+          "passed": true,
+          "status_code": 200,
+          "detail": "first={'household_id': 'e070c909-b074-4a02-8e62-d7ef4c01237b', 'payload': {'status': 'connected'}, 'watermark': '1776744771949-0'}, second_event=update"
+        },
+        {
+          "name": "stream_gap_requires_resync",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'message': 'Requested watermark is older than available replay buffer. Client must call full bootstrap.', 'reason': 'watermark_too_old'}"
+        },
+        {
+          "name": "stream_adversarial_mini_test",
+          "passed": true,
+          "status_code": 200,
+          "detail": "adversarial_sse_ok"
+        }
+      ]
+    },
+    {
+      "run_index": 3,
+      "port": 8061,
+      "classification": "NONE",
+      "reason": "all checks passed",
+      "passed": true,
+      "boot_probe": {
+        "overall": "ok",
+        "checked_live": true,
+        "database": "ok",
+        "identity_repo": "ok",
+        "household_repo": "ok",
+        "auth_middleware": "ok",
+        "broadcaster": "ok",
+        "repository_fresh_transaction": "ok",
+        "repository_fresh_transaction_error": null,
+        "sse_internal_probe": "ok",
+        "sse_internal_probe_error": null,
+        "migration_mode": "metadata_create_all",
+        "pool_status": "Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0",
+        "required_tables": [
+          "households",
+          "users",
+          "devices",
+          "memberships",
+          "session_tokens",
+          "idempotency_keys"
+        ],
+        "required_columns": {
+          "households": [
+            "household_id",
+            "name",
+            "timezone",
+            "created_at",
+            "updated_at"
+          ],
+          "users": [
+            "user_id",
+            "household_id",
+            "name",
+            "email",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "devices": [
+            "device_id",
+            "user_id",
+            "household_id",
+            "device_name",
+            "platform",
+            "user_agent",
+            "is_active",
+            "created_at",
+            "updated_at",
+            "last_seen_at"
+          ],
+          "memberships": [
+            "membership_id",
+            "household_id",
+            "user_id",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "session_tokens": [
+            "token_id",
+            "household_id",
+            "user_id",
+            "device_id",
+            "role",
+            "session_claims",
+            "is_valid",
+            "created_at",
+            "expires_at"
+          ],
+          "idempotency_keys": [
+            "key",
+            "household_id",
+            "event_type",
+            "created_at",
+            "expires_at"
+          ]
+        },
+        "checked_at": "2026-04-21T04:12:59.855157+00:00"
+      },
+      "checks": [
+        {
+          "name": "boot_server_ready",
+          "passed": true,
+          "status_code": 200,
+          "detail": "server ready"
+        },
+        {
+          "name": "state_boot_probe_components",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{\"auth_middleware\": \"ok\", \"broadcaster\": \"ok\", \"checked_at\": \"2026-04-21T04:12:59.855157+00:00\", \"checked_live\": true, \"database\": \"ok\", \"household_repo\": \"ok\", \"identity_repo\": \"ok\", \"migration_mode\": \"metadata_create_all\", \"overall\": \"ok\", \"pool_status\": \"Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0\", \"repository_fresh_transaction\": \"ok\", \"repository_fresh_transaction_error\": null, \"required_columns\": {\"devices\": [\"device_id\", \"user_id\", \"household_id\", \"device_name\", \"platform\", \"user_agent\", \"is_active\", \"created_at\", \"updated_at\", \"last_seen_at\"], \"households\": [\"household_id\", \"name\", \"timezone\", \"created_at\", \"updated_at\"], \"idempotency_keys\": [\"key\", \"household_id\", \"event_type\", \"created_at\", \"expires_at\"], \"memberships\": [\"membership_id\", \"household_id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"updated_at\"], \"session_tokens\": [\"token_id\", \"household_id\", \"user_id\", \"device_id\", \"role\", \"session_claims\", \"is_valid\", \"created_at\", \"expires_at\"], \"users\": [\"user_id\", \"household_id\", \"name\", \"email\", \"role\", \"is_active\", \"created_at\", \"updated_at\"]}, \"required_tables\": [\"households\", \"users\", \"devices\", \"memberships\", \"session_tokens\", \"idempotency_keys\"], \"sse_internal_probe\": \"ok\", \"sse_internal_probe_error\": null}"
+        },
+        {
+          "name": "contract_household_create_unique",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': '5f250c94-f0c7-482b-a430-cd3e8e95e06d', 'name': 'Boot Smoke f1d7cb', 'timezone': 'UTC', 'member_count': 0}, 'founder_user': {'user_id': 'ed04c3e6-1cf8-45bd-b9f5-20a62c3061d0', 'household_id': '5f250c94-f0c7-482b-a430-cd3e8e95e06d', 'name': 'Boot Founder', 'email': 'boot-smoke-8bc1fa84@example.com', 'role': 'ADMIN', 'is_active': True}}"
+        },
+        {
+          "name": "contract_household_create_duplicate_400",
+          "passed": true,
+          "status_code": 400,
+          "detail": "{'detail': 'founder_email_already_exists: boot-smoke-8bc1fa84@example.com'}"
+        },
+        {
+          "name": "contract_bootstrap_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': '5f250c94-f0c7-482b-a430-cd3e8e95e06d', 'name': 'Boot Smoke f1d7cb', 'timezone': 'UTC', 'member_count': 1}, 'user': {'user_id': 'ed04c3e6-1cf8-45bd-b9f5-20a62c3061d0', 'household_id': '5f250c94-f0c7-482b-a430-cd3e8e95e06d', 'name': 'Boot Founder', 'email': 'boot-smoke-8bc1fa84@example.com', 'role': 'ADMIN', 'is_active': True}, 'device': {'device_id': 'eaec2239-0316-4df6-aab4-603af0445296', 'user_id': 'ed04c3e6-1cf8-45bd-b9f5-20a62c3061d0', 'household_id': '5f250c94-f0c7-482b-a430-cd3e8e95e06d', 'device_name': 'Primary Device', 'platform': 'Web', 'is_active': True, 'last_seen_at': None}, 'identity_context': {'household_id': '5f250c94-f0c7-482b-a430-cd3e8e95e06d', 'user_id': 'ed04c3e6-1cf8-45bd-b9f5-20a62c3061d0', 'device_id': 'eaec2239-0316-4df6-aab4-603af0445296', 'user_role': 'ADMIN', 'can_chat': True, 'can_execute_actions': True, 'can_override_conflicts': True, 'can_view_sensitive_cards': True}, 'session_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VfaWQiOiJlYWVjMjIzOS0wMzE2LTRkZjYtYWFiNC02MDNhZjA0NDUyOTYiLCJleHAiOjE3NzY3NDU2ODAsImhvdXNlaG9sZF9pZCI6IjVmMjUwYzk0LWYwYzctNDgyYi1hNDMwLWNkM2U4ZTk1ZTA2ZCIsImlhdCI6MTc3Njc0NDc4MCwiaXNzIjoiaHBhbCIsImp0aSI6ImQwMzQ2ODk1LWExY2YtNDAzYS05ZjE1LTQwOGE1NzkyNDg1ZiIsInJvbGUiOiJBRE1JTiIsInR5cCI6ImFjY2VzcyIsInVzZXJfaWQiOiJlZDA0YzNlNi0xY2Y4LTQ1YmQtYjlmNS0yMGE2MmMzMDYxZDAifQ.HN26PInLFd_Qf-lDNl5WVEBU6pHOzRzFlBKU6q4wbS4'}"
+        },
+        {
+          "name": "auth_missing_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'missing_bearer_token'}"
+        },
+        {
+          "name": "auth_invalid_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'invalid_or_expired_token'}"
+        },
+        {
+          "name": "auth_valid_token_200",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'assistant_message': 'Schedule appointment for 2026-04-20 06:00-06:45. Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'action_cards': [{'id': 'card:assist-4e29f59fb477-primary:confirm', 'type': 'confirm', 'title': 'Confirm recommendation', 'description': 'Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'related_entity': 'assist-4e29f59fb477-primary', 'required_action_payload': {'group_id': 'assist-4e29f59fb477-group', 'action_ids': ['assist-4e29f59fb477-primary']}, 'risk_level': 'high'}, {'id': 'card:assist-4e29f59fb477-primary:reject', 'type': 'reject', 'title': 'Reject recommendation', 'description': 'Dismiss this recommendation without applying changes.', 'related_entity': 'assist-4e29f59fb477-primary', 'required_action_payload': {'action_ids': ['assist-4e29f59fb477-primary']}, 'risk_level': 'low'}, {'id': 'card:assist-4e29f59fb477-primary:reschedule', 'type': 'reschedule', 'title': 'Adjust schedule', 'description': 'Pick a different time for this recommendation.', 'related_entity': 'assist-4e29f59fb477-primary', 'required_action_payload': {'action_id': 'assist-4e29f59fb477-primary', 'current_schedule': '2026-04-20 06:00-06:45'}, 'risk_level': 'medium'}], 'ui_patch': [{'entity_type': 'family', 'entity_id': '5f250c94-f0c7-482b-a430-cd3e8e95e06d', 'change_type': 'replace', 'payload': {'family_id': '5f250c94-f0c7-482b-a430-cd3e8e95e06d', 'member_count': 0, 'member_names': [], 'default_time_zone': 'UTC'}, 'version': 222755761803835, 'source_timestamp': '2026-04-21T04:13:00.143832Z'}, {'entity_type': 'notification', 'entity_id': 'notif:stale:5f250c94-f0c7-482b-a430-cd3e8e95e06d', 'change_type': 'create', 'payload': {'notification_id': 'notif:stale:5f250c94-f0c7-482b-a430-cd3e8e95e06d', 'title': 'View refresh pending', 'message': 'A refreshed snapshot is pending.', 'level': 'info', 'related_entity': '5f250c94-f0c7-482b-a430-cd3e8e95e06d'}, 'version': 222755761803835, 'source_timestamp': '2026-04-21T04:13:00.143832Z'}], 'requires_confirmation': True, 'explanation_summary': []}"
+        },
+        {
+          "name": "stream_connect_valid_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household_id': '5f250c94-f0c7-482b-a430-cd3e8e95e06d', 'payload': {'status': 'connected'}, 'watermark': '1776744780153-0'}"
+        },
+        {
+          "name": "stream_reconnect_no_forced_resync_on_zero_sequence",
+          "passed": true,
+          "status_code": 200,
+          "detail": "first={'household_id': '5f250c94-f0c7-482b-a430-cd3e8e95e06d', 'payload': {'status': 'connected'}, 'watermark': '1776744780156-0'}, second_event=update"
+        },
+        {
+          "name": "stream_gap_requires_resync",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'message': 'Requested watermark is older than available replay buffer. Client must call full bootstrap.', 'reason': 'watermark_too_old'}"
+        },
+        {
+          "name": "stream_adversarial_mini_test",
+          "passed": true,
+          "status_code": 200,
+          "detail": "adversarial_sse_ok"
+        }
+      ]
+    },
+    {
+      "run_index": 4,
+      "port": 8023,
+      "classification": "NONE",
+      "reason": "all checks passed",
+      "passed": true,
+      "boot_probe": {
+        "overall": "ok",
+        "checked_live": true,
+        "database": "ok",
+        "identity_repo": "ok",
+        "household_repo": "ok",
+        "auth_middleware": "ok",
+        "broadcaster": "ok",
+        "repository_fresh_transaction": "ok",
+        "repository_fresh_transaction_error": null,
+        "sse_internal_probe": "ok",
+        "sse_internal_probe_error": null,
+        "migration_mode": "metadata_create_all",
+        "pool_status": "Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0",
+        "required_tables": [
+          "households",
+          "users",
+          "devices",
+          "memberships",
+          "session_tokens",
+          "idempotency_keys"
+        ],
+        "required_columns": {
+          "households": [
+            "household_id",
+            "name",
+            "timezone",
+            "created_at",
+            "updated_at"
+          ],
+          "users": [
+            "user_id",
+            "household_id",
+            "name",
+            "email",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "devices": [
+            "device_id",
+            "user_id",
+            "household_id",
+            "device_name",
+            "platform",
+            "user_agent",
+            "is_active",
+            "created_at",
+            "updated_at",
+            "last_seen_at"
+          ],
+          "memberships": [
+            "membership_id",
+            "household_id",
+            "user_id",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "session_tokens": [
+            "token_id",
+            "household_id",
+            "user_id",
+            "device_id",
+            "role",
+            "session_claims",
+            "is_valid",
+            "created_at",
+            "expires_at"
+          ],
+          "idempotency_keys": [
+            "key",
+            "household_id",
+            "event_type",
+            "created_at",
+            "expires_at"
+          ]
+        },
+        "checked_at": "2026-04-21T04:13:08.132052+00:00"
+      },
+      "checks": [
+        {
+          "name": "boot_server_ready",
+          "passed": true,
+          "status_code": 200,
+          "detail": "server ready"
+        },
+        {
+          "name": "state_boot_probe_components",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{\"auth_middleware\": \"ok\", \"broadcaster\": \"ok\", \"checked_at\": \"2026-04-21T04:13:08.132052+00:00\", \"checked_live\": true, \"database\": \"ok\", \"household_repo\": \"ok\", \"identity_repo\": \"ok\", \"migration_mode\": \"metadata_create_all\", \"overall\": \"ok\", \"pool_status\": \"Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0\", \"repository_fresh_transaction\": \"ok\", \"repository_fresh_transaction_error\": null, \"required_columns\": {\"devices\": [\"device_id\", \"user_id\", \"household_id\", \"device_name\", \"platform\", \"user_agent\", \"is_active\", \"created_at\", \"updated_at\", \"last_seen_at\"], \"households\": [\"household_id\", \"name\", \"timezone\", \"created_at\", \"updated_at\"], \"idempotency_keys\": [\"key\", \"household_id\", \"event_type\", \"created_at\", \"expires_at\"], \"memberships\": [\"membership_id\", \"household_id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"updated_at\"], \"session_tokens\": [\"token_id\", \"household_id\", \"user_id\", \"device_id\", \"role\", \"session_claims\", \"is_valid\", \"created_at\", \"expires_at\"], \"users\": [\"user_id\", \"household_id\", \"name\", \"email\", \"role\", \"is_active\", \"created_at\", \"updated_at\"]}, \"required_tables\": [\"households\", \"users\", \"devices\", \"memberships\", \"session_tokens\", \"idempotency_keys\"], \"sse_internal_probe\": \"ok\", \"sse_internal_probe_error\": null}"
+        },
+        {
+          "name": "contract_household_create_unique",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': '91fb9681-6b71-45a0-9baa-370907654aea', 'name': 'Boot Smoke 2565be', 'timezone': 'UTC', 'member_count': 0}, 'founder_user': {'user_id': '92ccaead-2d7c-4737-93af-134843ce2c6a', 'household_id': '91fb9681-6b71-45a0-9baa-370907654aea', 'name': 'Boot Founder', 'email': 'boot-smoke-3da2443e@example.com', 'role': 'ADMIN', 'is_active': True}}"
+        },
+        {
+          "name": "contract_household_create_duplicate_400",
+          "passed": true,
+          "status_code": 400,
+          "detail": "{'detail': 'founder_email_already_exists: boot-smoke-3da2443e@example.com'}"
+        },
+        {
+          "name": "contract_bootstrap_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': '91fb9681-6b71-45a0-9baa-370907654aea', 'name': 'Boot Smoke 2565be', 'timezone': 'UTC', 'member_count': 1}, 'user': {'user_id': '92ccaead-2d7c-4737-93af-134843ce2c6a', 'household_id': '91fb9681-6b71-45a0-9baa-370907654aea', 'name': 'Boot Founder', 'email': 'boot-smoke-3da2443e@example.com', 'role': 'ADMIN', 'is_active': True}, 'device': {'device_id': '5cf3b10b-01f5-4d3a-a085-baa4135e8d74', 'user_id': '92ccaead-2d7c-4737-93af-134843ce2c6a', 'household_id': '91fb9681-6b71-45a0-9baa-370907654aea', 'device_name': 'Primary Device', 'platform': 'Web', 'is_active': True, 'last_seen_at': None}, 'identity_context': {'household_id': '91fb9681-6b71-45a0-9baa-370907654aea', 'user_id': '92ccaead-2d7c-4737-93af-134843ce2c6a', 'device_id': '5cf3b10b-01f5-4d3a-a085-baa4135e8d74', 'user_role': 'ADMIN', 'can_chat': True, 'can_execute_actions': True, 'can_override_conflicts': True, 'can_view_sensitive_cards': True}, 'session_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VfaWQiOiI1Y2YzYjEwYi0wMWY1LTRkM2EtYTA4NS1iYWE0MTM1ZThkNzQiLCJleHAiOjE3NzY3NDU2ODgsImhvdXNlaG9sZF9pZCI6IjkxZmI5NjgxLTZiNzEtNDVhMC05YmFhLTM3MDkwNzY1NGFlYSIsImlhdCI6MTc3Njc0NDc4OCwiaXNzIjoiaHBhbCIsImp0aSI6ImE1OWVkNDhmLTI0ZGQtNDY1MS1iOTQ5LWEzOTljMTYyNjdjNyIsInJvbGUiOiJBRE1JTiIsInR5cCI6ImFjY2VzcyIsInVzZXJfaWQiOiI5MmNjYWVhZC0yZDdjLTQ3MzctOTNhZi0xMzQ4NDNjZTJjNmEifQ.q1_S_G8WqRfU8uVwy98d_AHfWTUO3s1-JBUHVAZHgHY'}"
+        },
+        {
+          "name": "auth_missing_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'missing_bearer_token'}"
+        },
+        {
+          "name": "auth_invalid_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'invalid_or_expired_token'}"
+        },
+        {
+          "name": "auth_valid_token_200",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'assistant_message': 'Schedule appointment for 2026-04-20 06:00-06:45. Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'action_cards': [{'id': 'card:assist-9651625b0309-primary:confirm', 'type': 'confirm', 'title': 'Confirm recommendation', 'description': 'Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'related_entity': 'assist-9651625b0309-primary', 'required_action_payload': {'group_id': 'assist-9651625b0309-group', 'action_ids': ['assist-9651625b0309-primary']}, 'risk_level': 'high'}, {'id': 'card:assist-9651625b0309-primary:reject', 'type': 'reject', 'title': 'Reject recommendation', 'description': 'Dismiss this recommendation without applying changes.', 'related_entity': 'assist-9651625b0309-primary', 'required_action_payload': {'action_ids': ['assist-9651625b0309-primary']}, 'risk_level': 'low'}, {'id': 'card:assist-9651625b0309-primary:reschedule', 'type': 'reschedule', 'title': 'Adjust schedule', 'description': 'Pick a different time for this recommendation.', 'related_entity': 'assist-9651625b0309-primary', 'required_action_payload': {'action_id': 'assist-9651625b0309-primary', 'current_schedule': '2026-04-20 06:00-06:45'}, 'risk_level': 'medium'}], 'ui_patch': [{'entity_type': 'family', 'entity_id': '91fb9681-6b71-45a0-9baa-370907654aea', 'change_type': 'replace', 'payload': {'family_id': '91fb9681-6b71-45a0-9baa-370907654aea', 'member_count': 0, 'member_names': [], 'default_time_zone': 'UTC'}, 'version': 118901536947078, 'source_timestamp': '2026-04-21T04:13:08.408212Z'}, {'entity_type': 'notification', 'entity_id': 'notif:stale:91fb9681-6b71-45a0-9baa-370907654aea', 'change_type': 'create', 'payload': {'notification_id': 'notif:stale:91fb9681-6b71-45a0-9baa-370907654aea', 'title': 'View refresh pending', 'message': 'A refreshed snapshot is pending.', 'level': 'info', 'related_entity': '91fb9681-6b71-45a0-9baa-370907654aea'}, 'version': 118901536947078, 'source_timestamp': '2026-04-21T04:13:08.408212Z'}], 'requires_confirmation': True, 'explanation_summary': []}"
+        },
+        {
+          "name": "stream_connect_valid_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household_id': '91fb9681-6b71-45a0-9baa-370907654aea', 'payload': {'status': 'connected'}, 'watermark': '1776744788418-0'}"
+        },
+        {
+          "name": "stream_reconnect_no_forced_resync_on_zero_sequence",
+          "passed": true,
+          "status_code": 200,
+          "detail": "first={'household_id': '91fb9681-6b71-45a0-9baa-370907654aea', 'payload': {'status': 'connected'}, 'watermark': '1776744788421-0'}, second_event=update"
+        },
+        {
+          "name": "stream_gap_requires_resync",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'message': 'Requested watermark is older than available replay buffer. Client must call full bootstrap.', 'reason': 'watermark_too_old'}"
+        },
+        {
+          "name": "stream_adversarial_mini_test",
+          "passed": true,
+          "status_code": 200,
+          "detail": "adversarial_sse_ok"
+        }
+      ]
+    },
+    {
+      "run_index": 5,
+      "port": 8063,
+      "classification": "NONE",
+      "reason": "all checks passed",
+      "passed": true,
+      "boot_probe": {
+        "overall": "ok",
+        "checked_live": true,
+        "database": "ok",
+        "identity_repo": "ok",
+        "household_repo": "ok",
+        "auth_middleware": "ok",
+        "broadcaster": "ok",
+        "repository_fresh_transaction": "ok",
+        "repository_fresh_transaction_error": null,
+        "sse_internal_probe": "ok",
+        "sse_internal_probe_error": null,
+        "migration_mode": "metadata_create_all",
+        "pool_status": "Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0",
+        "required_tables": [
+          "households",
+          "users",
+          "devices",
+          "memberships",
+          "session_tokens",
+          "idempotency_keys"
+        ],
+        "required_columns": {
+          "households": [
+            "household_id",
+            "name",
+            "timezone",
+            "created_at",
+            "updated_at"
+          ],
+          "users": [
+            "user_id",
+            "household_id",
+            "name",
+            "email",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "devices": [
+            "device_id",
+            "user_id",
+            "household_id",
+            "device_name",
+            "platform",
+            "user_agent",
+            "is_active",
+            "created_at",
+            "updated_at",
+            "last_seen_at"
+          ],
+          "memberships": [
+            "membership_id",
+            "household_id",
+            "user_id",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "session_tokens": [
+            "token_id",
+            "household_id",
+            "user_id",
+            "device_id",
+            "role",
+            "session_claims",
+            "is_valid",
+            "created_at",
+            "expires_at"
+          ],
+          "idempotency_keys": [
+            "key",
+            "household_id",
+            "event_type",
+            "created_at",
+            "expires_at"
+          ]
+        },
+        "checked_at": "2026-04-21T04:13:16.186883+00:00"
+      },
+      "checks": [
+        {
+          "name": "boot_server_ready",
+          "passed": true,
+          "status_code": 200,
+          "detail": "server ready"
+        },
+        {
+          "name": "state_boot_probe_components",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{\"auth_middleware\": \"ok\", \"broadcaster\": \"ok\", \"checked_at\": \"2026-04-21T04:13:16.186883+00:00\", \"checked_live\": true, \"database\": \"ok\", \"household_repo\": \"ok\", \"identity_repo\": \"ok\", \"migration_mode\": \"metadata_create_all\", \"overall\": \"ok\", \"pool_status\": \"Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0\", \"repository_fresh_transaction\": \"ok\", \"repository_fresh_transaction_error\": null, \"required_columns\": {\"devices\": [\"device_id\", \"user_id\", \"household_id\", \"device_name\", \"platform\", \"user_agent\", \"is_active\", \"created_at\", \"updated_at\", \"last_seen_at\"], \"households\": [\"household_id\", \"name\", \"timezone\", \"created_at\", \"updated_at\"], \"idempotency_keys\": [\"key\", \"household_id\", \"event_type\", \"created_at\", \"expires_at\"], \"memberships\": [\"membership_id\", \"household_id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"updated_at\"], \"session_tokens\": [\"token_id\", \"household_id\", \"user_id\", \"device_id\", \"role\", \"session_claims\", \"is_valid\", \"created_at\", \"expires_at\"], \"users\": [\"user_id\", \"household_id\", \"name\", \"email\", \"role\", \"is_active\", \"created_at\", \"updated_at\"]}, \"required_tables\": [\"households\", \"users\", \"devices\", \"memberships\", \"session_tokens\", \"idempotency_keys\"], \"sse_internal_probe\": \"ok\", \"sse_internal_probe_error\": null}"
+        },
+        {
+          "name": "contract_household_create_unique",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': 'e7ca7546-18fc-4626-94af-c72b71c290b5', 'name': 'Boot Smoke 898d32', 'timezone': 'UTC', 'member_count': 0}, 'founder_user': {'user_id': '96f015f9-7cb8-4dd4-ab05-a9aa629748f9', 'household_id': 'e7ca7546-18fc-4626-94af-c72b71c290b5', 'name': 'Boot Founder', 'email': 'boot-smoke-1de895b6@example.com', 'role': 'ADMIN', 'is_active': True}}"
+        },
+        {
+          "name": "contract_household_create_duplicate_400",
+          "passed": true,
+          "status_code": 400,
+          "detail": "{'detail': 'founder_email_already_exists: boot-smoke-1de895b6@example.com'}"
+        },
+        {
+          "name": "contract_bootstrap_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': 'e7ca7546-18fc-4626-94af-c72b71c290b5', 'name': 'Boot Smoke 898d32', 'timezone': 'UTC', 'member_count': 1}, 'user': {'user_id': '96f015f9-7cb8-4dd4-ab05-a9aa629748f9', 'household_id': 'e7ca7546-18fc-4626-94af-c72b71c290b5', 'name': 'Boot Founder', 'email': 'boot-smoke-1de895b6@example.com', 'role': 'ADMIN', 'is_active': True}, 'device': {'device_id': '31fbbb62-cda4-4a5a-b943-3512c41a4cba', 'user_id': '96f015f9-7cb8-4dd4-ab05-a9aa629748f9', 'household_id': 'e7ca7546-18fc-4626-94af-c72b71c290b5', 'device_name': 'Primary Device', 'platform': 'Web', 'is_active': True, 'last_seen_at': None}, 'identity_context': {'household_id': 'e7ca7546-18fc-4626-94af-c72b71c290b5', 'user_id': '96f015f9-7cb8-4dd4-ab05-a9aa629748f9', 'device_id': '31fbbb62-cda4-4a5a-b943-3512c41a4cba', 'user_role': 'ADMIN', 'can_chat': True, 'can_execute_actions': True, 'can_override_conflicts': True, 'can_view_sensitive_cards': True}, 'session_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VfaWQiOiIzMWZiYmI2Mi1jZGE0LTRhNWEtYjk0My0zNTEyYzQxYTRjYmEiLCJleHAiOjE3NzY3NDU2OTYsImhvdXNlaG9sZF9pZCI6ImU3Y2E3NTQ2LTE4ZmMtNDYyNi05NGFmLWM3MmI3MWMyOTBiNSIsImlhdCI6MTc3Njc0NDc5NiwiaXNzIjoiaHBhbCIsImp0aSI6ImM1NTg5MzM3LTkwOTgtNDI2Mi04YzQ1LTlhOGZiOTU5MjdlNyIsInJvbGUiOiJBRE1JTiIsInR5cCI6ImFjY2VzcyIsInVzZXJfaWQiOiI5NmYwMTVmOS03Y2I4LTRkZDQtYWIwNS1hOWFhNjI5NzQ4ZjkifQ.ISQFwIJkkbwvt1MOshSlp21EbpOZr1nSvi1nnW5fT1c'}"
+        },
+        {
+          "name": "auth_missing_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'missing_bearer_token'}"
+        },
+        {
+          "name": "auth_invalid_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'invalid_or_expired_token'}"
+        },
+        {
+          "name": "auth_valid_token_200",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'assistant_message': 'Schedule appointment for 2026-04-20 06:00-06:45. Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'action_cards': [{'id': 'card:assist-d62b729644f5-primary:confirm', 'type': 'confirm', 'title': 'Confirm recommendation', 'description': 'Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'related_entity': 'assist-d62b729644f5-primary', 'required_action_payload': {'group_id': 'assist-d62b729644f5-group', 'action_ids': ['assist-d62b729644f5-primary']}, 'risk_level': 'high'}, {'id': 'card:assist-d62b729644f5-primary:reject', 'type': 'reject', 'title': 'Reject recommendation', 'description': 'Dismiss this recommendation without applying changes.', 'related_entity': 'assist-d62b729644f5-primary', 'required_action_payload': {'action_ids': ['assist-d62b729644f5-primary']}, 'risk_level': 'low'}, {'id': 'card:assist-d62b729644f5-primary:reschedule', 'type': 'reschedule', 'title': 'Adjust schedule', 'description': 'Pick a different time for this recommendation.', 'related_entity': 'assist-d62b729644f5-primary', 'required_action_payload': {'action_id': 'assist-d62b729644f5-primary', 'current_schedule': '2026-04-20 06:00-06:45'}, 'risk_level': 'medium'}], 'ui_patch': [{'entity_type': 'family', 'entity_id': 'e7ca7546-18fc-4626-94af-c72b71c290b5', 'change_type': 'replace', 'payload': {'family_id': 'e7ca7546-18fc-4626-94af-c72b71c290b5', 'member_count': 0, 'member_names': [], 'default_time_zone': 'UTC'}, 'version': 98480982843222, 'source_timestamp': '2026-04-21T04:13:16.553462Z'}, {'entity_type': 'notification', 'entity_id': 'notif:stale:e7ca7546-18fc-4626-94af-c72b71c290b5', 'change_type': 'create', 'payload': {'notification_id': 'notif:stale:e7ca7546-18fc-4626-94af-c72b71c290b5', 'title': 'View refresh pending', 'message': 'A refreshed snapshot is pending.', 'level': 'info', 'related_entity': 'e7ca7546-18fc-4626-94af-c72b71c290b5'}, 'version': 98480982843222, 'source_timestamp': '2026-04-21T04:13:16.553462Z'}], 'requires_confirmation': True, 'explanation_summary': []}"
+        },
+        {
+          "name": "stream_connect_valid_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household_id': 'e7ca7546-18fc-4626-94af-c72b71c290b5', 'payload': {'status': 'connected'}, 'watermark': '1776744796565-0'}"
+        },
+        {
+          "name": "stream_reconnect_no_forced_resync_on_zero_sequence",
+          "passed": true,
+          "status_code": 200,
+          "detail": "first={'household_id': 'e7ca7546-18fc-4626-94af-c72b71c290b5', 'payload': {'status': 'connected'}, 'watermark': '1776744796569-0'}, second_event=update"
+        },
+        {
+          "name": "stream_gap_requires_resync",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'message': 'Requested watermark is older than available replay buffer. Client must call full bootstrap.', 'reason': 'watermark_too_old'}"
+        },
+        {
+          "name": "stream_adversarial_mini_test",
+          "passed": true,
+          "status_code": 200,
+          "detail": "adversarial_sse_ok"
+        }
+      ]
+    },
+    {
+      "run_index": 6,
+      "port": 8070,
+      "classification": "NONE",
+      "reason": "all checks passed",
+      "passed": true,
+      "boot_probe": {
+        "overall": "ok",
+        "checked_live": true,
+        "database": "ok",
+        "identity_repo": "ok",
+        "household_repo": "ok",
+        "auth_middleware": "ok",
+        "broadcaster": "ok",
+        "repository_fresh_transaction": "ok",
+        "repository_fresh_transaction_error": null,
+        "sse_internal_probe": "ok",
+        "sse_internal_probe_error": null,
+        "migration_mode": "metadata_create_all",
+        "pool_status": "Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0",
+        "required_tables": [
+          "households",
+          "users",
+          "devices",
+          "memberships",
+          "session_tokens",
+          "idempotency_keys"
+        ],
+        "required_columns": {
+          "households": [
+            "household_id",
+            "name",
+            "timezone",
+            "created_at",
+            "updated_at"
+          ],
+          "users": [
+            "user_id",
+            "household_id",
+            "name",
+            "email",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "devices": [
+            "device_id",
+            "user_id",
+            "household_id",
+            "device_name",
+            "platform",
+            "user_agent",
+            "is_active",
+            "created_at",
+            "updated_at",
+            "last_seen_at"
+          ],
+          "memberships": [
+            "membership_id",
+            "household_id",
+            "user_id",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "session_tokens": [
+            "token_id",
+            "household_id",
+            "user_id",
+            "device_id",
+            "role",
+            "session_claims",
+            "is_valid",
+            "created_at",
+            "expires_at"
+          ],
+          "idempotency_keys": [
+            "key",
+            "household_id",
+            "event_type",
+            "created_at",
+            "expires_at"
+          ]
+        },
+        "checked_at": "2026-04-21T04:13:24.299257+00:00"
+      },
+      "checks": [
+        {
+          "name": "boot_server_ready",
+          "passed": true,
+          "status_code": 200,
+          "detail": "server ready"
+        },
+        {
+          "name": "state_boot_probe_components",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{\"auth_middleware\": \"ok\", \"broadcaster\": \"ok\", \"checked_at\": \"2026-04-21T04:13:24.299257+00:00\", \"checked_live\": true, \"database\": \"ok\", \"household_repo\": \"ok\", \"identity_repo\": \"ok\", \"migration_mode\": \"metadata_create_all\", \"overall\": \"ok\", \"pool_status\": \"Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0\", \"repository_fresh_transaction\": \"ok\", \"repository_fresh_transaction_error\": null, \"required_columns\": {\"devices\": [\"device_id\", \"user_id\", \"household_id\", \"device_name\", \"platform\", \"user_agent\", \"is_active\", \"created_at\", \"updated_at\", \"last_seen_at\"], \"households\": [\"household_id\", \"name\", \"timezone\", \"created_at\", \"updated_at\"], \"idempotency_keys\": [\"key\", \"household_id\", \"event_type\", \"created_at\", \"expires_at\"], \"memberships\": [\"membership_id\", \"household_id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"updated_at\"], \"session_tokens\": [\"token_id\", \"household_id\", \"user_id\", \"device_id\", \"role\", \"session_claims\", \"is_valid\", \"created_at\", \"expires_at\"], \"users\": [\"user_id\", \"household_id\", \"name\", \"email\", \"role\", \"is_active\", \"created_at\", \"updated_at\"]}, \"required_tables\": [\"households\", \"users\", \"devices\", \"memberships\", \"session_tokens\", \"idempotency_keys\"], \"sse_internal_probe\": \"ok\", \"sse_internal_probe_error\": null}"
+        },
+        {
+          "name": "contract_household_create_unique",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': 'e2c41b16-e2ab-4edb-8f78-d9546ae0193c', 'name': 'Boot Smoke 12458e', 'timezone': 'UTC', 'member_count': 0}, 'founder_user': {'user_id': '27402a3f-f5a3-457b-8c15-93702bdd2a0f', 'household_id': 'e2c41b16-e2ab-4edb-8f78-d9546ae0193c', 'name': 'Boot Founder', 'email': 'boot-smoke-73522740@example.com', 'role': 'ADMIN', 'is_active': True}}"
+        },
+        {
+          "name": "contract_household_create_duplicate_400",
+          "passed": true,
+          "status_code": 400,
+          "detail": "{'detail': 'founder_email_already_exists: boot-smoke-73522740@example.com'}"
+        },
+        {
+          "name": "contract_bootstrap_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': 'e2c41b16-e2ab-4edb-8f78-d9546ae0193c', 'name': 'Boot Smoke 12458e', 'timezone': 'UTC', 'member_count': 1}, 'user': {'user_id': '27402a3f-f5a3-457b-8c15-93702bdd2a0f', 'household_id': 'e2c41b16-e2ab-4edb-8f78-d9546ae0193c', 'name': 'Boot Founder', 'email': 'boot-smoke-73522740@example.com', 'role': 'ADMIN', 'is_active': True}, 'device': {'device_id': 'd88066ca-58a5-4eef-b275-af261f26bd22', 'user_id': '27402a3f-f5a3-457b-8c15-93702bdd2a0f', 'household_id': 'e2c41b16-e2ab-4edb-8f78-d9546ae0193c', 'device_name': 'Primary Device', 'platform': 'Web', 'is_active': True, 'last_seen_at': None}, 'identity_context': {'household_id': 'e2c41b16-e2ab-4edb-8f78-d9546ae0193c', 'user_id': '27402a3f-f5a3-457b-8c15-93702bdd2a0f', 'device_id': 'd88066ca-58a5-4eef-b275-af261f26bd22', 'user_role': 'ADMIN', 'can_chat': True, 'can_execute_actions': True, 'can_override_conflicts': True, 'can_view_sensitive_cards': True}, 'session_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VfaWQiOiJkODgwNjZjYS01OGE1LTRlZWYtYjI3NS1hZjI2MWYyNmJkMjIiLCJleHAiOjE3NzY3NDU3MDQsImhvdXNlaG9sZF9pZCI6ImUyYzQxYjE2LWUyYWItNGVkYi04Zjc4LWQ5NTQ2YWUwMTkzYyIsImlhdCI6MTc3Njc0NDgwNCwiaXNzIjoiaHBhbCIsImp0aSI6ImIyNjEzMDkxLTEyNzAtNDZjMC1iYWNmLWE1NDgxNDQ4Nzc5YSIsInJvbGUiOiJBRE1JTiIsInR5cCI6ImFjY2VzcyIsInVzZXJfaWQiOiIyNzQwMmEzZi1mNWEzLTQ1N2ItOGMxNS05MzcwMmJkZDJhMGYifQ.2fPRO9Ec4EbYHjEoIqERlPfa7CRzZtA0t3rFbWlErMk'}"
+        },
+        {
+          "name": "auth_missing_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'missing_bearer_token'}"
+        },
+        {
+          "name": "auth_invalid_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'invalid_or_expired_token'}"
+        },
+        {
+          "name": "auth_valid_token_200",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'assistant_message': 'Schedule appointment for 2026-04-20 06:00-06:45. Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'action_cards': [{'id': 'card:assist-2c60d3fd4063-primary:confirm', 'type': 'confirm', 'title': 'Confirm recommendation', 'description': 'Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'related_entity': 'assist-2c60d3fd4063-primary', 'required_action_payload': {'group_id': 'assist-2c60d3fd4063-group', 'action_ids': ['assist-2c60d3fd4063-primary']}, 'risk_level': 'high'}, {'id': 'card:assist-2c60d3fd4063-primary:reject', 'type': 'reject', 'title': 'Reject recommendation', 'description': 'Dismiss this recommendation without applying changes.', 'related_entity': 'assist-2c60d3fd4063-primary', 'required_action_payload': {'action_ids': ['assist-2c60d3fd4063-primary']}, 'risk_level': 'low'}, {'id': 'card:assist-2c60d3fd4063-primary:reschedule', 'type': 'reschedule', 'title': 'Adjust schedule', 'description': 'Pick a different time for this recommendation.', 'related_entity': 'assist-2c60d3fd4063-primary', 'required_action_payload': {'action_id': 'assist-2c60d3fd4063-primary', 'current_schedule': '2026-04-20 06:00-06:45'}, 'risk_level': 'medium'}], 'ui_patch': [{'entity_type': 'family', 'entity_id': 'e2c41b16-e2ab-4edb-8f78-d9546ae0193c', 'change_type': 'replace', 'payload': {'family_id': 'e2c41b16-e2ab-4edb-8f78-d9546ae0193c', 'member_count': 0, 'member_names': [], 'default_time_zone': 'UTC'}, 'version': 165052576354538, 'source_timestamp': '2026-04-21T04:13:24.623409Z'}, {'entity_type': 'notification', 'entity_id': 'notif:stale:e2c41b16-e2ab-4edb-8f78-d9546ae0193c', 'change_type': 'create', 'payload': {'notification_id': 'notif:stale:e2c41b16-e2ab-4edb-8f78-d9546ae0193c', 'title': 'View refresh pending', 'message': 'A refreshed snapshot is pending.', 'level': 'info', 'related_entity': 'e2c41b16-e2ab-4edb-8f78-d9546ae0193c'}, 'version': 165052576354538, 'source_timestamp': '2026-04-21T04:13:24.623409Z'}], 'requires_confirmation': True, 'explanation_summary': []}"
+        },
+        {
+          "name": "stream_connect_valid_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household_id': 'e2c41b16-e2ab-4edb-8f78-d9546ae0193c', 'payload': {'status': 'connected'}, 'watermark': '1776744804633-0'}"
+        },
+        {
+          "name": "stream_reconnect_no_forced_resync_on_zero_sequence",
+          "passed": true,
+          "status_code": 200,
+          "detail": "first={'household_id': 'e2c41b16-e2ab-4edb-8f78-d9546ae0193c', 'payload': {'status': 'connected'}, 'watermark': '1776744804637-0'}, second_event=update"
+        },
+        {
+          "name": "stream_gap_requires_resync",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'message': 'Requested watermark is older than available replay buffer. Client must call full bootstrap.', 'reason': 'watermark_too_old'}"
+        },
+        {
+          "name": "stream_adversarial_mini_test",
+          "passed": true,
+          "status_code": 200,
+          "detail": "adversarial_sse_ok"
+        }
+      ]
+    },
+    {
+      "run_index": 7,
+      "port": 8048,
+      "classification": "NONE",
+      "reason": "all checks passed",
+      "passed": true,
+      "boot_probe": {
+        "overall": "ok",
+        "checked_live": true,
+        "database": "ok",
+        "identity_repo": "ok",
+        "household_repo": "ok",
+        "auth_middleware": "ok",
+        "broadcaster": "ok",
+        "repository_fresh_transaction": "ok",
+        "repository_fresh_transaction_error": null,
+        "sse_internal_probe": "ok",
+        "sse_internal_probe_error": null,
+        "migration_mode": "metadata_create_all",
+        "pool_status": "Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0",
+        "required_tables": [
+          "households",
+          "users",
+          "devices",
+          "memberships",
+          "session_tokens",
+          "idempotency_keys"
+        ],
+        "required_columns": {
+          "households": [
+            "household_id",
+            "name",
+            "timezone",
+            "created_at",
+            "updated_at"
+          ],
+          "users": [
+            "user_id",
+            "household_id",
+            "name",
+            "email",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "devices": [
+            "device_id",
+            "user_id",
+            "household_id",
+            "device_name",
+            "platform",
+            "user_agent",
+            "is_active",
+            "created_at",
+            "updated_at",
+            "last_seen_at"
+          ],
+          "memberships": [
+            "membership_id",
+            "household_id",
+            "user_id",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "session_tokens": [
+            "token_id",
+            "household_id",
+            "user_id",
+            "device_id",
+            "role",
+            "session_claims",
+            "is_valid",
+            "created_at",
+            "expires_at"
+          ],
+          "idempotency_keys": [
+            "key",
+            "household_id",
+            "event_type",
+            "created_at",
+            "expires_at"
+          ]
+        },
+        "checked_at": "2026-04-21T04:13:32.362225+00:00"
+      },
+      "checks": [
+        {
+          "name": "boot_server_ready",
+          "passed": true,
+          "status_code": 200,
+          "detail": "server ready"
+        },
+        {
+          "name": "state_boot_probe_components",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{\"auth_middleware\": \"ok\", \"broadcaster\": \"ok\", \"checked_at\": \"2026-04-21T04:13:32.362225+00:00\", \"checked_live\": true, \"database\": \"ok\", \"household_repo\": \"ok\", \"identity_repo\": \"ok\", \"migration_mode\": \"metadata_create_all\", \"overall\": \"ok\", \"pool_status\": \"Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0\", \"repository_fresh_transaction\": \"ok\", \"repository_fresh_transaction_error\": null, \"required_columns\": {\"devices\": [\"device_id\", \"user_id\", \"household_id\", \"device_name\", \"platform\", \"user_agent\", \"is_active\", \"created_at\", \"updated_at\", \"last_seen_at\"], \"households\": [\"household_id\", \"name\", \"timezone\", \"created_at\", \"updated_at\"], \"idempotency_keys\": [\"key\", \"household_id\", \"event_type\", \"created_at\", \"expires_at\"], \"memberships\": [\"membership_id\", \"household_id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"updated_at\"], \"session_tokens\": [\"token_id\", \"household_id\", \"user_id\", \"device_id\", \"role\", \"session_claims\", \"is_valid\", \"created_at\", \"expires_at\"], \"users\": [\"user_id\", \"household_id\", \"name\", \"email\", \"role\", \"is_active\", \"created_at\", \"updated_at\"]}, \"required_tables\": [\"households\", \"users\", \"devices\", \"memberships\", \"session_tokens\", \"idempotency_keys\"], \"sse_internal_probe\": \"ok\", \"sse_internal_probe_error\": null}"
+        },
+        {
+          "name": "contract_household_create_unique",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': '98daa300-dc3f-43c3-ab43-82214ce3fd25', 'name': 'Boot Smoke d3c114', 'timezone': 'UTC', 'member_count': 0}, 'founder_user': {'user_id': 'dc3072cd-6f97-48a6-9d46-47bc337602c8', 'household_id': '98daa300-dc3f-43c3-ab43-82214ce3fd25', 'name': 'Boot Founder', 'email': 'boot-smoke-c5a989be@example.com', 'role': 'ADMIN', 'is_active': True}}"
+        },
+        {
+          "name": "contract_household_create_duplicate_400",
+          "passed": true,
+          "status_code": 400,
+          "detail": "{'detail': 'founder_email_already_exists: boot-smoke-c5a989be@example.com'}"
+        },
+        {
+          "name": "contract_bootstrap_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': '98daa300-dc3f-43c3-ab43-82214ce3fd25', 'name': 'Boot Smoke d3c114', 'timezone': 'UTC', 'member_count': 1}, 'user': {'user_id': 'dc3072cd-6f97-48a6-9d46-47bc337602c8', 'household_id': '98daa300-dc3f-43c3-ab43-82214ce3fd25', 'name': 'Boot Founder', 'email': 'boot-smoke-c5a989be@example.com', 'role': 'ADMIN', 'is_active': True}, 'device': {'device_id': 'bb2d724b-df72-4254-a2a8-b28931acf593', 'user_id': 'dc3072cd-6f97-48a6-9d46-47bc337602c8', 'household_id': '98daa300-dc3f-43c3-ab43-82214ce3fd25', 'device_name': 'Primary Device', 'platform': 'Web', 'is_active': True, 'last_seen_at': None}, 'identity_context': {'household_id': '98daa300-dc3f-43c3-ab43-82214ce3fd25', 'user_id': 'dc3072cd-6f97-48a6-9d46-47bc337602c8', 'device_id': 'bb2d724b-df72-4254-a2a8-b28931acf593', 'user_role': 'ADMIN', 'can_chat': True, 'can_execute_actions': True, 'can_override_conflicts': True, 'can_view_sensitive_cards': True}, 'session_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VfaWQiOiJiYjJkNzI0Yi1kZjcyLTQyNTQtYTJhOC1iMjg5MzFhY2Y1OTMiLCJleHAiOjE3NzY3NDU3MTIsImhvdXNlaG9sZF9pZCI6Ijk4ZGFhMzAwLWRjM2YtNDNjMy1hYjQzLTgyMjE0Y2UzZmQyNSIsImlhdCI6MTc3Njc0NDgxMiwiaXNzIjoiaHBhbCIsImp0aSI6IjZkMjZiMjIxLTcxOGEtNDI4Zi1hZWQzLWUyMDY1Mjg2MTQzNCIsInJvbGUiOiJBRE1JTiIsInR5cCI6ImFjY2VzcyIsInVzZXJfaWQiOiJkYzMwNzJjZC02Zjk3LTQ4YTYtOWQ0Ni00N2JjMzM3NjAyYzgifQ.mE7mqKPkXgAOGvMFRCb7md2r-YElk6hSWKVdgMQ-2Y4'}"
+        },
+        {
+          "name": "auth_missing_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'missing_bearer_token'}"
+        },
+        {
+          "name": "auth_invalid_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'invalid_or_expired_token'}"
+        },
+        {
+          "name": "auth_valid_token_200",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'assistant_message': 'Schedule appointment for 2026-04-20 06:00-06:45. Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'action_cards': [{'id': 'card:assist-d5f3cd01824b-primary:confirm', 'type': 'confirm', 'title': 'Confirm recommendation', 'description': 'Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'related_entity': 'assist-d5f3cd01824b-primary', 'required_action_payload': {'group_id': 'assist-d5f3cd01824b-group', 'action_ids': ['assist-d5f3cd01824b-primary']}, 'risk_level': 'high'}, {'id': 'card:assist-d5f3cd01824b-primary:reject', 'type': 'reject', 'title': 'Reject recommendation', 'description': 'Dismiss this recommendation without applying changes.', 'related_entity': 'assist-d5f3cd01824b-primary', 'required_action_payload': {'action_ids': ['assist-d5f3cd01824b-primary']}, 'risk_level': 'low'}, {'id': 'card:assist-d5f3cd01824b-primary:reschedule', 'type': 'reschedule', 'title': 'Adjust schedule', 'description': 'Pick a different time for this recommendation.', 'related_entity': 'assist-d5f3cd01824b-primary', 'required_action_payload': {'action_id': 'assist-d5f3cd01824b-primary', 'current_schedule': '2026-04-20 06:00-06:45'}, 'risk_level': 'medium'}], 'ui_patch': [{'entity_type': 'family', 'entity_id': '98daa300-dc3f-43c3-ab43-82214ce3fd25', 'change_type': 'replace', 'payload': {'family_id': '98daa300-dc3f-43c3-ab43-82214ce3fd25', 'member_count': 0, 'member_names': [], 'default_time_zone': 'UTC'}, 'version': 83746215219573, 'source_timestamp': '2026-04-21T04:13:32.683497Z'}, {'entity_type': 'notification', 'entity_id': 'notif:stale:98daa300-dc3f-43c3-ab43-82214ce3fd25', 'change_type': 'create', 'payload': {'notification_id': 'notif:stale:98daa300-dc3f-43c3-ab43-82214ce3fd25', 'title': 'View refresh pending', 'message': 'A refreshed snapshot is pending.', 'level': 'info', 'related_entity': '98daa300-dc3f-43c3-ab43-82214ce3fd25'}, 'version': 83746215219573, 'source_timestamp': '2026-04-21T04:13:32.683497Z'}], 'requires_confirmation': True, 'explanation_summary': []}"
+        },
+        {
+          "name": "stream_connect_valid_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household_id': '98daa300-dc3f-43c3-ab43-82214ce3fd25', 'payload': {'status': 'connected'}, 'watermark': '1776744812694-0'}"
+        },
+        {
+          "name": "stream_reconnect_no_forced_resync_on_zero_sequence",
+          "passed": true,
+          "status_code": 200,
+          "detail": "first={'household_id': '98daa300-dc3f-43c3-ab43-82214ce3fd25', 'payload': {'status': 'connected'}, 'watermark': '1776744812696-0'}, second_event=update"
+        },
+        {
+          "name": "stream_gap_requires_resync",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'message': 'Requested watermark is older than available replay buffer. Client must call full bootstrap.', 'reason': 'watermark_too_old'}"
+        },
+        {
+          "name": "stream_adversarial_mini_test",
+          "passed": true,
+          "status_code": 200,
+          "detail": "adversarial_sse_ok"
+        }
+      ]
+    },
+    {
+      "run_index": 8,
+      "port": 8031,
+      "classification": "NONE",
+      "reason": "all checks passed",
+      "passed": true,
+      "boot_probe": {
+        "overall": "ok",
+        "checked_live": true,
+        "database": "ok",
+        "identity_repo": "ok",
+        "household_repo": "ok",
+        "auth_middleware": "ok",
+        "broadcaster": "ok",
+        "repository_fresh_transaction": "ok",
+        "repository_fresh_transaction_error": null,
+        "sse_internal_probe": "ok",
+        "sse_internal_probe_error": null,
+        "migration_mode": "metadata_create_all",
+        "pool_status": "Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0",
+        "required_tables": [
+          "households",
+          "users",
+          "devices",
+          "memberships",
+          "session_tokens",
+          "idempotency_keys"
+        ],
+        "required_columns": {
+          "households": [
+            "household_id",
+            "name",
+            "timezone",
+            "created_at",
+            "updated_at"
+          ],
+          "users": [
+            "user_id",
+            "household_id",
+            "name",
+            "email",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "devices": [
+            "device_id",
+            "user_id",
+            "household_id",
+            "device_name",
+            "platform",
+            "user_agent",
+            "is_active",
+            "created_at",
+            "updated_at",
+            "last_seen_at"
+          ],
+          "memberships": [
+            "membership_id",
+            "household_id",
+            "user_id",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "session_tokens": [
+            "token_id",
+            "household_id",
+            "user_id",
+            "device_id",
+            "role",
+            "session_claims",
+            "is_valid",
+            "created_at",
+            "expires_at"
+          ],
+          "idempotency_keys": [
+            "key",
+            "household_id",
+            "event_type",
+            "created_at",
+            "expires_at"
+          ]
+        },
+        "checked_at": "2026-04-21T04:13:40.561852+00:00"
+      },
+      "checks": [
+        {
+          "name": "boot_server_ready",
+          "passed": true,
+          "status_code": 200,
+          "detail": "server ready"
+        },
+        {
+          "name": "state_boot_probe_components",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{\"auth_middleware\": \"ok\", \"broadcaster\": \"ok\", \"checked_at\": \"2026-04-21T04:13:40.561852+00:00\", \"checked_live\": true, \"database\": \"ok\", \"household_repo\": \"ok\", \"identity_repo\": \"ok\", \"migration_mode\": \"metadata_create_all\", \"overall\": \"ok\", \"pool_status\": \"Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0\", \"repository_fresh_transaction\": \"ok\", \"repository_fresh_transaction_error\": null, \"required_columns\": {\"devices\": [\"device_id\", \"user_id\", \"household_id\", \"device_name\", \"platform\", \"user_agent\", \"is_active\", \"created_at\", \"updated_at\", \"last_seen_at\"], \"households\": [\"household_id\", \"name\", \"timezone\", \"created_at\", \"updated_at\"], \"idempotency_keys\": [\"key\", \"household_id\", \"event_type\", \"created_at\", \"expires_at\"], \"memberships\": [\"membership_id\", \"household_id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"updated_at\"], \"session_tokens\": [\"token_id\", \"household_id\", \"user_id\", \"device_id\", \"role\", \"session_claims\", \"is_valid\", \"created_at\", \"expires_at\"], \"users\": [\"user_id\", \"household_id\", \"name\", \"email\", \"role\", \"is_active\", \"created_at\", \"updated_at\"]}, \"required_tables\": [\"households\", \"users\", \"devices\", \"memberships\", \"session_tokens\", \"idempotency_keys\"], \"sse_internal_probe\": \"ok\", \"sse_internal_probe_error\": null}"
+        },
+        {
+          "name": "contract_household_create_unique",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': 'd41534b9-c191-4dbe-b120-d962f0d1739f', 'name': 'Boot Smoke 821054', 'timezone': 'UTC', 'member_count': 0}, 'founder_user': {'user_id': 'a1900d6f-368a-4ccc-bd92-ba47e67e462f', 'household_id': 'd41534b9-c191-4dbe-b120-d962f0d1739f', 'name': 'Boot Founder', 'email': 'boot-smoke-8a22c9c8@example.com', 'role': 'ADMIN', 'is_active': True}}"
+        },
+        {
+          "name": "contract_household_create_duplicate_400",
+          "passed": true,
+          "status_code": 400,
+          "detail": "{'detail': 'founder_email_already_exists: boot-smoke-8a22c9c8@example.com'}"
+        },
+        {
+          "name": "contract_bootstrap_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': 'd41534b9-c191-4dbe-b120-d962f0d1739f', 'name': 'Boot Smoke 821054', 'timezone': 'UTC', 'member_count': 1}, 'user': {'user_id': 'a1900d6f-368a-4ccc-bd92-ba47e67e462f', 'household_id': 'd41534b9-c191-4dbe-b120-d962f0d1739f', 'name': 'Boot Founder', 'email': 'boot-smoke-8a22c9c8@example.com', 'role': 'ADMIN', 'is_active': True}, 'device': {'device_id': 'a5a18b60-c400-41f2-844d-236ccc07bebe', 'user_id': 'a1900d6f-368a-4ccc-bd92-ba47e67e462f', 'household_id': 'd41534b9-c191-4dbe-b120-d962f0d1739f', 'device_name': 'Primary Device', 'platform': 'Web', 'is_active': True, 'last_seen_at': None}, 'identity_context': {'household_id': 'd41534b9-c191-4dbe-b120-d962f0d1739f', 'user_id': 'a1900d6f-368a-4ccc-bd92-ba47e67e462f', 'device_id': 'a5a18b60-c400-41f2-844d-236ccc07bebe', 'user_role': 'ADMIN', 'can_chat': True, 'can_execute_actions': True, 'can_override_conflicts': True, 'can_view_sensitive_cards': True}, 'session_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VfaWQiOiJhNWExOGI2MC1jNDAwLTQxZjItODQ0ZC0yMzZjY2MwN2JlYmUiLCJleHAiOjE3NzY3NDU3MjAsImhvdXNlaG9sZF9pZCI6ImQ0MTUzNGI5LWMxOTEtNGRiZS1iMTIwLWQ5NjJmMGQxNzM5ZiIsImlhdCI6MTc3Njc0NDgyMCwiaXNzIjoiaHBhbCIsImp0aSI6IjkwNjI0YTA4LTdhYWEtNDAxYy1iNjcwLTFmYTE4ZmQxOTE0NSIsInJvbGUiOiJBRE1JTiIsInR5cCI6ImFjY2VzcyIsInVzZXJfaWQiOiJhMTkwMGQ2Zi0zNjhhLTRjY2MtYmQ5Mi1iYTQ3ZTY3ZTQ2MmYifQ.YvAtPmUwglHR-Mk8G_f70PBH8aaNXtsHylRWs4abRQ8'}"
+        },
+        {
+          "name": "auth_missing_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'missing_bearer_token'}"
+        },
+        {
+          "name": "auth_invalid_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'invalid_or_expired_token'}"
+        },
+        {
+          "name": "auth_valid_token_200",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'assistant_message': 'Schedule appointment for 2026-04-20 06:00-06:45. Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'action_cards': [{'id': 'card:assist-5c702da90c07-primary:confirm', 'type': 'confirm', 'title': 'Confirm recommendation', 'description': 'Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'related_entity': 'assist-5c702da90c07-primary', 'required_action_payload': {'group_id': 'assist-5c702da90c07-group', 'action_ids': ['assist-5c702da90c07-primary']}, 'risk_level': 'high'}, {'id': 'card:assist-5c702da90c07-primary:reject', 'type': 'reject', 'title': 'Reject recommendation', 'description': 'Dismiss this recommendation without applying changes.', 'related_entity': 'assist-5c702da90c07-primary', 'required_action_payload': {'action_ids': ['assist-5c702da90c07-primary']}, 'risk_level': 'low'}, {'id': 'card:assist-5c702da90c07-primary:reschedule', 'type': 'reschedule', 'title': 'Adjust schedule', 'description': 'Pick a different time for this recommendation.', 'related_entity': 'assist-5c702da90c07-primary', 'required_action_payload': {'action_id': 'assist-5c702da90c07-primary', 'current_schedule': '2026-04-20 06:00-06:45'}, 'risk_level': 'medium'}], 'ui_patch': [{'entity_type': 'family', 'entity_id': 'd41534b9-c191-4dbe-b120-d962f0d1739f', 'change_type': 'replace', 'payload': {'family_id': 'd41534b9-c191-4dbe-b120-d962f0d1739f', 'member_count': 0, 'member_names': [], 'default_time_zone': 'UTC'}, 'version': 105587699740223, 'source_timestamp': '2026-04-21T04:13:40.888744Z'}, {'entity_type': 'notification', 'entity_id': 'notif:stale:d41534b9-c191-4dbe-b120-d962f0d1739f', 'change_type': 'create', 'payload': {'notification_id': 'notif:stale:d41534b9-c191-4dbe-b120-d962f0d1739f', 'title': 'View refresh pending', 'message': 'A refreshed snapshot is pending.', 'level': 'info', 'related_entity': 'd41534b9-c191-4dbe-b120-d962f0d1739f'}, 'version': 105587699740223, 'source_timestamp': '2026-04-21T04:13:40.888744Z'}], 'requires_confirmation': True, 'explanation_summary': []}"
+        },
+        {
+          "name": "stream_connect_valid_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household_id': 'd41534b9-c191-4dbe-b120-d962f0d1739f', 'payload': {'status': 'connected'}, 'watermark': '1776744820898-0'}"
+        },
+        {
+          "name": "stream_reconnect_no_forced_resync_on_zero_sequence",
+          "passed": true,
+          "status_code": 200,
+          "detail": "first={'household_id': 'd41534b9-c191-4dbe-b120-d962f0d1739f', 'payload': {'status': 'connected'}, 'watermark': '1776744820902-0'}, second_event=update"
+        },
+        {
+          "name": "stream_gap_requires_resync",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'message': 'Requested watermark is older than available replay buffer. Client must call full bootstrap.', 'reason': 'watermark_too_old'}"
+        },
+        {
+          "name": "stream_adversarial_mini_test",
+          "passed": true,
+          "status_code": 200,
+          "detail": "adversarial_sse_ok"
+        }
+      ]
+    },
+    {
+      "run_index": 9,
+      "port": 8063,
+      "classification": "NONE",
+      "reason": "all checks passed",
+      "passed": true,
+      "boot_probe": {
+        "overall": "ok",
+        "checked_live": true,
+        "database": "ok",
+        "identity_repo": "ok",
+        "household_repo": "ok",
+        "auth_middleware": "ok",
+        "broadcaster": "ok",
+        "repository_fresh_transaction": "ok",
+        "repository_fresh_transaction_error": null,
+        "sse_internal_probe": "ok",
+        "sse_internal_probe_error": null,
+        "migration_mode": "metadata_create_all",
+        "pool_status": "Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0",
+        "required_tables": [
+          "households",
+          "users",
+          "devices",
+          "memberships",
+          "session_tokens",
+          "idempotency_keys"
+        ],
+        "required_columns": {
+          "households": [
+            "household_id",
+            "name",
+            "timezone",
+            "created_at",
+            "updated_at"
+          ],
+          "users": [
+            "user_id",
+            "household_id",
+            "name",
+            "email",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "devices": [
+            "device_id",
+            "user_id",
+            "household_id",
+            "device_name",
+            "platform",
+            "user_agent",
+            "is_active",
+            "created_at",
+            "updated_at",
+            "last_seen_at"
+          ],
+          "memberships": [
+            "membership_id",
+            "household_id",
+            "user_id",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "session_tokens": [
+            "token_id",
+            "household_id",
+            "user_id",
+            "device_id",
+            "role",
+            "session_claims",
+            "is_valid",
+            "created_at",
+            "expires_at"
+          ],
+          "idempotency_keys": [
+            "key",
+            "household_id",
+            "event_type",
+            "created_at",
+            "expires_at"
+          ]
+        },
+        "checked_at": "2026-04-21T04:13:48.971513+00:00"
+      },
+      "checks": [
+        {
+          "name": "boot_server_ready",
+          "passed": true,
+          "status_code": 200,
+          "detail": "server ready"
+        },
+        {
+          "name": "state_boot_probe_components",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{\"auth_middleware\": \"ok\", \"broadcaster\": \"ok\", \"checked_at\": \"2026-04-21T04:13:48.971513+00:00\", \"checked_live\": true, \"database\": \"ok\", \"household_repo\": \"ok\", \"identity_repo\": \"ok\", \"migration_mode\": \"metadata_create_all\", \"overall\": \"ok\", \"pool_status\": \"Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0\", \"repository_fresh_transaction\": \"ok\", \"repository_fresh_transaction_error\": null, \"required_columns\": {\"devices\": [\"device_id\", \"user_id\", \"household_id\", \"device_name\", \"platform\", \"user_agent\", \"is_active\", \"created_at\", \"updated_at\", \"last_seen_at\"], \"households\": [\"household_id\", \"name\", \"timezone\", \"created_at\", \"updated_at\"], \"idempotency_keys\": [\"key\", \"household_id\", \"event_type\", \"created_at\", \"expires_at\"], \"memberships\": [\"membership_id\", \"household_id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"updated_at\"], \"session_tokens\": [\"token_id\", \"household_id\", \"user_id\", \"device_id\", \"role\", \"session_claims\", \"is_valid\", \"created_at\", \"expires_at\"], \"users\": [\"user_id\", \"household_id\", \"name\", \"email\", \"role\", \"is_active\", \"created_at\", \"updated_at\"]}, \"required_tables\": [\"households\", \"users\", \"devices\", \"memberships\", \"session_tokens\", \"idempotency_keys\"], \"sse_internal_probe\": \"ok\", \"sse_internal_probe_error\": null}"
+        },
+        {
+          "name": "contract_household_create_unique",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': '059268d4-5d8e-42c0-8b42-bfa5701d7f1b', 'name': 'Boot Smoke 5c45c5', 'timezone': 'UTC', 'member_count': 0}, 'founder_user': {'user_id': '53002ae5-c2b7-4d03-8363-3a36226f5d51', 'household_id': '059268d4-5d8e-42c0-8b42-bfa5701d7f1b', 'name': 'Boot Founder', 'email': 'boot-smoke-a65ce63b@example.com', 'role': 'ADMIN', 'is_active': True}}"
+        },
+        {
+          "name": "contract_household_create_duplicate_400",
+          "passed": true,
+          "status_code": 400,
+          "detail": "{'detail': 'founder_email_already_exists: boot-smoke-a65ce63b@example.com'}"
+        },
+        {
+          "name": "contract_bootstrap_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': '059268d4-5d8e-42c0-8b42-bfa5701d7f1b', 'name': 'Boot Smoke 5c45c5', 'timezone': 'UTC', 'member_count': 1}, 'user': {'user_id': '53002ae5-c2b7-4d03-8363-3a36226f5d51', 'household_id': '059268d4-5d8e-42c0-8b42-bfa5701d7f1b', 'name': 'Boot Founder', 'email': 'boot-smoke-a65ce63b@example.com', 'role': 'ADMIN', 'is_active': True}, 'device': {'device_id': 'c2bb3666-65d2-4657-a10c-34fc6b7352f8', 'user_id': '53002ae5-c2b7-4d03-8363-3a36226f5d51', 'household_id': '059268d4-5d8e-42c0-8b42-bfa5701d7f1b', 'device_name': 'Primary Device', 'platform': 'Web', 'is_active': True, 'last_seen_at': None}, 'identity_context': {'household_id': '059268d4-5d8e-42c0-8b42-bfa5701d7f1b', 'user_id': '53002ae5-c2b7-4d03-8363-3a36226f5d51', 'device_id': 'c2bb3666-65d2-4657-a10c-34fc6b7352f8', 'user_role': 'ADMIN', 'can_chat': True, 'can_execute_actions': True, 'can_override_conflicts': True, 'can_view_sensitive_cards': True}, 'session_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VfaWQiOiJjMmJiMzY2Ni02NWQyLTQ2NTctYTEwYy0zNGZjNmI3MzUyZjgiLCJleHAiOjE3NzY3NDU3MjksImhvdXNlaG9sZF9pZCI6IjA1OTI2OGQ0LTVkOGUtNDJjMC04YjQyLWJmYTU3MDFkN2YxYiIsImlhdCI6MTc3Njc0NDgyOSwiaXNzIjoiaHBhbCIsImp0aSI6IjJjYzg0ODk4LWM5OTQtNGU0OC1iMmUyLWY2ODRmZjE3NmQ3OCIsInJvbGUiOiJBRE1JTiIsInR5cCI6ImFjY2VzcyIsInVzZXJfaWQiOiI1MzAwMmFlNS1jMmI3LTRkMDMtODM2My0zYTM2MjI2ZjVkNTEifQ.XlaGIk7MIdendmhMDY6WPJpu_piBsuZ31SjQgil_8dU'}"
+        },
+        {
+          "name": "auth_missing_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'missing_bearer_token'}"
+        },
+        {
+          "name": "auth_invalid_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'invalid_or_expired_token'}"
+        },
+        {
+          "name": "auth_valid_token_200",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'assistant_message': 'Schedule appointment for 2026-04-20 06:00-06:45. Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'action_cards': [{'id': 'card:assist-7c5d76c5379e-primary:confirm', 'type': 'confirm', 'title': 'Confirm recommendation', 'description': 'Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'related_entity': 'assist-7c5d76c5379e-primary', 'required_action_payload': {'group_id': 'assist-7c5d76c5379e-group', 'action_ids': ['assist-7c5d76c5379e-primary']}, 'risk_level': 'high'}, {'id': 'card:assist-7c5d76c5379e-primary:reject', 'type': 'reject', 'title': 'Reject recommendation', 'description': 'Dismiss this recommendation without applying changes.', 'related_entity': 'assist-7c5d76c5379e-primary', 'required_action_payload': {'action_ids': ['assist-7c5d76c5379e-primary']}, 'risk_level': 'low'}, {'id': 'card:assist-7c5d76c5379e-primary:reschedule', 'type': 'reschedule', 'title': 'Adjust schedule', 'description': 'Pick a different time for this recommendation.', 'related_entity': 'assist-7c5d76c5379e-primary', 'required_action_payload': {'action_id': 'assist-7c5d76c5379e-primary', 'current_schedule': '2026-04-20 06:00-06:45'}, 'risk_level': 'medium'}], 'ui_patch': [{'entity_type': 'family', 'entity_id': '059268d4-5d8e-42c0-8b42-bfa5701d7f1b', 'change_type': 'replace', 'payload': {'family_id': '059268d4-5d8e-42c0-8b42-bfa5701d7f1b', 'member_count': 0, 'member_names': [], 'default_time_zone': 'UTC'}, 'version': 249858457095818, 'source_timestamp': '2026-04-21T04:13:49.272116Z'}, {'entity_type': 'notification', 'entity_id': 'notif:stale:059268d4-5d8e-42c0-8b42-bfa5701d7f1b', 'change_type': 'create', 'payload': {'notification_id': 'notif:stale:059268d4-5d8e-42c0-8b42-bfa5701d7f1b', 'title': 'View refresh pending', 'message': 'A refreshed snapshot is pending.', 'level': 'info', 'related_entity': '059268d4-5d8e-42c0-8b42-bfa5701d7f1b'}, 'version': 249858457095818, 'source_timestamp': '2026-04-21T04:13:49.272116Z'}], 'requires_confirmation': True, 'explanation_summary': []}"
+        },
+        {
+          "name": "stream_connect_valid_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household_id': '059268d4-5d8e-42c0-8b42-bfa5701d7f1b', 'payload': {'status': 'connected'}, 'watermark': '1776744829281-0'}"
+        },
+        {
+          "name": "stream_reconnect_no_forced_resync_on_zero_sequence",
+          "passed": true,
+          "status_code": 200,
+          "detail": "first={'household_id': '059268d4-5d8e-42c0-8b42-bfa5701d7f1b', 'payload': {'status': 'connected'}, 'watermark': '1776744829285-0'}, second_event=update"
+        },
+        {
+          "name": "stream_gap_requires_resync",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'message': 'Requested watermark is older than available replay buffer. Client must call full bootstrap.', 'reason': 'watermark_too_old'}"
+        },
+        {
+          "name": "stream_adversarial_mini_test",
+          "passed": true,
+          "status_code": 200,
+          "detail": "adversarial_sse_ok"
+        }
+      ]
+    },
+    {
+      "run_index": 10,
+      "port": 8047,
+      "classification": "NONE",
+      "reason": "all checks passed",
+      "passed": true,
+      "boot_probe": {
+        "overall": "ok",
+        "checked_live": true,
+        "database": "ok",
+        "identity_repo": "ok",
+        "household_repo": "ok",
+        "auth_middleware": "ok",
+        "broadcaster": "ok",
+        "repository_fresh_transaction": "ok",
+        "repository_fresh_transaction_error": null,
+        "sse_internal_probe": "ok",
+        "sse_internal_probe_error": null,
+        "migration_mode": "metadata_create_all",
+        "pool_status": "Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0",
+        "required_tables": [
+          "households",
+          "users",
+          "devices",
+          "memberships",
+          "session_tokens",
+          "idempotency_keys"
+        ],
+        "required_columns": {
+          "households": [
+            "household_id",
+            "name",
+            "timezone",
+            "created_at",
+            "updated_at"
+          ],
+          "users": [
+            "user_id",
+            "household_id",
+            "name",
+            "email",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "devices": [
+            "device_id",
+            "user_id",
+            "household_id",
+            "device_name",
+            "platform",
+            "user_agent",
+            "is_active",
+            "created_at",
+            "updated_at",
+            "last_seen_at"
+          ],
+          "memberships": [
+            "membership_id",
+            "household_id",
+            "user_id",
+            "role",
+            "is_active",
+            "created_at",
+            "updated_at"
+          ],
+          "session_tokens": [
+            "token_id",
+            "household_id",
+            "user_id",
+            "device_id",
+            "role",
+            "session_claims",
+            "is_valid",
+            "created_at",
+            "expires_at"
+          ],
+          "idempotency_keys": [
+            "key",
+            "household_id",
+            "event_type",
+            "created_at",
+            "expires_at"
+          ]
+        },
+        "checked_at": "2026-04-21T04:13:57.063465+00:00"
+      },
+      "checks": [
+        {
+          "name": "boot_server_ready",
+          "passed": true,
+          "status_code": 200,
+          "detail": "server ready"
+        },
+        {
+          "name": "state_boot_probe_components",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{\"auth_middleware\": \"ok\", \"broadcaster\": \"ok\", \"checked_at\": \"2026-04-21T04:13:57.063465+00:00\", \"checked_live\": true, \"database\": \"ok\", \"household_repo\": \"ok\", \"identity_repo\": \"ok\", \"migration_mode\": \"metadata_create_all\", \"overall\": \"ok\", \"pool_status\": \"Pool size: 5  Connections in pool: 1 Current Overflow: -4 Current Checked out connections: 0\", \"repository_fresh_transaction\": \"ok\", \"repository_fresh_transaction_error\": null, \"required_columns\": {\"devices\": [\"device_id\", \"user_id\", \"household_id\", \"device_name\", \"platform\", \"user_agent\", \"is_active\", \"created_at\", \"updated_at\", \"last_seen_at\"], \"households\": [\"household_id\", \"name\", \"timezone\", \"created_at\", \"updated_at\"], \"idempotency_keys\": [\"key\", \"household_id\", \"event_type\", \"created_at\", \"expires_at\"], \"memberships\": [\"membership_id\", \"household_id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"updated_at\"], \"session_tokens\": [\"token_id\", \"household_id\", \"user_id\", \"device_id\", \"role\", \"session_claims\", \"is_valid\", \"created_at\", \"expires_at\"], \"users\": [\"user_id\", \"household_id\", \"name\", \"email\", \"role\", \"is_active\", \"created_at\", \"updated_at\"]}, \"required_tables\": [\"households\", \"users\", \"devices\", \"memberships\", \"session_tokens\", \"idempotency_keys\"], \"sse_internal_probe\": \"ok\", \"sse_internal_probe_error\": null}"
+        },
+        {
+          "name": "contract_household_create_unique",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': 'c561aa9c-fa58-47b2-946b-d0cbda137521', 'name': 'Boot Smoke a19ed9', 'timezone': 'UTC', 'member_count': 0}, 'founder_user': {'user_id': 'bfaef18d-e6ac-402c-ab78-dfd52c651869', 'household_id': 'c561aa9c-fa58-47b2-946b-d0cbda137521', 'name': 'Boot Founder', 'email': 'boot-smoke-40735848@example.com', 'role': 'ADMIN', 'is_active': True}}"
+        },
+        {
+          "name": "contract_household_create_duplicate_400",
+          "passed": true,
+          "status_code": 400,
+          "detail": "{'detail': 'founder_email_already_exists: boot-smoke-40735848@example.com'}"
+        },
+        {
+          "name": "contract_bootstrap_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household': {'household_id': 'c561aa9c-fa58-47b2-946b-d0cbda137521', 'name': 'Boot Smoke a19ed9', 'timezone': 'UTC', 'member_count': 1}, 'user': {'user_id': 'bfaef18d-e6ac-402c-ab78-dfd52c651869', 'household_id': 'c561aa9c-fa58-47b2-946b-d0cbda137521', 'name': 'Boot Founder', 'email': 'boot-smoke-40735848@example.com', 'role': 'ADMIN', 'is_active': True}, 'device': {'device_id': '02aa0e78-119d-4aa4-8e46-7ab71505e238', 'user_id': 'bfaef18d-e6ac-402c-ab78-dfd52c651869', 'household_id': 'c561aa9c-fa58-47b2-946b-d0cbda137521', 'device_name': 'Primary Device', 'platform': 'Web', 'is_active': True, 'last_seen_at': None}, 'identity_context': {'household_id': 'c561aa9c-fa58-47b2-946b-d0cbda137521', 'user_id': 'bfaef18d-e6ac-402c-ab78-dfd52c651869', 'device_id': '02aa0e78-119d-4aa4-8e46-7ab71505e238', 'user_role': 'ADMIN', 'can_chat': True, 'can_execute_actions': True, 'can_override_conflicts': True, 'can_view_sensitive_cards': True}, 'session_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VfaWQiOiIwMmFhMGU3OC0xMTlkLTRhYTQtOGU0Ni03YWI3MTUwNWUyMzgiLCJleHAiOjE3NzY3NDU3MzcsImhvdXNlaG9sZF9pZCI6ImM1NjFhYTljLWZhNTgtNDdiMi05NDZiLWQwY2JkYTEzNzUyMSIsImlhdCI6MTc3Njc0NDgzNywiaXNzIjoiaHBhbCIsImp0aSI6IjQ5NDk4OTRmLTk1MzMtNGQ3Yy04OTljLTZmMzI1YTAwZDIyZCIsInJvbGUiOiJBRE1JTiIsInR5cCI6ImFjY2VzcyIsInVzZXJfaWQiOiJiZmFlZjE4ZC1lNmFjLTQwMmMtYWI3OC1kZmQ1MmM2NTE4NjkifQ.nefakuMFkKDPEzCi2VWiar5ofQEgRAToG9_HhFvdVto'}"
+        },
+        {
+          "name": "auth_missing_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'missing_bearer_token'}"
+        },
+        {
+          "name": "auth_invalid_token_401",
+          "passed": true,
+          "status_code": 401,
+          "detail": "{'detail': 'invalid_or_expired_token'}"
+        },
+        {
+          "name": "auth_valid_token_200",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'assistant_message': 'Schedule appointment for 2026-04-20 06:00-06:45. Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'action_cards': [{'id': 'card:assist-e1b0ced589eb-primary:confirm', 'type': 'confirm', 'title': 'Confirm recommendation', 'description': 'Reserve 2026-04-20 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.', 'related_entity': 'assist-e1b0ced589eb-primary', 'required_action_payload': {'group_id': 'assist-e1b0ced589eb-group', 'action_ids': ['assist-e1b0ced589eb-primary']}, 'risk_level': 'high'}, {'id': 'card:assist-e1b0ced589eb-primary:reject', 'type': 'reject', 'title': 'Reject recommendation', 'description': 'Dismiss this recommendation without applying changes.', 'related_entity': 'assist-e1b0ced589eb-primary', 'required_action_payload': {'action_ids': ['assist-e1b0ced589eb-primary']}, 'risk_level': 'low'}, {'id': 'card:assist-e1b0ced589eb-primary:reschedule', 'type': 'reschedule', 'title': 'Adjust schedule', 'description': 'Pick a different time for this recommendation.', 'related_entity': 'assist-e1b0ced589eb-primary', 'required_action_payload': {'action_id': 'assist-e1b0ced589eb-primary', 'current_schedule': '2026-04-20 06:00-06:45'}, 'risk_level': 'medium'}], 'ui_patch': [{'entity_type': 'family', 'entity_id': 'c561aa9c-fa58-47b2-946b-d0cbda137521', 'change_type': 'replace', 'payload': {'family_id': 'c561aa9c-fa58-47b2-946b-d0cbda137521', 'member_count': 0, 'member_names': [], 'default_time_zone': 'UTC'}, 'version': 197422650835391, 'source_timestamp': '2026-04-21T04:13:57.345213Z'}, {'entity_type': 'notification', 'entity_id': 'notif:stale:c561aa9c-fa58-47b2-946b-d0cbda137521', 'change_type': 'create', 'payload': {'notification_id': 'notif:stale:c561aa9c-fa58-47b2-946b-d0cbda137521', 'title': 'View refresh pending', 'message': 'A refreshed snapshot is pending.', 'level': 'info', 'related_entity': 'c561aa9c-fa58-47b2-946b-d0cbda137521'}, 'version': 197422650835391, 'source_timestamp': '2026-04-21T04:13:57.345213Z'}], 'requires_confirmation': True, 'explanation_summary': []}"
+        },
+        {
+          "name": "stream_connect_valid_jwt",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'household_id': 'c561aa9c-fa58-47b2-946b-d0cbda137521', 'payload': {'status': 'connected'}, 'watermark': '1776744837356-0'}"
+        },
+        {
+          "name": "stream_reconnect_no_forced_resync_on_zero_sequence",
+          "passed": true,
+          "status_code": 200,
+          "detail": "first={'household_id': 'c561aa9c-fa58-47b2-946b-d0cbda137521', 'payload': {'status': 'connected'}, 'watermark': '1776744837358-0'}, second_event=update"
+        },
+        {
+          "name": "stream_gap_requires_resync",
+          "passed": true,
+          "status_code": 200,
+          "detail": "{'message': 'Requested watermark is older than available replay buffer. Client must call full bootstrap.', 'reason': 'watermark_too_old'}"
+        },
+        {
+          "name": "stream_adversarial_mini_test",
+          "passed": true,
+          "status_code": 200,
+          "detail": "adversarial_sse_ok"
+        }
+      ]
+    }
+  ]
+}

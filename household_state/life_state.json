@@ -1,0 +1,436 @@
+{
+  "households": {
+    "default": {
+      "intent_history": [
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.8,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "daily_focus",
+          "secondary_intents": [],
+          "confidence": 0.1,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "daily_focus",
+          "secondary_intents": [],
+          "confidence": 0.1,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.8,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "daily_focus",
+          "secondary_intents": [],
+          "confidence": 0.1,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "daily_focus",
+          "secondary_intents": [],
+          "confidence": 0.1,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.8,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "daily_focus",
+          "secondary_intents": [],
+          "confidence": 0.1,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "daily_focus",
+          "secondary_intents": [],
+          "confidence": 0.1,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.8,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "daily_focus",
+          "secondary_intents": [],
+          "confidence": 0.1,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "daily_focus",
+          "secondary_intents": [],
+          "confidence": 0.1,
+          "captured_at": "2026-04-19T08:00:00Z"
+        }
+      ],
+      "life_state": {
+        "workload_score": 0.2,
+        "stress_index": 0.1,
+        "routine_stability": 0.5,
+        "recent_focus_distribution": {
+          "daily_focus": 8,
+          "fitness": 8,
+          "meal": 0,
+          "medical": 0,
+          "scheduling": 0
+        },
+        "active_backlog_size": 5
+      },
+      "updated_at": "2026-04-19T08:00:00Z"
+    },
+    "runtime-api-household": {
+      "intent_history": [
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        }
+      ],
+      "life_state": {
+        "workload_score": 0.0,
+        "stress_index": 0.0,
+        "routine_stability": 1.0,
+        "recent_focus_distribution": {
+          "daily_focus": 0,
+          "fitness": 12,
+          "meal": 0,
+          "medical": 0,
+          "scheduling": 0
+        },
+        "active_backlog_size": 0
+      },
+      "updated_at": "2026-04-19T08:00:00Z"
+    },
+    "humanize-no-raw-ts": {
+      "intent_history": [
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        }
+      ],
+      "life_state": {
+        "workload_score": 0.04000000000000001,
+        "stress_index": 0.020000000000000004,
+        "routine_stability": 0.5,
+        "recent_focus_distribution": {
+          "daily_focus": 0,
+          "fitness": 2,
+          "meal": 0,
+          "medical": 0,
+          "scheduling": 0
+        },
+        "active_backlog_size": 1
+      },
+      "updated_at": "2026-04-19T08:00:00Z"
+    },
+    "humanize-workout": {
+      "intent_history": [
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        }
+      ],
+      "life_state": {
+        "workload_score": 0.04000000000000001,
+        "stress_index": 0.020000000000000004,
+        "routine_stability": 0.5,
+        "recent_focus_distribution": {
+          "daily_focus": 0,
+          "fitness": 2,
+          "meal": 0,
+          "medical": 0,
+          "scheduling": 0
+        },
+        "active_backlog_size": 1
+      },
+      "updated_at": "2026-04-19T08:00:00Z"
+    },
+    "behavior-rejection-household": {
+      "intent_history": [
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        }
+      ],
+      "life_state": {
+        "workload_score": 0.04000000000000001,
+        "stress_index": 0.020000000000000004,
+        "routine_stability": 0.0,
+        "recent_focus_distribution": {
+          "daily_focus": 0,
+          "fitness": 10,
+          "meal": 0,
+          "medical": 0,
+          "scheduling": 0
+        },
+        "active_backlog_size": 1
+      },
+      "updated_at": "2026-04-19T08:00:00Z"
+    },
+    "behavior-preferred-time-household": {
+      "intent_history": [
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        }
+      ],
+      "life_state": {
+        "workload_score": 0.04000000000000001,
+        "stress_index": 0.020000000000000004,
+        "routine_stability": 1.0,
+        "recent_focus_distribution": {
+          "daily_focus": 0,
+          "fitness": 2,
+          "meal": 0,
+          "medical": 0,
+          "scheduling": 0
+        },
+        "active_backlog_size": 1
+      },
+      "updated_at": "2026-04-19T08:00:00Z"
+    },
+    "behavior-ignored-household": {
+      "intent_history": [
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "fitness",
+          "secondary_intents": [],
+          "confidence": 0.5,
+          "captured_at": "2026-04-19T08:00:00Z"
+        }
+      ],
+      "life_state": {
+        "workload_score": 0.04000000000000001,
+        "stress_index": 0.020000000000000004,
+        "routine_stability": 0.0,
+        "recent_focus_distribution": {
+          "daily_focus": 0,
+          "fitness": 2,
+          "meal": 0,
+          "medical": 0,
+          "scheduling": 0
+        },
+        "active_backlog_size": 1
+      },
+      "updated_at": "2026-04-19T08:00:00Z"
+    },
+    "daily-focus-api-household": {
+      "intent_history": [
+        {
+          "intent": "daily_focus",
+          "secondary_intents": [],
+          "confidence": 0.65,
+          "captured_at": "2026-04-19T08:00:00Z"
+        },
+        {
+          "intent": "daily_focus",
+          "secondary_intents": [],
+          "confidence": 0.65,
+          "captured_at": "2026-04-19T08:00:00Z"
+        }
+      ],
+      "life_state": {
+        "workload_score": 0.04000000000000001,
+        "stress_index": 0.020000000000000004,
+        "routine_stability": 0.5,
+        "recent_focus_distribution": {
+          "daily_focus": 2,
+          "fitness": 0,
+          "meal": 0,
+          "medical": 0,
+          "scheduling": 0
+        },
+        "active_backlog_size": 1
+      },
+      "updated_at": "2026-04-19T08:00:00Z"
+    }
+  }
+}

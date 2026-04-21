@@ -1,0 +1,131 @@
+.navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--mobile-nav-height, 64px);
+  background: var(--color-bg-primary, #ffffff);
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+  display: none;
+}
+
+/* Show on mobile and tablet */
+@media (max-width: 1024px) {
+  .navigation {
+    display: block;
+  }
+}
+
+/* Hide on desktop */
+@media (min-width: 1025px) {
+  .navigation {
+    display: none;
+  }
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.navItem {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navLink {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-decoration: none;
+  color: var(--color-text-secondary, #6b7280);
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+  -webkit-user-select: none;
+  user-select: none;
+  padding: 8px 0;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.navLink:active {
+  background: rgba(37, 99, 235, 0.04);
+}
+
+.navLink.active {
+  color: var(--color-primary, #2563eb);
+}
+
+.icon {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  width: 28px;
+  transition: transform 0.2s ease;
+}
+
+.navLink.active .icon {
+  transform: scale(1.1);
+}
+
+.label {
+  font-size: 11px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60px;
+}
+
+.indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--color-primary, #2563eb);
+  border-radius: 2px 2px 0 0;
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: scaleX(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+/* Touch-friendly spacing */
+@supports (padding: max(0px)) {
+  .navLink {
+    padding-bottom: max(8px, env(safe-area-inset-bottom) / 2);
+  }
+
+  .navigation {
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(var(--mobile-nav-height, 64px) + env(safe-area-inset-bottom));
+  }
+}

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>HPAL - Offline</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      text-align: center;
+      background: white;
+      border-radius: 16px;
+      padding: 40px 20px;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      opacity: 0.5;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      color: #6b7280;
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .status {
+      padding: 12px 16px;
+      background: #fee2e2;
+      border-left: 4px solid #dc2626;
+      border-radius: 4px;
+      color: #991b1b;
+      font-size: 14px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .tips {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .tips h3 {
+      font-size: 14px;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .tips ul {
+      list-style: none;
+      padding: 0;
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.8;
+    }
+
+    .tips li:before {
+      content: "● ";
+      color: #2563eb;
+      margin-right: 8px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 8px;
+      vertical-align: -2px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .connection-monitor {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M12 6v6l4 2"></path>
+    </svg>
+
+    <h1>You're Offline</h1>
+
+    <div class="message">
+      It looks like you've lost your internet connection. Don't worry—HPAL is working on restoring it.
+    </div>
+
+    <div class="status">
+      🌐 Waiting for connection to be restored...
+    </div>
+
+    <div class="tips">
+      <h3>While offline, you can still:</h3>
+      <ul>
+        <li>View cached household data</li>
+        <li>Read previous conversations</li>
+        <li>Queue actions and messages</li>
+      </ul>
+    </div>
+
+    <div class="buttons">
+      <button class="btn-secondary" onclick="window.location.reload()">🔄 Retry</button>
+      <button class="btn-secondary" onclick="window.history.back()">← Back</button>
+    </div>
+
+    <div class="connection-monitor">
+      <span id="status">Monitoring connection...</span>
+    </div>
+  </div>
+
+  <script>
+    // Monitor connection status
+    function updateStatus() {
+      const status = document.getElementById('status');
+      if (navigator.onLine) {
+        status.textContent = '✅ Connected! Reloading...';
+        setTimeout(() => window.location.reload(), 1000);
+      } else {
+        status.textContent = '📡 Still offline. Last check: ' + new Date().toLocaleTimeString();
+      }
+    }
+
+    window.addEventListener('online', updateStatus);
+    window.addEventListener('offline', updateStatus);
+
+    // Check every 5 seconds
+    setInterval(updateStatus, 5000);
+
+    // Initial check
+    updateStatus();
+  </script>
+</body>
+</html>

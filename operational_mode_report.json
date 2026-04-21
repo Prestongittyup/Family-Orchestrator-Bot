@@ -1,0 +1,35 @@
+{
+  "artifact": "operational_mode_report",
+  "status": "completed",
+  "summary": {
+    "operational_layer_isolated": true,
+    "strict_contract_enforced": true,
+    "ui_today_operational_mode_added": true,
+    "integration_core_logic_unchanged": true,
+    "evaluation_logic_unchanged": true
+  },
+  "operational_endpoints": [
+    "/operational/run",
+    "/operational/context",
+    "/operational/brief"
+  ],
+  "tests": {
+    "operational_suite": {
+      "command": "python -m pytest tests/test_operational_mode.py -q",
+      "result": "passed",
+      "passed": 4,
+      "failed": 0
+    },
+    "regression_suite": {
+      "command": "python -m pytest -q",
+      "result": "passed",
+      "passed": 279,
+      "failed": 0
+    }
+  },
+  "notes": [
+    "Operational responses are emitted via strict Pydantic models with extra fields forbidden.",
+    "Operational router uses integration_core orchestration path and does not call simulation/evaluation routes.",
+    "A minimal .env fallback loader was added to env bootstrap to keep full-suite deterministic when python-dotenv is unavailable."
+  ]
+}

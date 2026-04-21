@@ -1,0 +1,2958 @@
+{
+  "households": {
+    "household-core-approval": {
+      "household_id": "household-core-approval",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-706631b35d50-next",
+          "title": "Schedule the dentist appointment in the first protected weekday slot",
+          "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+          "domain": "appointment",
+          "urgency": "high",
+          "scheduled_for": "2026-04-20 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "approved",
+          "request_id": "assist-706631b35d50"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-706631b35d50",
+          "intent_summary": "appointment request with low priority and 2 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-706631b35d50-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:15:01.316306Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-706631b35d50",
+          "query": "Schedule a doctor appointment for Monday morning after school drop-off",
+          "recorded_at": "2026-04-19T06:15:01.316312Z"
+        },
+        {
+          "type": "assistant_approval",
+          "request_id": "assist-706631b35d50",
+          "action_ids": [
+            "assist-706631b35d50-next"
+          ],
+          "recorded_at": "2026-04-19T06:15:31.006093Z"
+        }
+      ],
+      "responses": {
+        "assist-706631b35d50": {
+          "request_id": "assist-706631b35d50",
+          "intent_summary": "appointment request with low priority and 2 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-core-approval",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": null,
+            "low_inventory_items": [],
+            "pending_approval_count": 0,
+            "conflicts": [
+              {
+                "conflict_type": "busy_week",
+                "severity": "high",
+                "description": "The next planning window already contains 5 calendar commitments."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-706631b35d50-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "approved"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-706631b35d50-approval-group",
+              "title": "Schedule the dentist appointment in the first protected weekday slot",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-706631b35d50-next"
+              ],
+              "approval_status": "approved"
+            }
+          ],
+          "reasoning_trace": [
+            "The household calendar already shows 5 near-term commitments.",
+            "2026-04-20 06:00-06:45 is the earliest low-conflict weekday opening in the state graph.",
+            "Choosing a buffered appointment window avoids stealing time from dinner coordination later in the day.",
+            "Approval recorded without executing any downstream side effects."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:15:31.006104Z"
+    },
+    "household-001": {
+      "household_id": "household-001",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-8da57ed9a458-next",
+          "title": "Schedule the dentist appointment in the first protected weekday slot",
+          "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+          "domain": "appointment",
+          "urgency": "high",
+          "scheduled_for": "2026-04-20 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-8da57ed9a458"
+        },
+        {
+          "action_id": "assist-1f68f8104ca9-next",
+          "title": "Schedule the dentist appointment in the first protected weekday slot",
+          "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+          "domain": "appointment",
+          "urgency": "high",
+          "scheduled_for": "2026-04-20 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-1f68f8104ca9"
+        },
+        {
+          "action_id": "assist-573059900039-next",
+          "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+          "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+          "domain": "meal",
+          "urgency": "high",
+          "scheduled_for": "2026-04-19 18:30-19:15",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-573059900039"
+        },
+        {
+          "action_id": "assist-b2d4fce86d57-next",
+          "title": "Schedule the dentist appointment in the first protected weekday slot",
+          "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+          "domain": "appointment",
+          "urgency": "high",
+          "scheduled_for": "2026-04-20 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-b2d4fce86d57"
+        },
+        {
+          "action_id": "assist-49416be14740-next",
+          "title": "Schedule the dentist appointment in the first protected weekday slot",
+          "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+          "domain": "appointment",
+          "urgency": "high",
+          "scheduled_for": "2026-04-20 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-49416be14740"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [
+        "fat loss",
+        "strength"
+      ],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-8da57ed9a458",
+          "intent_summary": "appointment request with low priority and 4 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-8da57ed9a458-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:16:35.929567Z"
+        },
+        {
+          "request_id": "assist-1f68f8104ca9",
+          "intent_summary": "appointment request with low priority and 4 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-1f68f8104ca9-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:16:35.949219Z"
+        },
+        {
+          "request_id": "assist-573059900039",
+          "intent_summary": "meal request with low priority and 4 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-573059900039-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:16:35.988894Z"
+        },
+        {
+          "request_id": "assist-b2d4fce86d57",
+          "intent_summary": "appointment request with low priority and 4 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-b2d4fce86d57-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:16:36.024623Z"
+        },
+        {
+          "request_id": "assist-49416be14740",
+          "intent_summary": "appointment request with low priority and 4 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-49416be14740-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:16:36.079242Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-8da57ed9a458",
+          "query": "Plan today with appointments, meals, and a workout around the family schedule",
+          "recorded_at": "2026-04-19T06:16:35.929573Z"
+        },
+        {
+          "type": "assistant_query",
+          "request_id": "assist-1f68f8104ca9",
+          "query": "Plan today around appointments, dinner, and a workout after school pickup",
+          "recorded_at": "2026-04-19T06:16:35.949226Z"
+        },
+        {
+          "type": "assistant_query",
+          "request_id": "assist-573059900039",
+          "query": "Plan today with dinner and a workout around the family schedule",
+          "recorded_at": "2026-04-19T06:16:35.988917Z"
+        },
+        {
+          "type": "assistant_query",
+          "request_id": "assist-b2d4fce86d57",
+          "query": "Plan today with appointments, dinner, and a workout around the family schedule",
+          "recorded_at": "2026-04-19T06:16:36.024631Z"
+        },
+        {
+          "type": "assistant_query",
+          "request_id": "assist-49416be14740",
+          "query": "Plan today with appointments, meals, and a workout around the family schedule",
+          "recorded_at": "2026-04-19T06:16:36.079250Z"
+        }
+      ],
+      "responses": {
+        "assist-8da57ed9a458": {
+          "request_id": "assist-8da57ed9a458",
+          "intent_summary": "appointment request with low priority and 4 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-001",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": "fat loss",
+            "low_inventory_items": [],
+            "pending_approval_count": 1,
+            "conflicts": [
+              {
+                "conflict_type": "busy_week",
+                "severity": "high",
+                "description": "The next planning window already contains 5 calendar commitments."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-8da57ed9a458-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-8da57ed9a458-approval-group",
+              "title": "Schedule the dentist appointment in the first protected weekday slot",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-8da57ed9a458-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "The household calendar already shows 5 near-term commitments.",
+            "2026-04-20 06:00-06:45 is the earliest low-conflict weekday opening in the state graph.",
+            "Choosing a buffered appointment window avoids stealing time from dinner coordination later in the day."
+          ]
+        },
+        "assist-1f68f8104ca9": {
+          "request_id": "assist-1f68f8104ca9",
+          "intent_summary": "appointment request with low priority and 4 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-001",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": "fat loss",
+            "low_inventory_items": [],
+            "pending_approval_count": 2,
+            "conflicts": [
+              {
+                "conflict_type": "busy_week",
+                "severity": "high",
+                "description": "The next planning window already contains 5 calendar commitments."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-1f68f8104ca9-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-1f68f8104ca9-approval-group",
+              "title": "Schedule the dentist appointment in the first protected weekday slot",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-1f68f8104ca9-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "The household calendar already shows 5 near-term commitments.",
+            "2026-04-20 06:00-06:45 is the earliest low-conflict weekday opening in the state graph.",
+            "Choosing a buffered appointment window avoids stealing time from dinner coordination later in the day."
+          ]
+        },
+        "assist-573059900039": {
+          "request_id": "assist-573059900039",
+          "intent_summary": "meal request with low priority and 4 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-001",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": "strength",
+            "low_inventory_items": [],
+            "pending_approval_count": 3,
+            "conflicts": [
+              {
+                "conflict_type": "inventory_gap",
+                "severity": "medium",
+                "description": "Inventory is missing: bell pepper."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-573059900039-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-573059900039-approval-group",
+              "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-573059900039-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "Inventory and meal history make Chicken Quinoa Bowl the least repetitive dinner option.",
+            "The food recommendation preserves an evening buffer against existing time pressure.",
+            "Groceries are bundled into the same recommendation so the plan stays realistic."
+          ]
+        },
+        "assist-b2d4fce86d57": {
+          "request_id": "assist-b2d4fce86d57",
+          "intent_summary": "appointment request with low priority and 4 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-001",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": "strength",
+            "low_inventory_items": [],
+            "pending_approval_count": 4,
+            "conflicts": [
+              {
+                "conflict_type": "busy_week",
+                "severity": "high",
+                "description": "The next planning window already contains 5 calendar commitments."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-b2d4fce86d57-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-b2d4fce86d57-approval-group",
+              "title": "Schedule the dentist appointment in the first protected weekday slot",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-b2d4fce86d57-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "The household calendar already shows 5 near-term commitments.",
+            "2026-04-20 06:00-06:45 is the earliest low-conflict weekday opening in the state graph.",
+            "Choosing a buffered appointment window avoids stealing time from dinner coordination later in the day."
+          ]
+        },
+        "assist-49416be14740": {
+          "request_id": "assist-49416be14740",
+          "intent_summary": "appointment request with low priority and 4 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-001",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": "strength",
+            "low_inventory_items": [],
+            "pending_approval_count": 5,
+            "conflicts": [
+              {
+                "conflict_type": "busy_week",
+                "severity": "high",
+                "description": "The next planning window already contains 5 calendar commitments."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-49416be14740-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-49416be14740-approval-group",
+              "title": "Schedule the dentist appointment in the first protected weekday slot",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-49416be14740-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "The household calendar already shows 5 near-term commitments.",
+            "2026-04-20 06:00-06:45 is the earliest low-conflict weekday opening in the state graph.",
+            "Choosing a buffered appointment window avoids stealing time from dinner coordination later in the day."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:16:36.079252Z"
+    },
+    "household-runtime-deterministic": {
+      "household_id": "household-runtime-deterministic",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-a7eec27b928b-next",
+          "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+          "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+          "domain": "meal",
+          "urgency": "high",
+          "scheduled_for": "2026-04-19 18:30-19:15",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-a7eec27b928b"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [
+        "fat loss"
+      ],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-a7eec27b928b",
+          "intent_summary": "appointment request with low priority and 4 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-a7eec27b928b-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:15:01.457462Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-a7eec27b928b",
+          "query": "Plan today around dinner and a workout after school pickup",
+          "recorded_at": "2026-04-19T06:15:01.457475Z"
+        }
+      ],
+      "responses": {
+        "assist-a7eec27b928b": {
+          "request_id": "assist-a7eec27b928b",
+          "intent_summary": "appointment request with low priority and 4 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-runtime-deterministic",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": "fat loss",
+            "low_inventory_items": [],
+            "pending_approval_count": 0,
+            "conflicts": [
+              {
+                "conflict_type": "inventory_gap",
+                "severity": "medium",
+                "description": "Inventory is missing: bell pepper."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-a7eec27b928b-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-a7eec27b928b-approval-group",
+              "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-a7eec27b928b-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "Inventory and meal history make Chicken Quinoa Bowl the least repetitive dinner option.",
+            "The food recommendation preserves an evening buffer against existing time pressure.",
+            "Groceries are bundled into the same recommendation so the plan stays realistic."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:15:01.457477Z"
+    },
+    "household-runtime-multi-domain": {
+      "household_id": "household-runtime-multi-domain",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-9eae51e5bf56-next",
+          "title": "Schedule the dentist appointment in the first protected weekday slot",
+          "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+          "domain": "appointment",
+          "urgency": "high",
+          "scheduled_for": "2026-04-20 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-9eae51e5bf56"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [
+        "fat loss"
+      ],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-9eae51e5bf56",
+          "intent_summary": "appointment request with low priority and 5 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-9eae51e5bf56-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:15:01.482370Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-9eae51e5bf56",
+          "query": "Schedule a doctor appointment, dinner, and a workout around the family plan today",
+          "recorded_at": "2026-04-19T06:15:01.482378Z"
+        }
+      ],
+      "responses": {
+        "assist-9eae51e5bf56": {
+          "request_id": "assist-9eae51e5bf56",
+          "intent_summary": "appointment request with low priority and 5 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-runtime-multi-domain",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": "fat loss",
+            "low_inventory_items": [],
+            "pending_approval_count": 0,
+            "conflicts": [
+              {
+                "conflict_type": "busy_week",
+                "severity": "high",
+                "description": "The next planning window already contains 5 calendar commitments."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-9eae51e5bf56-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-9eae51e5bf56-approval-group",
+              "title": "Schedule the dentist appointment in the first protected weekday slot",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-9eae51e5bf56-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "The household calendar already shows 5 near-term commitments.",
+            "2026-04-20 06:00-06:45 is the earliest low-conflict weekday opening in the state graph.",
+            "Choosing a buffered appointment window avoids stealing time from dinner coordination later in the day."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:15:01.482380Z"
+    },
+    "household-runtime-conflicts": {
+      "household_id": "household-runtime-conflicts",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-early-1",
+          "title": "Breakfast cleanup",
+          "start": "2026-04-19T06:00:00Z",
+          "end": "2026-04-19T06:45:00Z"
+        },
+        {
+          "event_id": "evt-early-2",
+          "title": "Commute prep",
+          "start": "2026-04-19T07:00:00Z",
+          "end": "2026-04-19T07:45:00Z"
+        },
+        {
+          "event_id": "evt-early-3",
+          "title": "Midday errand",
+          "start": "2026-04-19T12:00:00Z",
+          "end": "2026-04-19T12:45:00Z"
+        },
+        {
+          "event_id": "evt-early-4",
+          "title": "After school buffer",
+          "start": "2026-04-19T16:00:00Z",
+          "end": "2026-04-19T16:45:00Z"
+        },
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-f81eb6bfc1ac-next",
+          "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+          "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+          "domain": "meal",
+          "urgency": "high",
+          "scheduled_for": "2026-04-19 18:30-19:15",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-f81eb6bfc1ac"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [
+        "fat loss"
+      ],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-f81eb6bfc1ac",
+          "intent_summary": "meal request with low priority and 4 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-f81eb6bfc1ac-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:15:01.503833Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-f81eb6bfc1ac",
+          "query": "Plan dinner and a workout for tonight around the household schedule",
+          "recorded_at": "2026-04-19T06:15:01.503840Z"
+        }
+      ],
+      "responses": {
+        "assist-f81eb6bfc1ac": {
+          "request_id": "assist-f81eb6bfc1ac",
+          "intent_summary": "meal request with low priority and 4 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-runtime-conflicts",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 9,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": "fat loss",
+            "low_inventory_items": [],
+            "pending_approval_count": 0,
+            "conflicts": [
+              {
+                "conflict_type": "inventory_gap",
+                "severity": "medium",
+                "description": "Inventory is missing: bell pepper."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-f81eb6bfc1ac-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-f81eb6bfc1ac-approval-group",
+              "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-f81eb6bfc1ac-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "Inventory and meal history make Chicken Quinoa Bowl the least repetitive dinner option.",
+            "The food recommendation preserves an evening buffer against existing time pressure.",
+            "Groceries are bundled into the same recommendation so the plan stays realistic."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:15:01.503842Z"
+    },
+    "household-runtime-api": {
+      "household_id": "household-runtime-api",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-3c4b63ef67c7-next",
+          "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+          "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+          "domain": "meal",
+          "urgency": "high",
+          "scheduled_for": "2026-04-19 18:30-19:15",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-3c4b63ef67c7"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [
+        "fat loss"
+      ],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-3c4b63ef67c7",
+          "intent_summary": "meal request with low priority and 3 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-3c4b63ef67c7-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:15:01.545409Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-3c4b63ef67c7",
+          "query": "Plan today with dinner and a workout block after work",
+          "recorded_at": "2026-04-19T06:15:01.545416Z"
+        }
+      ],
+      "responses": {
+        "assist-3c4b63ef67c7": {
+          "request_id": "assist-3c4b63ef67c7",
+          "intent_summary": "meal request with low priority and 3 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-runtime-api",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": "fat loss",
+            "low_inventory_items": [],
+            "pending_approval_count": 0,
+            "conflicts": [
+              {
+                "conflict_type": "inventory_gap",
+                "severity": "medium",
+                "description": "Inventory is missing: bell pepper."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-3c4b63ef67c7-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-3c4b63ef67c7-approval-group",
+              "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-3c4b63ef67c7-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "Inventory and meal history make Chicken Quinoa Bowl the least repetitive dinner option.",
+            "The food recommendation preserves an evening buffer against existing time pressure.",
+            "Groceries are bundled into the same recommendation so the plan stays realistic."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:15:01.545417Z"
+    },
+    "household-state-convergence": {
+      "household_id": "household-state-convergence",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-a424f2a76840-next",
+          "title": "Schedule the dentist appointment in the first protected weekday slot",
+          "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+          "domain": "appointment",
+          "urgency": "high",
+          "scheduled_for": "2026-04-20 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-a424f2a76840"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-a424f2a76840",
+          "intent_summary": "appointment request with low priority and 1 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-a424f2a76840-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:15:01.569787Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-a424f2a76840",
+          "query": "I'm busy this week, need dentist appointment",
+          "recorded_at": "2026-04-19T06:15:01.569800Z"
+        }
+      ],
+      "responses": {
+        "assist-a424f2a76840": {
+          "request_id": "assist-a424f2a76840",
+          "intent_summary": "appointment request with low priority and 1 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-state-convergence",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": null,
+            "low_inventory_items": [],
+            "pending_approval_count": 0,
+            "conflicts": [
+              {
+                "conflict_type": "busy_week",
+                "severity": "high",
+                "description": "The next planning window already contains 5 calendar commitments."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-a424f2a76840-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-a424f2a76840-approval-group",
+              "title": "Schedule the dentist appointment in the first protected weekday slot",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-a424f2a76840-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "The household calendar already shows 5 near-term commitments.",
+            "2026-04-20 06:00-06:45 is the earliest low-conflict weekday opening in the state graph.",
+            "Choosing a buffered appointment window avoids stealing time from dinner coordination later in the day."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:15:01.569803Z"
+    },
+    "household-state-no-leak": {
+      "household_id": "household-state-no-leak",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-4011ff55f284-next",
+          "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+          "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+          "domain": "meal",
+          "urgency": "high",
+          "scheduled_for": "2026-04-19 18:30-19:15",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-4011ff55f284"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-4011ff55f284",
+          "intent_summary": "meal request with low priority and 1 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-4011ff55f284-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:15:01.608967Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-4011ff55f284",
+          "query": "What should I do next for dinner and groceries?",
+          "recorded_at": "2026-04-19T06:15:01.608982Z"
+        }
+      ],
+      "responses": {
+        "assist-4011ff55f284": {
+          "request_id": "assist-4011ff55f284",
+          "intent_summary": "meal request with low priority and 1 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-state-no-leak",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": null,
+            "low_inventory_items": [],
+            "pending_approval_count": 0,
+            "conflicts": [
+              {
+                "conflict_type": "inventory_gap",
+                "severity": "medium",
+                "description": "Inventory is missing: bell pepper."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-4011ff55f284-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-4011ff55f284-approval-group",
+              "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-4011ff55f284-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "Inventory and meal history make Chicken Quinoa Bowl the least repetitive dinner option.",
+            "The food recommendation preserves an evening buffer against existing time pressure.",
+            "Groceries are bundled into the same recommendation so the plan stays realistic."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:15:01.608985Z"
+    },
+    "household-state-conflict": {
+      "household_id": "household-state-conflict",
+      "reference_time": "2026-04-19T07:30:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-conflict-1",
+          "title": "School drop-off",
+          "start": "2026-04-19T08:00:00Z",
+          "end": "2026-04-19T08:45:00Z"
+        },
+        {
+          "event_id": "evt-conflict-2",
+          "title": "Doctor callback",
+          "start": "2026-04-19T08:30:00Z",
+          "end": "2026-04-19T09:00:00Z"
+        },
+        {
+          "event_id": "evt-conflict-3",
+          "title": "Dinner prep",
+          "start": "2026-04-19T18:00:00Z",
+          "end": "2026-04-19T18:45:00Z"
+        },
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-fc1977c983d1-next",
+          "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+          "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+          "domain": "meal",
+          "urgency": "high",
+          "scheduled_for": "2026-04-19 18:30-19:15",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-fc1977c983d1"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-fc1977c983d1",
+          "intent_summary": "meal request with low priority and 1 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-fc1977c983d1-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:15:01.631933Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-fc1977c983d1",
+          "query": "What's for dinner and do I need groceries?",
+          "recorded_at": "2026-04-19T06:15:01.631941Z"
+        }
+      ],
+      "responses": {
+        "assist-fc1977c983d1": {
+          "request_id": "assist-fc1977c983d1",
+          "intent_summary": "meal request with low priority and 1 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-state-conflict",
+            "reference_time": "2026-04-19T07:30:00Z",
+            "calendar_event_count": 8,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": null,
+            "low_inventory_items": [],
+            "pending_approval_count": 0,
+            "conflicts": [
+              {
+                "conflict_type": "calendar_overlap",
+                "severity": "medium",
+                "description": "School drop-off overlaps with Doctor callback."
+              },
+              {
+                "conflict_type": "evening_compression",
+                "severity": "medium",
+                "description": "The evening calendar is compressed, so dinner needs a protected prep window."
+              },
+              {
+                "conflict_type": "inventory_gap",
+                "severity": "medium",
+                "description": "Inventory is missing: bell pepper."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-fc1977c983d1-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-fc1977c983d1-approval-group",
+              "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-fc1977c983d1-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "Inventory and meal history make Chicken Quinoa Bowl the least repetitive dinner option.",
+            "The food recommendation preserves an evening buffer against existing time pressure.",
+            "Groceries are bundled into the same recommendation so the plan stays realistic."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:15:01.631943Z"
+    },
+    "household-state-single-action": {
+      "household_id": "household-state-single-action",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-ac4e9b502073-next",
+          "title": "Start a repeatable workout cadence with the first low-friction slot",
+          "description": "Use 2026-04-19 06:00-06:45 to establish a consistency routine without disrupting meals or pickups.",
+          "domain": "fitness",
+          "urgency": "high",
+          "scheduled_for": "2026-04-19 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-ac4e9b502073"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [
+        "consistency"
+      ],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-ac4e9b502073",
+          "intent_summary": "general request with medium priority and 1 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-ac4e9b502073-next",
+            "title": "Start a repeatable workout cadence with the first low-friction slot",
+            "description": "Use 2026-04-19 06:00-06:45 to establish a consistency routine without disrupting meals or pickups.",
+            "domain": "fitness",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:15:01.663787Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-ac4e9b502073",
+          "query": "I need to start working out consistently",
+          "recorded_at": "2026-04-19T06:15:01.663793Z"
+        }
+      ],
+      "responses": {
+        "assist-ac4e9b502073": {
+          "request_id": "assist-ac4e9b502073",
+          "intent_summary": "general request with medium priority and 1 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-state-single-action",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": "consistency",
+            "low_inventory_items": [],
+            "pending_approval_count": 0,
+            "conflicts": []
+          },
+          "recommended_action": {
+            "action_id": "assist-ac4e9b502073-next",
+            "title": "Start a repeatable workout cadence with the first low-friction slot",
+            "description": "Use 2026-04-19 06:00-06:45 to establish a consistency routine without disrupting meals or pickups.",
+            "domain": "fitness",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-ac4e9b502073-approval-group",
+              "title": "Start a repeatable workout cadence with the first low-friction slot",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-ac4e9b502073-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "The active fitness goal in the state graph is consistency.",
+            "2026-04-19 06:00-06:45 is the least disruptive insertion point across the current schedule.",
+            "Leading with a low-friction session improves adherence without overloading the household plan."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:15:01.663795Z"
+    },
+    "household-runtime-conflicts-v2": {
+      "household_id": "household-runtime-conflicts-v2",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-early-1",
+          "title": "Breakfast cleanup",
+          "start": "2026-04-19T06:00:00Z",
+          "end": "2026-04-19T06:45:00Z"
+        },
+        {
+          "event_id": "evt-early-2",
+          "title": "Commute prep",
+          "start": "2026-04-19T07:00:00Z",
+          "end": "2026-04-19T07:45:00Z"
+        },
+        {
+          "event_id": "evt-early-3",
+          "title": "Midday errand",
+          "start": "2026-04-19T12:00:00Z",
+          "end": "2026-04-19T12:45:00Z"
+        },
+        {
+          "event_id": "evt-early-4",
+          "title": "After school buffer",
+          "start": "2026-04-19T16:00:00Z",
+          "end": "2026-04-19T16:45:00Z"
+        },
+        {
+          "event_id": "evt-early-5",
+          "title": "Dinner commute",
+          "start": "2026-04-19T18:10:00Z",
+          "end": "2026-04-19T18:50:00Z"
+        },
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-06dc45d6da12-next",
+          "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+          "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+          "domain": "meal",
+          "urgency": "high",
+          "scheduled_for": "2026-04-19 18:30-19:15",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-06dc45d6da12"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [
+        "fat loss"
+      ],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-06dc45d6da12",
+          "intent_summary": "meal request with low priority and 4 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-06dc45d6da12-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:16:19.849463Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-06dc45d6da12",
+          "query": "Plan dinner and a workout for tonight around the household schedule",
+          "recorded_at": "2026-04-19T06:16:19.849472Z"
+        }
+      ],
+      "responses": {
+        "assist-06dc45d6da12": {
+          "request_id": "assist-06dc45d6da12",
+          "intent_summary": "meal request with low priority and 4 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-runtime-conflicts-v2",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 10,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": "fat loss",
+            "low_inventory_items": [],
+            "pending_approval_count": 1,
+            "conflicts": [
+              {
+                "conflict_type": "evening_compression",
+                "severity": "medium",
+                "description": "The evening calendar is compressed, so dinner needs a protected prep window."
+              },
+              {
+                "conflict_type": "inventory_gap",
+                "severity": "medium",
+                "description": "Inventory is missing: bell pepper."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-06dc45d6da12-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-06dc45d6da12-approval-group",
+              "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-06dc45d6da12-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "Inventory and meal history make Chicken Quinoa Bowl the least repetitive dinner option.",
+            "The food recommendation preserves an evening buffer against existing time pressure.",
+            "Groceries are bundled into the same recommendation so the plan stays realistic."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:16:19.849474Z"
+    },
+    "household-state-convergence-v2": {
+      "household_id": "household-state-convergence-v2",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-997ee31320f4-next",
+          "title": "Schedule the dentist appointment in the first protected weekday slot",
+          "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+          "domain": "appointment",
+          "urgency": "high",
+          "scheduled_for": "2026-04-20 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-997ee31320f4"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-997ee31320f4",
+          "intent_summary": "appointment request with low priority and 1 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-997ee31320f4-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:16:19.917341Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-997ee31320f4",
+          "query": "I'm busy this week, need dentist appointment",
+          "recorded_at": "2026-04-19T06:16:19.917349Z"
+        }
+      ],
+      "responses": {
+        "assist-997ee31320f4": {
+          "request_id": "assist-997ee31320f4",
+          "intent_summary": "appointment request with low priority and 1 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-state-convergence-v2",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": null,
+            "low_inventory_items": [],
+            "pending_approval_count": 1,
+            "conflicts": [
+              {
+                "conflict_type": "busy_week",
+                "severity": "high",
+                "description": "The next planning window already contains 5 calendar commitments."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-997ee31320f4-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-997ee31320f4-approval-group",
+              "title": "Schedule the dentist appointment in the first protected weekday slot",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-997ee31320f4-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "The household calendar already shows 5 near-term commitments.",
+            "2026-04-20 06:00-06:45 is the earliest low-conflict weekday opening in the state graph.",
+            "Choosing a buffered appointment window avoids stealing time from dinner coordination later in the day."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:16:19.917351Z"
+    },
+    "household-core-approval-v2": {
+      "household_id": "household-core-approval-v2",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-dc200876bb4c-next",
+          "title": "Schedule the dentist appointment in the first protected weekday slot",
+          "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+          "domain": "appointment",
+          "urgency": "high",
+          "scheduled_for": "2026-04-20 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "approved",
+          "request_id": "assist-dc200876bb4c"
+        },
+        {
+          "action_id": "assist-dc200876bb4c-next",
+          "title": "Schedule the dentist appointment in the first protected weekday slot",
+          "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+          "domain": "appointment",
+          "urgency": "high",
+          "scheduled_for": "2026-04-20 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "approved",
+          "request_id": "assist-dc200876bb4c"
+        },
+        {
+          "action_id": "assist-dc200876bb4c-next",
+          "title": "Schedule the dentist appointment in the first protected weekday slot",
+          "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+          "domain": "appointment",
+          "urgency": "high",
+          "scheduled_for": "2026-04-20 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "approved",
+          "request_id": "assist-dc200876bb4c"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-dc200876bb4c",
+          "intent_summary": "appointment request with low priority and 2 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-dc200876bb4c-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:16:29.077508Z"
+        },
+        {
+          "request_id": "assist-dc200876bb4c",
+          "intent_summary": "appointment request with low priority and 2 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-dc200876bb4c-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:19:50.507005Z"
+        },
+        {
+          "request_id": "assist-dc200876bb4c",
+          "intent_summary": "appointment request with low priority and 2 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-dc200876bb4c-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:19:56.154055Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-dc200876bb4c",
+          "query": "Schedule a doctor appointment for Monday morning after school drop-off",
+          "recorded_at": "2026-04-19T06:16:29.077515Z"
+        },
+        {
+          "type": "assistant_approval",
+          "request_id": "assist-dc200876bb4c",
+          "action_ids": [
+            "assist-dc200876bb4c-next"
+          ],
+          "recorded_at": "2026-04-19T06:16:29.086550Z"
+        },
+        {
+          "type": "assistant_query",
+          "request_id": "assist-dc200876bb4c",
+          "query": "Schedule a doctor appointment for Monday morning after school drop-off",
+          "recorded_at": "2026-04-19T06:19:50.507017Z"
+        },
+        {
+          "type": "assistant_approval",
+          "request_id": "assist-dc200876bb4c",
+          "action_ids": [
+            "assist-dc200876bb4c-next"
+          ],
+          "recorded_at": "2026-04-19T06:19:50.518497Z"
+        },
+        {
+          "type": "assistant_query",
+          "request_id": "assist-dc200876bb4c",
+          "query": "Schedule a doctor appointment for Monday morning after school drop-off",
+          "recorded_at": "2026-04-19T06:19:56.154064Z"
+        },
+        {
+          "type": "assistant_approval",
+          "request_id": "assist-dc200876bb4c",
+          "action_ids": [
+            "assist-dc200876bb4c-next"
+          ],
+          "recorded_at": "2026-04-19T06:19:56.163744Z"
+        }
+      ],
+      "responses": {
+        "assist-dc200876bb4c": {
+          "request_id": "assist-dc200876bb4c",
+          "intent_summary": "appointment request with low priority and 2 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-core-approval-v2",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": null,
+            "low_inventory_items": [],
+            "pending_approval_count": 1,
+            "conflicts": [
+              {
+                "conflict_type": "busy_week",
+                "severity": "high",
+                "description": "The next planning window already contains 5 calendar commitments."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-dc200876bb4c-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "approved"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-dc200876bb4c-approval-group",
+              "title": "Schedule the dentist appointment in the first protected weekday slot",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-dc200876bb4c-next"
+              ],
+              "approval_status": "approved"
+            }
+          ],
+          "reasoning_trace": [
+            "The household calendar already shows 5 near-term commitments.",
+            "2026-04-20 06:00-06:45 is the earliest low-conflict weekday opening in the state graph.",
+            "Choosing a buffered appointment window avoids stealing time from dinner coordination later in the day.",
+            "Approval recorded without executing any downstream side effects."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:19:56.163752Z"
+    },
+    "household-output-1": {
+      "household_id": "household-output-1",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-e12d054aed9a-next",
+          "title": "Schedule the dentist appointment in the first protected weekday slot",
+          "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+          "domain": "appointment",
+          "urgency": "high",
+          "scheduled_for": "2026-04-20 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-e12d054aed9a"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-e12d054aed9a",
+          "intent_summary": "appointment request with low priority and 1 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-e12d054aed9a-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:20:20.180365Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-e12d054aed9a",
+          "query": "I'm busy this week, need dentist appointment",
+          "recorded_at": "2026-04-19T06:20:20.180370Z"
+        }
+      ],
+      "responses": {
+        "assist-e12d054aed9a": {
+          "request_id": "assist-e12d054aed9a",
+          "intent_summary": "appointment request with low priority and 1 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-output-1",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": null,
+            "low_inventory_items": [],
+            "pending_approval_count": 1,
+            "conflicts": [
+              {
+                "conflict_type": "busy_week",
+                "severity": "high",
+                "description": "The next planning window already contains 5 calendar commitments."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-e12d054aed9a-next",
+            "title": "Schedule the dentist appointment in the first protected weekday slot",
+            "description": "Use 2026-04-20 06:00-06:45 because it avoids the densest calendar pressure and preserves meal and pickup buffers.",
+            "domain": "appointment",
+            "urgency": "high",
+            "scheduled_for": "2026-04-20 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-e12d054aed9a-approval-group",
+              "title": "Schedule the dentist appointment in the first protected weekday slot",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-e12d054aed9a-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "The household calendar already shows 5 near-term commitments.",
+            "2026-04-20 06:00-06:45 is the earliest low-conflict weekday opening in the state graph.",
+            "Choosing a buffered appointment window avoids stealing time from dinner coordination later in the day."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:20:20.180372Z"
+    },
+    "household-output-2": {
+      "household_id": "household-output-2",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-dc45f15b333b-next",
+          "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+          "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+          "domain": "meal",
+          "urgency": "high",
+          "scheduled_for": "2026-04-19 18:30-19:15",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-dc45f15b333b"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-dc45f15b333b",
+          "intent_summary": "meal request with low priority and 1 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-dc45f15b333b-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:20:20.192311Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-dc45f15b333b",
+          "query": "What's for dinner and do I need groceries?",
+          "recorded_at": "2026-04-19T06:20:20.192316Z"
+        }
+      ],
+      "responses": {
+        "assist-dc45f15b333b": {
+          "request_id": "assist-dc45f15b333b",
+          "intent_summary": "meal request with low priority and 1 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-output-2",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": null,
+            "low_inventory_items": [],
+            "pending_approval_count": 1,
+            "conflicts": [
+              {
+                "conflict_type": "inventory_gap",
+                "severity": "medium",
+                "description": "Inventory is missing: bell pepper."
+              }
+            ]
+          },
+          "recommended_action": {
+            "action_id": "assist-dc45f15b333b-next",
+            "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+            "description": "Plan Chicken Quinoa Bowl for 2026-04-19 18:30-19:15 and collect bell pepper before that dinner window.",
+            "domain": "meal",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 18:30-19:15",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-dc45f15b333b-approval-group",
+              "title": "Cook Chicken Quinoa Bowl and reconcile groceries first",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-dc45f15b333b-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "Inventory and meal history make Chicken Quinoa Bowl the least repetitive dinner option.",
+            "The food recommendation preserves an evening buffer against existing time pressure.",
+            "Groceries are bundled into the same recommendation so the plan stays realistic."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:20:20.192318Z"
+    },
+    "household-output-3": {
+      "household_id": "household-output-3",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "assistant_actions": [
+        {
+          "action_id": "assist-4a42b122166b-next",
+          "title": "Start a repeatable workout cadence with the first low-friction slot",
+          "description": "Use 2026-04-19 06:00-06:45 to establish a consistency routine without disrupting meals or pickups.",
+          "domain": "fitness",
+          "urgency": "high",
+          "scheduled_for": "2026-04-19 06:00-06:45",
+          "approval_required": true,
+          "approval_status": "pending",
+          "request_id": "assist-4a42b122166b"
+        }
+      ],
+      "inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "tasks": [],
+      "fitness_goals": [
+        "consistency"
+      ],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "decision_history": [
+        {
+          "request_id": "assist-4a42b122166b",
+          "intent_summary": "general request with medium priority and 1 extracted intent entities.",
+          "recommended_action": {
+            "action_id": "assist-4a42b122166b-next",
+            "title": "Start a repeatable workout cadence with the first low-friction slot",
+            "description": "Use 2026-04-19 06:00-06:45 to establish a consistency routine without disrupting meals or pickups.",
+            "domain": "fitness",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "recorded_at": "2026-04-19T06:20:20.203263Z"
+        }
+      ],
+      "event_history": [
+        {
+          "type": "assistant_query",
+          "request_id": "assist-4a42b122166b",
+          "query": "I need to start working out consistently",
+          "recorded_at": "2026-04-19T06:20:20.203270Z"
+        }
+      ],
+      "responses": {
+        "assist-4a42b122166b": {
+          "request_id": "assist-4a42b122166b",
+          "intent_summary": "general request with medium priority and 1 extracted intent entities.",
+          "current_state_summary": {
+            "household_id": "household-output-3",
+            "reference_time": "2026-04-19T08:00:00Z",
+            "calendar_event_count": 5,
+            "task_count": 0,
+            "meal_history_count": 3,
+            "active_fitness_goal": "consistency",
+            "low_inventory_items": [],
+            "pending_approval_count": 1,
+            "conflicts": []
+          },
+          "recommended_action": {
+            "action_id": "assist-4a42b122166b-next",
+            "title": "Start a repeatable workout cadence with the first low-friction slot",
+            "description": "Use 2026-04-19 06:00-06:45 to establish a consistency routine without disrupting meals or pickups.",
+            "domain": "fitness",
+            "urgency": "high",
+            "scheduled_for": "2026-04-19 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "grouped_approvals": [
+            {
+              "group_id": "assist-4a42b122166b-approval-group",
+              "title": "Start a repeatable workout cadence with the first low-friction slot",
+              "description": "Approve the single recommended next action.",
+              "action_ids": [
+                "assist-4a42b122166b-next"
+              ],
+              "approval_status": "pending"
+            }
+          ],
+          "reasoning_trace": [
+            "The active fitness goal in the state graph is consistency.",
+            "2026-04-19 06:00-06:45 is the least disruptive insertion point across the current schedule.",
+            "Leading with a low-friction session improves adherence without overloading the household plan."
+          ]
+        }
+      },
+      "updated_at": "2026-04-19T06:20:20.203272Z"
+    }
+  }
+}

@@ -21,6 +21,25 @@ _REQUIRED_GOOGLE_ENV = (
 )
 
 
+def _fallback_load_dotenv(*, override: bool) -> None:
+    env_path = ".env"
+    if not os.path.exists(env_path):
+        return
+
+    with open(env_path, encoding="utf-8") as handle:
+        for raw_line in handle:
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            if not key:
+                continue
+            if override or key not in os.environ:
+                os.environ[key] = value
+
+
 def load_environment(*, force: bool = False) -> None:
     """
     Idempotently load environment variables from .env.
@@ -36,6 +55,7 @@ def load_environment(*, force: bool = False) -> None:
 
         if load_dotenv is None:
             logger.warning("python-dotenv is not installed; .env file will not be auto-loaded.")
+            _fallback_load_dotenv(override=force)
         else:
             # Load only the .env in the current working directory to keep
             # startup and tests deterministic.

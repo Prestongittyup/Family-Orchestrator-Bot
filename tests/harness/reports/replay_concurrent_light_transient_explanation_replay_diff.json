@@ -1,0 +1,31 @@
+{
+  "run_id": "replay_concurrent_light_transient",
+  "generated_at": "2026-04-20T21:45:22.085535",
+  "run1_explanation_count": 9,
+  "run2_explanation_count": 9,
+  "added_ids": [
+    "26f98274-544a-58f6-8fca-b300b73d0314",
+    "48c57f7a-4f4c-5c25-b658-e38928d924cf",
+    "6b5e451c-5afe-5555-b133-50cf5d3198de",
+    "8dc7dbab-45cb-5f61-b8be-497cae59c0ba",
+    "a5799902-8985-5b98-816d-1dbe21b2e9ad",
+    "b6943591-16d2-5632-be4e-f17642c36dd2",
+    "b7efcb27-ebd5-5cfe-ba9b-878342bc2ce2",
+    "ee532428-6b5a-5780-9f89-88558d7e352e",
+    "f0a79da7-f190-58ea-b40c-58119d5549c0"
+  ],
+  "removed_ids": [
+    "6c7ac5e2-8e8b-50bd-a9de-3cb12ff181fb",
+    "6ee704a9-3ada-5c5b-9291-95d7a63b81b4",
+    "727e340a-381a-5baa-b500-8bccfd56d59e",
+    "9571b572-3431-5f45-b472-b89bb35d1986",
+    "9c841f37-bcea-542f-8c12-d13eb29e60bc",
+    "aac5bebf-ca27-5a29-a004-80d03a645d1e",
+    "b6f837c6-e48e-539f-8da3-238f0d7d068c",
+    "eeface44-f0ff-5fa5-a000-fb378e62b07f",
+    "fa39856d-7961-55d6-91bb-eeb3803c1e35"
+  ],
+  "text_diffs": [],
+  "deterministic": false,
+  "pass": false
+}

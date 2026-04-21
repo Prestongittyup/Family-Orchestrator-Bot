@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 from typing import Protocol
 
 POISON_THRESHOLD = 3  # consecutive failures before a job is considered poisoned
@@ -36,9 +37,12 @@ def is_poisoned(job: PoisonableJob) -> bool:
 
 def get_backoff_seconds(retry_count: int) -> float:
     """
-    Exponential backoff in seconds: 0.5, 1, 2, 4, ...
+    Exponential backoff in seconds with jitter and a hard cap.
 
     The first retry (retry_count=0) waits 0.5s.
     """
     safe_retry_count = max(0, retry_count)
-    return 0.5 * (2 ** safe_retry_count)
+    base_delay = 0.5 * (2 ** safe_retry_count)
+    capped_delay = min(base_delay, 8.0)
+    jitter = random.uniform(0.0, capped_delay * 0.25)
+    return min(8.0, capped_delay + jitter)

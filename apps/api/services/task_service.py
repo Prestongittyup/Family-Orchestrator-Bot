@@ -4,6 +4,7 @@ from uuid import uuid4
 
 from apps.api.core.database import SessionLocal
 from apps.api.models.task import Task
+from apps.api.realtime.broadcaster import broadcaster
 
 
 def create_task(household_id: str, title: str) -> Task:
@@ -22,6 +23,18 @@ def create_task(household_id: str, title: str) -> Task:
         session.flush()   # ensures DB assigns lifecycle hooks properly
         session.commit()
         session.refresh(task)
+
+        broadcaster.publish_sync(
+            household_id=household_id,
+            event_type="task_created",
+            payload={
+                "task_id": task.id,
+                "household_id": task.household_id,
+                "title": task.title,
+                "status": task.status,
+                "priority": task.priority,
+            },
+        )
 
         return task
 

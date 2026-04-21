@@ -1,0 +1,23 @@
+{
+  "artifact": "assistant_core_report.json",
+  "status": "generated",
+  "module": "assistant_core",
+  "deterministic": true,
+  "approval_gate_enforced": true,
+  "side_effects": "none",
+  "endpoints": [
+    "/assistant/query",
+    "/assistant/suggestions/{request_id}",
+    "/assistant/approve"
+  ],
+  "sample_request_ids": [
+    "assist-ffafbb2c8da2",
+    "assist-7251501ce852",
+    "assist-b91b3ede87c4"
+  ],
+  "intent_types": [
+    "appointment",
+    "meal",
+    "fitness"
+  ]
+}

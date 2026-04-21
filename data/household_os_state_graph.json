@@ -1,0 +1,164 @@
+{
+  "households": {
+    "5111ee86-156c-4c1d-96d5-fbb7ec07f6ad": {
+      "household_id": "5111ee86-156c-4c1d-96d5-fbb7ec07f6ad",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-32",
+          "recorded_at": "2026-04-21T14:59:39.542305Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-37",
+          "recorded_at": "2026-04-21T14:59:41.339021Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-98",
+          "recorded_at": "2026-04-21T14:59:56.189317Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-0",
+          "recorded_at": "2026-04-21T14:59:58.042431Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-85",
+          "recorded_at": "2026-04-21T15:00:04.223174Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-19",
+          "recorded_at": "2026-04-21T15:00:06.637749Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-20",
+          "recorded_at": "2026-04-21T15:00:10.473986Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-67",
+          "recorded_at": "2026-04-21T15:00:12.468771Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-53",
+          "recorded_at": "2026-04-21T15:00:13.490596Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-75",
+          "recorded_at": "2026-04-21T15:00:18.410507Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-21",
+          "recorded_at": "2026-04-21T15:00:29.042469Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-10",
+          "recorded_at": "2026-04-21T15:00:40.595832Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-4",
+          "recorded_at": "2026-04-21T15:00:50.024100Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "phase1-valid-68",
+          "recorded_at": "2026-04-21T15:00:52.444866Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 15,
+      "updated_at": "2026-04-21T15:00:52.444852Z"
+    }
+  }
+}

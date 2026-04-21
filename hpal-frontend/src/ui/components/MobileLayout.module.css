@@ -1,0 +1,76 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--color-bg-primary, #ffffff);
+  position: relative;
+}
+
+.mainContent {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+
+  /* Account for mobile navigation on smaller screens */
+  @media (max-width: 1024px) {
+    padding-bottom: var(--mobile-nav-height, 64px);
+  }
+
+  /* Account for safe-area-inset on notched devices */
+  @supports (padding: max(0px)) {
+    padding-bottom: max(
+      var(--mobile-nav-height, 64px),
+      env(safe-area-inset-bottom) + 64px
+    );
+  }
+}
+
+/* Offline indicator */
+.offlineIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #fef3e2 0%, #fed7aa 100%);
+  border-bottom: 1px solid #fed7aa;
+  color: #92400e;
+  font-size: 13px;
+  font-weight: 500;
+  animation: slideDown 0.3s ease;
+  z-index: 50;
+}
+
+.offlineIcon {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+.offlineText {
+  flex: 1;
+  text-align: center;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Wider screens (desktop) */
+@media (min-width: 1025px) {
+  .mainContent {
+    padding-bottom: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}

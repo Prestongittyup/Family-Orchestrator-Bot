@@ -20,6 +20,7 @@ from sqlalchemy import text
 
 from apps.api.core.event_bus import get_event_bus
 from apps.api.core.database import SessionLocal
+from apps.api.realtime.broadcaster import broadcaster
 from apps.api.services.shared_dependencies import get_til
 from apps.api.schemas.event import SystemEvent
 from apps.api.services.event_log_service import log_system_event
@@ -281,6 +282,11 @@ def schedule_event(
 
     log_system_event(calendar_event)
     get_event_bus().publish(calendar_event)
+    broadcaster.publish_sync(
+        household_id=household_id,
+        event_type="calendar_event_created",
+        payload=event,
+    )
 
     logger.debug(f"Calendar event created: {event_id} for user {user_id}")
     return event
@@ -406,6 +412,158 @@ def create_recurring_event(
 
     log_system_event(recurring_calendar_event)
     get_event_bus().publish(recurring_calendar_event)
+    broadcaster.publish_sync(
+        household_id=household_id,
+        event_type="calendar_event_created",
+        payload=recurring_event,
+    )
 
     logger.debug(f"Recurring calendar event created: {event_id}")
     return recurring_event
+
+
+def update_event(
+    household_id: str,
+    event_id: str,
+    *,
+    title: str | None = None,
+    start_time: str | None = None,
+    end_time: str | None = None,
+    description: str | None = None,
+) -> dict:
+    """
+    Update an existing calendar event's mutable fields.
+
+    Only fields provided (not None) are updated. Household scoping is
+    enforced — an event belonging to a different household cannot be
+    modified.
+
+    Returns:
+        Updated event dict, or raises ValueError if not found.
+    """
+    session = SessionLocal()
+    try:
+        # Verify event belongs to this household
+        row = session.execute(
+            text("SELECT id FROM calendar_events WHERE id = :id AND household_id = :hid"),
+            {"id": event_id, "hid": household_id},
+        ).fetchone()
+        if not row:
+            raise ValueError(f"Event {event_id} not found in household {household_id}")
+
+        updates: dict[str, object] = {}
+        if title is not None:
+            updates["title"] = title
+        if start_time is not None:
+            updates["start_time"] = start_time
+        if end_time is not None:
+            updates["end_time"] = end_time
+        if description is not None:
+            existing_meta_row = session.execute(
+                text("SELECT metadata FROM calendar_events WHERE id = :id"),
+                {"id": event_id},
+            ).fetchone()
+            try:
+                meta = json.loads(existing_meta_row[0] or "{}")
+            except Exception:
+                meta = {}
+            meta["description"] = description
+            updates["metadata"] = json.dumps(meta, sort_keys=True)
+
+        if not updates:
+            # Nothing to do
+            return get_event_by_id(household_id, event_id)
+
+        set_clause = ", ".join(f"{k} = :{k}" for k in updates)
+        updates["id"] = event_id
+        session.execute(
+            text(f"UPDATE calendar_events SET {set_clause} WHERE id = :id"),
+            updates,
+        )
+        session.commit()
+    finally:
+        session.close()
+
+    updated = get_event_by_id(household_id, event_id)
+    ev = SystemEvent(
+        household_id=household_id,
+        type="calendar_event_updated",
+        source="calendar_service",
+        payload={"event_id": event_id, **updated},
+    )
+    log_system_event(ev)
+    get_event_bus().publish(ev)
+    broadcaster.publish_sync(
+        household_id=household_id,
+        event_type="calendar_event_updated",
+        payload={"event_id": event_id, **updated},
+    )
+    return updated
+
+
+def delete_event(household_id: str, event_id: str) -> dict:
+    """
+    Delete a calendar event by id, scoped to household.
+
+    Returns the deleted event snapshot or raises ValueError if not found.
+    """
+    snapshot = get_event_by_id(household_id, event_id)  # raises if not found
+
+    session = SessionLocal()
+    try:
+        session.execute(
+            text("DELETE FROM calendar_events WHERE id = :id AND household_id = :hid"),
+            {"id": event_id, "hid": household_id},
+        )
+        session.commit()
+    finally:
+        session.close()
+
+    ev = SystemEvent(
+        household_id=household_id,
+        type="calendar_event_deleted",
+        source="calendar_service",
+        payload={"event_id": event_id},
+    )
+    log_system_event(ev)
+    get_event_bus().publish(ev)
+    broadcaster.publish_sync(
+        household_id=household_id,
+        event_type="calendar_event_deleted",
+        payload={"event_id": event_id},
+    )
+    return {"deleted": True, "event_id": event_id}
+
+
+def get_event_by_id(household_id: str, event_id: str) -> dict:
+    """Fetch a single calendar event, scoped to household. Raises ValueError if not found."""
+    session = SessionLocal()
+    try:
+        row = session.execute(
+            text(
+                "SELECT id, household_id, title, start_time, end_time, priority, metadata, created_at "
+                "FROM calendar_events WHERE id = :id AND household_id = :hid"
+            ),
+            {"id": event_id, "hid": household_id},
+        ).mappings().fetchone()
+    finally:
+        session.close()
+
+    if not row:
+        raise ValueError(f"Event {event_id} not found in household {household_id}")
+
+    try:
+        meta = json.loads(row.get("metadata") or "{}")
+    except Exception:
+        meta = {}
+
+    return {
+        "event_id": str(row["id"]),
+        "household_id": str(row["household_id"]),
+        "title": str(row["title"]),
+        "start_time": str(row["start_time"]),
+        "end_time": str(row["end_time"]),
+        "priority": int(row["priority"]),
+        "metadata": meta,
+        "created_at": str(row["created_at"]),
+    }

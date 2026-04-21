@@ -1,0 +1,131 @@
+{
+  "scenarios": [
+    {
+      "scenario_id": "high_conflict_day",
+      "description": "Overlapping school drop-off, work sync, and doctor appointment.",
+      "scores": {
+        "priority_score": 10,
+        "relevance_score": 10,
+        "completeness_score": 10,
+        "clarity_score": 10,
+        "priority_correctness": 0,
+        "conflict_handling_score": 10,
+        "omission_score": 10,
+        "noise_penalty": 10
+      },
+      "issues": [
+        "top priority mismatch: expected 'doctor_appointment' got 'school_event'"
+      ]
+    },
+    {
+      "scenario_id": "low_activity_day",
+      "description": "Minimal events and low conflict schedule.",
+      "scores": {
+        "priority_score": 10,
+        "relevance_score": 10,
+        "completeness_score": 10,
+        "clarity_score": 10,
+        "priority_correctness": 10,
+        "conflict_handling_score": 10,
+        "omission_score": 10,
+        "noise_penalty": 10
+      },
+      "issues": []
+    },
+    {
+      "scenario_id": "family_overload_day",
+      "description": "Many competing priorities across school, work, and household responsibilities.",
+      "scores": {
+        "priority_score": 10,
+        "relevance_score": 10,
+        "completeness_score": 10,
+        "clarity_score": 10,
+        "priority_correctness": 0,
+        "conflict_handling_score": 10,
+        "omission_score": 10,
+        "noise_penalty": 10
+      },
+      "issues": [
+        "top priority mismatch: expected 'client_demo' got 'breakfast_prep'"
+      ]
+    },
+    {
+      "scenario_id": "health_priority_day",
+      "description": "Medical event should dominate over routine tasks.",
+      "scores": {
+        "priority_score": 10,
+        "relevance_score": 10,
+        "completeness_score": 10,
+        "clarity_score": 10,
+        "priority_correctness": 10,
+        "conflict_handling_score": 10,
+        "omission_score": 10,
+        "noise_penalty": 10
+      },
+      "issues": []
+    },
+    {
+      "scenario_id": "balanced_day",
+      "description": "Balanced distribution of school, work, and personal events.",
+      "scores": {
+        "priority_score": 10,
+        "relevance_score": 10,
+        "completeness_score": 10,
+        "clarity_score": 10,
+        "priority_correctness": 10,
+        "conflict_handling_score": 10,
+        "omission_score": 10,
+        "noise_penalty": 10
+      },
+      "issues": []
+    }
+  ],
+  "aggregate": {
+    "avg_priority": 10.0,
+    "avg_relevance": 10.0,
+    "avg_completeness": 10.0,
+    "avg_clarity": 10.0,
+    "avg_priority_correctness": 6.0,
+    "avg_conflict_handling": 10.0,
+    "avg_omission": 10.0,
+    "avg_noise_penalty": 10.0
+  },
+  "comparison": {
+    "improved": false,
+    "regressions": [],
+    "score_deltas": {
+      "priority_score": 0.0,
+      "relevance_score": 0.0,
+      "completeness_score": 0.0,
+      "clarity_score": 0.0,
+      "priority_correctness": 0.0,
+      "conflict_handling_score": 0.0,
+      "omission_score": 0.0,
+      "noise_penalty": 0.0
+    }
+  },
+  "failure_patterns": [
+    {
+      "type": "priority_misordering",
+      "count": 2,
+      "scenarios": [
+        "high_conflict_day",
+        "family_overload_day"
+      ]
+    }
+  ],
+  "decision_gaps": [
+    {
+      "gap_type": "priority_weighting_logic_weak",
+      "source_failure": "priority_misordering",
+      "frequency": 2
+    }
+  ],
+  "recommended_adjustments": [
+    {
+      "recommendation": "Increase weighting of time-sensitive and high-impact events during prioritization.",
+      "based_on": "priority_weighting_logic_weak",
+      "priority": "medium"
+    }
+  ]
+}
