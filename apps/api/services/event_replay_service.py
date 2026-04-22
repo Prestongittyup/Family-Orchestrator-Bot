@@ -10,9 +10,11 @@ from __future__ import annotations
 from apps.api.core.database import SessionLocal
 from apps.api.core.event_registry import event_bus
 from apps.api.models.event_log import EventLog
+from apps.api.observability.execution_trace import trace_function
 from apps.api.schemas.event import SystemEvent
 
 
+@trace_function(entrypoint="event_replay.global", actor_type="system_worker", source="event_replay")
 def replay_events(limit: int = 10) -> list[object]:
     """
     Replay the most recent EventLog entries through the event bus.
@@ -60,6 +62,7 @@ def replay_events(limit: int = 10) -> list[object]:
         session.close()
 
 
+@trace_function(entrypoint="event_replay.household", actor_type="system_worker", source="event_replay")
 def replay_events_for_household(
     household_id: str,
     event_type: str | None = None,

@@ -8,6 +8,11 @@ from typing import Any
 
 from apps.api.integration_core.models.household_state import HouseholdState
 from apps.assistant_core.meal_planner import default_inventory, default_recipe_history
+from household_os.core.lifecycle_state import (
+    LifecycleState,
+    assert_lifecycle_state,
+    enforce_boundary_state,
+)
 
 
 def _utc_now_iso() -> str:
@@ -63,6 +68,7 @@ class HouseholdStateManager:
         if not graph:
             graph = self._empty_graph(household_id)
             self._write_graph(graph)
+        graph = self._parse_lifecycle_sections(graph)
         self._graph_cache[household_id] = deepcopy(graph)
         return deepcopy(graph)
 
@@ -191,8 +197,35 @@ class HouseholdStateManager:
             return {"households": {}}
 
     def _write_graph(self, graph: dict[str, Any]) -> None:
+        self._assert_lifecycle_sections(graph)
         payload = self._read_store()
         payload.setdefault("households", {})[graph["household_id"]] = deepcopy(graph)
         self.graph_path.parent.mkdir(parents=True, exist_ok=True)
         self.graph_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
         self._graph_cache[graph["household_id"]] = deepcopy(graph)
+
+    def _parse_lifecycle_sections(self, graph: dict[str, Any]) -> dict[str, Any]:
+        lifecycle = graph.get("action_lifecycle", {})
+        actions = lifecycle.get("actions", {}) if isinstance(lifecycle, dict) else {}
+        if isinstance(actions, dict):
+            for payload in actions.values():
+                if not isinstance(payload, dict):
+                    continue
+                state = payload.get("current_state")
+                if state is not None:
+                    payload["current_state"] = enforce_boundary_state(state)
+        return graph
+
+    def _assert_lifecycle_sections(self, graph: dict[str, Any]) -> None:
+        lifecycle = graph.get("action_lifecycle", {})
+        actions = lifecycle.get("actions", {}) if isinstance(lifecycle, dict) else {}
+        if isinstance(actions, dict):
+            for action_id, payload in actions.items():
+                if not isinstance(payload, dict):
+                    continue
+                state = payload.get("current_state")
+                if state is None:
+                    continue
+                if not isinstance(state, LifecycleState):
+                    raise TypeError(f"Action {action_id} current_state must be LifecycleState")
+                assert_lifecycle_state(state)

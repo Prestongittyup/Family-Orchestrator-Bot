@@ -1,0 +1,4071 @@
+{
+  "mode": "standard",
+  "seed": 20260421,
+  "run_fingerprint": "69f11bd40e5294fe",
+  "run_status": "success",
+  "elapsed_seconds": 1182.16,
+  "reproducibility": {
+    "fingerprint": "69f11bd40e5294fe",
+    "seed": 20260421
+  },
+  "duration_config": {
+    "soak_duration_seconds": 300,
+    "breakpoint_stage_seconds": 10,
+    "breakpoint_stages": [
+      10,
+      25,
+      50,
+      100
+    ],
+    "chaos_duration_seconds": 120,
+    "repeat_runs": 2
+  },
+  "failure_attribution": {
+    "primary_cause": "SSE_BACKPRESSURE_COLLAPSE",
+    "secondary_causes": [
+      "EVENT_LOOP_LAG",
+      "TRANSPORT_TIMEOUT"
+    ],
+    "confidence": 0.887,
+    "evidence": [
+      "timeout_count=6079",
+      "timeout_ratio=0.792",
+      "sse_lag_slope=255.76",
+      "rejection_count=1596",
+      "p95_latency_ms=5174.7"
+    ],
+    "cause_scores": {
+      "SSE_BACKPRESSURE_COLLAPSE": 1.0,
+      "EVENT_LOOP_LAG": 0.733,
+      "TRANSPORT_TIMEOUT": 0.704,
+      "ASGI_ADMISSION_REJECTION": 0.162,
+      "SYSTEM_OVERLOAD_COLLAPSE": 0.033,
+      "FAIRNESS_POOL_EXHAUSTION": 0.0,
+      "DB_POOL_EXHAUSTION": 0.0,
+      "CLIENT_RETRY_AMPLIFICATION": 0.0,
+      "HTTP_5XX_BACKEND_FAILURE": 0.0
+    }
+  },
+  "failure_timeline": [
+    {
+      "timestamp": 6.24,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 1024.2,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 7.51,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 1024.2,
+        "inflight_current": 10,
+        "completion_ratio": 2.152,
+        "rejected_total": 15
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 8.69,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 1024.2,
+        "inflight_current": 11,
+        "completion_ratio": 1.962,
+        "rejected_total": 15
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 9.89,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 1024.2,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 11.44,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 1024.2,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 12.75,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 5606.8,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 14.85,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 7995.2,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 16.98,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 7995.2,
+        "inflight_current": 8,
+        "completion_ratio": 2.079,
+        "rejected_total": 226
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 18.75,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 7995.2,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 20.54,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "inflight_saturation",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 7995.2,
+        "inflight_current": 16,
+        "completion_ratio": 1.626,
+        "rejected_total": 270
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 22.38,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 7555.4,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 24.28,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 7335.5,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 26.77,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 7335.5,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 30.24,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "inflight_saturation",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 7115.6,
+        "inflight_current": 16,
+        "completion_ratio": 1.493,
+        "rejected_total": 485
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 32.98,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 6895.7,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 36.23,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 6895.7,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 39.58,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 8483.1,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 45.59,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "inflight_saturation",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 11891.0,
+        "inflight_current": 20,
+        "completion_ratio": 1.365,
+        "rejected_total": 787
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 49.29,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 15049.8,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 55.67,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 14003.5,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 59.29,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "inflight_saturation",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 13585.0,
+        "inflight_current": 18,
+        "completion_ratio": 1.348,
+        "rejected_total": 1154
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 62.98,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 13166.5,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 70.19,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "inflight_saturation",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 16514.5,
+        "inflight_current": 16,
+        "completion_ratio": 1.349,
+        "rejected_total": 1440
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 77.53,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 16825.0,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 82.95,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 19115.8,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 87.64,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 31888.0,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 93.04,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 31128.0,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 100.33,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 30406.5,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 103.42,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 30406.5,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 109.18,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 30064.8,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 113.07,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 42618.8,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 117.04,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 42902.0,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 122.04,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 48809.2,
+        "inflight_current": 14,
+        "completion_ratio": 1.353,
+        "rejected_total": 2907
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 126.75,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 48759.8,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 132.13,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 48710.6,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 138.2,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 78164.6,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 141.94,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 77637.6,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 147.21,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 77456.6,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 153.42,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 77335.9,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 158.4,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 77335.9,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 165.86,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 77215.2,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 171.17,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 87840.2,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 176.22,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 87434.6,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 183.07,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 91984.8,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 189.47,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 91984.8,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 198.66,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 98166.6,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 203.07,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 98166.6,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 208.15,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 98112.4,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 211.83,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 102519.9,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 215.89,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 102205.9,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 222.88,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 101867.1,
+        "inflight_current": 12,
+        "completion_ratio": 1.329,
+        "rejected_total": 5455
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 228.03,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 101503.3,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 234.52,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 100957.6,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 241.53,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 100411.9,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 247.16,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 100230.0,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 254.67,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "inflight_saturation",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 100048.1,
+        "inflight_current": 20,
+        "completion_ratio": 1.31,
+        "rejected_total": 6202
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 260.07,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 100048.1,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 266.14,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "inflight_saturation",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 99866.2,
+        "inflight_current": 16,
+        "completion_ratio": 1.307,
+        "rejected_total": 6454
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 270.99,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 99138.6,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 277.86,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "inflight_saturation",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 105188.0,
+        "inflight_current": 17,
+        "completion_ratio": 1.305,
+        "rejected_total": 6778
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 283.99,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 108899.6,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 289.07,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 108843.2,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 293.0,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "inflight_saturation",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 108786.8,
+        "inflight_current": 20,
+        "completion_ratio": 1.301,
+        "rejected_total": 7169
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 296.56,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 108730.4,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 300.67,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 108730.4,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 307.16,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "inflight_saturation",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 156214.1,
+        "inflight_current": 16,
+        "completion_ratio": 1.308,
+        "rejected_total": 7489
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 311.48,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "inflight_saturation",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 155470.2,
+        "inflight_current": 17,
+        "completion_ratio": 1.308,
+        "rejected_total": 7539
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 315.54,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 155470.2,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 319.05,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 153982.3,
+        "inflight_current": 1,
+        "completion_ratio": 1.321,
+        "rejected_total": 7797
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 322.7,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 164189.2,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 326.43,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 164189.2,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 329.46,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 163710.6,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 333.18,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 166072.7,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 335.48,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 166072.7,
+        "inflight_current": 15,
+        "completion_ratio": 1.31,
+        "rejected_total": 8126
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 337.56,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 166072.7,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 339.37,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 166072.7,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 341.46,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 166072.7,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 343.57,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 166072.7,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 345.53,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "inflight_saturation",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 169152.0,
+        "inflight_current": 20,
+        "completion_ratio": 1.308,
+        "rejected_total": 8320
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 347.09,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "inflight_saturation",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 169152.0,
+        "inflight_current": 18,
+        "completion_ratio": 1.309,
+        "rejected_total": 8348
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 348.73,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 169152.0,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 350.8,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 169152.0,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 7.1,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 10.29,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 4,
+        "completion_ratio": 1.269,
+        "rejected_total": 9795
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 13.33,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 13,
+        "completion_ratio": 1.266,
+        "rejected_total": 9814
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 16.38,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 4,
+        "completion_ratio": 1.267,
+        "rejected_total": 9863
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 20.64,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 24.91,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 3,
+        "completion_ratio": 1.263,
+        "rejected_total": 9886
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 28.66,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 8,
+        "completion_ratio": 1.257,
+        "rejected_total": 9903
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 33.79,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 38.21,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 3,
+        "completion_ratio": 1.251,
+        "rejected_total": 9949
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 44.15,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 49.35,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 6,
+        "completion_ratio": 1.246,
+        "rejected_total": 10001
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 54.2,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 9,
+        "completion_ratio": 1.242,
+        "rejected_total": 10017
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 60.13,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 5,
+        "completion_ratio": 1.239,
+        "rejected_total": 10036
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 66.07,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 2,
+        "completion_ratio": 1.235,
+        "rejected_total": 10050
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 71.56,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 9,
+        "completion_ratio": 1.23,
+        "rejected_total": 10063
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 76.72,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 7,
+        "completion_ratio": 1.23,
+        "rejected_total": 10092
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 81.57,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 3,
+        "completion_ratio": 1.229,
+        "rejected_total": 10094
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 86.93,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 4,
+        "completion_ratio": 1.228,
+        "rejected_total": 10123
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 91.49,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 10,
+        "completion_ratio": 1.224,
+        "rejected_total": 10165
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 96.9,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 8,
+        "completion_ratio": 1.222,
+        "rejected_total": 10182
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 101.8,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "sse_lag_spike",
+        "timeout_burst",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 0,
+        "completion_ratio": 0.0,
+        "rejected_total": 0
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 107.38,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 3,
+        "completion_ratio": 1.22,
+        "rejected_total": 10210
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 112.12,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 8,
+        "completion_ratio": 1.219,
+        "rejected_total": 10229
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 115.5,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 4,
+        "completion_ratio": 1.217,
+        "rejected_total": 10244
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 119.13,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 2,
+        "completion_ratio": 1.216,
+        "rejected_total": 10249
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 122.52,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 8,
+        "completion_ratio": 1.214,
+        "rejected_total": 10267
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 125.7,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 1,
+        "completion_ratio": 1.213,
+        "rejected_total": 10279
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 128.5,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 3,
+        "completion_ratio": 1.212,
+        "rejected_total": 10283
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 131.06,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 8,
+        "completion_ratio": 1.209,
+        "rejected_total": 10289
+      },
+      "confidence": 1.0
+    },
+    {
+      "timestamp": 132.79,
+      "regime": "full_run",
+      "events": [
+        "latency_spike",
+        "rejection_spike",
+        "sse_lag_spike",
+        "recovery_event"
+      ],
+      "metric_snapshot": {
+        "sse_lag_ms_p95": 181793.0,
+        "inflight_current": 2,
+        "completion_ratio": 1.21,
+        "rejected_total": 10302
+      },
+      "confidence": 1.0
+    }
+  ],
+  "signal_quality": {
+    "signal_layer_ratio": 0.432,
+    "artifact_layer_ratio": 0.446,
+    "distortion_layer_ratio": 0.122,
+    "signal_layer_samples": 5895,
+    "artifact_layer_samples": 6079,
+    "distortion_layer_samples": 1664,
+    "observability_confidence": 0.878
+  },
+  "repeatability": {
+    "status": "FAIL",
+    "variance": {
+      "success_rate": 0.02716036,
+      "rejection_rate": 0.00219225,
+      "completion_ratio": 0.02054994,
+      "p95_latency": 36412.08158025
+    },
+    "variance_breakdown": {
+      "success_rate": {
+        "values": [
+          0.60855,
+          0.278942
+        ],
+        "mean": 0.443746,
+        "variance": 0.02716036,
+        "stddev": 0.164804,
+        "range": 0.329608,
+        "threshold": 0.01,
+        "pass": false
+      },
+      "rejection_rate": {
+        "values": [
+          0.270738,
+          0.177095
+        ],
+        "mean": 0.2239165,
+        "variance": 0.00219225,
+        "stddev": 0.0468215,
+        "range": 0.093643,
+        "threshold": 0.01,
+        "pass": true
+      },
+      "completion_ratio": {
+        "values": [
+          0.702792,
+          0.416087
+        ],
+        "mean": 0.5594395,
+        "variance": 0.02054994,
+        "stddev": 0.1433525,
+        "range": 0.286705,
+        "threshold": 0.02,
+        "pass": false
+      },
+      "p95_latency": {
+        "values": [
+          5236.078,
+          5617.717
+        ],
+        "mean": 5426.8975,
+        "variance": 36412.08158025,
+        "stddev": 190.8195,
+        "range": 381.639,
+        "threshold": Infinity,
+        "pass": true
+      }
+    },
+    "outliers": [],
+    "outlier_run_indices": [],
+    "runs_evaluated": 2,
+    "cv_success_rate": 0.0,
+    "cv_latency": 0.0,
+    "rank_consistency": 1.0,
+    "pass": true
+  },
+  "soak_results": {
+    "regime": "soak",
+    "stage": null,
+    "duration_seconds": 300,
+    "load_model": {
+      "type": "stable_curve",
+      "seed": 20260421,
+      "schedule_points": 300
+    },
+    "raw_request_count": 8418,
+    "clean_request_count": 3111,
+    "clean_metrics": {
+      "request_count": 3111,
+      "success_count": 1920,
+      "error_count": 1191
+    },
+    "success_rate": 0.617165,
+    "error_rate": 0.382835,
+    "p95_latency": 5174.738,
+    "retry_rate": 0.0,
+    "rejections_429": 1191,
+    "timeout_count": 4201,
+    "sse_lag_p95": 138522.1,
+    "sse_lag_growth_slope": 482.17458,
+    "inflight_concurrency": {
+      "peak": 80,
+      "final": 18.0,
+      "sampled_max": 20.0
+    },
+    "inflight_recovery_ratio": 0.225,
+    "completion_ratio": 0.617165,
+    "memory_growth_slope": 0.0,
+    "first_failure_mode": "http_429",
+    "saturation_signal_type": "transport_timeout",
+    "noise_profile": {
+      "client_noise_ratio": 0.49905,
+      "warmup_impact": 0.003207,
+      "retry_inflation_factor": 1.359943,
+      "cold_start_ratio": 0.0,
+      "removed_ratio": 0.630435
+    },
+    "samples": [
+      {
+        "t_seconds": 0.267,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 0.0,
+        "client_inflight": 1,
+        "client_inflight_peak": 2,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 14.0,
+        "inflight_current": 2.0,
+        "accepted_total": 6.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 1.52,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 0.0,
+        "client_inflight": 2,
+        "client_inflight_peak": 3,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 7.416667,
+        "inflight_current": 3.0,
+        "accepted_total": 12.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 2.688,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 0.0,
+        "client_inflight": 4,
+        "client_inflight_peak": 5,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 4.26087,
+        "inflight_current": 5.0,
+        "accepted_total": 23.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 3.853,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 0.0,
+        "client_inflight": 4,
+        "client_inflight_peak": 6,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 3.34375,
+        "inflight_current": 5.0,
+        "accepted_total": 32.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 4.971,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 0.0,
+        "client_inflight": 5,
+        "client_inflight_peak": 6,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 2.902439,
+        "inflight_current": 6.0,
+        "accepted_total": 41.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 6.237,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 1024.2,
+        "client_inflight": 7,
+        "client_inflight_peak": 10,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 7.513,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 1024.2,
+        "client_inflight": 10,
+        "client_inflight_peak": 11,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 2.151515,
+        "inflight_current": 10.0,
+        "accepted_total": 66.0,
+        "rejected_total": 15.0
+      },
+      {
+        "t_seconds": 8.686,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 1024.2,
+        "client_inflight": 11,
+        "client_inflight_peak": 12,
+        "replay_queue_depth": 1.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.9625,
+        "inflight_current": 11.0,
+        "accepted_total": 80.0,
+        "rejected_total": 15.0
+      },
+      {
+        "t_seconds": 9.895,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 1024.2,
+        "client_inflight": 11,
+        "client_inflight_peak": 14,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 11.436,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 1024.2,
+        "client_inflight": 13,
+        "client_inflight_peak": 16,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 12.753,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 5606.8,
+        "client_inflight": 10,
+        "client_inflight_peak": 18,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 14.848,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 7995.2,
+        "client_inflight": 18,
+        "client_inflight_peak": 20,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 16.979,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 7995.2,
+        "client_inflight": 18,
+        "client_inflight_peak": 21,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 2.078652,
+        "inflight_current": 8.0,
+        "accepted_total": 89.0,
+        "rejected_total": 226.0
+      },
+      {
+        "t_seconds": 18.753,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 7995.2,
+        "client_inflight": 19,
+        "client_inflight_peak": 24,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 20.54,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 7995.2,
+        "client_inflight": 26,
+        "client_inflight_peak": 27,
+        "replay_queue_depth": 1.0,
+        "db_pool_in_use": 1.0,
+        "completion_ratio": 1.62585,
+        "inflight_current": 16.0,
+        "accepted_total": 147.0,
+        "rejected_total": 270.0
+      },
+      {
+        "t_seconds": 22.382,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 7555.4,
+        "client_inflight": 22,
+        "client_inflight_peak": 27,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 24.281,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 7335.5,
+        "client_inflight": 20,
+        "client_inflight_peak": 31,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 26.771,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 7335.5,
+        "client_inflight": 29,
+        "client_inflight_peak": 32,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 30.244,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 7115.6,
+        "client_inflight": 34,
+        "client_inflight_peak": 36,
+        "replay_queue_depth": 1.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.493213,
+        "inflight_current": 16.0,
+        "accepted_total": 221.0,
+        "rejected_total": 485.0
+      },
+      {
+        "t_seconds": 32.98,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 6895.7,
+        "client_inflight": 34,
+        "client_inflight_peak": 41,
+        "replay_queue_depth": 1.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 36.231,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 6895.7,
+        "client_inflight": 38,
+        "client_inflight_peak": 44,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 39.579,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 8483.15,
+        "client_inflight": 38,
+        "client_inflight_peak": 49,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 45.588,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 11891.0,
+        "client_inflight": 50,
+        "client_inflight_peak": 51,
+        "replay_queue_depth": 3.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.364865,
+        "inflight_current": 20.0,
+        "accepted_total": 370.0,
+        "rejected_total": 787.0
+      },
+      {
+        "t_seconds": 49.287,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 15049.75,
+        "client_inflight": 53,
+        "client_inflight_peak": 58,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 55.667,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 14003.5,
+        "client_inflight": 61,
+        "client_inflight_peak": 66,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 59.294,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 13585.0,
+        "client_inflight": 66,
+        "client_inflight_peak": 69,
+        "replay_queue_depth": 3.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.348291,
+        "inflight_current": 18.0,
+        "accepted_total": 468.0,
+        "rejected_total": 1154.0
+      },
+      {
+        "t_seconds": 62.982,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 13166.5,
+        "client_inflight": 63,
+        "client_inflight_peak": 69,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 70.186,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 16514.5,
+        "client_inflight": 62,
+        "client_inflight_peak": 72,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.348624,
+        "inflight_current": 16.0,
+        "accepted_total": 545.0,
+        "rejected_total": 1440.0
+      },
+      {
+        "t_seconds": 77.527,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 16825.0,
+        "client_inflight": 65,
+        "client_inflight_peak": 76,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 82.949,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 19115.85,
+        "client_inflight": 70,
+        "client_inflight_peak": 76,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 87.645,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 31888.0,
+        "client_inflight": 67,
+        "client_inflight_peak": 76,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 93.04,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 31128.0,
+        "client_inflight": 69,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 100.329,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 30406.5,
+        "client_inflight": 70,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 103.42,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 30406.5,
+        "client_inflight": 66,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 109.176,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 30064.8,
+        "client_inflight": 70,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 113.067,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 42618.8,
+        "client_inflight": 69,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 117.036,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 42902.0,
+        "client_inflight": 72,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 122.044,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 48809.15,
+        "client_inflight": 65,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 10.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.352941,
+        "inflight_current": 14.0,
+        "accepted_total": 918.0,
+        "rejected_total": 2907.0
+      },
+      {
+        "t_seconds": 126.755,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 48759.85,
+        "client_inflight": 72,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 10.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 132.135,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 48710.55,
+        "client_inflight": 67,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 138.2,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 78164.55,
+        "client_inflight": 74,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 141.94,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 77637.65,
+        "client_inflight": 67,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 147.209,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 77456.6,
+        "client_inflight": 69,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 1.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 153.42,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 77335.9,
+        "client_inflight": 68,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 4.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 158.4,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 77335.9,
+        "client_inflight": 67,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 165.862,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 77215.2,
+        "client_inflight": 68,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 171.17,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 87840.2,
+        "client_inflight": 66,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 176.217,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 87434.6,
+        "client_inflight": 73,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 183.07,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 91984.8,
+        "client_inflight": 69,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 189.466,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 91984.8,
+        "client_inflight": 64,
+        "client_inflight_peak": 78,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 198.659,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 98166.65,
+        "client_inflight": 73,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 2.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 203.069,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 98166.65,
+        "client_inflight": 67,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 208.151,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 98112.35,
+        "client_inflight": 68,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 3.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 211.834,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 102519.85,
+        "client_inflight": 74,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 215.89,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 102205.95,
+        "client_inflight": 67,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 222.882,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 101867.1,
+        "client_inflight": 74,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 4.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.329426,
+        "inflight_current": 12.0,
+        "accepted_total": 1706.0,
+        "rejected_total": 5455.0
+      },
+      {
+        "t_seconds": 228.034,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 101503.3,
+        "client_inflight": 67,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 234.522,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 100957.6,
+        "client_inflight": 69,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 241.532,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 100411.9,
+        "client_inflight": 66,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 3.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 247.16,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 100230.0,
+        "client_inflight": 72,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 254.668,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 100048.1,
+        "client_inflight": 73,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.309752,
+        "inflight_current": 20.0,
+        "accepted_total": 1979.0,
+        "rejected_total": 6202.0
+      },
+      {
+        "t_seconds": 260.068,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 100048.1,
+        "client_inflight": 69,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 266.138,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 99866.2,
+        "client_inflight": 67,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 1.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.306926,
+        "inflight_current": 16.0,
+        "accepted_total": 2108.0,
+        "rejected_total": 6454.0
+      },
+      {
+        "t_seconds": 270.991,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 99138.6,
+        "client_inflight": 68,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 277.862,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 105188.0,
+        "client_inflight": 67,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.30534,
+        "inflight_current": 17.0,
+        "accepted_total": 2191.0,
+        "rejected_total": 6778.0
+      },
+      {
+        "t_seconds": 283.985,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 108899.6,
+        "client_inflight": 69,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 289.074,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 108843.2,
+        "client_inflight": 67,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 293.002,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 108786.8,
+        "client_inflight": 64,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.300736,
+        "inflight_current": 20.0,
+        "accepted_total": 2311.0,
+        "rejected_total": 7169.0
+      },
+      {
+        "t_seconds": 296.556,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 108730.4,
+        "client_inflight": 61,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 300.672,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 108730.4,
+        "client_inflight": 58,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 307.159,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 156214.15,
+        "client_inflight": 52,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.308299,
+        "inflight_current": 16.0,
+        "accepted_total": 2410.0,
+        "rejected_total": 7489.0
+      },
+      {
+        "t_seconds": 311.481,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 155470.2,
+        "client_inflight": 55,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 3.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.308032,
+        "inflight_current": 17.0,
+        "accepted_total": 2490.0,
+        "rejected_total": 7539.0
+      },
+      {
+        "t_seconds": 315.538,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 155470.2,
+        "client_inflight": 49,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 319.047,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 153982.3,
+        "client_inflight": 42,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.321429,
+        "inflight_current": 1.0,
+        "accepted_total": 2492.0,
+        "rejected_total": 7797.0
+      },
+      {
+        "t_seconds": 322.698,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 164189.2,
+        "client_inflight": 39,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 5.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 326.434,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 164189.2,
+        "client_inflight": 42,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 1.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 329.462,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 163710.6,
+        "client_inflight": 36,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 333.175,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 166072.7,
+        "client_inflight": 32,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 1.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 335.48,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 166072.7,
+        "client_inflight": 33,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.309622,
+        "inflight_current": 15.0,
+        "accepted_total": 2671.0,
+        "rejected_total": 8126.0
+      },
+      {
+        "t_seconds": 337.565,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 166072.7,
+        "client_inflight": 29,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 5.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 339.368,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 166072.7,
+        "client_inflight": 30,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 341.464,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 166072.7,
+        "client_inflight": 24,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 343.574,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 166072.7,
+        "client_inflight": 17,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 5.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 345.532,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 169152.0,
+        "client_inflight": 23,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.30772,
+        "inflight_current": 20.0,
+        "accepted_total": 2759.0,
+        "rejected_total": 8320.0
+      },
+      {
+        "t_seconds": 347.093,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 169152.0,
+        "client_inflight": 22,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 7.0,
+        "db_pool_in_use": 1.0,
+        "completion_ratio": 1.308526,
+        "inflight_current": 18.0,
+        "accepted_total": 2768.0,
+        "rejected_total": 8348.0
+      },
+      {
+        "t_seconds": 348.726,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 169152.0,
+        "client_inflight": 16,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 350.795,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 169152.0,
+        "client_inflight": 18,
+        "client_inflight_peak": 80,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      }
+    ],
+    "samples_captured": 87
+  },
+  "breakpoint_results": {
+    "stage_duration_seconds": 10,
+    "target_peak": 100,
+    "stages": [
+      {
+        "regime": "breakpoint",
+        "stage": "concurrency_10",
+        "duration_seconds": 10,
+        "load_model": {
+          "type": "fixed_stage",
+          "seed": 20260421,
+          "schedule_points": 10
+        },
+        "raw_request_count": 122,
+        "clean_request_count": 71,
+        "clean_metrics": {
+          "request_count": 71,
+          "success_count": 20,
+          "error_count": 51
+        },
+        "success_rate": 0.28169,
+        "error_rate": 0.71831,
+        "p95_latency": 500.944,
+        "retry_rate": 0.0,
+        "rejections_429": 51,
+        "timeout_count": 33,
+        "sse_lag_p95": 0.0,
+        "sse_lag_growth_slope": 0.0,
+        "inflight_concurrency": {
+          "peak": 11,
+          "final": 1.0,
+          "sampled_max": 11.0
+        },
+        "inflight_recovery_ratio": 0.090909,
+        "completion_ratio": 0.28169,
+        "memory_growth_slope": 0.0,
+        "first_failure_mode": "transport_timeout",
+        "saturation_signal_type": "backpressure_429",
+        "noise_profile": {
+          "client_noise_ratio": 0.270492,
+          "warmup_impact": 0.114754,
+          "retry_inflation_factor": 1.057377,
+          "cold_start_ratio": 0.0,
+          "removed_ratio": 0.418033
+        },
+        "samples": [
+          {
+            "t_seconds": 0.999,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 169152.0,
+            "client_inflight": 8,
+            "client_inflight_peak": 11,
+            "replay_queue_depth": 7.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 1.316447,
+            "inflight_current": 2.0,
+            "accepted_total": 2803.0,
+            "rejected_total": 8437.0
+          },
+          {
+            "t_seconds": 2.096,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 169152.0,
+            "client_inflight": 10,
+            "client_inflight_peak": 11,
+            "replay_queue_depth": 7.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 1.310577,
+            "inflight_current": 11.0,
+            "accepted_total": 2827.0,
+            "rejected_total": 8437.0
+          },
+          {
+            "t_seconds": 3.24,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 169152.0,
+            "client_inflight": 10,
+            "client_inflight_peak": 11,
+            "replay_queue_depth": 7.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 1.310357,
+            "inflight_current": 11.0,
+            "accepted_total": 2829.0,
+            "rejected_total": 8437.0
+          },
+          {
+            "t_seconds": 4.348,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 169152.0,
+            "client_inflight": 10,
+            "client_inflight_peak": 11,
+            "replay_queue_depth": 7.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 1.310138,
+            "inflight_current": 11.0,
+            "accepted_total": 2831.0,
+            "rejected_total": 8437.0
+          },
+          {
+            "t_seconds": 5.465,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 169152.0,
+            "client_inflight": 10,
+            "client_inflight_peak": 11,
+            "replay_queue_depth": 7.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 1.309919,
+            "inflight_current": 11.0,
+            "accepted_total": 2833.0,
+            "rejected_total": 8437.0
+          },
+          {
+            "t_seconds": 6.557,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 169152.0,
+            "client_inflight": 10,
+            "client_inflight_peak": 11,
+            "replay_queue_depth": 7.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 1.309591,
+            "inflight_current": 11.0,
+            "accepted_total": 2836.0,
+            "rejected_total": 8437.0
+          },
+          {
+            "t_seconds": 7.758,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 169152.0,
+            "client_inflight": 5,
+            "client_inflight_peak": 11,
+            "replay_queue_depth": 0.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 0.0,
+            "inflight_current": 0.0,
+            "accepted_total": 0.0,
+            "rejected_total": 0.0
+          },
+          {
+            "t_seconds": 9.306,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 169152.0,
+            "client_inflight": 10,
+            "client_inflight_peak": 11,
+            "replay_queue_depth": 0.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 0.0,
+            "inflight_current": 0.0,
+            "accepted_total": 0.0,
+            "rejected_total": 0.0
+          },
+          {
+            "t_seconds": 10.716,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 169152.0,
+            "client_inflight": 1,
+            "client_inflight_peak": 11,
+            "replay_queue_depth": 0.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 0.0,
+            "inflight_current": 0.0,
+            "accepted_total": 0.0,
+            "rejected_total": 0.0
+          }
+        ],
+        "samples_captured": 9,
+        "concurrency": 10
+      },
+      {
+        "regime": "breakpoint",
+        "stage": "concurrency_25",
+        "duration_seconds": 10,
+        "load_model": {
+          "type": "fixed_stage",
+          "seed": 20260421,
+          "schedule_points": 10
+        },
+        "raw_request_count": 319,
+        "clean_request_count": 183,
+        "clean_metrics": {
+          "request_count": 183,
+          "success_count": 74,
+          "error_count": 109
+        },
+        "success_rate": 0.404372,
+        "error_rate": 0.595628,
+        "p95_latency": 1395.473,
+        "retry_rate": 0.0,
+        "rejections_429": 109,
+        "timeout_count": 93,
+        "sse_lag_p95": 246549.9,
+        "sse_lag_growth_slope": 973.693045,
+        "inflight_concurrency": {
+          "peak": 26,
+          "final": 23.0,
+          "sampled_max": 12.0
+        },
+        "inflight_recovery_ratio": 0.884615,
+        "completion_ratio": 0.404372,
+        "memory_growth_slope": 0.0,
+        "first_failure_mode": "transport_timeout",
+        "saturation_signal_type": "backpressure_429",
+        "noise_profile": {
+          "client_noise_ratio": 0.291536,
+          "warmup_impact": 0.059561,
+          "retry_inflation_factor": 1.147335,
+          "cold_start_ratio": 0.0,
+          "removed_ratio": 0.426332
+        },
+        "samples": [
+          {
+            "t_seconds": 2.308,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 169152.0,
+            "client_inflight": 14,
+            "client_inflight_peak": 23,
+            "replay_queue_depth": 0.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 0.0,
+            "inflight_current": 0.0,
+            "accepted_total": 0.0,
+            "rejected_total": 0.0
+          },
+          {
+            "t_seconds": 4.389,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 181792.95,
+            "client_inflight": 24,
+            "client_inflight_peak": 26,
+            "replay_queue_depth": 0.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 1.307613,
+            "inflight_current": 12.0,
+            "accepted_total": 2903.0,
+            "rejected_total": 8554.0
+          },
+          {
+            "t_seconds": 6.32,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 181792.95,
+            "client_inflight": 21,
+            "client_inflight_peak": 26,
+            "replay_queue_depth": 8.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 0.0,
+            "inflight_current": 0.0,
+            "accepted_total": 0.0,
+            "rejected_total": 0.0
+          },
+          {
+            "t_seconds": 8.248,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 181792.95,
+            "client_inflight": 20,
+            "client_inflight_peak": 26,
+            "replay_queue_depth": 0.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 0.0,
+            "inflight_current": 0.0,
+            "accepted_total": 0.0,
+            "rejected_total": 0.0
+          },
+          {
+            "t_seconds": 9.687,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 181792.95,
+            "client_inflight": 11,
+            "client_inflight_peak": 26,
+            "replay_queue_depth": 0.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 0.0,
+            "inflight_current": 0.0,
+            "accepted_total": 0.0,
+            "rejected_total": 0.0
+          },
+          {
+            "t_seconds": 12.007,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 181792.95,
+            "client_inflight": 23,
+            "client_inflight_peak": 26,
+            "replay_queue_depth": 0.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 0.0,
+            "inflight_current": 0.0,
+            "accepted_total": 0.0,
+            "rejected_total": 0.0
+          }
+        ],
+        "samples_captured": 6,
+        "concurrency": 25
+      },
+      {
+        "regime": "breakpoint",
+        "stage": "concurrency_50",
+        "duration_seconds": 10,
+        "load_model": {
+          "type": "fixed_stage",
+          "seed": 20260421,
+          "schedule_points": 10
+        },
+        "raw_request_count": 495,
+        "clean_request_count": 235,
+        "clean_metrics": {
+          "request_count": 235,
+          "success_count": 193,
+          "error_count": 42
+        },
+        "success_rate": 0.821277,
+        "error_rate": 0.178723,
+        "p95_latency": 2822.884,
+        "retry_rate": 0.0,
+        "rejections_429": 42,
+        "timeout_count": 180,
+        "sse_lag_p95": 0.0,
+        "sse_lag_growth_slope": 0.0,
+        "inflight_concurrency": {
+          "peak": 49,
+          "final": 35.0,
+          "sampled_max": 20.0
+        },
+        "inflight_recovery_ratio": 0.714286,
+        "completion_ratio": 0.821277,
+        "memory_growth_slope": 0.0,
+        "first_failure_mode": "transport_timeout",
+        "saturation_signal_type": "transport_timeout",
+        "noise_profile": {
+          "client_noise_ratio": 0.363636,
+          "warmup_impact": 0.036364,
+          "retry_inflation_factor": 1.212121,
+          "cold_start_ratio": 0.0,
+          "removed_ratio": 0.525253
+        },
+        "samples": [
+          {
+            "t_seconds": 11.93,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 181792.95,
+            "client_inflight": 43,
+            "client_inflight_peak": 47,
+            "replay_queue_depth": 8.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 0.0,
+            "inflight_current": 0.0,
+            "accepted_total": 0.0,
+            "rejected_total": 0.0
+          },
+          {
+            "t_seconds": 17.415,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 181792.95,
+            "client_inflight": 39,
+            "client_inflight_peak": 49,
+            "replay_queue_depth": 8.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 1.290723,
+            "inflight_current": 20.0,
+            "accepted_total": 3223.0,
+            "rejected_total": 8970.0
+          },
+          {
+            "t_seconds": 20.416,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 181792.95,
+            "client_inflight": 35,
+            "client_inflight_peak": 49,
+            "replay_queue_depth": 0.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 0.0,
+            "inflight_current": 0.0,
+            "accepted_total": 0.0,
+            "rejected_total": 0.0
+          }
+        ],
+        "samples_captured": 3,
+        "concurrency": 50
+      },
+      {
+        "regime": "breakpoint",
+        "stage": "concurrency_100",
+        "duration_seconds": 10,
+        "load_model": {
+          "type": "fixed_stage",
+          "seed": 20260421,
+          "schedule_points": 10
+        },
+        "raw_request_count": 960,
+        "clean_request_count": 380,
+        "clean_metrics": {
+          "request_count": 380,
+          "success_count": 304,
+          "error_count": 76
+        },
+        "success_rate": 0.8,
+        "error_rate": 0.2,
+        "p95_latency": 5236.078,
+        "retry_rate": 0.0,
+        "rejections_429": 75,
+        "timeout_count": 420,
+        "sse_lag_p95": 0.0,
+        "sse_lag_growth_slope": 0.0,
+        "inflight_concurrency": {
+          "peak": 93,
+          "final": 6.0,
+          "sampled_max": 20.0
+        },
+        "inflight_recovery_ratio": 0.064516,
+        "completion_ratio": 0.8,
+        "memory_growth_slope": 0.0,
+        "first_failure_mode": "transport_timeout",
+        "saturation_signal_type": "transport_timeout",
+        "noise_profile": {
+          "client_noise_ratio": 0.4375,
+          "warmup_impact": 0.0125,
+          "retry_inflation_factor": 1.301042,
+          "cold_start_ratio": 0.0,
+          "removed_ratio": 0.604167
+        },
+        "samples": [
+          {
+            "t_seconds": 31.148,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 181792.95,
+            "client_inflight": 82,
+            "client_inflight_peak": 92,
+            "replay_queue_depth": 0.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 1.277138,
+            "inflight_current": 20.0,
+            "accepted_total": 3648.0,
+            "rejected_total": 9551.0
+          },
+          {
+            "t_seconds": 38.184,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 181792.95,
+            "client_inflight": 88,
+            "client_inflight_peak": 93,
+            "replay_queue_depth": 8.0,
+            "db_pool_in_use": 0.0,
+            "completion_ratio": 0.0,
+            "inflight_current": 0.0,
+            "accepted_total": 0.0,
+            "rejected_total": 0.0
+          },
+          {
+            "t_seconds": 40.626,
+            "memory_mb": 0.0,
+            "sse_lag_ms_p95": 181792.95,
+            "client_inflight": 6,
+            "client_inflight_peak": 93,
+            "replay_queue_depth": 8.0,
+            "db_pool_in_use": 1.0,
+            "completion_ratio": 0.0,
+            "inflight_current": 0.0,
+            "accepted_total": 0.0,
+            "rejected_total": 0.0
+          }
+        ],
+        "samples_captured": 3,
+        "concurrency": 100
+      }
+    ],
+    "first_failure_mode": "transport_timeout",
+    "saturation_signal_type": "backpressure_429",
+    "rejections_429": 277,
+    "timeout_count": 726,
+    "max_stable_concurrency": 0,
+    "sse_degradation_behavior": {
+      "lag_slope_max": 973.693045,
+      "lag_slope_avg": 243.423261
+    },
+    "sse_lag_growth_slope": 973.693045,
+    "completion_ratio": 0.28169,
+    "inflight_recovery_ratio": 0.064516,
+    "memory_growth_slope": 0.0
+  },
+  "chaos_results": {
+    "regime": "chaos",
+    "stage": null,
+    "duration_seconds": 120,
+    "load_model": {
+      "type": "chaos_curve",
+      "seed": 20260421,
+      "schedule_points": 120
+    },
+    "raw_request_count": 3324,
+    "clean_request_count": 1915,
+    "clean_metrics": {
+      "request_count": 1915,
+      "success_count": 1784,
+      "error_count": 131
+    },
+    "success_rate": 0.931593,
+    "error_rate": 0.068407,
+    "p95_latency": 1269.573,
+    "retry_rate": 0.0,
+    "rejections_429": 128,
+    "timeout_count": 1152,
+    "sse_lag_p95": 0.0,
+    "sse_lag_growth_slope": 0.0,
+    "inflight_concurrency": {
+      "peak": 39,
+      "final": 4.0,
+      "sampled_max": 13.0
+    },
+    "inflight_recovery_ratio": 0.102564,
+    "completion_ratio": 1.20952,
+    "memory_growth_slope": 0.0,
+    "first_failure_mode": "transport_timeout",
+    "saturation_signal_type": "transport_timeout",
+    "noise_profile": {
+      "client_noise_ratio": 0.34657,
+      "warmup_impact": 0.037605,
+      "retry_inflation_factor": 1.06077,
+      "cold_start_ratio": 0.0,
+      "removed_ratio": 0.423887
+    },
+    "samples": [
+      {
+        "t_seconds": 7.097,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 21,
+        "client_inflight_peak": 27,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 10.294,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 32,
+        "client_inflight_peak": 34,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.269454,
+        "inflight_current": 4.0,
+        "accepted_total": 3971.0,
+        "rejected_total": 9795.0
+      },
+      {
+        "t_seconds": 13.33,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 31,
+        "client_inflight_peak": 34,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.265544,
+        "inflight_current": 13.0,
+        "accepted_total": 4037.0,
+        "rejected_total": 9814.0
+      },
+      {
+        "t_seconds": 16.375,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 15,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.267353,
+        "inflight_current": 4.0,
+        "accepted_total": 4077.0,
+        "rejected_total": 9863.0
+      },
+      {
+        "t_seconds": 20.637,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 11,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 24.908,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 13,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.262947,
+        "inflight_current": 3.0,
+        "accepted_total": 4248.0,
+        "rejected_total": 9886.0
+      },
+      {
+        "t_seconds": 28.662,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 14,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.257426,
+        "inflight_current": 8.0,
+        "accepted_total": 4343.0,
+        "rejected_total": 9903.0
+      },
+      {
+        "t_seconds": 33.794,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 12,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 38.211,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 7,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 0.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.251319,
+        "inflight_current": 3.0,
+        "accepted_total": 4548.0,
+        "rejected_total": 9949.0
+      },
+      {
+        "t_seconds": 44.149,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 10,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 49.353,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 7,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 1.0,
+        "completion_ratio": 1.24585,
+        "inflight_current": 6.0,
+        "accepted_total": 4759.0,
+        "rejected_total": 10001.0
+      },
+      {
+        "t_seconds": 54.203,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 15,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.242188,
+        "inflight_current": 9.0,
+        "accepted_total": 4864.0,
+        "rejected_total": 10017.0
+      },
+      {
+        "t_seconds": 60.127,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 9,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.238639,
+        "inflight_current": 5.0,
+        "accepted_total": 4995.0,
+        "rejected_total": 10036.0
+      },
+      {
+        "t_seconds": 66.067,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 11,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 1.0,
+        "completion_ratio": 1.235317,
+        "inflight_current": 2.0,
+        "accepted_total": 5125.0,
+        "rejected_total": 10050.0
+      },
+      {
+        "t_seconds": 71.562,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 14,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.229833,
+        "inflight_current": 9.0,
+        "accepted_total": 5256.0,
+        "rejected_total": 10063.0
+      },
+      {
+        "t_seconds": 76.717,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 13,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.230009,
+        "inflight_current": 7.0,
+        "accepted_total": 5365.0,
+        "rejected_total": 10092.0
+      },
+      {
+        "t_seconds": 81.567,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 11,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.229395,
+        "inflight_current": 3.0,
+        "accepted_total": 5484.0,
+        "rejected_total": 10094.0
+      },
+      {
+        "t_seconds": 86.926,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 7,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.227841,
+        "inflight_current": 4.0,
+        "accepted_total": 5596.0,
+        "rejected_total": 10123.0
+      },
+      {
+        "t_seconds": 91.49,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 14,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.224232,
+        "inflight_current": 10.0,
+        "accepted_total": 5695.0,
+        "rejected_total": 10165.0
+      },
+      {
+        "t_seconds": 96.898,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 11,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.221668,
+        "inflight_current": 8.0,
+        "accepted_total": 5815.0,
+        "rejected_total": 10182.0
+      },
+      {
+        "t_seconds": 101.797,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 13,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 0.0,
+        "inflight_current": 0.0,
+        "accepted_total": 0.0,
+        "rejected_total": 0.0
+      },
+      {
+        "t_seconds": 107.384,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 9,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.220255,
+        "inflight_current": 3.0,
+        "accepted_total": 6043.0,
+        "rejected_total": 10210.0
+      },
+      {
+        "t_seconds": 112.118,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 12,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.218837,
+        "inflight_current": 8.0,
+        "accepted_total": 6137.0,
+        "rejected_total": 10229.0
+      },
+      {
+        "t_seconds": 115.499,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 11,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.217405,
+        "inflight_current": 4.0,
+        "accepted_total": 6228.0,
+        "rejected_total": 10244.0
+      },
+      {
+        "t_seconds": 119.128,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 12,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.216049,
+        "inflight_current": 2.0,
+        "accepted_total": 6318.0,
+        "rejected_total": 10249.0
+      },
+      {
+        "t_seconds": 122.517,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 18,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.213648,
+        "inflight_current": 8.0,
+        "accepted_total": 6389.0,
+        "rejected_total": 10267.0
+      },
+      {
+        "t_seconds": 125.702,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 14,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.213125,
+        "inflight_current": 1.0,
+        "accepted_total": 6461.0,
+        "rejected_total": 10279.0
+      },
+      {
+        "t_seconds": 128.497,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 10,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.211912,
+        "inflight_current": 3.0,
+        "accepted_total": 6531.0,
+        "rejected_total": 10283.0
+      },
+      {
+        "t_seconds": 131.062,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 10,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.209331,
+        "inflight_current": 8.0,
+        "accepted_total": 6602.0,
+        "rejected_total": 10289.0
+      },
+      {
+        "t_seconds": 132.794,
+        "memory_mb": 0.0,
+        "sse_lag_ms_p95": 181792.95,
+        "client_inflight": 4,
+        "client_inflight_peak": 39,
+        "replay_queue_depth": 8.0,
+        "db_pool_in_use": 0.0,
+        "completion_ratio": 1.20952,
+        "inflight_current": 2.0,
+        "accepted_total": 6639.0,
+        "rejected_total": 10302.0
+      }
+    ],
+    "samples_captured": 30,
+    "chaos_injections": {
+      "invalid_jwt_bursts": 8,
+      "poisson_spike_windows": 43,
+      "disconnect_reconnect_churn_windows": 16,
+      "sse_reconnect_storms": 10,
+      "retry_amplification_bursts": 20
+    }
+  },
+  "noise_profile": {
+    "client_noise_ratio": 0.390514,
+    "cold_start_ratio": 0.0,
+    "removed_ratio": 0.534479,
+    "retry_inflation_factor": 1.227393,
+    "warmup_impact": 0.045108
+  },
+  "production_readiness": {
+    "classification": "FAILURE_DOMINATED",
+    "confidence": 0.99,
+    "reasons": [
+      "sustained error rate 0.383 exceeds 0.05",
+      "completion ratio 0.617 is below 0.8",
+      "SSE lag growth slope 973.693 indicates degradation",
+      "timeout distribution dominates 429 handling (timeouts=1878, rejections=405)",
+      "inflight recovery ratio 0.065 indicates saturation without recovery",
+      "repeatability gate failed"
+    ]
+  }
+}

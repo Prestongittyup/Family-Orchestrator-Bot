@@ -8,12 +8,14 @@ from apps.api.endpoints.integrations_router import get_credential_store, get_htt
 from apps.api.integration_core.credentials import InMemoryOAuthCredentialStore
 from apps.api.integration_core.decision_engine import DecisionEngine
 from apps.api.integration_core.orchestrator import create_orchestrator
+from apps.api.observability.execution_trace import trace_function
 from apps.api.operational.contracts import OperationalResponse
 from apps.api.operational.service import build_operational_response
 
 router = APIRouter(prefix="/operational", tags=["operational"])
 
 
+@trace_function(entrypoint="operational.pipeline", actor_type="api_user", source="api")
 def _run_pipeline(
     household_id: str,
     credential_store: InMemoryOAuthCredentialStore,
@@ -35,6 +37,7 @@ def _run_pipeline(
 
 
 @router.get("/run", response_model=OperationalResponse)
+@trace_function(entrypoint="operational.run", actor_type="api_user", source="api")
 def run_operational_mode(
     household_id: str = Query(default="household-001"),
     credential_store: InMemoryOAuthCredentialStore = Depends(get_credential_store),
@@ -50,6 +53,7 @@ def run_operational_mode(
 
 
 @router.get("/context", response_model=OperationalResponse)
+@trace_function(entrypoint="operational.context", actor_type="api_user", source="api")
 def get_operational_context(
     household_id: str = Query(default="household-001"),
     credential_store: InMemoryOAuthCredentialStore = Depends(get_credential_store),
@@ -65,6 +69,7 @@ def get_operational_context(
 
 
 @router.get("/brief", response_model=OperationalResponse)
+@trace_function(entrypoint="operational.brief", actor_type="api_user", source="api")
 def get_operational_brief(
     household_id: str = Query(default="household-001"),
     credential_store: InMemoryOAuthCredentialStore = Depends(get_credential_store),

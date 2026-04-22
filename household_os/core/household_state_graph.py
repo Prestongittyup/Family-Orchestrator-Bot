@@ -9,6 +9,11 @@ from typing import Any
 from apps.api.integration_core.models.household_state import HouseholdState
 from apps.assistant_core.meal_planner import default_inventory, default_recipe_history
 from household_os.connectors import CalendarConnector, GroceryConnector, TaskConnector
+from household_os.core.lifecycle_state import (
+    LifecycleState,
+    assert_lifecycle_state,
+    enforce_boundary_state,
+)
 
 
 def _utc_now_iso() -> str:
@@ -37,6 +42,7 @@ class HouseholdStateGraphStore:
             self._write_graph(graph)
 
         graph = self._ensure_runtime_sections(graph)
+        graph = self._parse_lifecycle_sections(graph)
 
         self._cache[household_id] = deepcopy(graph)
         return deepcopy(graph)
@@ -86,6 +92,7 @@ class HouseholdStateGraphStore:
             "updated_at": _utc_now_iso(),
         }
         canonical_graph = self._ensure_runtime_sections(canonical_graph)
+        canonical_graph = self._parse_lifecycle_sections(canonical_graph)
 
         canonical_graph["event_history"].append(
             {
@@ -206,6 +213,7 @@ class HouseholdStateGraphStore:
 
     def save_graph(self, graph: dict[str, Any]) -> dict[str, Any]:
         graph = self._ensure_runtime_sections(deepcopy(graph))
+        self._assert_lifecycle_sections(graph)
         graph["updated_at"] = _utc_now_iso()
         self._write_graph(graph)
         return deepcopy(graph)
@@ -246,7 +254,81 @@ class HouseholdStateGraphStore:
         behavior_feedback.setdefault("records", [])
         return graph
 
+    def _parse_lifecycle_sections(self, graph: dict[str, Any]) -> dict[str, Any]:
+        lifecycle = graph.get("action_lifecycle", {})
+        actions = lifecycle.get("actions", {}) if isinstance(lifecycle, dict) else {}
+        if isinstance(actions, dict):
+            for payload in actions.values():
+                if not isinstance(payload, dict):
+                    continue
+                raw_state = payload.get("current_state")
+                if raw_state is not None:
+                    payload["current_state"] = enforce_boundary_state(raw_state)
+
+        transition_log = lifecycle.get("transition_log", []) if isinstance(lifecycle, dict) else []
+        if isinstance(transition_log, list):
+            for item in transition_log:
+                if not isinstance(item, dict):
+                    continue
+                from_raw = item.get("from_state")
+                if from_raw is not None:
+                    item["from_state"] = enforce_boundary_state(from_raw)
+                to_raw = item.get("to_state")
+                if to_raw is not None:
+                    item["to_state"] = enforce_boundary_state(to_raw)
+
+        feedback_records = graph.get("behavior_feedback", {}).get("records", [])
+        if isinstance(feedback_records, list):
+            for record in feedback_records:
+                if not isinstance(record, dict):
+                    continue
+                raw_status = record.get("status")
+                if raw_status is not None:
+                    record["status"] = enforce_boundary_state(raw_status)
+        return graph
+
+    def _assert_lifecycle_sections(self, graph: dict[str, Any]) -> None:
+        lifecycle = graph.get("action_lifecycle", {})
+        actions = lifecycle.get("actions", {}) if isinstance(lifecycle, dict) else {}
+        if isinstance(actions, dict):
+            for action_id, payload in actions.items():
+                if not isinstance(payload, dict):
+                    continue
+                state = payload.get("current_state")
+                if state is not None:
+                    if not isinstance(state, LifecycleState):
+                        raise TypeError(f"Action {action_id} current_state must be LifecycleState")
+                    assert_lifecycle_state(state)
+
+        transition_log = lifecycle.get("transition_log", []) if isinstance(lifecycle, dict) else []
+        if isinstance(transition_log, list):
+            for entry in transition_log:
+                if not isinstance(entry, dict):
+                    continue
+                from_state = entry.get("from_state")
+                if from_state is not None:
+                    if not isinstance(from_state, LifecycleState):
+                        raise TypeError("transition_log.from_state must be LifecycleState")
+                    assert_lifecycle_state(from_state)
+                to_state = entry.get("to_state")
+                if to_state is not None:
+                    if not isinstance(to_state, LifecycleState):
+                        raise TypeError("transition_log.to_state must be LifecycleState")
+                    assert_lifecycle_state(to_state)
+
+        feedback_records = graph.get("behavior_feedback", {}).get("records", [])
+        if isinstance(feedback_records, list):
+            for record in feedback_records:
+                if not isinstance(record, dict):
+                    continue
+                status = record.get("status")
+                if status is not None:
+                    if not isinstance(status, LifecycleState):
+                        raise TypeError("behavior_feedback.status must be LifecycleState")
+                    assert_lifecycle_state(status)
+
     def _write_graph(self, graph: dict[str, Any]) -> None:
+        self._assert_lifecycle_sections(graph)
         payload = self._read_store()
         payload.setdefault("households", {})[graph["household_id"]] = deepcopy(graph)
         self.graph_path.parent.mkdir(parents=True, exist_ok=True)

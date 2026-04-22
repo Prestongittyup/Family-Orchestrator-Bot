@@ -1,0 +1,22 @@
+{
+  "findings": [],
+  "metadata": {
+    "arch_risk_report_present": false,
+    "baseline_trace_count": 15,
+    "current_trace_count": 15,
+    "drift_report_present": false,
+    "generated_at": "2026-04-22T19:06:26.787334Z",
+    "git_diff_present": true,
+    "mode": "SUGGEST"
+  },
+  "mode": "SUGGEST",
+  "patch_generated": false,
+  "strategies": [],
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "manual_required": false,
+    "total_findings": 0
+  },
+  "verdict": "PASS"
+}

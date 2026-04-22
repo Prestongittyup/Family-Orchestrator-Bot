@@ -1,0 +1,92 @@
+[
+  {
+    "actor_type": "api_user",
+    "ended_at": "2026-04-22T18:36:21.476724Z",
+    "entrypoint": "api.event_ingest",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "create_app.<locals>.ingest_event",
+        "module": "apps.api.main",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:36:21.476701Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "create_app.<locals>.ingest_event",
+        "module": "apps.api.main",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:36:21.476717Z"
+      }
+    ],
+    "source": "api",
+    "started_at": "2026-04-22T18:36:21.476670Z",
+    "trace_id": "trace-831b996a-48d7-4d5d-b92e-656cc4198e46"
+  },
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:36:21.484406Z",
+    "entrypoint": "ingestion.webhook",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "ingest_webhook",
+        "module": "apps.api.ingestion.service",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:36:21.483376Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "ingest_webhook",
+        "module": "apps.api.ingestion.service",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:36:21.484386Z"
+      }
+    ],
+    "source": "ingestion",
+    "started_at": "2026-04-22T18:36:21.483344Z",
+    "trace_id": "trace-61041a3f-eaa4-4bb7-a953-d46220ef25f6"
+  },
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:36:21.486145Z",
+    "entrypoint": "ingestion.email",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "ingest_email",
+        "module": "apps.api.ingestion.service",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:36:21.485685Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "ingest_email",
+        "module": "apps.api.ingestion.service",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:36:21.486134Z"
+      }
+    ],
+    "source": "ingestion",
+    "started_at": "2026-04-22T18:36:21.485667Z",
+    "trace_id": "trace-069e53fa-bd25-43c6-9ade-01d2a64fdb21"
+  }
+]

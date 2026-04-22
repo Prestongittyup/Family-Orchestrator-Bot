@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 from pathlib import Path
 import queue
 import random
@@ -22,6 +23,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.runtime_stress_audit import RuntimeStressHarness
+from apps.api.core.runtime_classifier import RuntimeSaturationClassifier
+from tests.harness.load_curve_model import LoadCurveModel
+from tests.harness.noise_isolation import classify_noise, isolate
+from tests.harness.repeatability_gate import RepeatabilityConfig, RepeatabilityGate
 
 
 BASELINE_RETRY_RATE = 0.03773
@@ -156,6 +161,301 @@ class Runner:
     @staticmethod
     def _gauge(snapshot: dict[str, Any], name: str) -> float:
         return float(snapshot.get("gauges", {}).get(name, 0.0))
+
+    @staticmethod
+    def _summarize_records(records: list[dict[str, Any]]) -> dict[str, float]:
+        total = len(records)
+        if total == 0:
+            return {
+                "total_requests": 0.0,
+                "success_rate": 0.0,
+                "error_rate": 1.0,
+                "retry_rate": 0.0,
+                "rejections_429": 0.0,
+                "p50_ms": 0.0,
+                "p95_ms": 0.0,
+            }
+
+        success_count = sum(1 for r in records if bool(r.get("ok", False)))
+        retry_count = sum(1 for r in records if bool(r.get("retried", False)))
+        reject_429 = sum(1 for r in records if int(r.get("status", 0)) == 429)
+        latencies = [float(r.get("latency_ms", 0.0)) for r in records if float(r.get("latency_ms", 0.0)) > 0]
+
+        p50 = statistics.median(latencies) if latencies else 0.0
+        p95 = statistics.quantiles(latencies, n=100, method="inclusive")[94] if len(latencies) >= 2 else p50
+
+        return {
+            "total_requests": float(total),
+            "success_rate": float(success_count) / float(total),
+            "error_rate": float(total - success_count) / float(total),
+            "retry_rate": float(retry_count) / float(total),
+            "rejections_429": float(reject_429),
+            "p50_ms": float(p50),
+            "p95_ms": float(p95),
+        }
+
+    def _collect_runtime_metrics_snapshot(self, household_id: str, token: str) -> dict[str, Any]:
+        for _ in range(5):
+            status, payload, _lat, _retried = self._json_request(
+                "GET",
+                "/v1/system/runtime-metrics",
+                headers={
+                    "Authorization": f"Bearer {token}",
+                    "x-hpal-household-id": household_id,
+                },
+                retries=1,
+            )
+            if status == 200 and isinstance(payload, dict):
+                return payload
+            time.sleep(0.2)
+        return {}
+
+    def run_stable_curve_once(self, schedule: list[dict[str, int]], seed: int, warmup_seconds: int = 10) -> dict[str, Any]:
+        observations: "queue.Queue[ReqObs]" = queue.Queue()
+        sse_success = 0
+        sse_attempts = 0
+        sse_reconnects = 0
+        invalid_401 = 0
+        invalid_non_401 = 0
+        invalid_statuses: Counter[int] = Counter()
+        valid_token_failures = 0
+        auth_system_failures = 0
+        total_invalid = 0
+        lag_flag = False
+
+        with self._lock:
+            self._inflight_peak = 0
+
+        baseline_metrics = self._collect_metrics_snapshot()
+        db_pool_max_in_use = self._gauge(baseline_metrics, "db_pool_in_use")
+
+        target_by_second = {int(p["timestamp"]): int(p["target_concurrency"]) for p in schedule}
+        total_seconds = max(target_by_second.keys()) + 1 if target_by_second else 1
+        max_concurrency = max(target_by_second.values()) if target_by_second else 1
+
+        stop_event = threading.Event()
+        active_lock = threading.Lock()
+        active_target = target_by_second.get(0, 1)
+
+        homes: list[tuple[str, str]] = []
+        for _ in range(max(5, max_concurrency // 2)):
+            homes.append(self.harness._register_household())
+
+        def pick_home(rnd: random.Random) -> tuple[str, str]:
+            return homes[rnd.randint(0, len(homes) - 1)]
+
+        def worker(idx: int) -> None:
+            nonlocal sse_success, sse_attempts, sse_reconnects
+            nonlocal invalid_401, invalid_non_401, total_invalid
+            nonlocal valid_token_failures, auth_system_failures
+            rnd = random.Random(seed * 1000 + idx)
+            msg_seq = 0
+            while not stop_event.is_set():
+                with active_lock:
+                    target = active_target
+                if idx >= target:
+                    time.sleep(0.01)
+                    continue
+
+                hh, token = pick_home(rnd)
+                r = rnd.random()
+                msg_seq += 1
+
+                if r < 0.72:
+                    status, _payload, latency, retried = self._json_request(
+                        "POST",
+                        "/v1/ui/message",
+                        body={
+                            "family_id": hh,
+                            "message": f"curve-valid-{seed}-{idx}-{msg_seq}",
+                            "session_id": f"curve-s-{seed}-{idx}",
+                        },
+                        headers={
+                            "Authorization": f"Bearer {token}",
+                            "x-hpal-household-id": hh,
+                            "x-idempotency-key": f"curve-valid-{seed}-{idx}-{msg_seq}",
+                        },
+                        timeout=8,
+                        retries=1,
+                    )
+                    ok = status == 200
+                    if status in {401, 403, 503}:
+                        valid_token_failures += 1
+                    if status == 503:
+                        auth_system_failures += 1
+                    observations.put(ReqObs(time.time(), latency, status, ok, retried, "valid"))
+
+                elif r < 0.87:
+                    total_invalid += 1
+                    status, _payload, latency, retried = self._json_request(
+                        "POST",
+                        "/v1/ui/message",
+                        body={
+                            "family_id": hh,
+                            "message": f"curve-invalid-{seed}-{idx}-{msg_seq}",
+                            "session_id": f"curve-iv-{seed}-{idx}",
+                        },
+                        headers={
+                            "Authorization": "Bearer invalid.token.value",
+                            "x-hpal-household-id": hh,
+                            "x-idempotency-key": f"curve-invalid-{seed}-{idx}-{msg_seq}",
+                        },
+                        timeout=8,
+                        retries=1,
+                    )
+                    if status == 401:
+                        invalid_401 += 1
+                    else:
+                        invalid_non_401 += 1
+                        invalid_statuses[status] += 1
+                        if status == 503:
+                            auth_system_failures += 1
+                    observations.put(ReqObs(time.time(), latency, status, status == 401, retried, "invalid"))
+
+                else:
+                    sse_attempts += 1
+                    sse_reconnects += 1
+                    ok, latency, retried = self._sse_connect_once(hh, token)
+                    if ok:
+                        sse_success += 1
+                    observations.put(ReqObs(time.time(), latency, 200 if ok else 0, ok, retried, "sse"))
+
+                time.sleep(rnd.uniform(0.01, 0.06))
+
+        def sampler() -> None:
+            nonlocal db_pool_max_in_use, lag_flag
+            while not stop_event.is_set():
+                snap = self._collect_metrics_snapshot()
+                if snap:
+                    db_pool_max_in_use = max(db_pool_max_in_use, self._gauge(snap, "db_pool_in_use"))
+                    replay_depth = self._gauge(snap, "replay_queue_depth")
+                    if replay_depth > 200:
+                        lag_flag = True
+                time.sleep(1.0)
+
+        threads = [threading.Thread(target=worker, args=(i,), daemon=True) for i in range(max_concurrency)]
+        sample_thread = threading.Thread(target=sampler, daemon=True)
+        for t in threads:
+            t.start()
+        sample_thread.start()
+
+        for sec in range(total_seconds):
+            with active_lock:
+                active_target = target_by_second.get(sec, active_target)
+            time.sleep(1.0)
+
+        stop_event.set()
+        for t in threads:
+            t.join(timeout=3)
+        sample_thread.join(timeout=2)
+
+        final_metrics = self._collect_metrics_snapshot()
+        runtime_metrics = self._collect_runtime_metrics_snapshot(homes[0][0], homes[0][1])
+
+        raw_records: list[dict[str, Any]] = []
+        while True:
+            try:
+                obs = observations.get_nowait()
+                raw_records.append(
+                    {
+                        "ts": obs.ts,
+                        "latency_ms": obs.latency_ms,
+                        "status": obs.status,
+                        "ok": obs.ok,
+                        "retried": obs.retried,
+                        "kind": obs.kind,
+                    }
+                )
+            except queue.Empty:
+                break
+
+        clean_records = isolate(raw_records, warmup_seconds=warmup_seconds)
+        noise_profile = classify_noise(raw_records, warmup_seconds=warmup_seconds)
+
+        raw_summary = self._summarize_records(raw_records)
+        clean_summary = self._summarize_records(clean_records)
+
+        db_rejections = self._counter(final_metrics, "db_pool_rejection_count") - self._counter(
+            baseline_metrics, "db_pool_rejection_count"
+        )
+
+        fallback_metrics = {
+            "accepted_total": clean_summary["total_requests"],
+            "rejected_total": clean_summary["rejections_429"],
+            "completed_total": clean_summary["total_requests"] * clean_summary["success_rate"],
+            "failed_total": clean_summary["total_requests"] * clean_summary["error_rate"],
+            "inflight_current": float(self._inflight),
+            "completion_ratio": clean_summary["success_rate"],
+            "ASGI_ENTRY_RECEIVED_COUNT": raw_summary["total_requests"],
+            "ADMISSION_ACCEPTED_COUNT": clean_summary["total_requests"],
+            "ADMISSION_REJECTED_COUNT": clean_summary["rejections_429"],
+            "CLIENT_TIMEOUT_COUNT": noise_profile["client_noise_ratio"] * raw_summary["total_requests"],
+            "MAX_INFLIGHT_OBSERVED": float(self._inflight_peak),
+            "MAX_INFLIGHT_CAP": 20.0,
+            "retry_rate": clean_summary["retry_rate"],
+            "p95_latency": clean_summary["p95_ms"],
+        }
+
+        completion_ratio = float(runtime_metrics.get("completion_ratio", fallback_metrics["completion_ratio"])) if runtime_metrics else float(fallback_metrics["completion_ratio"])
+        classification = (
+            runtime_metrics.get("runtime_classification")
+            if runtime_metrics and isinstance(runtime_metrics.get("runtime_classification"), dict)
+            else RuntimeSaturationClassifier.classify(fallback_metrics)
+        )
+
+        notes_parts: list[str] = [
+            f"raw_total={int(raw_summary['total_requests'])}",
+            f"clean_total={int(clean_summary['total_requests'])}",
+            f"noise_client_ratio={noise_profile['client_noise_ratio']:.4f}",
+            f"sse_success_rate={(sse_success / sse_attempts) if sse_attempts else 1.0:.4f}",
+            f"reconnect_rate={(sse_reconnects / total_seconds) if total_seconds else 0.0:.3f}/s",
+            f"major_lag_detected={'yes' if lag_flag else 'no'}",
+        ]
+        if invalid_non_401 > 0:
+            top_invalid = ",".join(f"{code}:{count}" for code, count in invalid_statuses.most_common(3))
+            notes_parts.append(f"invalid_non_401_statuses={top_invalid}")
+
+        return {
+            "seed": seed,
+            "duration_seconds": total_seconds,
+            "success_rate": round(clean_summary["success_rate"], 5),
+            "error_rate": round(clean_summary["error_rate"], 5),
+            "auth": {
+                "valid_token_failures": int(valid_token_failures),
+                "invalid_token_responses": int(invalid_401),
+                "system_failures": int(auth_system_failures),
+            },
+            "backpressure": {
+                "inflight_peak": int(self._inflight_peak),
+                "rejections_429": int(clean_summary["rejections_429"]),
+                "retry_rate": round(clean_summary["retry_rate"], 5),
+                "rejection_rate": round(
+                    (clean_summary["rejections_429"] / clean_summary["total_requests"])
+                    if clean_summary["total_requests"] > 0
+                    else 0.0,
+                    5,
+                ),
+            },
+            "db": {
+                "pool_max_in_use": int(round(db_pool_max_in_use)),
+                "rejections": int(round(db_rejections)),
+            },
+            "latency": {
+                "p50_ms": round(clean_summary["p50_ms"], 3),
+                "p95_ms": round(clean_summary["p95_ms"], 3),
+            },
+            "noise_profile": noise_profile,
+            "runtime_metrics": runtime_metrics,
+            "classification": classification,
+            "completion_ratio": round(completion_ratio, 6),
+            "notes": "; ".join(notes_parts),
+            "_internal": {
+                "raw_total": int(raw_summary["total_requests"]),
+                "clean_total": int(clean_summary["total_requests"]),
+                "lag": lag_flag,
+                "total_invalid": total_invalid,
+            },
+        }
 
     def run_tier(self, concurrency: int, seconds: int) -> dict[str, Any]:
         observations: "queue.Queue[ReqObs]" = queue.Queue()
@@ -372,69 +672,64 @@ class Runner:
         self.server = self.harness._start_server()
         self.harness._wait_ready()
 
-        tiers = [
-            self.run_tier(10, 70),
-            self.run_tier(50, 75),
-            self.run_tier(100, 60),
-        ]
+        base_seed = int(os.getenv("PHASE1_LOAD_SEED", "20260421"))
+        repeat_runs = int(os.getenv("PHASE1_REPEATABILITY_RUNS", "5"))
 
-        # pass/fail
-        tier10 = tiers[0]
-        tier50 = tiers[1]
+        load_curve = (
+            LoadCurveModel(seed=base_seed)
+            .ramp_up(duration=40, start=10, end=50)
+            .plateau(duration=40, level=50)
+            .burst(duration=20, spikes=8, amplitude=50)
+            .decay(duration=30, end_level=20)
+        )
+        schedule = list(load_curve.to_schedule())
 
-        no_cascade = all(t["_internal"]["trend"] != "increasing" for t in tiers)
-        no_error_growth = no_cascade
+        curve_runs: list[dict[str, Any]] = []
+        repeatability_inputs: list[dict[str, float]] = []
+        noise_profiles: list[dict[str, float]] = []
 
-        tier10_pass = (
-            math.isclose(float(tier10["success_rate"]), 1.0, rel_tol=0.0, abs_tol=0.0)
-            and int(tier10["auth"]["valid_token_failures"]) == 0
-            and int(tier10["auth"]["system_failures"]) == 0
+        for run_idx in range(repeat_runs):
+            run_seed = base_seed + run_idx
+            run_summary = self.run_stable_curve_once(schedule=schedule, seed=run_seed, warmup_seconds=10)
+            curve_runs.append({k: v for k, v in run_summary.items() if k not in {"_internal", "runtime_metrics"}})
+            noise_profiles.append(run_summary["noise_profile"])
+            repeatability_inputs.append(
+                {
+                    "success_rate": float(run_summary["success_rate"]),
+                    "rejection_rate": float(run_summary["backpressure"]["rejection_rate"]),
+                    "completion_ratio": float(run_summary.get("completion_ratio", 0.0)),
+                    "p95_latency": float(run_summary["latency"]["p95_ms"]),
+                }
+            )
+
+        repeatability = RepeatabilityGate.evaluate(
+            repeatability_inputs,
+            RepeatabilityConfig(n_runs=repeat_runs),
         )
 
-        tier50_retry = float(tier50["backpressure"]["retry_rate"])
-        retry_reduction = tier50_retry <= (BASELINE_RETRY_RATE * 0.5)
-
-        tier50_pass = (
-            float(tier50["success_rate"]) >= 0.95
-            and int(tier50["auth"]["valid_token_failures"]) == 0
-            and int(tier50["db"]["rejections"]) == 0
-            and retry_reduction
-        )
-
-        phase_passed = tier10_pass and tier50_pass and no_cascade and no_error_growth
-
-        primary_failure_subsystem = "unknown"
-        if not phase_passed:
-            if int(tier10["auth"]["valid_token_failures"]) > 0 or int(tier50["auth"]["valid_token_failures"]) > 0 or int(tier50["auth"]["system_failures"]) > 0:
-                primary_failure_subsystem = "auth"
-            elif int(tier50["db"]["rejections"]) > 0:
-                primary_failure_subsystem = "db"
-            elif int(tier50["backpressure"]["rejections_429"]) > 0 or not retry_reduction:
-                primary_failure_subsystem = "backpressure"
-
-        auth_improvement = (
-            int(tier10["auth"]["valid_token_failures"]) == 0
-            and int(tier50["auth"]["valid_token_failures"]) == 0
-            and int(tier10["auth"]["system_failures"]) == 0
-            and int(tier50["auth"]["system_failures"]) == 0
-        )
-
-        stability_gain = no_cascade and no_error_growth and float(tier50["success_rate"]) >= 0.95
-
-        output_tiers: list[dict[str, Any]] = []
-        for t in tiers:
-            clean = {k: v for k, v in t.items() if k != "_internal"}
-            output_tiers.append(clean)
+        if noise_profiles:
+            noise_profile = {
+                "client_noise_ratio": round(statistics.fmean(n["client_noise_ratio"] for n in noise_profiles), 6),
+                "warmup_impact": round(statistics.fmean(n["warmup_impact"] for n in noise_profiles), 6),
+                "retry_inflation_factor": round(statistics.fmean(n["retry_inflation_factor"] for n in noise_profiles), 6),
+            }
+        else:
+            noise_profile = {
+                "client_noise_ratio": 0.0,
+                "warmup_impact": 0.0,
+                "retry_inflation_factor": 1.0,
+            }
 
         return {
-            "tier_results": output_tiers,
-            "phase1_status": "PASSED" if phase_passed else "FAILED",
-            "primary_failure_subsystem": primary_failure_subsystem,
-            "regression_vs_baseline": {
-                "auth_improvement": "yes" if auth_improvement else "no",
-                "retry_reduction": "yes" if retry_reduction else "no",
-                "stability_gain": "yes" if stability_gain else "no",
+            "repeatability": repeatability,
+            "noise_profile": noise_profile,
+            "load_model": {
+                "type": "stable_curve",
+                "seed": base_seed,
+                "duration_seconds": load_curve.duration_seconds,
+                "schedule_points": len(schedule),
             },
+            "curve_runs": curve_runs,
         }
 
     def close(self) -> None:

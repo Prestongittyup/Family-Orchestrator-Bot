@@ -8,6 +8,7 @@ from apps.api.hpal.contracts import (
     PlanModel,
     TaskModel,
 )
+from household_os.core.lifecycle_state import LifecycleState, enforce_boundary_state
 
 
 class ProjectionBuilder:
@@ -27,7 +28,12 @@ class ProjectionBuilder:
         )
         summary = {
             "state_version": int(graph.get("state_version", 0)),
-            "pending_actions": sum(1 for item in graph.get("action_lifecycle", {}).get("actions", {}).values() if str(item.get("current_state", "")) in {"pending_approval", "approved", "proposed"}),
+            "pending_actions": sum(
+                1
+                for item in graph.get("action_lifecycle", {}).get("actions", {}).values()
+                if enforce_boundary_state(item.get("current_state"))
+                in {LifecycleState.PENDING_APPROVAL, LifecycleState.APPROVED, LifecycleState.PROPOSED}
+            ),
             "projection_epoch": int(watermark.get("projection_epoch", 0)),
             "last_projection_at": str(watermark.get("last_projection_at", graph.get("updated_at", ""))),
             "stale_projection": stale_projection,

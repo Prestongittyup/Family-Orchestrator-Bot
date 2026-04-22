@@ -12,6 +12,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import TimeoutError as SQLAlchemyTimeoutError
 
 from apps.api.core.database import Base, DATABASE_URL, engine
+from apps.api.core.asgi_admission import AdmissionGateASGI
 from apps.api.core.auth_middleware import install_auth_middleware
 from apps.api.core.backpressure_middleware import install_request_backpressure_middleware
 from apps.api.core.idempotency_middleware import install_idempotency_middleware
@@ -38,6 +39,8 @@ from apps.api.observability.metrics import metrics
 from apps.api.observability.safety import router as safety_router
 from apps.api.endpoints.system_router import router as system_router
 from apps.api.core.boot_diagnostics import assert_boot_invariants
+from apps.api.runtime.loop_tracing import trace_loop_context
+from apps.api.observability.execution_trace import trace_function
 
 
 def _sanitize_db_url(url: str) -> str:
@@ -97,15 +100,16 @@ def create_app() -> FastAPI:
     )
 
     # Global hardening middleware stack.
-    # Middleware runs in reverse registration order for decorator-based handlers:
-    # register idempotency first (innermost), backpressure second, auth last (outermost).
-    # This preserves strict invalid-token 401 behavior while still shedding authenticated load.
+    # Middleware runs in reverse registration order for decorator-based handlers.
+    # Required runtime order:
+    # [1] backpressure (outermost), [2] auth, [3] idempotency, [4] route handlers.
     install_idempotency_middleware(_app)
-    install_request_backpressure_middleware(_app)
     install_auth_middleware(_app)
+    install_request_backpressure_middleware(_app)
 
     @_app.exception_handler(SQLAlchemyTimeoutError)
     async def handle_db_pool_timeout(_request, exc: SQLAlchemyTimeoutError) -> JSONResponse:
+        metrics.increment("db_acquire_timeout_count")
         metrics.note_db_pool_rejection()
         log_error("db_pool_exhausted", exc)
         return JSONResponse({"detail": "database_temporarily_unavailable"}, status_code=503)
@@ -136,7 +140,8 @@ def create_app() -> FastAPI:
     # Lifecycle
     # ---------------------------------------------------------------
     @_app.on_event("startup")
-    def on_startup() -> None:
+    async def on_startup() -> None:
+        trace_loop_context("main.on_startup")
         # Import ALL models so their tables are registered with Base.metadata
         # CRITICAL: Database tables are only created if the model class is imported
         try:
@@ -160,7 +165,12 @@ def create_app() -> FastAPI:
             print("[STARTUP] Creating database tables...")
             Base.metadata.create_all(bind=engine)
             print("[STARTUP] [OK] Database tables created")
-            
+
+            # Start event-loop lag guard background task.
+            from apps.api.runtime.event_loop_guard import event_loop_guard
+            await event_loop_guard.start()
+            print("[STARTUP] [OK] Event loop guard started")
+
             # Run hard boot assertions. Any violation aborts startup.
             print("[STARTUP] Running boot invariants...")
             diags = assert_boot_invariants()
@@ -174,12 +184,19 @@ def create_app() -> FastAPI:
 
     @_app.on_event("shutdown")
     def on_shutdown() -> None:
-        pass
+        loop = None
+        try:
+            trace_loop_context("main.on_shutdown")
+        except RuntimeError:
+            loop = None
+        from apps.api.runtime.event_loop_guard import event_loop_guard
+        event_loop_guard.stop()
 
     # ---------------------------------------------------------------
     # Core event ingest (non-integration pipeline)
     # ---------------------------------------------------------------
     @_app.post("/event")
+    @trace_function(entrypoint="api.event_ingest", actor_type="api_user", source="api")
     def ingest_event(event: SystemEvent) -> dict:
         try:
             task = route_event(event)
@@ -205,4 +222,22 @@ def create_app() -> FastAPI:
 # ---------------------------------------------------------------------------
 # Module-level singleton — consumed by uvicorn and test clients
 # ---------------------------------------------------------------------------
-app = create_app()
+_fastapi_app = create_app()
+app = AdmissionGateASGI(_fastapi_app)
+
+if __name__ == "__main__":
+    import uvicorn
+    # limit_concurrency caps OS-level accepted connections per worker before
+    # they reach the ASGI app, providing a front-door rejection layer that
+    # supplements the in-app backpressure middleware.
+    # timeout_keep_alive=2 releases idle connections quickly under load.
+    uvicorn.run(
+        "apps.api.main:app",
+        host="0.0.0.0",
+        port=8000,
+        workers=2,
+        limit_concurrency=50,
+        timeout_keep_alive=0,
+        log_level="debug",
+        access_log=True,
+    )

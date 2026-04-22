@@ -6,6 +6,7 @@ from fastapi.testclient import TestClient
 
 from apps.api.main import app
 from household_os.core.household_state_graph import HouseholdStateGraphStore
+from household_os.core.lifecycle_state import LifecycleState
 from household_os.runtime.orchestrator import HouseholdOSOrchestrator
 
 
@@ -64,7 +65,7 @@ def test_approval_executes_action(tmp_path):
 
     graph = orchestrator.state_store.load_graph("runtime-api-household")
     action = graph["action_lifecycle"]["actions"][action_id]
-    assert action["current_state"] == "executed"
+    assert action["current_state"] == LifecycleState.COMMITTED
 
 
 def test_today_view_returns_state(tmp_path):

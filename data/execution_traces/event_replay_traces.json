@@ -1,0 +1,62 @@
+[
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:29:15.888210Z",
+    "entrypoint": "state_reducer.replay_events",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "replay_events",
+        "module": "household_os.runtime.state_reducer",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:29:15.888181Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "replay_events",
+        "module": "household_os.runtime.state_reducer",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:29:15.888204Z"
+      }
+    ],
+    "source": "event_replay",
+    "started_at": "2026-04-22T18:29:15.888153Z",
+    "trace_id": "trace-186aaa38-ac33-4e60-848c-f5b520c04f5d"
+  },
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:29:15.920027Z",
+    "entrypoint": "state_reducer.replay_events",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "replay_events",
+        "module": "household_os.runtime.state_reducer",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:29:15.919990Z"
+      },
+      {
+        "depth": 0,
+        "error_message": "Invalid lifecycle state: executed",
+        "error_type": "ValueError",
+        "event_type": "function_error",
+        "function": "replay_events",
+        "module": "household_os.runtime.state_reducer",
+        "status": "error",
+        "timestamp": "2026-04-22T18:29:15.920019Z"
+      }
+    ],
+    "source": "event_replay",
+    "started_at": "2026-04-22T18:29:15.919970Z",
+    "trace_id": "trace-e07fc6f1-b8e6-4e28-9e32-f52c9d25e749"
+  }
+]

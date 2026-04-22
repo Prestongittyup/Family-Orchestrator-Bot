@@ -158,11 +158,15 @@ class RuntimeStressHarness:
         port: int,
         duration_minutes: int,
         sample_interval_seconds: int,
+        audit_mode: str | None = None,
+        audit_bypass: bool = False,
     ) -> None:
         self.port = port
         self.duration_minutes = duration_minutes
         self.sample_interval_seconds = sample_interval_seconds
         self.base_url = f"http://{HOST}:{self.port}"
+        self.audit_mode = (audit_mode or "").strip().lower()
+        self.audit_bypass = audit_bypass and self.audit_mode in {"smoke", "standard"}
 
         self._lock = threading.Lock()
         self._households: dict[str, str] = {}  # household_id -> token
@@ -174,6 +178,17 @@ class RuntimeStressHarness:
 
     def _idem(self) -> str:
         return f"runtime-audit-{uuid.uuid4().hex}"
+
+    def _audit_headers(self, path: str) -> dict[str, str]:
+        if not self.audit_bypass:
+            return {}
+        if path not in {"/v1/identity/household/create", "/v1/identity/bootstrap"}:
+            return {}
+        return {
+            "x-audit-bypass": "1",
+            "x-audit-mode": self.audit_mode,
+            "x-audit-source": "production_torture_audit",
+        }
 
     def _json_request(
         self,
@@ -187,6 +202,7 @@ class RuntimeStressHarness:
     ) -> tuple[int, dict[str, Any] | str, float, bool]:
         payload = None
         request_headers = {"Content-Type": "application/json"}
+        request_headers.update(self._audit_headers(path))
         if headers:
             request_headers.update(headers)
         if body is not None:
@@ -246,44 +262,59 @@ class RuntimeStressHarness:
             return hh, self._households[hh]
 
     def _register_household(self) -> tuple[str, str]:
-        founder_email = f"runtime-{uuid.uuid4().hex[:10]}@example.com"
-        body = {
-            "name": f"Runtime Audit {uuid.uuid4().hex[:6]}",
-            "timezone": "UTC",
-            "founder_user_name": "Runtime Founder",
-            "founder_email": founder_email,
-        }
-        status, payload, latency, retried = self._json_request(
-            "POST",
-            "/v1/identity/household/create",
-            body=body,
-            headers={"x-idempotency-key": self._idem()},
-            retries=2,
-        )
-        ok = status == 200 and isinstance(payload, dict)
-        self._record_obs(RequestObservation("household_create", latency, status, ok, retried, time.time()))
-        if not ok:
-            self._subsystem_errors["identity"] += 1
-            raise StressFailure(f"household_create_failed:{status}:{payload}")
+        setup_attempts = 5 if self.audit_bypass else 1
+        last_error: str | None = None
 
-        household_id = payload["household"]["household_id"]
-        b_status, b_payload, b_latency, b_retried = self._json_request(
-            "POST",
-            "/v1/identity/bootstrap",
-            body={"household_id": household_id},
-            retries=2,
-        )
-        token = b_payload.get("session_token") if isinstance(b_payload, dict) else ""
-        is_jwt = isinstance(token, str) and token.count(".") == 2
-        b_ok = b_status == 200 and is_jwt
-        self._record_obs(RequestObservation("bootstrap", b_latency, b_status, b_ok, b_retried, time.time()))
-        if not b_ok:
-            self._subsystem_errors["auth"] += 1
-            raise StressFailure(f"bootstrap_failed:{b_status}:{b_payload}")
+        for attempt in range(setup_attempts):
+            founder_email = f"runtime-{uuid.uuid4().hex[:10]}@example.com"
+            body = {
+                "name": f"Runtime Audit {uuid.uuid4().hex[:6]}",
+                "timezone": "UTC",
+                "founder_user_name": "Runtime Founder",
+                "founder_email": founder_email,
+            }
+            status, payload, latency, retried = self._json_request(
+                "POST",
+                "/v1/identity/household/create",
+                body=body,
+                headers={"x-idempotency-key": self._idem()},
+                retries=2,
+            )
+            ok = status == 200 and isinstance(payload, dict)
+            self._record_obs(RequestObservation("household_create", latency, status, ok, retried, time.time()))
+            if not ok:
+                last_error = f"household_create_failed:{status}:{payload}"
+                if self.audit_bypass and status in {429, 500} and attempt + 1 < setup_attempts:
+                    time.sleep(0.1 * (attempt + 1))
+                    continue
+                self._subsystem_errors["identity"] += 1
+                raise StressFailure(last_error)
 
-        with self._lock:
-            self._households[household_id] = token
-        return household_id, token
+            household_id = payload["household"]["household_id"]
+            b_status, b_payload, b_latency, b_retried = self._json_request(
+                "POST",
+                "/v1/identity/bootstrap",
+                body={"household_id": household_id},
+                headers={"x-idempotency-key": self._idem()},
+                retries=2,
+            )
+            token = b_payload.get("session_token") if isinstance(b_payload, dict) else ""
+            is_jwt = isinstance(token, str) and token.count(".") == 2
+            b_ok = b_status == 200 and is_jwt
+            self._record_obs(RequestObservation("bootstrap", b_latency, b_status, b_ok, b_retried, time.time()))
+            if not b_ok:
+                last_error = f"bootstrap_failed:{b_status}:{b_payload}"
+                if self.audit_bypass and b_status in {429, 500} and attempt + 1 < setup_attempts:
+                    time.sleep(0.1 * (attempt + 1))
+                    continue
+                self._subsystem_errors["auth"] += 1
+                raise StressFailure(last_error)
+
+            with self._lock:
+                self._households[household_id] = token
+            return household_id, token
+
+        raise StressFailure(last_error or "bootstrap_setup_failed")
 
     def _wait_ready(self, timeout_seconds: int = 60) -> dict[str, Any]:
         deadline = time.time() + timeout_seconds

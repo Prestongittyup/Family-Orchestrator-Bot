@@ -1,0 +1,52 @@
+[
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:29:48.097493Z",
+    "entrypoint": "orchestrator.tick",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "HouseholdOSOrchestrator.tick",
+        "module": "household_os.runtime.orchestrator",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:29:48.081770Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:29:48.090771Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:29:48.091097Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "HouseholdOSOrchestrator.tick",
+        "module": "household_os.runtime.orchestrator",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:29:48.097455Z"
+      }
+    ],
+    "source": "orchestrator",
+    "started_at": "2026-04-22T18:29:48.081721Z",
+    "trace_id": "trace-700549fd-aff1-47e7-9cdb-dbbf4c20005b"
+  }
+]

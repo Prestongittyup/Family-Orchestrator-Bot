@@ -36,6 +36,7 @@ def install_auth_middleware(app: Any) -> None:
     @app.middleware("http")
     async def auth_guard(request: Request, call_next: Callable[[Request], Awaitable[Response]]) -> Response:
         path = request.url.path
+        request.state.user = None
         if not path.startswith("/v1/"):
             return await call_next(request)
 
@@ -54,6 +55,7 @@ def install_auth_middleware(app: Any) -> None:
         try:
             claims = _TOKEN_SERVICE.validate_access_token(token)
         except AuthValidationSystemError as exc:
+            metrics.increment("db_acquire_timeout_count")
             metrics.record_auth_result(False, "system_failure")
             log_error("auth_system_failure", exc, path=path)
             return JSONResponse({"detail": "token_validation_unavailable"}, status_code=503)
@@ -80,7 +82,11 @@ def install_auth_middleware(app: Any) -> None:
             return JSONResponse({"detail": "household_scope_mismatch"}, status_code=403)
 
         request.state.auth_claims = claims
+        request.state.user = claims
         response = await call_next(request)
+        if getattr(request.state, "user", None) is None:
+            metrics.note_invalid_token_non_401()
+            return JSONResponse({"detail": "invalid_or_expired_token"}, status_code=401)
         if had_bearer_header and response.status_code in {200, 500, 503} and getattr(request.state, "auth_claims", None) is None:
             metrics.note_invalid_token_non_401()
             return JSONResponse({"detail": "invalid_or_expired_token"}, status_code=401)

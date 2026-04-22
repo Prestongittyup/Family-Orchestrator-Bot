@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from assistant.governance.intent_lock import IntentClassification, IntentType
+from household_os.core.lifecycle_state import LifecycleState, enforce_boundary_state
 
 
 @dataclass(frozen=True)
@@ -156,7 +157,14 @@ class LifeStateModel:
         unresolved_actions = sum(
             1
             for payload in lifecycle_actions.values()
-            if str(payload.get("current_state", "")) in {"proposed", "pending_approval", "approved", "ignored", "rejected"}
+            if enforce_boundary_state(payload.get("current_state"))
+            in {
+                LifecycleState.PROPOSED,
+                LifecycleState.PENDING_APPROVAL,
+                LifecycleState.APPROVED,
+                LifecycleState.FAILED,
+                LifecycleState.REJECTED,
+            }
         )
         return int(open_tasks + unresolved_actions)
 
@@ -164,12 +172,16 @@ class LifeStateModel:
         lifecycle_actions = dict(graph.get("action_lifecycle", {}).get("actions", {}))
         deferred = 0
         for payload in lifecycle_actions.values():
-            state = str(payload.get("current_state", ""))
-            if state in {"ignored", "rejected"}:
+            state = enforce_boundary_state(payload.get("current_state"))
+            if state in {LifecycleState.FAILED, LifecycleState.REJECTED}:
                 deferred += 1
                 continue
 
-            if state in {"proposed", "pending_approval", "approved"}:
+            if state in {
+                LifecycleState.PROPOSED,
+                LifecycleState.PENDING_APPROVAL,
+                LifecycleState.APPROVED,
+            }:
                 created_at = payload.get("created_at")
                 created = self._coerce_datetime(created_at)
                 if created <= (now - timedelta(hours=24)):
@@ -186,13 +198,19 @@ class LifeStateModel:
         if not relevant:
             return 0.5
 
-        approved = sum(1 for r in relevant if str(r.get("status", "")) == "approved")
-        ignored = sum(1 for r in relevant if str(r.get("status", "")) == "ignored")
-        rejected = sum(1 for r in relevant if str(r.get("status", "")) == "rejected")
+        approved = sum(
+            1 for r in relevant if enforce_boundary_state(r.get("status")) == LifecycleState.APPROVED
+        )
+        failed = sum(
+            1 for r in relevant if enforce_boundary_state(r.get("status")) == LifecycleState.FAILED
+        )
+        rejected = sum(
+            1 for r in relevant if enforce_boundary_state(r.get("status")) == LifecycleState.REJECTED
+        )
 
-        total = max(1, approved + ignored + rejected)
+        total = max(1, approved + failed + rejected)
         positive = approved / total
-        friction = (ignored + rejected) / total
+        friction = (failed + rejected) / total
 
         return self._clip01(positive * 0.7 + (1.0 - friction) * 0.3)
 

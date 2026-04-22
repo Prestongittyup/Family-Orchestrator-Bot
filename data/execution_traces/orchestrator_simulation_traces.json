@@ -1,0 +1,392 @@
+[
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:28:58.172357Z",
+    "entrypoint": "action_pipeline.register_proposed_action",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.172106Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.172350Z"
+      }
+    ],
+    "source": "action_lifecycle",
+    "started_at": "2026-04-22T18:28:58.172089Z",
+    "trace_id": "trace-48672927-1529-4476-956d-4f9aad1485fa"
+  },
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:28:58.174414Z",
+    "entrypoint": "action_pipeline.approve_actions",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "ActionPipeline.approve_actions",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.174127Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "ActionPipeline.approve_actions",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.174404Z"
+      }
+    ],
+    "source": "action_lifecycle",
+    "started_at": "2026-04-22T18:28:58.174103Z",
+    "trace_id": "trace-f6b54a14-e7f8-42bd-bfb2-88a7e068d55a"
+  },
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:28:58.178133Z",
+    "entrypoint": "action_pipeline.execute_approved_actions",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "ActionPipeline.execute_approved_actions",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.175633Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "ActionPipeline.execute_approved_actions",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.178123Z"
+      }
+    ],
+    "source": "action_lifecycle",
+    "started_at": "2026-04-22T18:28:58.175618Z",
+    "trace_id": "trace-90ebd785-089f-4352-b532-cf960fdededa"
+  },
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:28:58.214041Z",
+    "entrypoint": "orchestrator.tick",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "HouseholdOSOrchestrator.tick",
+        "module": "household_os.runtime.orchestrator",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.203932Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.208758Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.208932Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "HouseholdOSOrchestrator.tick",
+        "module": "household_os.runtime.orchestrator",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.214018Z"
+      }
+    ],
+    "source": "orchestrator",
+    "started_at": "2026-04-22T18:28:58.203914Z",
+    "trace_id": "trace-ab6fd21f-c373-4c6c-a311-34c319ceba7b"
+  },
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:28:58.244212Z",
+    "entrypoint": "action_pipeline.register_proposed_action",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.244041Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.244207Z"
+      }
+    ],
+    "source": "action_lifecycle",
+    "started_at": "2026-04-22T18:28:58.244025Z",
+    "trace_id": "trace-4d5f4721-782c-4422-abf4-6dcc1a9d1169"
+  },
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:28:58.334623Z",
+    "entrypoint": "orchestrator.tick",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "HouseholdOSOrchestrator.tick",
+        "module": "household_os.runtime.orchestrator",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.323436Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.329343Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.329533Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "HouseholdOSOrchestrator.tick",
+        "module": "household_os.runtime.orchestrator",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.334586Z"
+      }
+    ],
+    "source": "orchestrator",
+    "started_at": "2026-04-22T18:28:58.323417Z",
+    "trace_id": "trace-f17463f4-5eec-4e2f-a3b1-e85b2b792484"
+  },
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:28:58.342263Z",
+    "entrypoint": "orchestrator.approve_and_execute",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "HouseholdOSOrchestrator.approve_and_execute",
+        "module": "household_os.runtime.orchestrator",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.336644Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "ActionPipeline.approve_actions",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.336842Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "ActionPipeline.approve_actions",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.337134Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "ActionPipeline.execute_approved_actions",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.337151Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "ActionPipeline.execute_approved_actions",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.337437Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "HouseholdOSOrchestrator.approve_and_execute",
+        "module": "household_os.runtime.orchestrator",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.342242Z"
+      }
+    ],
+    "source": "orchestrator",
+    "started_at": "2026-04-22T18:28:58.336618Z",
+    "trace_id": "trace-67101585-cf6b-4622-adec-46facc8eec59"
+  },
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:28:58.356245Z",
+    "entrypoint": "orchestrator.tick",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "HouseholdOSOrchestrator.tick",
+        "module": "household_os.runtime.orchestrator",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.345695Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.348026Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.348211Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "HouseholdOSOrchestrator.tick",
+        "module": "household_os.runtime.orchestrator",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.356218Z"
+      }
+    ],
+    "source": "orchestrator",
+    "started_at": "2026-04-22T18:28:58.345680Z",
+    "trace_id": "trace-b6689d9d-3f2d-4c14-a9cb-3da53a0c731d"
+  },
+  {
+    "actor_type": "system_worker",
+    "ended_at": "2026-04-22T18:28:58.368349Z",
+    "entrypoint": "orchestrator.tick",
+    "events": [
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "HouseholdOSOrchestrator.tick",
+        "module": "household_os.runtime.orchestrator",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.358643Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_entry",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.360985Z"
+      },
+      {
+        "depth": 1,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "ActionPipeline.register_proposed_action",
+        "module": "household_os.runtime.action_pipeline",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.361192Z"
+      },
+      {
+        "depth": 0,
+        "error_message": null,
+        "error_type": null,
+        "event_type": "function_exit",
+        "function": "HouseholdOSOrchestrator.tick",
+        "module": "household_os.runtime.orchestrator",
+        "status": "ok",
+        "timestamp": "2026-04-22T18:28:58.368329Z"
+      }
+    ],
+    "source": "orchestrator",
+    "started_at": "2026-04-22T18:28:58.358612Z",
+    "trace_id": "trace-9f7d3979-f4dc-40a5-b478-c38f628516cc"
+  }
+]

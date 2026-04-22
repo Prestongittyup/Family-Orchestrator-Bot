@@ -1,0 +1,158 @@
+{
+  "mode": "sse_breakpoint_gate",
+  "baseline_comparison": true,
+  "scaling_classification": "unknown",
+  "production_readiness": "FAIL",
+  "confidence": 0.5,
+  "key_bottleneck": "Insufficient directional signal to classify scaling mode.",
+  "before_after_deltas": {
+    "fanout_delta_pct": -93.232577,
+    "schedule_delay_delta_pct": 461.383092,
+    "event_loop_lag_delta_pct": 167741000.0,
+    "success_rate_delta": 0.09622,
+    "rejection_delta": -0.102175
+  },
+  "production_readiness_gate": {
+    "status": "FAIL",
+    "reason": "event_loop_lag_max_ms > 500 sustained; max_stable_concurrency == 0; success_rate < 0.85 under breakpoint load; rejection_rate_429 > 0.10 at concurrency 100"
+  },
+  "evidence": {
+    "fanout": {
+      "signals": {
+        "fanout_growth_rate": -0.004755,
+        "schedule_delay_growth_rate": -0.469693,
+        "event_loop_lag_correlation": 0.929436,
+        "per_subscriber_cost_ratio": 0.0
+      },
+      "avg_fanout_time_ms": 0.42395,
+      "stage_metrics": [
+        {
+          "concurrency": 10,
+          "avg_fanout_time_ms": 0.5375,
+          "max_fanout_time_ms": 1.2729,
+          "fanout_calls_per_second": 0.437042,
+          "fanout_per_subscriber_cost": 396.066661
+        },
+        {
+          "concurrency": 25,
+          "avg_fanout_time_ms": 0.28245,
+          "max_fanout_time_ms": 0.3273,
+          "fanout_calls_per_second": 0.13203,
+          "fanout_per_subscriber_cost": 200.625
+        },
+        {
+          "concurrency": 50,
+          "avg_fanout_time_ms": 0.87585,
+          "max_fanout_time_ms": 2.7731,
+          "fanout_calls_per_second": 0.234889,
+          "fanout_per_subscriber_cost": 495.024997
+        },
+        {
+          "concurrency": 100,
+          "avg_fanout_time_ms": 0.0,
+          "max_fanout_time_ms": 0.0,
+          "fanout_calls_per_second": 0.0,
+          "fanout_per_subscriber_cost": 0.0
+        }
+      ]
+    },
+    "scheduling": {
+      "avg_event_loop_schedule_delay_ms": 80.521602,
+      "max_event_loop_schedule_delay_ms": 560.9656,
+      "stage_metrics": [
+        {
+          "concurrency": 10,
+          "avg_event_loop_schedule_delay_ms": 13.751925,
+          "max_event_loop_schedule_delay_ms": 105.6078,
+          "callback_queue_depth": 1,
+          "inflight_tasks": 80.0
+        },
+        {
+          "concurrency": 25,
+          "avg_event_loop_schedule_delay_ms": 114.0251,
+          "max_event_loop_schedule_delay_ms": 165.9059,
+          "callback_queue_depth": 2,
+          "inflight_tasks": 75.0
+        },
+        {
+          "concurrency": 50,
+          "avg_event_loop_schedule_delay_ms": 194.309383,
+          "max_event_loop_schedule_delay_ms": 560.9656,
+          "callback_queue_depth": 2,
+          "inflight_tasks": 116.0
+        },
+        {
+          "concurrency": 100,
+          "avg_event_loop_schedule_delay_ms": 0.0,
+          "max_event_loop_schedule_delay_ms": 0.0,
+          "callback_queue_depth": 0,
+          "inflight_tasks": 0.0
+        }
+      ]
+    },
+    "event_loop": {
+      "event_loop_lag_max_ms": 1677.41,
+      "success_rate": 0.264808,
+      "rejection_rate_429": 0.721171,
+      "max_stable_concurrency": 0,
+      "stage_metrics": [
+        {
+          "concurrency": 10,
+          "avg_fanout_time_ms": 0.5375,
+          "max_fanout_time_ms": 1.2729,
+          "fanout_calls_per_second": 0.437042,
+          "fanout_per_subscriber_cost": 396.066661,
+          "avg_event_loop_schedule_delay_ms": 13.751925,
+          "max_event_loop_schedule_delay_ms": 105.6078,
+          "callback_queue_depth": 1,
+          "event_loop_lag_max_ms": 80.81,
+          "inflight_tasks": 80.0,
+          "rejection_rate_429": 0.57,
+          "success_rate": 0.43
+        },
+        {
+          "concurrency": 25,
+          "avg_fanout_time_ms": 0.28245,
+          "max_fanout_time_ms": 0.3273,
+          "fanout_calls_per_second": 0.13203,
+          "fanout_per_subscriber_cost": 200.625,
+          "avg_event_loop_schedule_delay_ms": 114.0251,
+          "max_event_loop_schedule_delay_ms": 165.9059,
+          "callback_queue_depth": 2,
+          "event_loop_lag_max_ms": 775.01,
+          "inflight_tasks": 75.0,
+          "rejection_rate_429": 0.763889,
+          "success_rate": 0.236111
+        },
+        {
+          "concurrency": 50,
+          "avg_fanout_time_ms": 0.87585,
+          "max_fanout_time_ms": 2.7731,
+          "fanout_calls_per_second": 0.234889,
+          "fanout_per_subscriber_cost": 495.024997,
+          "avg_event_loop_schedule_delay_ms": 194.309383,
+          "max_event_loop_schedule_delay_ms": 560.9656,
+          "callback_queue_depth": 2,
+          "event_loop_lag_max_ms": 609.75,
+          "inflight_tasks": 116.0,
+          "rejection_rate_429": 0.661905,
+          "success_rate": 0.319048
+        },
+        {
+          "concurrency": 100,
+          "avg_fanout_time_ms": 0.0,
+          "max_fanout_time_ms": 0.0,
+          "fanout_calls_per_second": 0.0,
+          "fanout_per_subscriber_cost": 0.0,
+          "avg_event_loop_schedule_delay_ms": 0.0,
+          "max_event_loop_schedule_delay_ms": 0.0,
+          "callback_queue_depth": 0,
+          "event_loop_lag_max_ms": 1677.41,
+          "inflight_tasks": 0.0,
+          "rejection_rate_429": 0.888889,
+          "success_rate": 0.074074
+        }
+      ]
+    }
+  }
+}

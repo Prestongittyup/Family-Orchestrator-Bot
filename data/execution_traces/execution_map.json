@@ -1,0 +1,148 @@
+{
+  "entrypoint_reachability": {
+    "action_pipeline.approve_actions": [
+      "household_os.runtime.action_pipeline.ActionPipeline.approve_actions"
+    ],
+    "action_pipeline.execute_approved_actions": [
+      "household_os.runtime.action_pipeline.ActionPipeline.execute_approved_actions"
+    ],
+    "action_pipeline.register_proposed_action": [
+      "household_os.runtime.action_pipeline.ActionPipeline.register_proposed_action"
+    ],
+    "api.event_ingest": [
+      "apps.api.main.create_app.<locals>.ingest_event"
+    ],
+    "ingestion.email": [
+      "apps.api.ingestion.service.ingest_email"
+    ],
+    "ingestion.webhook": [
+      "apps.api.ingestion.service.ingest_webhook"
+    ],
+    "orchestrator.approve_and_execute": [
+      "household_os.runtime.action_pipeline.ActionPipeline.approve_actions",
+      "household_os.runtime.action_pipeline.ActionPipeline.execute_approved_actions",
+      "household_os.runtime.orchestrator.HouseholdOSOrchestrator.approve_and_execute"
+    ],
+    "orchestrator.tick": [
+      "household_os.runtime.action_pipeline.ActionPipeline.register_proposed_action",
+      "household_os.runtime.orchestrator.HouseholdOSOrchestrator.tick"
+    ],
+    "state_reducer.replay_events": [
+      "household_os.runtime.state_reducer.replay_events"
+    ]
+  },
+  "functions": {
+    "apps.api.assistant_runtime_router.approve_assistant_action": {
+      "execution_count": 0,
+      "temperature": "DEAD",
+      "unique_callers": []
+    },
+    "apps.api.assistant_runtime_router.assistant_today": {
+      "execution_count": 0,
+      "temperature": "DEAD",
+      "unique_callers": []
+    },
+    "apps.api.assistant_runtime_router.reject_assistant_action": {
+      "execution_count": 0,
+      "temperature": "DEAD",
+      "unique_callers": []
+    },
+    "apps.api.assistant_runtime_router.run_assistant": {
+      "execution_count": 0,
+      "temperature": "DEAD",
+      "unique_callers": []
+    },
+    "apps.api.endpoints.operational_router._run_pipeline": {
+      "execution_count": 0,
+      "temperature": "DEAD",
+      "unique_callers": []
+    },
+    "apps.api.endpoints.operational_router.get_operational_brief": {
+      "execution_count": 0,
+      "temperature": "DEAD",
+      "unique_callers": []
+    },
+    "apps.api.endpoints.operational_router.get_operational_context": {
+      "execution_count": 0,
+      "temperature": "DEAD",
+      "unique_callers": []
+    },
+    "apps.api.endpoints.operational_router.run_operational_mode": {
+      "execution_count": 0,
+      "temperature": "DEAD",
+      "unique_callers": []
+    },
+    "apps.api.ingestion.service.ingest_email": {
+      "execution_count": 1,
+      "temperature": "COLD",
+      "unique_callers": []
+    },
+    "apps.api.ingestion.service.ingest_webhook": {
+      "execution_count": 1,
+      "temperature": "COLD",
+      "unique_callers": []
+    },
+    "apps.api.main.create_app.<locals>.ingest_event": {
+      "execution_count": 1,
+      "temperature": "COLD",
+      "unique_callers": []
+    },
+    "apps.api.services.event_replay_service.replay_events": {
+      "execution_count": 0,
+      "temperature": "DEAD",
+      "unique_callers": []
+    },
+    "apps.api.services.event_replay_service.replay_events_for_household": {
+      "execution_count": 0,
+      "temperature": "DEAD",
+      "unique_callers": []
+    },
+    "household_os.runtime.action_pipeline.ActionPipeline.approve_actions": {
+      "execution_count": 2,
+      "temperature": "COLD",
+      "unique_callers": [
+        "household_os.runtime.orchestrator.HouseholdOSOrchestrator.approve_and_execute"
+      ]
+    },
+    "household_os.runtime.action_pipeline.ActionPipeline.execute_approved_actions": {
+      "execution_count": 2,
+      "temperature": "COLD",
+      "unique_callers": [
+        "household_os.runtime.orchestrator.HouseholdOSOrchestrator.approve_and_execute"
+      ]
+    },
+    "household_os.runtime.action_pipeline.ActionPipeline.register_proposed_action": {
+      "execution_count": 7,
+      "temperature": "WARM",
+      "unique_callers": [
+        "household_os.runtime.orchestrator.HouseholdOSOrchestrator.tick"
+      ]
+    },
+    "household_os.runtime.action_pipeline.ActionPipeline.reject_action_timeout": {
+      "execution_count": 0,
+      "temperature": "DEAD",
+      "unique_callers": []
+    },
+    "household_os.runtime.action_pipeline.ActionPipeline.reject_actions": {
+      "execution_count": 0,
+      "temperature": "DEAD",
+      "unique_callers": []
+    },
+    "household_os.runtime.orchestrator.HouseholdOSOrchestrator.approve_and_execute": {
+      "execution_count": 1,
+      "temperature": "COLD",
+      "unique_callers": []
+    },
+    "household_os.runtime.orchestrator.HouseholdOSOrchestrator.tick": {
+      "execution_count": 5,
+      "temperature": "WARM",
+      "unique_callers": []
+    },
+    "household_os.runtime.state_reducer.replay_events": {
+      "execution_count": 2,
+      "temperature": "COLD",
+      "unique_callers": []
+    }
+  },
+  "trace_count": 15
+}

@@ -1,0 +1,208 @@
+{
+  "mode": "sse_breakpoint_gate",
+  "baseline_comparison": false,
+  "scaling_classification": "admission_saturation",
+  "production_readiness": "FAIL",
+  "confidence": 0.616,
+  "key_bottleneck": "429 saturation dominates while fanout and loop delay remain comparatively bounded.",
+  "before_after_deltas": {},
+  "production_readiness_gate": {
+    "status": "FAIL",
+    "reason": "max_stable_concurrency == 0; success_rate < 0.85 under breakpoint load"
+  },
+  "classification_debug": {
+    "used_stages": [
+      10,
+      25
+    ],
+    "excluded_stages": [],
+    "excluded_regimes": [],
+    "stage_scores": {
+      "10": 0.7714,
+      "25": 0.2294
+    },
+    "stage_z_scores": {
+      "10": 0.0,
+      "25": 0.0
+    },
+    "stage_votes": {
+      "10": {
+        "percentile": {
+          "stable": 1.0,
+          "transition": 0.0,
+          "collapsed": 0.0
+        },
+        "zscore": {
+          "stable": 0.4471134892036294,
+          "transition": 0.5468779936541585,
+          "collapsed": 0.00600851714221214
+        },
+        "gradient": {
+          "stable": 0.2,
+          "transition": 0.8,
+          "collapsed": 0.0
+        },
+        "consensus": 0.344,
+        "weights": {
+          "percentile": 0.0,
+          "zscore": 1.0,
+          "gradient": 0.0
+        }
+      },
+      "25": {
+        "percentile": {
+          "stable": 0.0,
+          "transition": 0.0,
+          "collapsed": 1.0
+        },
+        "zscore": {
+          "stable": 0.4471134892036294,
+          "transition": 0.5468779936541585,
+          "collapsed": 0.00600851714221214
+        },
+        "gradient": {
+          "stable": 0.2,
+          "transition": 0.8,
+          "collapsed": 0.0
+        },
+        "consensus": 0.344,
+        "weights": {
+          "percentile": 0.0,
+          "zscore": 1.0,
+          "gradient": 0.0
+        }
+      }
+    },
+    "class_probability_distribution": {
+      "stable": 0.447113,
+      "transition": 0.546878,
+      "collapsed": 0.006009
+    },
+    "signal_ratio": 1.0,
+    "early_run_mode": true,
+    "classification_invariants": {
+      "transition_stage_count": 2,
+      "stable_stage_count": 0,
+      "collapsed_stage_count": 0,
+      "uses_percentile_model": true
+    },
+    "classification_stability": {
+      "within_run_consistency": 0.6487,
+      "cross_run_z_alignment": 1.0,
+      "baseline_shift_detected": false
+    },
+    "baseline_drift": {
+      "pre_update_mean_shift": 0.5004,
+      "collapse_inclusion_attempts": 0,
+      "z_score_drift_trend": 0.0,
+      "baseline_committed": false,
+      "baseline_version_id": "TEST_FREEZE_V1",
+      "gate_mode": true,
+      "baseline_degradation_warning": true
+    }
+  },
+  "evidence": {
+    "fanout": {
+      "signals": {
+        "fanout_growth_rate": -0.072907,
+        "schedule_delay_growth_rate": -0.121537,
+        "event_loop_lag_correlation": 1.0,
+        "per_subscriber_cost_ratio": 0.0,
+        "class_probability_distribution": {
+          "stable": 0.447113,
+          "transition": 0.546878,
+          "collapsed": 0.006009
+        },
+        "baseline_degradation_warning": true
+      },
+      "avg_fanout_time_ms": 0.5468,
+      "stage_metrics": [
+        {
+          "concurrency": 10,
+          "avg_fanout_time_ms": 1.0936,
+          "max_fanout_time_ms": 3.8522,
+          "fanout_calls_per_second": 1.567804,
+          "fanout_per_subscriber_cost": 1093.599999
+        },
+        {
+          "concurrency": 25,
+          "avg_fanout_time_ms": 0.0,
+          "max_fanout_time_ms": 0.0,
+          "fanout_calls_per_second": 0.0,
+          "fanout_per_subscriber_cost": 0.0
+        }
+      ]
+    },
+    "scheduling": {
+      "avg_event_loop_schedule_delay_ms": 0.911527,
+      "max_event_loop_schedule_delay_ms": 13.953,
+      "stage_metrics": [
+        {
+          "concurrency": 10,
+          "avg_event_loop_schedule_delay_ms": 1.823054,
+          "max_event_loop_schedule_delay_ms": 13.953,
+          "callback_queue_depth": 2,
+          "inflight_tasks": 76.0
+        },
+        {
+          "concurrency": 25,
+          "avg_event_loop_schedule_delay_ms": 0.0,
+          "max_event_loop_schedule_delay_ms": 0.0,
+          "callback_queue_depth": 0,
+          "inflight_tasks": 0.0
+        }
+      ]
+    },
+    "event_loop": {
+      "event_loop_lag_max_ms": 310.53,
+      "success_rate": 0.25105,
+      "rejection_rate_429": 0.74895,
+      "max_stable_concurrency": 0,
+      "stage_metrics": [
+        {
+          "concurrency": 10,
+          "avg_fanout_time_ms": 1.0936,
+          "max_fanout_time_ms": 3.8522,
+          "fanout_calls_per_second": 1.567804,
+          "fanout_per_subscriber_cost": 1093.599999,
+          "avg_event_loop_schedule_delay_ms": 1.823054,
+          "max_event_loop_schedule_delay_ms": 13.953,
+          "callback_queue_depth": 2,
+          "event_loop_lag_max_ms": 45.3,
+          "inflight_tasks": 76.0,
+          "rejection_rate_429": 0.571429,
+          "success_rate": 0.428571
+        },
+        {
+          "concurrency": 25,
+          "avg_fanout_time_ms": 0.0,
+          "max_fanout_time_ms": 0.0,
+          "fanout_calls_per_second": 0.0,
+          "fanout_per_subscriber_cost": 0.0,
+          "avg_event_loop_schedule_delay_ms": 0.0,
+          "max_event_loop_schedule_delay_ms": 0.0,
+          "callback_queue_depth": 0,
+          "event_loop_lag_max_ms": 310.53,
+          "inflight_tasks": 0.0,
+          "rejection_rate_429": 0.926471,
+          "success_rate": 0.073529
+        }
+      ]
+    }
+  },
+  "decision_layer": {
+    "decision": "WARN",
+    "confidence": 0.616,
+    "risk_ceiling_breached": false,
+    "primary_reason": "baseline_degradation_warning == True",
+    "supporting_factors": [
+      "baseline_degradation_warning == True"
+    ]
+  },
+  "calibration_log_written": true,
+  "calibration_metrics": {
+    "brier_score": null,
+    "average_confidence": 0.573667,
+    "failure_rate_by_prediction_bucket": {}
+  }
+}

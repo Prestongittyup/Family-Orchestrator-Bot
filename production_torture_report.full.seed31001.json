@@ -1,0 +1,34 @@
+{
+  "mode": "full_torture",
+  "seed": 31001,
+  "run_fingerprint": "c468b238a7a2ecf4",
+  "run_status": "success",
+  "elapsed_seconds": 501.63,
+  "reproducibility": {
+    "fingerprint": "c468b238a7a2ecf4",
+    "seed": 31001
+  },
+  "duration_config": {
+    "soak_duration_seconds": 1200,
+    "breakpoint_stage_seconds": 60,
+    "breakpoint_stages": [
+      10,
+      25,
+      50,
+      100,
+      200,
+      400
+    ],
+    "chaos_duration_seconds": 240,
+    "repeat_runs": 1
+  },
+  "failure_attribution": {},
+  "failure_timeline": [],
+  "signal_quality": {
+    "signal_layer_ratio": 1.0,
+    "artifact_layer_ratio": 0.0,
+    "distortion_layer_ratio": 0.0,
+    "observability_confidence": 1.0
+  },
+  "repeatability": {}
+}

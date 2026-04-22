@@ -1,22 +1,25 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
-from typing import Any, Literal
-
+from typing import Any
 from pydantic import BaseModel, ConfigDict, Field
+from pydantic import PrivateAttr
 
+from apps.api.core.state_machine import ActionState, TransitionError, validate_transition
+from apps.api.observability.execution_trace import trace_function
 from household_os.core.contracts import HouseholdOSRunResponse
+from household_os.core.lifecycle_state import (
+    LifecycleState,
+    assert_lifecycle_state,
+    parse_lifecycle_state,
+)
+from household_os.runtime.domain_event import DomainEvent, LIFECYCLE_EVENT_TYPES
+from household_os.runtime.event_store import EventStore, AggregateNotFoundError, InMemoryEventStore
+from household_os.runtime.lifecycle_firewall import enforce_lifecycle_integrity
+from household_os.runtime.state_firewall import FIREWALL
+from household_os.runtime.state_proxy import StateProxy
+from household_os.runtime.state_reducer import reduce_state
 from household_os.runtime.trigger_detector import RuntimeTrigger
-
-
-LifecycleState = Literal[
-    "proposed",
-    "pending_approval",
-    "approved",
-    "executed",
-    "rejected",
-    "ignored",
-]
 
 
 class LifecycleTransition(BaseModel):
@@ -50,8 +53,107 @@ class LifecycleAction(BaseModel):
     transitions: list[LifecycleTransition] = Field(default_factory=list)
     reviewed_in_evening: bool = False
 
+    _state_proxy: StateProxy | None = PrivateAttr(default=None)
+    _state_guard_ready: bool = PrivateAttr(default=False)
+
+    def model_post_init(self, __context: Any) -> None:
+        self._state_proxy = StateProxy(lambda _object_id: self.current_state, self.action_id)
+        self._state_guard_ready = True
+
+    @property
+    def state(self) -> LifecycleState:
+        if self._state_proxy is None:
+            return assert_lifecycle_state(self.current_state)
+        return parse_lifecycle_state(self._state_proxy.current_state)
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name == "current_state" and getattr(self, "_state_guard_ready", False):
+            action_id = self.__dict__.get("action_id")
+            if action_id and not FIREWALL.can_mutate(action_id):
+                FIREWALL.block_direct_mutation(self, name, value, source="LifecycleAction.__setattr__")
+        super().__setattr__(name, value)
+
 
 class ActionPipeline:
+    """
+    Action lifecycle management pipeline.
+    
+    MIGRATION IN PROGRESS: Transitioning from FSM-backed state to event-sourced state.
+    - Event store is now the single source of truth for action lifecycle state
+    - All state reads should use _get_derived_state() which replays events
+    - FSM remains only as a transition validator
+    """
+
+    def __init__(self, event_store: EventStore | None = None) -> None:
+        """
+        Initialize action pipeline with event store dependency.
+
+        Args:
+            event_store: Event store for persisting action lifecycle events.
+                        Defaults to global migration layer event store.
+        """
+        if event_store is None:
+            # Use global migration layer's event store for events
+            from household_os.runtime.lifecycle_migration import get_migration_layer
+            event_store = get_migration_layer().event_store
+        
+        self.event_store = event_store
+
+    def _get_derived_state(self, action_id: str, fallback_state: LifecycleState | None = None) -> LifecycleState | None:
+        """
+        Get current action state by replaying events from the event store.
+
+        This is the SINGLE SOURCE OF TRUTH for action state in the event-sourced system.
+        
+        For actions not yet fully migrated to event sourcing, falls back to the action
+        object's current_state field.
+
+        Args:
+            action_id: ID of the action aggregate
+            fallback_state: Fallback lifecycle state if event store has no events
+
+        Returns:
+            Current derived state as LifecycleState enum, or None
+
+        Note:
+            During migration, pending_approval is an internal state that may not have
+            a corresponding event. We fall back to the action object's state in such cases.
+        """
+        try:
+            events = self.event_store.get_events(action_id)
+            derived = reduce_state(events)
+            assert isinstance(derived, LifecycleState), f"Reducer should return LifecycleState, got {type(derived)}"
+            
+            # During registration, pending_approval is represented in-memory before approval event exists.
+            if derived == LifecycleState.PROPOSED and fallback_state == LifecycleState.PENDING_APPROVAL:
+                return fallback_state
+            
+            return derived
+        except AggregateNotFoundError:
+            # Action not yet persisted in event store
+            if fallback_state is None:
+                return None
+            return fallback_state
+
+    def _hydrate_action(self, raw: dict[str, Any]) -> LifecycleAction:
+        """Boundary parser for persisted action payloads (DB/API/queue ingress)."""
+        payload = dict(raw)
+        payload["current_state"] = parse_lifecycle_state(payload.get("current_state"))
+
+        transitions = []
+        for item in payload.get("transitions", []):
+            transition = dict(item)
+            from_raw = transition.get("from_state")
+            transition["from_state"] = None if from_raw is None else parse_lifecycle_state(from_raw)
+            transition["to_state"] = parse_lifecycle_state(transition.get("to_state"))
+            transitions.append(transition)
+        payload["transitions"] = transitions
+
+        action = LifecycleAction.model_validate(payload)
+        enforce_lifecycle_integrity(action.current_state)
+        return action
+
+    @trace_function(entrypoint="action_pipeline.register_proposed_action", actor_type="system_worker", source="action_lifecycle")
     def register_proposed_action(
         self,
         *,
@@ -69,7 +171,7 @@ class ActionPipeline:
             description=response.recommended_action.description,
             domain=self._infer_domain(response),
             execution_handler=self._infer_execution_handler(response),
-            current_state="proposed",
+            current_state=LifecycleState.PROPOSED,
             approval_required=bool(response.recommended_action.approval_required),
             trigger_id=trigger.trigger_id,
             trigger_type=trigger.trigger_type,
@@ -82,7 +184,7 @@ class ActionPipeline:
         self._append_transition(
             graph=graph,
             action=action,
-            to_state="proposed",
+            to_state=LifecycleState.PROPOSED,
             timestamp=timestamp,
             reason="Decision engine proposed a single action",
         )
@@ -91,12 +193,12 @@ class ActionPipeline:
             self._append_transition(
                 graph=graph,
                 action=action,
-                to_state="pending_approval",
+                to_state=LifecycleState.PENDING_APPROVAL,
                 timestamp=timestamp,
                 reason="Approval gate engaged before execution",
             )
 
-        graph.setdefault("action_lifecycle", {}).setdefault("actions", {})[action.action_id] = action.model_dump()
+        graph.setdefault("action_lifecycle", {}).setdefault("actions", {})[action.action_id] = action.model_dump(mode="python")
         graph.setdefault("event_history", []).append(
             {
                 "event_type": "action_proposed",
@@ -108,6 +210,7 @@ class ActionPipeline:
         )
         return action
 
+    @trace_function(entrypoint="action_pipeline.approve_actions", actor_type="system_worker", source="action_lifecycle")
     def approve_actions(
         self,
         *,
@@ -124,18 +227,22 @@ class ActionPipeline:
             raw = action_map.get(action_id)
             if raw is None:
                 continue
-            action = LifecycleAction.model_validate(raw)
-            if action.request_id != request_id or action.current_state not in {"proposed", "pending_approval"}:
+            action = self._hydrate_action(raw)
+            
+            # MIGRATED: Use event-derived state instead of action.current_state
+            derived_state = self._get_derived_state(action_id, fallback_state=action.current_state)
+            
+            if action.request_id != request_id or derived_state not in {LifecycleState.PROPOSED, LifecycleState.PENDING_APPROVAL}:
                 continue
 
             self._append_transition(
                 graph=graph,
                 action=action,
-                to_state="approved",
+                to_state=LifecycleState.APPROVED,
                 timestamp=timestamp,
                 reason="Action approved for execution",
             )
-            action_map[action_id] = action.model_dump()
+            action_map[action_id] = action.model_dump(mode="python")
             approved.append(action)
 
         if approved:
@@ -150,6 +257,7 @@ class ActionPipeline:
 
         return approved
 
+    @trace_function(entrypoint="action_pipeline.reject_actions", actor_type="system_worker", source="action_lifecycle")
     def reject_actions(
         self,
         *,
@@ -166,24 +274,28 @@ class ActionPipeline:
             raw = action_map.get(action_id)
             if raw is None:
                 continue
-            action = LifecycleAction.model_validate(raw)
-            if action.request_id != request_id or action.current_state not in {"proposed", "pending_approval"}:
+            action = self._hydrate_action(raw)
+            
+            # MIGRATED: Use event-derived state instead of action.current_state
+            derived_state = self._get_derived_state(action_id, fallback_state=action.current_state)
+            
+            if action.request_id != request_id or derived_state not in {LifecycleState.PROPOSED, LifecycleState.PENDING_APPROVAL}:
                 continue
 
             self._append_transition(
                 graph=graph,
                 action=action,
-                to_state="rejected",
+                to_state=LifecycleState.REJECTED,
                 timestamp=timestamp,
                 reason="Action rejected by user",
             )
-            action_map[action_id] = action.model_dump()
+            action_map[action_id] = action.model_dump(mode="python")
             self._record_behavior_feedback(
                 graph=graph,
                 action=action,
                 timestamp=timestamp,
-                status="rejected",
-                executed=False,
+                status=LifecycleState.REJECTED,
+                committed=False,
                 actual_execution_time=None,
             )
             rejected.append(action)
@@ -200,6 +312,7 @@ class ActionPipeline:
 
         return rejected
 
+    @trace_function(entrypoint="action_pipeline.reject_action_timeout", actor_type="system_worker", source="action_lifecycle")
     def reject_action_timeout(
         self,
         *,
@@ -214,30 +327,34 @@ class ActionPipeline:
         if raw is None:
             return None
 
-        action = LifecycleAction.model_validate(raw)
-        if action.current_state != "pending_approval":
+        action = self._hydrate_action(raw)
+        
+        # MIGRATED: Use event-derived state instead of action.current_state
+        derived_state = self._get_derived_state(action_id, fallback_state=action.current_state)
+        
+        if derived_state != LifecycleState.PENDING_APPROVAL:
             return None
 
         self._append_transition(
             graph=graph,
             action=action,
-            to_state="ignored",
+            to_state=LifecycleState.REJECTED,
             timestamp=timestamp,
             reason="Approval timeout expired without confirmation",
             metadata={"trigger_id": trigger.trigger_id},
         )
-        action_map[action.action_id] = action.model_dump()
+        action_map[action.action_id] = action.model_dump(mode="python")
         self._record_behavior_feedback(
             graph=graph,
             action=action,
             timestamp=timestamp,
-            status="ignored",
-            executed=False,
+            status=LifecycleState.REJECTED,
+            committed=False,
             actual_execution_time=None,
         )
         graph.setdefault("event_history", []).append(
             {
-                "event_type": "action_ignored",
+                "event_type": "action_rejected",
                 "action_id": action.action_id,
                 "request_id": action.request_id,
                 "recorded_at": self._iso(timestamp),
@@ -245,6 +362,7 @@ class ActionPipeline:
         )
         return action
 
+    @trace_function(entrypoint="action_pipeline.execute_approved_actions", actor_type="system_worker", source="action_lifecycle")
     def execute_approved_actions(
         self,
         *,
@@ -256,27 +374,31 @@ class ActionPipeline:
         action_map = graph.setdefault("action_lifecycle", {}).setdefault("actions", {})
 
         for action_id in sorted(action_map):
-            action = LifecycleAction.model_validate(action_map[action_id])
-            if action.current_state != "approved":
+            action = self._hydrate_action(action_map[action_id])
+            
+            # MIGRATED: Use event-derived state instead of action.current_state
+            derived_state = self._get_derived_state(action_id, fallback_state=action.current_state)
+            
+            if derived_state != LifecycleState.APPROVED:
                 continue
 
             action.execution_result = self._execute_action(graph=graph, action=action, timestamp=timestamp)
             self._append_transition(
                 graph=graph,
                 action=action,
-                to_state="executed",
+                to_state=LifecycleState.COMMITTED,
                 timestamp=timestamp,
                 reason=f"Action executed via {action.execution_handler}",
                 metadata=action.execution_result,
             )
-            action_map[action_id] = action.model_dump()
+            action_map[action_id] = action.model_dump(mode="python")
             graph.setdefault("execution_log", []).append(action.execution_result)
             self._record_behavior_feedback(
                 graph=graph,
                 action=action,
                 timestamp=timestamp,
-                status="approved",
-                executed=True,
+                status=LifecycleState.APPROVED,
+                committed=True,
                 actual_execution_time=self._resolve_actual_execution_time(action=action, timestamp=timestamp),
             )
             executed.append(action)
@@ -296,8 +418,13 @@ class ActionPipeline:
         pending_follow_ups = daily_cycle.setdefault("pending_follow_up_queries", [])
 
         for action_id in sorted(action_map):
-            action = LifecycleAction.model_validate(action_map[action_id])
-            if action.current_state != "executed" or action.reviewed_in_evening:
+            action = self._hydrate_action(action_map[action_id])
+            
+            # MIGRATED: Use event-derived state instead of action.current_state
+            derived_state = self._get_derived_state(action_id, fallback_state=action.current_state)
+            
+            # Event-sourced state uses LifecycleState.COMMITTED.
+            if derived_state != LifecycleState.COMMITTED or action.reviewed_in_evening:
                 continue
 
             follow_up = {
@@ -308,7 +435,7 @@ class ActionPipeline:
             pending_follow_ups.append(follow_up)
             action.reviewed_in_evening = True
             action.updated_at = self._iso(timestamp)
-            action_map[action_id] = action.model_dump()
+            action_map[action_id] = action.model_dump(mode="python")
             queued.append(follow_up)
 
         if queued:
@@ -353,7 +480,7 @@ class ActionPipeline:
             return {
                 "action_id": action.action_id,
                 "handler": "calendar_update",
-                "status": "executed",
+                "status": LifecycleState.COMMITTED.value,
                 "event_id": event["event_id"],
                 "start": start_iso,
                 "end": end_iso,
@@ -378,7 +505,7 @@ class ActionPipeline:
             return {
                 "action_id": action.action_id,
                 "handler": "meal_plan_update",
-                "status": "executed",
+                "status": LifecycleState.COMMITTED.value,
                 "recipe_name": meal_record["recipe_name"],
             }
 
@@ -404,7 +531,7 @@ class ActionPipeline:
         return {
             "action_id": action.action_id,
             "handler": "task_creation",
-            "status": "executed",
+            "status": LifecycleState.COMMITTED.value,
             "task_id": task_record["id"],
         }
 
@@ -418,14 +545,64 @@ class ActionPipeline:
         reason: str,
         metadata: dict[str, Any] | None = None,
     ) -> None:
-        transition = LifecycleTransition(
-            from_state=action.current_state if action.transitions else None,
-            to_state=to_state,
-            changed_at=self._iso(timestamp),
-            reason=reason,
-            metadata=metadata or {},
-        )
-        action.current_state = to_state
+        if not isinstance(to_state, LifecycleState):
+            raise TypeError("to_state must be LifecycleState")
+
+        # Derive previous lifecycle state from event history (single authority).
+        derived_state = self._get_derived_state(action.action_id, fallback_state=action.current_state)
+        if derived_state is None:
+            # For new actions not yet in event store, use object state
+            from_state = action.current_state if action.transitions else None
+            current_state_for_validation = action.current_state
+        else:
+            from_state = derived_state if action.transitions else None
+            current_state_for_validation = derived_state
+        
+        resolved_to_state = to_state
+        changed_at = self._iso(timestamp)
+
+        # Bootstrap transition for initial proposed state: no state mutation occurs,
+        # but we still record the lifecycle entry event.
+        if not action.transitions and current_state_for_validation == to_state:
+            transition = LifecycleTransition(
+                from_state=None,
+                to_state=to_state,
+                changed_at=changed_at,
+                reason=reason,
+                metadata=metadata or {},
+            )
+            
+            # CREATE AND PERSIST EVENT
+            event = DomainEvent.create(
+                aggregate_id=action.action_id,
+                event_type=LIFECYCLE_EVENT_TYPES["ACTION_PROPOSED"],
+            )
+            self.event_store.append(event)
+        else:
+            try:
+                validate_transition(
+                    from_state=self._to_machine_state(current_state_for_validation),
+                    to_state=self._to_machine_state(to_state),
+                    context={"requires_approval": action.approval_required},
+                )
+            except TransitionError as exc:
+                raise ValueError(
+                    f"Illegal lifecycle transition for {action.action_id}: {current_state_for_validation} -> {to_state}"
+                ) from exc
+
+            with FIREWALL.authorize_mutation(action.action_id):
+                action.current_state = resolved_to_state
+            if not isinstance(action.current_state, LifecycleState):
+                raise TypeError("action.current_state must be LifecycleState")
+
+            transition = LifecycleTransition(
+                from_state=from_state,
+                to_state=resolved_to_state,
+                changed_at=changed_at,
+                reason=reason,
+                metadata=metadata or {},
+            )
+
         action.updated_at = transition.changed_at
         action.transitions.append(transition)
         graph.setdefault("action_lifecycle", {}).setdefault("transition_log", []).append(
@@ -435,22 +612,71 @@ class ActionPipeline:
             }
         )
 
+        # Persist action payload in enum-preserving form; graph store serializes enums to strings.
+        graph.setdefault("action_lifecycle", {}).setdefault("actions", {})[action.action_id] = action.model_dump(mode="python")
+        
+        # MIGRATED: Create and persist domain event for event sourcing
+        # For non-bootstrap transitions, create events for actual phase changes
+        if action.transitions and len(action.transitions) > 1:  # More than just the one we just appended
+            event_type = self._get_lifecycle_event_type(from_state, resolved_to_state)
+            if event_type:
+                event = DomainEvent.create(
+                    aggregate_id=action.action_id,
+                    event_type=event_type,
+                )
+                self.event_store.append(event)
+
+    def _get_lifecycle_event_type(
+        self,
+        from_state: LifecycleState | None,
+        to_state: LifecycleState,
+    ) -> str | None:
+        """
+        Map lifecycle state transition to corresponding event type.
+        
+        Note: pending_approval is an internal state within the proposal phase.
+        Only actual phase changes create events.
+        """
+        # Don't create events for internal state changes or no transition
+        if from_state == to_state:
+            return None
+        
+        # pending_approval is an internal state - doesn't create an event
+        if to_state == LifecycleState.PENDING_APPROVAL:
+            return None
+        
+        # Map canonical lifecycle states to event types.
+        state_to_event = {
+            LifecycleState.PROPOSED: LIFECYCLE_EVENT_TYPES["ACTION_PROPOSED"],
+            LifecycleState.APPROVED: LIFECYCLE_EVENT_TYPES["ACTION_APPROVED"],
+            LifecycleState.COMMITTED: LIFECYCLE_EVENT_TYPES["ACTION_COMMITTED"],
+            LifecycleState.REJECTED: LIFECYCLE_EVENT_TYPES["ACTION_REJECTED"],
+            LifecycleState.FAILED: LIFECYCLE_EVENT_TYPES["ACTION_FAILED"],
+        }
+        return state_to_event.get(to_state)
+
+    def _to_machine_state(self, state: LifecycleState) -> ActionState:
+        """Convert canonical lifecycle enum to FSM enum for read-only validation."""
+        return ActionState(state.value)
+
     def _record_behavior_feedback(
         self,
         *,
         graph: dict[str, Any],
         action: LifecycleAction,
         timestamp: datetime,
-        status: str,
-        executed: bool,
+        status: LifecycleState,
+        committed: bool,
         actual_execution_time: str | None,
     ) -> None:
+        if not isinstance(status, LifecycleState):
+            raise TypeError("behavior feedback status must be LifecycleState")
         records = graph.setdefault("behavior_feedback", {}).setdefault("records", [])
         records.append(
             {
                 "action_id": action.action_id,
                 "status": status,
-                "executed": executed,
+                "committed": committed,
                 "timestamp": self._iso(timestamp),
                 "category": self._feedback_category(action.domain),
                 "scheduled_time": action.scheduled_for,

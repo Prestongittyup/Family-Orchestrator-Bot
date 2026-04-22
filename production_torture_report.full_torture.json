@@ -1,0 +1,45 @@
+{
+  "mode": "full_torture",
+  "seed": 20260421,
+  "run_fingerprint": "b040b7e1d66a36f0",
+  "run_status": "failed",
+  "elapsed_seconds": 6.97,
+  "reproducibility": {
+    "fingerprint": "b040b7e1d66a36f0",
+    "seed": 20260421
+  },
+  "duration_config": {
+    "soak_duration_seconds": 1200,
+    "breakpoint_stage_seconds": 60,
+    "breakpoint_stages": [
+      10,
+      25,
+      50,
+      100,
+      200,
+      400
+    ],
+    "chaos_duration_seconds": 240,
+    "repeat_runs": 5
+  },
+  "failure_attribution": {
+    "primary_cause": "HARNESS_FAILURE",
+    "secondary_causes": [],
+    "confidence": 1.0,
+    "evidence": [
+      "StressFailure"
+    ]
+  },
+  "failure_timeline": [],
+  "signal_quality": {
+    "signal_layer_ratio": 1.0,
+    "artifact_layer_ratio": 0.0,
+    "distortion_layer_ratio": 0.0,
+    "observability_confidence": 1.0
+  },
+  "repeatability": {},
+  "error": {
+    "exception_type": "StressFailure",
+    "message": "bootstrap_failed:500:{'detail': \"bootstrap_failed: Instance '<SessionToken at 0x22802fe89f0>' is not persistent within this Session\"}"
+  }
+}

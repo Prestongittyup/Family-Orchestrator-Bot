@@ -4,21 +4,19 @@ import hashlib
 from datetime import datetime
 from typing import Any
 
+from household_os.core.lifecycle_state import LifecycleState, enforce_boundary_state
+
 
 class TaskSynchronizationEngine:
     """Maps hidden action lifecycle into user-visible task projections."""
 
     STATUS_MAP = {
-        "pending_approval": "pending",
-        "proposed": "pending",
-        "approved": "pending",
-        "executing": "in_progress",
-        "executed": "completed",
-        "completed": "completed",
-        "failed": "failed",
-        "rejected": "failed",
-        "ignored": "failed",
-        "superseded": "failed",
+        LifecycleState.PENDING_APPROVAL: "pending",
+        LifecycleState.PROPOSED: "pending",
+        LifecycleState.APPROVED: "pending",
+        LifecycleState.COMMITTED: "completed",
+        LifecycleState.FAILED: "failed",
+        LifecycleState.REJECTED: "failed",
     }
 
     def sync(self, *, family_id: str, graph: dict[str, Any]) -> list[dict[str, Any]]:
@@ -33,7 +31,8 @@ class TaskSynchronizationEngine:
             plan_id = plan_action_map.get(action_id) or plan_request_map.get(request_id)
             if not plan_id:
                 continue
-            status = self.STATUS_MAP.get(str(raw.get("current_state", "")), "stale_projection")
+            lifecycle_state = enforce_boundary_state(raw.get("current_state"))
+            status = self.STATUS_MAP.get(lifecycle_state, "stale_projection")
             task_id = f"task-{self._digest(f'{family_id}:{plan_id}:{action_id}')[:12]}"
             tasks.append(
                 {

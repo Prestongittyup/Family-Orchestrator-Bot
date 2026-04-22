@@ -8,9 +8,11 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from assistant.governance.output_governor import OutputGovernor
 from apps.assistant_core.planning_engine import _fallback_household_state, _request_id
 from household_os.core import HouseholdOSDecisionEngine, HouseholdOSRunResponse
+from household_os.core.lifecycle_state import LifecycleState, enforce_boundary_state
 from household_os.presentation.humanizer import RecommendationHumanizer
 from household_os.presentation.recommendation_builder import RecommendationBuilder
 from household_os.runtime.orchestrator import HouseholdOSOrchestrator
+from apps.api.observability.execution_trace import trace_function
 
 
 router = APIRouter()
@@ -96,6 +98,7 @@ RunAssistantResponse = AssistantRunResponse | ClarificationResponse | HouseholdO
 
 
 @router.post("/run", response_model=RunAssistantResponse)
+@trace_function(entrypoint="assistant_runtime.run_assistant", actor_type="api_user", source="api")
 def run_assistant(request: AssistantRunRequest) -> RunAssistantResponse:
     if request.query and not request.message:
         return _run_legacy_household_os(request)
@@ -152,6 +155,7 @@ def run_assistant(request: AssistantRunRequest) -> RunAssistantResponse:
 
 
 @router.post("/approve", response_model=AssistantApproveResponse)
+@trace_function(entrypoint="assistant_runtime.approve", actor_type="api_user", source="api")
 def approve_assistant_action(request: AssistantApproveRequest) -> AssistantApproveResponse:
     graph = runtime_orchestrator.state_store.load_graph(request.household_id)
     action_payload = graph.get("action_lifecycle", {}).get("actions", {}).get(request.action_id)
@@ -179,19 +183,24 @@ def approve_assistant_action(request: AssistantApproveRequest) -> AssistantAppro
 
 
 @router.get("/today", response_model=AssistantTodayResponse)
+@trace_function(entrypoint="assistant_runtime.today", actor_type="api_user", source="api")
 def assistant_today(household_id: str = "default") -> AssistantTodayResponse:
     graph = runtime_orchestrator.state_store.load_graph(household_id)
 
     actions = graph.get("action_lifecycle", {}).get("actions", {})
     pending_actions = []
     for action in actions.values():
-        state = str(action.get("current_state", ""))
-        if state in {"proposed", "pending_approval", "approved"}:
+        state = enforce_boundary_state(action.get("current_state"))
+        if state in {
+            LifecycleState.PROPOSED,
+            LifecycleState.PENDING_APPROVAL,
+            LifecycleState.APPROVED,
+        }:
             pending_actions.append(
                 {
                     "action_id": action.get("action_id"),
                     "title": action.get("title"),
-                    "state": state,
+                    "state": state.value,
                     "approval_required": bool(action.get("approval_required", True)),
                 }
             )
@@ -218,6 +227,7 @@ def assistant_today(household_id: str = "default") -> AssistantTodayResponse:
 
 
 @router.post("/reject", response_model=AssistantRejectResponse)
+@trace_function(entrypoint="assistant_runtime.reject", actor_type="api_user", source="api")
 def reject_assistant_action(request: AssistantRejectRequest) -> AssistantRejectResponse:
     graph = runtime_orchestrator.state_store.load_graph(request.household_id)
     action_payload = graph.get("action_lifecycle", {}).get("actions", {}).get(request.action_id)

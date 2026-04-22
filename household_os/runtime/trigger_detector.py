@@ -7,6 +7,8 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from household_os.core.lifecycle_state import LifecycleState, enforce_boundary_state
+
 
 TriggerType = Literal[
     "USER_INPUT",
@@ -88,7 +90,8 @@ class TriggerDetector:
         actions = lifecycle.get("actions", {}) if isinstance(lifecycle, dict) else {}
         timeout_window = timedelta(minutes=pending_timeout_minutes)
         for action in actions.values():
-            if str(action.get("current_state", "")) != "pending_approval":
+            current_state = enforce_boundary_state(action.get("current_state"))
+            if current_state != LifecycleState.PENDING_APPROVAL:
                 continue
 
             created_at_raw = str(action.get("created_at", ""))

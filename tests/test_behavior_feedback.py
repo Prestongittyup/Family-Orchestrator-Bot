@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 from apps.api.main import app
 from apps.assistant_core.planning_engine import _fallback_household_state
 from household_os.core.household_state_graph import HouseholdStateGraphStore
+from household_os.core.lifecycle_state import LifecycleState
 from household_os.runtime.orchestrator import HouseholdOSOrchestrator
 
 
@@ -48,7 +49,7 @@ def test_rejection_affects_future_recommendations(tmp_path):
 
     graph = orchestrator.state_store.load_graph(household_id)
     records = graph["behavior_feedback"]["records"]
-    assert sum(1 for item in records if item["status"] == "rejected" and item["category"] == "fitness") >= 4
+    assert sum(1 for item in records if item["status"] == LifecycleState.REJECTED and item["category"] == "fitness") >= 4
 
 
 def test_preferred_time_is_reused(tmp_path):
@@ -64,7 +65,7 @@ def test_preferred_time_is_reused(tmp_path):
     graph["behavior_feedback"]["records"].append(
         {
             "action_id": "prior-approved-evening",
-            "status": "approved",
+            "status": LifecycleState.APPROVED,
             "executed": True,
             "timestamp": "2026-04-18T18:30:00Z",
             "category": "fitness",
@@ -98,7 +99,7 @@ def test_ignored_actions_reduce_priority(tmp_path):
         graph["behavior_feedback"]["records"].append(
             {
                 "action_id": f"ignored-fitness-{index}",
-                "status": "ignored",
+                "status": LifecycleState.FAILED,
                 "executed": False,
                 "timestamp": f"2026-04-1{index}T06:00:00Z",
                 "category": "fitness",

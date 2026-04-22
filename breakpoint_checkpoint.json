@@ -1,0 +1,489 @@
+{
+  "stage_duration_seconds": 10,
+  "target_peak": 100,
+  "stages": [
+    {
+      "regime": "breakpoint",
+      "stage": "concurrency_10",
+      "duration_seconds": 10,
+      "load_model": {
+        "type": "fixed_stage",
+        "seed": 20260421,
+        "schedule_points": 10
+      },
+      "raw_request_count": 196,
+      "clean_request_count": 116,
+      "clean_metrics": {
+        "request_count": 116,
+        "success_count": 78,
+        "error_count": 38
+      },
+      "success_rate": 0.672414,
+      "error_rate": 0.327586,
+      "p95_latency": 506.449,
+      "retry_rate": 0.0,
+      "rejections_429": 38,
+      "timeout_count": 55,
+      "sse_lag_p95": 129824.95,
+      "sse_lag_growth_slope": 1699.329436,
+      "inflight_concurrency": {
+        "peak": 11,
+        "final": 10.0,
+        "sampled_max": 11.0
+      },
+      "inflight_recovery_ratio": 0.909091,
+      "completion_ratio": 0.672414,
+      "memory_growth_slope": 0.0,
+      "first_failure_mode": "transport_timeout",
+      "saturation_signal_type": "backpressure_429",
+      "noise_profile": {
+        "client_noise_ratio": 0.280612,
+        "warmup_impact": 0.142857,
+        "retry_inflation_factor": 1.112245,
+        "cold_start_ratio": 0.0,
+        "removed_ratio": 0.408163
+      },
+      "samples": [
+        {
+          "t_seconds": 0.675,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 102618.0,
+          "client_inflight": 6,
+          "client_inflight_peak": 11,
+          "replay_queue_depth": 0.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 0.0,
+          "inflight_current": 0.0,
+          "accepted_total": 0.0,
+          "rejected_total": 0.0
+        },
+        {
+          "t_seconds": 2.325,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 102618.0,
+          "client_inflight": 8,
+          "client_inflight_peak": 11,
+          "replay_queue_depth": 0.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 0.0,
+          "inflight_current": 0.0,
+          "accepted_total": 0.0,
+          "rejected_total": 0.0
+        },
+        {
+          "t_seconds": 4.193,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 102618.0,
+          "client_inflight": 7,
+          "client_inflight_peak": 11,
+          "replay_queue_depth": 1.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 1.315516,
+          "inflight_current": 11.0,
+          "accepted_total": 1927.0,
+          "rejected_total": 5898.0
+        },
+        {
+          "t_seconds": 5.512,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 102618.0,
+          "client_inflight": 8,
+          "client_inflight_peak": 11,
+          "replay_queue_depth": 1.0,
+          "db_pool_in_use": 2.0,
+          "completion_ratio": 1.315033,
+          "inflight_current": 7.0,
+          "accepted_total": 1949.0,
+          "rejected_total": 5898.0
+        },
+        {
+          "t_seconds": 6.906,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 115763.6,
+          "client_inflight": 10,
+          "client_inflight_peak": 11,
+          "replay_queue_depth": 4.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 1.314852,
+          "inflight_current": 8.0,
+          "accepted_total": 1966.0,
+          "rejected_total": 5898.0
+        },
+        {
+          "t_seconds": 8.051,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 115763.6,
+          "client_inflight": 9,
+          "client_inflight_peak": 11,
+          "replay_queue_depth": 4.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 1.310988,
+          "inflight_current": 10.0,
+          "accepted_total": 1984.0,
+          "rejected_total": 5898.0
+        },
+        {
+          "t_seconds": 9.191,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 115763.6,
+          "client_inflight": 9,
+          "client_inflight_peak": 11,
+          "replay_queue_depth": 4.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 1.309273,
+          "inflight_current": 10.0,
+          "accepted_total": 1995.0,
+          "rejected_total": 5898.0
+        },
+        {
+          "t_seconds": 10.371,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 113949.8,
+          "client_inflight": 10,
+          "client_inflight_peak": 11,
+          "replay_queue_depth": 0.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 0.0,
+          "inflight_current": 0.0,
+          "accepted_total": 0.0,
+          "rejected_total": 0.0
+        }
+      ],
+      "samples_captured": 8,
+      "concurrency": 10
+    },
+    {
+      "regime": "breakpoint",
+      "stage": "concurrency_25",
+      "duration_seconds": 10,
+      "load_model": {
+        "type": "fixed_stage",
+        "seed": 20260421,
+        "schedule_points": 10
+      },
+      "raw_request_count": 336,
+      "clean_request_count": 176,
+      "clean_metrics": {
+        "request_count": 176,
+        "success_count": 94,
+        "error_count": 82
+      },
+      "success_rate": 0.534091,
+      "error_rate": 0.465909,
+      "p95_latency": 1013.023,
+      "retry_rate": 0.0,
+      "rejections_429": 82,
+      "timeout_count": 119,
+      "sse_lag_p95": 68047.5,
+      "sse_lag_growth_slope": -286.302817,
+      "inflight_concurrency": {
+        "peak": 25,
+        "final": 11.0,
+        "sampled_max": 20.0
+      },
+      "inflight_recovery_ratio": 0.44,
+      "completion_ratio": 0.534091,
+      "memory_growth_slope": 0.0,
+      "first_failure_mode": "http_429",
+      "saturation_signal_type": "transport_timeout",
+      "noise_profile": {
+        "client_noise_ratio": 0.354167,
+        "warmup_impact": 0.0625,
+        "retry_inflation_factor": 1.25,
+        "cold_start_ratio": 0.0,
+        "removed_ratio": 0.47619
+      },
+      "samples": [
+        {
+          "t_seconds": 2.779,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 113949.8,
+          "client_inflight": 19,
+          "client_inflight_peak": 25,
+          "replay_queue_depth": 0.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 0.0,
+          "inflight_current": 0.0,
+          "accepted_total": 0.0,
+          "rejected_total": 0.0
+        },
+        {
+          "t_seconds": 4.673,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 113949.8,
+          "client_inflight": 22,
+          "client_inflight_peak": 25,
+          "replay_queue_depth": 2.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 0.0,
+          "inflight_current": 0.0,
+          "accepted_total": 0.0,
+          "rejected_total": 0.0
+        },
+        {
+          "t_seconds": 6.565,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 112136.0,
+          "client_inflight": 18,
+          "client_inflight_peak": 25,
+          "replay_queue_depth": 2.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 1.297063,
+          "inflight_current": 20.0,
+          "accepted_total": 2077.0,
+          "rejected_total": 6078.0
+        },
+        {
+          "t_seconds": 8.643,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 112136.0,
+          "client_inflight": 21,
+          "client_inflight_peak": 25,
+          "replay_queue_depth": 2.0,
+          "db_pool_in_use": 1.0,
+          "completion_ratio": 1.30105,
+          "inflight_current": 19.0,
+          "accepted_total": 2096.0,
+          "rejected_total": 6096.0
+        },
+        {
+          "t_seconds": 10.422,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 112136.0,
+          "client_inflight": 22,
+          "client_inflight_peak": 25,
+          "replay_queue_depth": 0.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 0.0,
+          "inflight_current": 0.0,
+          "accepted_total": 0.0,
+          "rejected_total": 0.0
+        },
+        {
+          "t_seconds": 12.217,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 111229.1,
+          "client_inflight": 11,
+          "client_inflight_peak": 25,
+          "replay_queue_depth": 0.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 0.0,
+          "inflight_current": 0.0,
+          "accepted_total": 0.0,
+          "rejected_total": 0.0
+        }
+      ],
+      "samples_captured": 6,
+      "concurrency": 25
+    },
+    {
+      "regime": "breakpoint",
+      "stage": "concurrency_50",
+      "duration_seconds": 10,
+      "load_model": {
+        "type": "fixed_stage",
+        "seed": 20260421,
+        "schedule_points": 10
+      },
+      "raw_request_count": 471,
+      "clean_request_count": 186,
+      "clean_metrics": {
+        "request_count": 186,
+        "success_count": 146,
+        "error_count": 40
+      },
+      "success_rate": 0.784946,
+      "error_rate": 0.215054,
+      "p95_latency": 2755.697,
+      "retry_rate": 0.0,
+      "rejections_429": 40,
+      "timeout_count": 215,
+      "sse_lag_p95": 156001.4,
+      "sse_lag_growth_slope": -111.543381,
+      "inflight_concurrency": {
+        "peak": 51,
+        "final": 28.0,
+        "sampled_max": 19.0
+      },
+      "inflight_recovery_ratio": 0.54902,
+      "completion_ratio": 0.784946,
+      "memory_growth_slope": 0.0,
+      "first_failure_mode": "transport_timeout",
+      "saturation_signal_type": "transport_timeout",
+      "noise_profile": {
+        "client_noise_ratio": 0.456476,
+        "warmup_impact": 0.04034,
+        "retry_inflation_factor": 1.326964,
+        "cold_start_ratio": 0.0,
+        "removed_ratio": 0.605096
+      },
+      "samples": [
+        {
+          "t_seconds": 7.836,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 136663.0,
+          "client_inflight": 46,
+          "client_inflight_peak": 48,
+          "replay_queue_depth": 0.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 0.0,
+          "inflight_current": 0.0,
+          "accepted_total": 0.0,
+          "rejected_total": 0.0
+        },
+        {
+          "t_seconds": 10.581,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 136663.0,
+          "client_inflight": 39,
+          "client_inflight_peak": 51,
+          "replay_queue_depth": 0.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 0.0,
+          "inflight_current": 0.0,
+          "accepted_total": 0.0,
+          "rejected_total": 0.0
+        },
+        {
+          "t_seconds": 12.915,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 136079.0,
+          "client_inflight": 39,
+          "client_inflight_peak": 51,
+          "replay_queue_depth": 0.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 1.310329,
+          "inflight_current": 8.0,
+          "accepted_total": 2217.0,
+          "rejected_total": 6574.0
+        },
+        {
+          "t_seconds": 15.456,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 135784.9,
+          "client_inflight": 44,
+          "client_inflight_peak": 51,
+          "replay_queue_depth": 1.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 1.299781,
+          "inflight_current": 19.0,
+          "accepted_total": 2285.0,
+          "rejected_total": 6577.0
+        },
+        {
+          "t_seconds": 17.24,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 135784.9,
+          "client_inflight": 28,
+          "client_inflight_peak": 51,
+          "replay_queue_depth": 0.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 0.0,
+          "inflight_current": 0.0,
+          "accepted_total": 0.0,
+          "rejected_total": 0.0
+        }
+      ],
+      "samples_captured": 5,
+      "concurrency": 50
+    },
+    {
+      "regime": "breakpoint",
+      "stage": "concurrency_100",
+      "duration_seconds": 10,
+      "load_model": {
+        "type": "fixed_stage",
+        "seed": 20260421,
+        "schedule_points": 10
+      },
+      "raw_request_count": 958,
+      "clean_request_count": 273,
+      "clean_metrics": {
+        "request_count": 273,
+        "success_count": 157,
+        "error_count": 116
+      },
+      "success_rate": 0.575092,
+      "error_rate": 0.424908,
+      "p95_latency": 5245.301,
+      "retry_rate": 0.0,
+      "rejections_429": 116,
+      "timeout_count": 518,
+      "sse_lag_p95": 181235.8,
+      "sse_lag_growth_slope": 788.095319,
+      "inflight_concurrency": {
+        "peak": 94,
+        "final": 81.0,
+        "sampled_max": 16.0
+      },
+      "inflight_recovery_ratio": 0.861702,
+      "completion_ratio": 0.575092,
+      "memory_growth_slope": 0.0,
+      "first_failure_mode": "http_429",
+      "saturation_signal_type": "transport_timeout",
+      "noise_profile": {
+        "client_noise_ratio": 0.54071,
+        "warmup_impact": 0.030271,
+        "retry_inflation_factor": 1.387265,
+        "cold_start_ratio": 0.0,
+        "removed_ratio": 0.715031
+      },
+      "samples": [
+        {
+          "t_seconds": 25.763,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 135780.7,
+          "client_inflight": 86,
+          "client_inflight_peak": 92,
+          "replay_queue_depth": 0.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 1.29908,
+          "inflight_current": 16.0,
+          "accepted_total": 2501.0,
+          "rejected_total": 7376.0
+        },
+        {
+          "t_seconds": 30.044,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 141765.0,
+          "client_inflight": 89,
+          "client_inflight_peak": 93,
+          "replay_queue_depth": 11.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 0.0,
+          "inflight_current": 0.0,
+          "accepted_total": 0.0,
+          "rejected_total": 0.0
+        },
+        {
+          "t_seconds": 33.549,
+          "memory_mb": 0.0,
+          "sse_lag_ms_p95": 141737.4,
+          "client_inflight": 81,
+          "client_inflight_peak": 94,
+          "replay_queue_depth": 0.0,
+          "db_pool_in_use": 0.0,
+          "completion_ratio": 0.0,
+          "inflight_current": 0.0,
+          "accepted_total": 0.0,
+          "rejected_total": 0.0
+        }
+      ],
+      "samples_captured": 3,
+      "concurrency": 100
+    }
+  ],
+  "first_failure_mode": "transport_timeout",
+  "saturation_signal_type": "backpressure_429",
+  "rejections_429": 276,
+  "timeout_count": 907,
+  "max_stable_concurrency": 0,
+  "sse_degradation_behavior": {
+    "lag_slope_max": 1699.329436,
+    "lag_slope_avg": 522.394639
+  },
+  "sse_lag_growth_slope": 1699.329436,
+  "completion_ratio": 0.534091,
+  "inflight_recovery_ratio": 0.44,
+  "memory_growth_slope": 0.0
+}

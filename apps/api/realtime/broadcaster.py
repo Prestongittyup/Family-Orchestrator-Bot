@@ -15,9 +15,11 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import statistics
 import time
 from threading import Lock
 from collections import defaultdict, deque
+from dataclasses import dataclass
 from typing import Any, AsyncIterator
 
 from apps.api.observability.metrics import metrics, timer
@@ -34,6 +36,7 @@ from apps.api.realtime.event_bus import (
     RealtimeEvent,
     RealtimeEventBus,
 )
+from apps.api.runtime.loop_tracing import register_loop_resource, trace_loop_binding, trace_loop_context
 
 
 class AtomicCounter:
@@ -50,16 +53,75 @@ class AtomicCounter:
             return self._value
 
 
+@dataclass
+class _SubscriberState:
+    queue: asyncio.Queue[RealtimeEvent]
+    loop: asyncio.AbstractEventLoop
+    last_watermark: str = ""
+    last_emit_ts: float = 0.0
+
+
+@dataclass
+class _FanoutSample:
+    seq: int
+    ts: float
+    subscriber_count: int
+    fanout_elapsed_ms: float
+    per_subscriber_us: float
+    lag_slope: float
+
+
+@dataclass
+class _FanoutAggregate:
+    fanout_samples: int = 0
+    total_fanout_ms: float = 0.0
+    max_fanout_ms: float = 0.0
+    total_per_subscriber_us: float = 0.0
+    total_lag_slope: float = 0.0
+    enqueue_samples: int = 0
+    total_schedule_delay_ms: float = 0.0
+    max_schedule_delay_ms: float = 0.0
+    total_inflight_tasks: float = 0.0
+    max_inflight_tasks: int = 0
+
+
 class HouseholdBroadcaster:
     # Ring buffer size per household (max events to replay on reconnect)
     RING_BUFFER_SIZE = 1000
     
     def __init__(self) -> None:
-        self._subscribers: dict[str, set[asyncio.Queue[RealtimeEvent]]] = defaultdict(set)
+        self._subscribers: dict[str, list[_SubscriberState]] = defaultdict(list)
         self._counter = AtomicCounter()  # Single atomic counter (no race condition)
         self._ring_buffers: dict[str, deque[RealtimeEvent]] = defaultdict(
             lambda: deque(maxlen=self.RING_BUFFER_SIZE)
         )
+        self._subscriber_queue_maxsize = max(8, int(os.getenv("SSE_CLIENT_QUEUE_MAXSIZE", "100")))
+        self._queue_drop_threshold_pct = max(10, min(100, int(os.getenv("SSE_QUEUE_DROP_THRESHOLD_PCT", "80"))))
+        self._throttle_min_interval_ms = max(5, int(os.getenv("SSE_THROTTLE_MIN_INTERVAL_MS", "40")))
+        self._lag_slope_threshold = float(os.getenv("SSE_LAG_SLOPE_THRESHOLD", "0.08"))
+        self._lag_sample_window_seconds = max(5, int(os.getenv("SSE_LAG_SAMPLE_WINDOW_SECONDS", "30")))
+        self._queue_pressure_samples: deque[tuple[float, float]] = deque(maxlen=256)
+        self._fanout_state_lock = Lock()
+        self._fanout_samples: deque[_FanoutSample] = deque(maxlen=max(64, int(os.getenv("SSE_FANOUT_DIAGNOSTIC_WINDOW", "512"))))
+        self._fanout_aggregates: dict[int, _FanoutAggregate] = defaultdict(_FanoutAggregate)
+        self._fanout_seq = 0
+        self._fanout_sample_count = 0
+        self._fanout_total_ms = 0.0
+        self._fanout_max_ms = 0.0
+        self._fanout_total_subscribers = 0
+        self._fanout_total_per_subscriber_us = 0.0
+        self._fanout_total_lag_slope = 0.0
+        self._fanout_calls_total = 0
+        self._fanout_started_at = time.time()
+        self._enqueue_delay_sample_count = 0
+        self._enqueue_delay_total_ms = 0.0
+        self._enqueue_delay_max_ms = 0.0
+        self._scheduled_callbacks_total = 0
+        self._executed_callbacks_total = 0
+        self._callback_queue_depth_max = 0
+        self._inflight_tasks_sample_count = 0
+        self._inflight_tasks_total = 0.0
+        self._inflight_tasks_max = 0
         # Sliding window set for watermark collision detection
         self._emitted_watermarks: set[str] = set()
 
@@ -140,8 +202,12 @@ class HouseholdBroadcaster:
         self, household_id: str, last_watermark: str | None = None
     ) -> AsyncIterator[str]:
         from apps.api.observability.safety import safety
-        queue: asyncio.Queue[RealtimeEvent] = asyncio.Queue(maxsize=100)
-        self._subscribers[household_id].add(queue)
+        trace_loop_context(f"broadcaster.subscribe:{household_id}")
+        queue: asyncio.Queue[RealtimeEvent] = asyncio.Queue(maxsize=self._subscriber_queue_maxsize)
+        register_loop_resource(queue, "CREATE: apps/api/realtime/broadcaster.py:subscribe:queue")
+        loop = asyncio.get_running_loop()
+        subscriber = _SubscriberState(queue=queue, loop=loop)
+        self._subscribers[household_id].append(subscriber)
         metrics.gauge_inc("active_sse_connections")
         log_event("sse_connection_opened", household_id=household_id,
                   last_watermark=last_watermark)
@@ -176,10 +242,14 @@ class HouseholdBroadcaster:
 
         try:
             while True:
-                event = await queue.get()
-                # Duplicate live emission detection
-                if event.watermark in self._emitted_watermarks and event.watermark not in ("0",):
-                    signal_duplicate_emission(event.watermark, household_id)
+                try:
+                    trace_loop_binding(queue, "USE: apps/api/realtime/broadcaster.py:subscribe:queue.get")
+                    event = await asyncio.wait_for(queue.get(), timeout=1.0)
+                except asyncio.TimeoutError:
+                    if subscriber not in self._subscribers.get(household_id, []):
+                        # Queue was removed by fanout backpressure handling.
+                        break
+                    continue
                 payload = {
                     "household_id": event.household_id,
                     "event_type": event.event_type,
@@ -188,7 +258,8 @@ class HouseholdBroadcaster:
                 }
                 yield self._format_sse(event_type="update", data=payload)
         finally:
-            self._subscribers[household_id].discard(queue)
+            if subscriber in self._subscribers[household_id]:
+                self._subscribers[household_id].remove(subscriber)
             if not self._subscribers[household_id]:
                 self._subscribers.pop(household_id, None)
             metrics.gauge_dec("active_sse_connections")
@@ -283,15 +354,305 @@ class HouseholdBroadcaster:
             return False
 
     def _fanout_local(self, event: RealtimeEvent) -> None:
-        queues = list(self._subscribers.get(event.household_id, set()))
-        for queue in queues:
+        subscribers = list(self._subscribers.get(event.household_id, []))
+        if not subscribers:
+            return
+
+        fanout_start = time.perf_counter()
+        lag_slope = self._compute_queue_pressure_slope(subscribers)
+        throttled = lag_slope >= self._lag_slope_threshold
+        scheduled_at = time.perf_counter()
+
+        for subscriber in subscribers:
             try:
-                queue.put_nowait(event)
-            except asyncio.QueueFull:
-                # Drop on backpressure; next reconcile keeps clients consistent.
-                metrics.increment("errors_total")
-                log_error("sse_queue_full", "SSE subscriber queue full — event dropped",
-                          household_id=event.household_id, watermark=event.watermark)
+                subscriber.loop.call_soon_threadsafe(
+                    self._enqueue_for_subscriber,
+                    event,
+                    subscriber,
+                    throttled,
+                    scheduled_at,
+                )
+            except RuntimeError:
+                if subscriber in self._subscribers[event.household_id]:
+                    self._subscribers[event.household_id].remove(subscriber)
+
+        fanout_elapsed_ms = (time.perf_counter() - fanout_start) * 1000.0
+        subscriber_count = len(subscribers)
+        per_subscriber_us = (fanout_elapsed_ms * 1000.0) / max(1, subscriber_count)
+        metrics.histogram_observe("sse_fanout_cycle_ms", fanout_elapsed_ms)
+        with self._fanout_state_lock:
+            self._fanout_calls_total += 1
+            self._scheduled_callbacks_total += subscriber_count
+            queue_depth = max(0, self._scheduled_callbacks_total - self._executed_callbacks_total)
+            self._callback_queue_depth_max = max(self._callback_queue_depth_max, queue_depth)
+        self._record_fanout_sample(
+            subscriber_count=subscriber_count,
+            fanout_elapsed_ms=fanout_elapsed_ms,
+            per_subscriber_us=per_subscriber_us,
+            lag_slope=lag_slope,
+        )
+
+    def _compute_queue_pressure_slope(self, subscribers: list[_SubscriberState]) -> float:
+        now = time.time()
+        fill_ratios: list[float] = []
+        for subscriber in subscribers:
+            maxsize = max(1, subscriber.queue.maxsize)
+            fill_ratios.append(float(subscriber.queue.qsize()) / float(maxsize))
+        avg_fill_ratio = sum(fill_ratios) / len(fill_ratios) if fill_ratios else 0.0
+
+        with self._fanout_state_lock:
+            self._queue_pressure_samples.append((now, avg_fill_ratio))
+            while self._queue_pressure_samples and (now - self._queue_pressure_samples[0][0]) > self._lag_sample_window_seconds:
+                self._queue_pressure_samples.popleft()
+            if len(self._queue_pressure_samples) < 2:
+                return 0.0
+            t0, r0 = self._queue_pressure_samples[0]
+            t1, r1 = self._queue_pressure_samples[-1]
+            dt = max(0.001, t1 - t0)
+            return (r1 - r0) / dt
+
+    def _enqueue_for_subscriber(
+        self,
+        event: RealtimeEvent,
+        subscriber: _SubscriberState,
+        throttled: bool,
+        scheduled_at: float,
+    ) -> None:
+        trace_loop_context(f"broadcaster._enqueue_for_subscriber:{event.household_id}")
+        trace_loop_binding(subscriber.queue, "USE: apps/api/realtime/broadcaster.py:_enqueue_for_subscriber")
+        schedule_delay_ms = max(0.0, (time.perf_counter() - scheduled_at) * 1000.0)
+        metrics.histogram_observe("sse_enqueue_schedule_delay_ms", schedule_delay_ms)
+        self._record_schedule_delay(event.household_id, subscriber.loop, schedule_delay_ms)
+
+        # Duplicate suppression per subscriber avoids fanout amplification on repeated publish paths.
+        if subscriber.last_watermark == event.watermark:
+            signal_duplicate_emission(event.watermark, event.household_id)
+            return
+
+        now = time.time()
+        if throttled and (now - subscriber.last_emit_ts) < (self._throttle_min_interval_ms / 1000.0):
+            metrics.increment("sse_events_coalesced")
+            log_event(
+                "sse_event_dropped",
+                household_id=event.household_id,
+                watermark=event.watermark,
+                drop_reason="soft_throttle",
+            )
+            return
+
+        # Bounded queue with oldest-drop behavior under backpressure.
+        maxsize = max(1, subscriber.queue.maxsize)
+        queue_fill_pct = (subscriber.queue.qsize() * 100) // maxsize
+        if queue_fill_pct >= self._queue_drop_threshold_pct:
+            try:
+                trace_loop_binding(subscriber.queue, "USE: apps/api/realtime/broadcaster.py:_enqueue_for_subscriber:get_nowait")
+                subscriber.queue.get_nowait()
+                metrics.increment("sse_events_coalesced")
+                log_event(
+                    "sse_event_dropped",
+                    household_id=event.household_id,
+                    watermark=event.watermark,
+                    drop_reason="backpressure",
+                )
+            except asyncio.QueueEmpty:
+                pass
+
+        try:
+            trace_loop_binding(subscriber.queue, "USE: apps/api/realtime/broadcaster.py:_enqueue_for_subscriber:put_nowait")
+            subscriber.queue.put_nowait(event)
+            subscriber.last_watermark = event.watermark
+            subscriber.last_emit_ts = now
+        except asyncio.QueueFull:
+            # Hard cap reached even after oldest-drop: drop current event, keep connection alive.
+            metrics.increment("errors_total")
+            log_error(
+                "sse_queue_full",
+                "SSE subscriber queue full — event dropped",
+                household_id=event.household_id,
+                watermark=event.watermark,
+                drop_reason="backpressure",
+            )
+
+    def diagnostics_snapshot(self) -> dict[str, Any]:
+        with self._fanout_state_lock:
+            samples = list(self._fanout_samples)
+            aggregates = {count: aggregate for count, aggregate in sorted(self._fanout_aggregates.items())}
+            fanout_started_at = self._fanout_started_at
+            fanout_sample_count = self._fanout_sample_count
+            fanout_total_ms = self._fanout_total_ms
+            fanout_max_ms = self._fanout_max_ms
+            fanout_total_subscribers = self._fanout_total_subscribers
+            fanout_total_per_subscriber_us = self._fanout_total_per_subscriber_us
+            fanout_total_lag_slope = self._fanout_total_lag_slope
+            fanout_calls_total = self._fanout_calls_total
+            enqueue_delay_sample_count = self._enqueue_delay_sample_count
+            enqueue_delay_total_ms = self._enqueue_delay_total_ms
+            enqueue_delay_max_ms = self._enqueue_delay_max_ms
+            scheduled_callbacks_total = self._scheduled_callbacks_total
+            executed_callbacks_total = self._executed_callbacks_total
+            callback_queue_depth_max = self._callback_queue_depth_max
+            inflight_tasks_sample_count = self._inflight_tasks_sample_count
+            inflight_tasks_total = self._inflight_tasks_total
+            inflight_tasks_max = self._inflight_tasks_max
+
+        elapsed_seconds = max(0.001, time.time() - fanout_started_at)
+        callback_queue_depth = max(0, scheduled_callbacks_total - executed_callbacks_total)
+
+        cost_curve = []
+        for subscriber_count, aggregate in aggregates.items():
+            avg_fanout_ms = aggregate.total_fanout_ms / max(1, aggregate.fanout_samples)
+            avg_per_subscriber_us = aggregate.total_per_subscriber_us / max(1, aggregate.fanout_samples)
+            avg_lag_slope = aggregate.total_lag_slope / max(1, aggregate.fanout_samples)
+            avg_schedule_delay_ms = aggregate.total_schedule_delay_ms / max(1, aggregate.enqueue_samples)
+            avg_inflight_tasks = aggregate.total_inflight_tasks / max(1, aggregate.enqueue_samples)
+            cost_curve.append(
+                {
+                    "subscriber_count": subscriber_count,
+                    "samples": aggregate.fanout_samples,
+                    "avg_fanout_ms": round(avg_fanout_ms, 6),
+                    "max_fanout_ms": round(aggregate.max_fanout_ms, 6),
+                    "avg_per_subscriber_us": round(avg_per_subscriber_us, 6),
+                    "avg_schedule_delay_ms": round(avg_schedule_delay_ms, 6),
+                    "max_schedule_delay_ms": round(aggregate.max_schedule_delay_ms, 6),
+                    "avg_inflight_tasks": round(avg_inflight_tasks, 6),
+                    "max_inflight_tasks": aggregate.max_inflight_tasks,
+                    "avg_lag_slope": round(avg_lag_slope, 6),
+                }
+            )
+
+        correlation = self._pearson_correlation(
+            [float(sample.subscriber_count) for sample in samples],
+            [float(sample.lag_slope) for sample in samples],
+        )
+        fanout_time_correlation = self._pearson_correlation(
+            [float(sample.subscriber_count) for sample in samples],
+            [float(sample.fanout_elapsed_ms) for sample in samples],
+        )
+        return {
+            "fanout_diagnostics": {
+                "sample_count": fanout_sample_count,
+                "fanout_calls_total": fanout_calls_total,
+                "fanout_calls_per_second": round(fanout_calls_total / elapsed_seconds, 6),
+                "avg_fanout_time_ms": round(fanout_total_ms / max(1, fanout_sample_count), 6),
+                "max_fanout_time_ms": round(fanout_max_ms, 6),
+                "avg_subscriber_count": round(fanout_total_subscribers / max(1, fanout_sample_count), 6),
+                "avg_per_subscriber_us": round(fanout_total_per_subscriber_us / max(1, fanout_sample_count), 6),
+                "avg_lag_slope": round(fanout_total_lag_slope / max(1, fanout_sample_count), 6),
+                "avg_schedule_delay_ms": round(enqueue_delay_total_ms / max(1, enqueue_delay_sample_count), 6),
+                "max_schedule_delay_ms": round(enqueue_delay_max_ms, 6),
+                "callback_queue_depth": callback_queue_depth,
+                "callback_queue_depth_max": callback_queue_depth_max,
+                "inflight_tasks_avg": round(inflight_tasks_total / max(1, inflight_tasks_sample_count), 6),
+                "inflight_tasks_max": inflight_tasks_max,
+                "subscriber_count_vs_lag_slope_correlation": round(correlation, 6),
+                "subscriber_count_vs_fanout_time_correlation": round(fanout_time_correlation, 6),
+                "cost_curve": cost_curve,
+                "recent_samples": [
+                    {
+                        "seq": sample.seq,
+                        "ts": round(sample.ts, 6),
+                        "subscriber_count": sample.subscriber_count,
+                        "fanout_elapsed_ms": round(sample.fanout_elapsed_ms, 6),
+                        "per_subscriber_us": round(sample.per_subscriber_us, 6),
+                        "lag_slope": round(sample.lag_slope, 6),
+                    }
+                    for sample in samples[-32:]
+                ],
+            }
+        }
+
+    def _record_fanout_sample(
+        self,
+        *,
+        subscriber_count: int,
+        fanout_elapsed_ms: float,
+        per_subscriber_us: float,
+        lag_slope: float,
+    ) -> None:
+        with self._fanout_state_lock:
+            self._fanout_seq += 1
+            sample = _FanoutSample(
+                seq=self._fanout_seq,
+                ts=time.time(),
+                subscriber_count=subscriber_count,
+                fanout_elapsed_ms=fanout_elapsed_ms,
+                per_subscriber_us=per_subscriber_us,
+                lag_slope=lag_slope,
+            )
+            self._fanout_samples.append(sample)
+            self._fanout_sample_count += 1
+            self._fanout_total_ms += fanout_elapsed_ms
+            self._fanout_max_ms = max(self._fanout_max_ms, fanout_elapsed_ms)
+            self._fanout_total_subscribers += subscriber_count
+            self._fanout_total_per_subscriber_us += per_subscriber_us
+            self._fanout_total_lag_slope += lag_slope
+            aggregate = self._fanout_aggregates[subscriber_count]
+            aggregate.fanout_samples += 1
+            aggregate.total_fanout_ms += fanout_elapsed_ms
+            aggregate.max_fanout_ms = max(aggregate.max_fanout_ms, fanout_elapsed_ms)
+            aggregate.total_per_subscriber_us += per_subscriber_us
+            aggregate.total_lag_slope += lag_slope
+
+    def _record_schedule_delay(self, household_id: str, loop: asyncio.AbstractEventLoop, schedule_delay_ms: float) -> None:
+        subscriber_count = len(self._subscribers.get(household_id, []))
+        inflight_tasks = 0
+        try:
+            inflight_tasks = len(asyncio.all_tasks(loop))
+        except RuntimeError:
+            inflight_tasks = 0
+        with self._fanout_state_lock:
+            self._executed_callbacks_total += 1
+            self._enqueue_delay_sample_count += 1
+            self._enqueue_delay_total_ms += schedule_delay_ms
+            self._enqueue_delay_max_ms = max(self._enqueue_delay_max_ms, schedule_delay_ms)
+            self._inflight_tasks_sample_count += 1
+            self._inflight_tasks_total += float(inflight_tasks)
+            self._inflight_tasks_max = max(self._inflight_tasks_max, inflight_tasks)
+            aggregate = self._fanout_aggregates[subscriber_count]
+            aggregate.enqueue_samples += 1
+            aggregate.total_schedule_delay_ms += schedule_delay_ms
+            aggregate.max_schedule_delay_ms = max(aggregate.max_schedule_delay_ms, schedule_delay_ms)
+            aggregate.total_inflight_tasks += float(inflight_tasks)
+            aggregate.max_inflight_tasks = max(aggregate.max_inflight_tasks, inflight_tasks)
+
+    def reset_diagnostics(self) -> None:
+        with self._fanout_state_lock:
+            self._fanout_samples.clear()
+            self._fanout_aggregates.clear()
+            self._fanout_seq = 0
+            self._fanout_sample_count = 0
+            self._fanout_total_ms = 0.0
+            self._fanout_max_ms = 0.0
+            self._fanout_total_subscribers = 0
+            self._fanout_total_per_subscriber_us = 0.0
+            self._fanout_total_lag_slope = 0.0
+            self._fanout_calls_total = 0
+            self._fanout_started_at = time.time()
+            self._enqueue_delay_sample_count = 0
+            self._enqueue_delay_total_ms = 0.0
+            self._enqueue_delay_max_ms = 0.0
+            self._scheduled_callbacks_total = 0
+            self._executed_callbacks_total = 0
+            self._callback_queue_depth_max = 0
+            self._inflight_tasks_sample_count = 0
+            self._inflight_tasks_total = 0.0
+            self._inflight_tasks_max = 0
+
+    @staticmethod
+    def _pearson_correlation(xs: list[float], ys: list[float]) -> float:
+        if len(xs) < 2 or len(ys) < 2 or len(xs) != len(ys):
+            return 0.0
+        if len(set(xs)) == 1 or len(set(ys)) == 1:
+            return 0.0
+        x_mean = statistics.fmean(xs)
+        y_mean = statistics.fmean(ys)
+        numerator = sum((x - x_mean) * (y - y_mean) for x, y in zip(xs, ys, strict=False))
+        x_variance = sum((x - x_mean) ** 2 for x in xs)
+        y_variance = sum((y - y_mean) ** 2 for y in ys)
+        denominator = (x_variance * y_variance) ** 0.5
+        if denominator <= 0:
+            return 0.0
+        return numerator / denominator
 
     @staticmethod
     def _format_sse(event_type: str, data: dict[str, Any]) -> str:

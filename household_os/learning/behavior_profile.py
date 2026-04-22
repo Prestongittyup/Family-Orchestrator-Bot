@@ -5,6 +5,8 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
+from household_os.core.lifecycle_state import LifecycleState, parse_lifecycle_state
+
 
 @dataclass(frozen=True)
 class CategoryBehaviorProfile:
@@ -117,11 +119,11 @@ class BehaviorProfileBuilder:
         for record in records:
             scheduled = str(record.get("scheduled_time") or "")
             segment = self._segment_for_scheduled_time(scheduled)
-            status = str(record.get("status", ""))
+            status = parse_lifecycle_state(record.get("status"))
             if segment:
                 total_by_segment[segment] += 1
 
-            if status == "approved":
+            if status == LifecycleState.APPROVED:
                 approved_count += 1
                 if segment:
                     approved_by_segment[segment] += 1
@@ -131,12 +133,12 @@ class BehaviorProfileBuilder:
                     approved_start_times[start_time] += 1
                 if duration is not None:
                     approved_duration_counts[duration] += 1
-            elif status == "rejected":
+            elif status == LifecycleState.REJECTED:
                 rejected_count += 1
                 if segment:
                     rejected_by_segment[segment] += 1
                     rejected_windows[segment] += 1
-            elif status == "ignored":
+            elif status == LifecycleState.FAILED:
                 ignored_count += 1
                 if segment:
                     ignored_by_segment[segment] += 1

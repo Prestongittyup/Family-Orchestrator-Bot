@@ -1,0 +1,126 @@
+{
+  "comparison_name": "sse_pipeline_fix_validation",
+  "comparison_caveat": "Baseline used the original 30-minute standard gate profile; post-fix used a shorter bounded validation profile after the first post-fix attempt stalled due a saturated reused server instance. The post-fix run was executed only after recycling the port 8000 API process and re-verifying boot health.",
+  "baseline_report": "production_torture_report.standard_gate_30min.json",
+  "post_fix_report": "production_torture_report.post_fix_sse_validation_short.json",
+  "pre_fix": {
+    "run_status": "success",
+    "production_readiness": "FAILURE_DOMINATED",
+    "primary_bottleneck": "SSE_BACKPRESSURE_COLLAPSE",
+    "confidence": 0.99,
+    "metrics": {
+      "max_stable_concurrency": 0,
+      "p95_latency": 5426.898,
+      "sse_lag_slope_worst": 973.693045,
+      "completion_ratio": 0.559439,
+      "success_rate": 0.443746,
+      "timeout_count": 6079,
+      "rejections_429": 1596
+    },
+    "regimes": {
+      "soak": {
+        "p95_latency": 5174.738,
+        "sse_lag_growth_slope": 482.17458,
+        "completion_ratio": 0.617165,
+        "success_rate": 0.617165,
+        "timeout_count": 4201,
+        "rejections_429": 1191
+      },
+      "breakpoint": {
+        "max_stable_concurrency": 0,
+        "sse_lag_growth_slope": 973.693045,
+        "completion_ratio": 0.28169,
+        "timeout_count": 726,
+        "rejections_429": 277,
+        "first_failure_mode": "transport_timeout"
+      },
+      "chaos": {
+        "p95_latency": 1269.573,
+        "sse_lag_growth_slope": 0.0,
+        "completion_ratio": 1.20952,
+        "success_rate": 0.931593,
+        "timeout_count": 1152,
+        "rejections_429": 128,
+        "first_failure_mode": "transport_timeout"
+      }
+    }
+  },
+  "post_fix": {
+    "run_status": "success",
+    "production_readiness": "FAILURE_DOMINATED",
+    "primary_bottleneck": "SSE_BACKPRESSURE_COLLAPSE",
+    "confidence": 0.99,
+    "metrics": {
+      "max_stable_concurrency": 0,
+      "p95_latency": 4422.939,
+      "sse_lag_slope_worst": 1699.329436,
+      "completion_ratio": 0.633558,
+      "success_rate": 0.633558,
+      "timeout_count": 4940,
+      "rejections_429": 1273
+    },
+    "regimes": {
+      "soak": {
+        "p95_latency": 4422.939,
+        "sse_lag_growth_slope": 470.964669,
+        "completion_ratio": 0.633558,
+        "success_rate": 0.633558,
+        "timeout_count": 2819,
+        "rejections_429": 760
+      },
+      "breakpoint": {
+        "max_stable_concurrency": 0,
+        "sse_lag_growth_slope": 1699.329436,
+        "completion_ratio": 0.534091,
+        "timeout_count": 907,
+        "rejections_429": 276,
+        "first_failure_mode": "transport_timeout"
+      },
+      "chaos": {
+        "p95_latency": 5556.398,
+        "sse_lag_growth_slope": 296.160321,
+        "completion_ratio": 1.314115,
+        "success_rate": 0.605657,
+        "timeout_count": 1214,
+        "rejections_429": 237,
+        "first_failure_mode": "http_429"
+      }
+    }
+  },
+  "delta_analysis": {
+    "overall": {
+      "p95_latency_improvement_pct": 18.5,
+      "timeout_reduction_pct": 18.737,
+      "rejection_reduction_pct": 20.238,
+      "success_rate_delta": 0.189812,
+      "completion_ratio_delta": 0.074118,
+      "concurrency_improvement": 0,
+      "worst_case_sse_lag_change_pct": -74.524
+    },
+    "regime_level": {
+      "soak_sse_lag_improvement_pct": 2.325,
+      "soak_timeout_reduction_pct": 32.897,
+      "soak_latency_improvement_pct": 14.529,
+      "breakpoint_sse_lag_change_pct": -74.524,
+      "breakpoint_completion_ratio_delta": 0.252401,
+      "chaos_first_failure_mode_shift": "transport_timeout -> http_429"
+    }
+  },
+  "verdict": {
+    "did_fix_work": false,
+    "assessment": "The broadcaster changes improved soak latency, reduced total timeouts, and lowered total 429 volume, but they did not eliminate the collapse pattern. Worst-case SSE lag increased sharply at breakpoint pressure, stable concurrency remained zero, and the overall production-readiness classification stayed FAILURE_DOMINATED.",
+    "remaining_failure_mode": "SSE_BACKPRESSURE_COLLAPSE",
+    "evidence": [
+      "pre_worst_sse_lag_slope=973.693045",
+      "post_worst_sse_lag_slope=1699.329436",
+      "pre_soak_sse_lag_slope=482.174580",
+      "post_soak_sse_lag_slope=470.964669",
+      "pre_p95_latency=5426.898",
+      "post_p95_latency=4422.939",
+      "pre_timeout_count=6079",
+      "post_timeout_count=4940",
+      "pre_rejections_429=1596",
+      "post_rejections_429=1273"
+    ]
+  }
+}

@@ -1,0 +1,3869 @@
+{
+  "timestamp_utc": "2026-04-22T18:05:00.059597+00:00",
+  "total_files_scanned": 380,
+  "category_breakdown": {
+    "ACTIVE": 319,
+    "INDIRECT": 50,
+    "LEGACY": 7,
+    "UNUSED_CANDIDATE": 4
+  },
+  "moved": [
+    {
+      "from": "apps/api/core/schema_migrations.py",
+      "to": "archive/legacy_fsm/apps/api/core/schema_migrations.py",
+      "category": "LEGACY"
+    },
+    {
+      "from": "apps/api/core/state_machine_integration_guide.py",
+      "to": "archive/unused_candidates/apps/api/core/state_machine_integration_guide.py",
+      "category": "UNUSED_CANDIDATE"
+    },
+    {
+      "from": "apps/assistant_core/assistant_router.py",
+      "to": "archive/unused_candidates/apps/assistant_core/assistant_router.py",
+      "category": "UNUSED_CANDIDATE"
+    },
+    {
+      "from": "legacy/compiler/__init__.py",
+      "to": "archive/legacy_fsm/legacy/compiler/__init__.py",
+      "category": "LEGACY"
+    },
+    {
+      "from": "legacy/compiler/demo_context_resolver.py",
+      "to": "archive/legacy_fsm/legacy/compiler/demo_context_resolver.py",
+      "category": "LEGACY"
+    },
+    {
+      "from": "legacy/compiler/demo_intent_parser.py",
+      "to": "archive/legacy_fsm/legacy/compiler/demo_intent_parser.py",
+      "category": "LEGACY"
+    },
+    {
+      "from": "legacy/conversation/__init__.py",
+      "to": "archive/legacy_fsm/legacy/conversation/__init__.py",
+      "category": "LEGACY"
+    },
+    {
+      "from": "legacy/conversation/orchestrator.py",
+      "to": "archive/legacy_fsm/legacy/conversation/orchestrator.py",
+      "category": "LEGACY"
+    },
+    {
+      "from": "legacy/lifecycle/__init__.py",
+      "to": "archive/legacy_fsm/legacy/lifecycle/__init__.py",
+      "category": "LEGACY"
+    },
+    {
+      "from": "scripts/baseline_debug_test.py",
+      "to": "archive/unused_candidates/scripts/baseline_debug_test.py",
+      "category": "UNUSED_CANDIDATE"
+    },
+    {
+      "from": "scripts/verify_calendar_step4_authoritative.py",
+      "to": "archive/unused_candidates/scripts/verify_calendar_step4_authoritative.py",
+      "category": "UNUSED_CANDIDATE"
+    }
+  ],
+  "records": [
+    {
+      "path": "apps/api/adapters/email_ingestion_adapter.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/assistant_runtime_router.py",
+      "inbound_refs": 0,
+      "test_refs": 3,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/auth/token_service.py",
+      "inbound_refs": 5,
+      "test_refs": 4,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/conversation_orchestration/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/conversation_orchestration/intent_refinement.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/conversation_orchestration/pipeline.py",
+      "inbound_refs": 1,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/conversation_orchestration/schema.py",
+      "inbound_refs": 5,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/conversation_orchestration/state_machine.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/conversation_orchestration/store.py",
+      "inbound_refs": 3,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/admin_security.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/asgi_admission.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/audit_bypass.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/auth_middleware.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/backpressure_middleware.py",
+      "inbound_refs": 4,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/boot_diagnostics.py",
+      "inbound_refs": 3,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/bootstrap.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/database.py",
+      "inbound_refs": 23,
+      "test_refs": 6,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/edge_diagnostics.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/env_bootstrap.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/event_bus.py",
+      "inbound_refs": 5,
+      "test_refs": 2,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/event_bus_async.py",
+      "inbound_refs": 3,
+      "test_refs": 0,
+      "vulture_hits": 1,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/event_bus_base.py",
+      "inbound_refs": 5,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/event_bus_factory.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/event_registry.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/feature_flags.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/idempotency_middleware.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/kafka_event_bus.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/runtime_classifier.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/schema_migrations.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "LEGACY",
+      "reason": "Legacy/FSM/migration naming hint with no inbound refs",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/core/state_machine.py",
+      "inbound_refs": 3,
+      "test_refs": 3,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "apps/api/core/state_machine_integration_guide.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 1,
+      "dynamic_hint": false,
+      "category": "UNUSED_CANDIDATE",
+      "reason": "Vulture >=80 and no inbound/test references",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 11,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/auth_router.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/brief_contract_v1.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/brief_endpoint.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 1,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/brief_invariants_v1.py",
+      "inbound_refs": 1,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/brief_renderer_v1.py",
+      "inbound_refs": 1,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/calendar_router.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/evaluation_router.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/identity_router.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 1,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/integrations_router.py",
+      "inbound_refs": 4,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/operational_router.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/realtime_router.py",
+      "inbound_refs": 1,
+      "test_refs": 1,
+      "vulture_hits": 1,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/system_router.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/endpoints/ui_bootstrap_router.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/hpal/__init__.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/hpal/auto_reconciliation.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/hpal/command_gateway.py",
+      "inbound_refs": 3,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/hpal/contracts.py",
+      "inbound_refs": 5,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/hpal/event_integration.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/hpal/orchestration_adapter.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/hpal/plan_normalization.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/hpal/projection_builder.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/hpal/router.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/hpal/task_sync.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/identity/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/identity/auth.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/identity/contracts.py",
+      "inbound_refs": 4,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/identity/repository.py",
+      "inbound_refs": 4,
+      "test_refs": 3,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/identity/service.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/identity/sqlalchemy_repository.py",
+      "inbound_refs": 5,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/__init__.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/adapters/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/adapters/adapter_governance.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/adapters/email_integration_service.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/adapters/email_provider_adapter.py",
+      "inbound_refs": 5,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/adapters/execution_runner.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/adapters/imap_email_adapter.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 4,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/adapters/ingestion_defaults.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/adapters/manual_priority.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/adapters/mock_email_provider.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/adapters/time_normalizer.py",
+      "inbound_refs": 1,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/failure_handling.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/models.py",
+      "inbound_refs": 4,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/normalization.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ingestion/service.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/__init__.py",
+      "inbound_refs": 1,
+      "test_refs": 4,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/architecture_guard.py",
+      "inbound_refs": 1,
+      "test_refs": 4,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/brief_builder.py",
+      "inbound_refs": 3,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/credentials.py",
+      "inbound_refs": 9,
+      "test_refs": 7,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/decision_engine.py",
+      "inbound_refs": 6,
+      "test_refs": 5,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/event_adapter.py",
+      "inbound_refs": 1,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/event_windowing.py",
+      "inbound_refs": 5,
+      "test_refs": 3,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/feature_flags.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/google_calendar_provider.py",
+      "inbound_refs": 3,
+      "test_refs": 4,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/google_calendar_sandbox_runner.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/google_oauth_config.py",
+      "inbound_refs": 2,
+      "test_refs": 5,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/identity.py",
+      "inbound_refs": 4,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/identity_service.py",
+      "inbound_refs": 1,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/models/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/models/household_state.py",
+      "inbound_refs": 13,
+      "test_refs": 7,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/normalization.py",
+      "inbound_refs": 4,
+      "test_refs": 4,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/orchestrator.py",
+      "inbound_refs": 6,
+      "test_refs": 5,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/os1_bridge.py",
+      "inbound_refs": 1,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/providers.py",
+      "inbound_refs": 1,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/registry.py",
+      "inbound_refs": 3,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/repository.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/integration_core/state_builder.py",
+      "inbound_refs": 2,
+      "test_refs": 3,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/intent_contract/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/intent_contract/action_planner.py",
+      "inbound_refs": 4,
+      "test_refs": 2,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/intent_contract/classifier.py",
+      "inbound_refs": 6,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/intent_contract/schema.py",
+      "inbound_refs": 9,
+      "test_refs": 3,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/intent_contract/validator.py",
+      "inbound_refs": 5,
+      "test_refs": 2,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/llm/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/llm/gateway.py",
+      "inbound_refs": 1,
+      "test_refs": 4,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/llm/intent_resolver.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/llm/provider.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/main.py",
+      "inbound_refs": 8,
+      "test_refs": 13,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/models/event_log.py",
+      "inbound_refs": 4,
+      "test_refs": 2,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/models/idempotency_key.py",
+      "inbound_refs": 2,
+      "test_refs": 3,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/models/identity.py",
+      "inbound_refs": 4,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/models/task.py",
+      "inbound_refs": 9,
+      "test_refs": 2,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/modules/email/email_service.py",
+      "inbound_refs": 5,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/modules/email/rule_engine.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/observability/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/observability/alerts.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/observability/health.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/observability/logging.py",
+      "inbound_refs": 7,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/observability/metrics.py",
+      "inbound_refs": 10,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/observability/safety.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/observability/trace_context.py",
+      "inbound_refs": 3,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/operational/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/operational/contracts.py",
+      "inbound_refs": 3,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/operational/service.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/policy_engine/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/policy_engine/evaluator.py",
+      "inbound_refs": 3,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/policy_engine/integration_example.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/policy_engine/rules.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/policy_engine/schema.py",
+      "inbound_refs": 6,
+      "test_refs": 2,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/product_surface/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/product_surface/bootstrap_service.py",
+      "inbound_refs": 3,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/product_surface/chat_gateway_service.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/product_surface/contracts.py",
+      "inbound_refs": 5,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/product_surface/frontend_runtime.py",
+      "inbound_refs": 1,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/product_surface/patch_service.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/realtime/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/realtime/broadcaster.py",
+      "inbound_refs": 8,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/realtime/event_bus.py",
+      "inbound_refs": 1,
+      "test_refs": 4,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/runtime/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/runtime/backpressure_controller.py",
+      "inbound_refs": 3,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/runtime/event_loop_guard.py",
+      "inbound_refs": 3,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/runtime/execution_fairness.py",
+      "inbound_refs": 5,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/runtime/loop_tracing.py",
+      "inbound_refs": 10,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/runtime/sse_pressure_guard.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/schemas/event.py",
+      "inbound_refs": 12,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/schemas/events/email_events.py",
+      "inbound_refs": 4,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/schemas/events/task_events.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/calendar_service.py",
+      "inbound_refs": 8,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/dlq_service.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "INDIRECT",
+      "reason": "Dynamic import/reflection hints detected",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/event_log_service.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/event_replay_service.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/idempotency_key_service.py",
+      "inbound_refs": 0,
+      "test_refs": 4,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/idempotency_service.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/observability_service.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/queue_store.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/retry_engine.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/router_service.py",
+      "inbound_refs": 3,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/shared_dependencies.py",
+      "inbound_refs": 4,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/task_service.py",
+      "inbound_refs": 9,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/temporal_intelligence_layer.py",
+      "inbound_refs": 4,
+      "test_refs": 0,
+      "vulture_hits": 1,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/services/til_contract.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 1,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ui_bootstrap/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ui_bootstrap/cache.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ui_bootstrap/models.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ui_bootstrap/service.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/ui_bootstrap/system_state_store.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/xai/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/xai/causal_mapper.py",
+      "inbound_refs": 1,
+      "test_refs": 2,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/xai/db_model.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/xai/router.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/xai/schema.py",
+      "inbound_refs": 6,
+      "test_refs": 2,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/xai/store.py",
+      "inbound_refs": 4,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/xai/templates.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/api/xai/validation.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/assistant_core/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/assistant_core/assistant_router.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 2,
+      "dynamic_hint": false,
+      "category": "UNUSED_CANDIDATE",
+      "reason": "Vulture >=80 and no inbound/test references",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/assistant_core/contracts.py",
+      "inbound_refs": 6,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/assistant_core/fitness_planner.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/assistant_core/intent_parser.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/assistant_core/meal_planner.py",
+      "inbound_refs": 3,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/assistant_core/planning_engine.py",
+      "inbound_refs": 5,
+      "test_refs": 9,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "apps/assistant_core/request_store.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/connectors/__init__.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/connectors/calendar_connector.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/connectors/grocery_connector.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/connectors/task_connector.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/core/__init__.py",
+      "inbound_refs": 3,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/core/contracts.py",
+      "inbound_refs": 6,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/core/decision_engine.py",
+      "inbound_refs": 3,
+      "test_refs": 3,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/core/household_state_graph.py",
+      "inbound_refs": 3,
+      "test_refs": 7,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/core/lifecycle_state.py",
+      "inbound_refs": 15,
+      "test_refs": 10,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "household_os/learning/behavior_profile.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/presentation/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/presentation/humanizer.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/presentation/recommendation_builder.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/presentation/time_formatter.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/runtime/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/runtime/action_pipeline.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 1,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/runtime/command_handler.py",
+      "inbound_refs": 1,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "household_os/runtime/daily_cycle.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/runtime/domain_event.py",
+      "inbound_refs": 5,
+      "test_refs": 4,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/runtime/event_store.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "household_os/runtime/lifecycle_firewall.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "household_os/runtime/lifecycle_migration.py",
+      "inbound_refs": 1,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "household_os/runtime/orchestrator.py",
+      "inbound_refs": 5,
+      "test_refs": 4,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/runtime/state_firewall.py",
+      "inbound_refs": 2,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/runtime/state_proxy.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "household_os/runtime/state_reducer.py",
+      "inbound_refs": 3,
+      "test_refs": 4,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "household_os/runtime/trigger_detector.py",
+      "inbound_refs": 3,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/compiler/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "LEGACY",
+      "reason": "Legacy/FSM/migration naming hint with no inbound refs",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/compiler/context_resolver.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/compiler/demo_context_resolver.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "LEGACY",
+      "reason": "Legacy/FSM/migration naming hint with no inbound refs",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/compiler/demo_intent_parser.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "LEGACY",
+      "reason": "Legacy/FSM/migration naming hint with no inbound refs",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/compiler/intent_parser.py",
+      "inbound_refs": 8,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/conversation/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "LEGACY",
+      "reason": "Legacy/FSM/migration naming hint with no inbound refs",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/conversation/clarification_engine.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/conversation/conversation_engine.py",
+      "inbound_refs": 3,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/conversation/intent_refinement.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/conversation/orchestrator.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "LEGACY",
+      "reason": "Legacy/FSM/migration naming hint with no inbound refs",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/conversation/state_store.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/lifecycle/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "LEGACY",
+      "reason": "Legacy/FSM/migration naming hint with no inbound refs",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/lifecycle/execution_state_machine.py",
+      "inbound_refs": 5,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/lifecycle/failure_behavior.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/lifecycle/state_transitions.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/lifecycle/user_control_interface.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "legacy/lifecycle/workflow_tracker.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "modules/calendar/services/calendar_module.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "modules/core/models/module_output.py",
+      "inbound_refs": 5,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "modules/core/services/contract_registry.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "modules/core/services/module_runner.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "modules/core/services/module_validator.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "modules/core/services/orchestrator_lite.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "modules/meals/services/meal_module.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "modules/tasks/services/task_module.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/baseline_debug_test.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 1,
+      "dynamic_hint": false,
+      "category": "UNUSED_CANDIDATE",
+      "reason": "Vulture >=80 and no inbound/test references",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/boot_smoke_test.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/capture_household_os_outputs.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/forensic_loop_leak_probe.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/governance_upgrade_fixture.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/harness_validation_report.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "INDIRECT",
+      "reason": "Dynamic import/reflection hints detected",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/migrate_event_stream.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/migrate_lifecycle_states.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/phase1_breakpoint_validation.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/production_readiness_torture_gate.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/production_torture_audit.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 2,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/production_truth_gate.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "INDIRECT",
+      "reason": "Dynamic import/reflection hints detected",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/runtime_stress_audit.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Referenced by runtime import graph and/or tests",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/safe_repo_cleanup.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "INDIRECT",
+      "reason": "Dynamic import/reflection hints detected",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/sample_household_os_outputs.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/verify_async_event_bus.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "INDIRECT",
+      "reason": "Dynamic import/reflection hints detected",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/verify_calendar_step4_authoritative.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 1,
+      "dynamic_hint": false,
+      "category": "UNUSED_CANDIDATE",
+      "reason": "Vulture >=80 and no inbound/test references",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/verify_calendar_til_shadow.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/verify_email_til_shadow.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/verify_step3_final.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/verify_task_til_upgrade.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/verify_til_fail_safe.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/verify_til_integration.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/verify_til_shadow_mode.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/verify_til_step2_gates.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "scripts/verify_worker_hardening.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "INDIRECT",
+      "reason": "Low-confidence orphan; manual review required",
+      "safety_locked": false
+    },
+    {
+      "path": "tests/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/architecture/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/architecture/dependency_graph.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/architecture/test_dependency_graph.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/architecture/test_fetch_boundary.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/architecture/test_single_fetch_source.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 2,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/conftest.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 1,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/decision/test_decision_engine.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/evaluation/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/evaluation/brief_runner.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/evaluation/evaluation_runner.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/evaluation/feedback_engine.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/evaluation/scenario_generator.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/evaluation/scenario_models.py",
+      "inbound_refs": 0,
+      "test_refs": 2,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/evaluation/scoring_engine.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/governance_utils.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/harness/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/harness/__main__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/harness/cli.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/harness/failure_injector.py",
+      "inbound_refs": 0,
+      "test_refs": 3,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/harness/invariant_validator.py",
+      "inbound_refs": 0,
+      "test_refs": 2,
+      "vulture_hits": 1,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/harness/load_curve_model.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/harness/noise_isolation.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/harness/production_readiness_classifier.py",
+      "inbound_refs": 1,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/harness/repeatability_gate.py",
+      "inbound_refs": 2,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/harness/report_generator.py",
+      "inbound_refs": 0,
+      "test_refs": 3,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/harness/scenario_runner.py",
+      "inbound_refs": 0,
+      "test_refs": 2,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/harness/simulation_engine.py",
+      "inbound_refs": 0,
+      "test_refs": 3,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/p1_verification/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/p1_verification/fixtures.py",
+      "inbound_refs": 0,
+      "test_refs": 6,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/p1_verification/harness.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/p1_verification/scenario_matrix.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/p1_verification/test_auth_lifecycle.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/p1_verification/test_chaos_concurrency.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 1,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/p1_verification/test_e2e_integration.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/p1_verification/test_event_bus_correctness.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/p1_verification/test_idempotency_correctness.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/p1_verification/test_llm_gateway_failures.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/simulation/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/simulation/live_orchestration/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/simulation/live_orchestration/brief_tracker.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/simulation/live_orchestration/engine.py",
+      "inbound_refs": 1,
+      "test_refs": 2,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/simulation/live_orchestration/ingestion_simulator.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/simulation/live_orchestration/timeline_engine.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/simulation/stress_tests/__init__.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/simulation/stress_tests/mutation_engine.py",
+      "inbound_refs": 0,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/simulation/stress_tests/runner.py",
+      "inbound_refs": 1,
+      "test_refs": 1,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/simulation/stress_tests/stability_metrics.py",
+      "inbound_refs": 0,
+      "test_refs": 3,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_adapter_governance.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_assistant_core.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_assistant_runtime.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_assistant_runtime_router.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_behavior_feedback.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_boundary_enforcement.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_brief_builder.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_brief_evaluation.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_brief_renderer_v1.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_col.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_daily_loop_engine.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_decision_engine.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_decision_engine_integration.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_env_bootstrap.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_evaluation_endpoints.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_event_adapter.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_event_mutation_stress.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_event_replay_integrity.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_event_sourcing.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_event_windowing.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_external_event_normalization.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_feature_flags.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_frontend_runtime_contract.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_fsm_non_authority.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_full_suite_integrity.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_google_calendar_full_external_validation.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 1,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_google_calendar_integration_surface.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_google_calendar_oauth.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_google_oauth_env_config.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_google_oauth_missing_config_safe_boot.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_household_os.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_household_os_runtime.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_household_simulation.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_household_state.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_household_state_manager.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_identity_layer.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_insight_bridge.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_integration_architecture_guard.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_integration_core.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_integration_identity_system.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_intent_confidence_router.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_intent_contract.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_intent_lock.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_life_state_model.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_lifecycle_integrity_invariants.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_live_orchestration_simulation.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_manual_priority_adapter.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_migration_cleanliness.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_no_legacy_lifecycle_strings.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_no_raw_lifecycle_strings.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_oauth_credential_store.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_operational_mode.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_output_governor.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_p0_torture.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_persistence_roundtrip_integrity.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_policy_engine.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_policy_guardrails.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_provider_registry.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_recommendation_builder.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_recommendation_humanization.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_root_ui_routing.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_sample_household_os_outputs.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_single_pipeline_enforcement.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": true,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_state_machine.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 2,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_system_stability_lock.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_time_normalization.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_ui_bootstrap_router.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_ui_simulation_endpoints.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_xai_harness_integration.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/test_xai_layer.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    },
+    {
+      "path": "tests/verify_p0_fixes.py",
+      "inbound_refs": 0,
+      "test_refs": 0,
+      "vulture_hits": 0,
+      "dynamic_hint": false,
+      "category": "ACTIVE",
+      "reason": "Safety-locked critical invariant/harness",
+      "safety_locked": true
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "households": {
-    "5111ee86-156c-4c1d-96d5-fbb7ec07f6ad": {
-      "household_id": "5111ee86-156c-4c1d-96d5-fbb7ec07f6ad",
+    "42937995-87dd-4354-9bc6-ebc6d6b29155": {
+      "household_id": "42937995-87dd-4354-9bc6-ebc6d6b29155",
       "reference_time": "2026-04-19T08:00:00Z",
       "calendar_events": [
         {
@@ -70,73 +70,13 @@
       "event_history": [
         {
           "event_type": "query_received",
-          "query": "phase1-valid-32",
-          "recorded_at": "2026-04-21T14:59:39.542305Z"
+          "query": "audit-370356",
+          "recorded_at": "2026-04-22T01:15:07.263015Z"
         },
         {
           "event_type": "query_received",
-          "query": "phase1-valid-37",
-          "recorded_at": "2026-04-21T14:59:41.339021Z"
-        },
-        {
-          "event_type": "query_received",
-          "query": "phase1-valid-98",
-          "recorded_at": "2026-04-21T14:59:56.189317Z"
-        },
-        {
-          "event_type": "query_received",
-          "query": "phase1-valid-0",
-          "recorded_at": "2026-04-21T14:59:58.042431Z"
-        },
-        {
-          "event_type": "query_received",
-          "query": "phase1-valid-85",
-          "recorded_at": "2026-04-21T15:00:04.223174Z"
-        },
-        {
-          "event_type": "query_received",
-          "query": "phase1-valid-19",
-          "recorded_at": "2026-04-21T15:00:06.637749Z"
-        },
-        {
-          "event_type": "query_received",
-          "query": "phase1-valid-20",
-          "recorded_at": "2026-04-21T15:00:10.473986Z"
-        },
-        {
-          "event_type": "query_received",
-          "query": "phase1-valid-67",
-          "recorded_at": "2026-04-21T15:00:12.468771Z"
-        },
-        {
-          "event_type": "query_received",
-          "query": "phase1-valid-53",
-          "recorded_at": "2026-04-21T15:00:13.490596Z"
-        },
-        {
-          "event_type": "query_received",
-          "query": "phase1-valid-75",
-          "recorded_at": "2026-04-21T15:00:18.410507Z"
-        },
-        {
-          "event_type": "query_received",
-          "query": "phase1-valid-21",
-          "recorded_at": "2026-04-21T15:00:29.042469Z"
-        },
-        {
-          "event_type": "query_received",
-          "query": "phase1-valid-10",
-          "recorded_at": "2026-04-21T15:00:40.595832Z"
-        },
-        {
-          "event_type": "query_received",
-          "query": "phase1-valid-4",
-          "recorded_at": "2026-04-21T15:00:50.024100Z"
-        },
-        {
-          "event_type": "query_received",
-          "query": "phase1-valid-68",
-          "recorded_at": "2026-04-21T15:00:52.444866Z"
+          "query": "audit-658543",
+          "recorded_at": "2026-04-22T01:15:07.962613Z"
         }
       ],
       "action_lifecycle": {
@@ -157,8 +97,5726 @@
           "last_evening_run": null
         }
       },
-      "state_version": 15,
-      "updated_at": "2026-04-21T15:00:52.444852Z"
+      "state_version": 3,
+      "updated_at": "2026-04-22T01:15:07.962600Z"
+    },
+    "26f86414-3fab-4c54-a5cb-e9b0d1deb2a8": {
+      "household_id": "26f86414-3fab-4c54-a5cb-e9b0d1deb2a8",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-542054",
+          "recorded_at": "2026-04-22T01:15:07.112862Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-292485",
+          "recorded_at": "2026-04-22T01:15:07.961224Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-275998",
+          "recorded_at": "2026-04-22T01:15:08.568215Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-571396",
+          "recorded_at": "2026-04-22T01:15:08.868897Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 5,
+      "updated_at": "2026-04-22T01:15:08.868881Z"
+    },
+    "b020da03-fcd3-45fd-9b7a-297621b5fae1": {
+      "household_id": "b020da03-fcd3-45fd-9b7a-297621b5fae1",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-380497",
+          "recorded_at": "2026-04-22T01:15:07.397486Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-693640",
+          "recorded_at": "2026-04-22T01:15:08.880991Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 3,
+      "updated_at": "2026-04-22T01:15:08.880976Z"
+    },
+    "4fc426c9-b31a-4f2e-8339-802851d2513e": {
+      "household_id": "4fc426c9-b31a-4f2e-8339-802851d2513e",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-330083",
+          "recorded_at": "2026-04-22T01:15:17.910610Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:15:17.910592Z"
+    },
+    "96f58be2-4bfe-4c64-b29b-9dda66b26c7c": {
+      "household_id": "96f58be2-4bfe-4c64-b29b-9dda66b26c7c",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-463428",
+          "recorded_at": "2026-04-22T01:22:46.674215Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-484368",
+          "recorded_at": "2026-04-22T01:23:05.349844Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 3,
+      "updated_at": "2026-04-22T01:23:05.349827Z"
+    },
+    "77f28bd5-1701-4527-9ffd-ffda373b1d12": {
+      "household_id": "77f28bd5-1701-4527-9ffd-ffda373b1d12",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-676076",
+          "recorded_at": "2026-04-22T01:22:46.794513Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-861352",
+          "recorded_at": "2026-04-22T01:22:53.570353Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-745423",
+          "recorded_at": "2026-04-22T01:23:01.362310Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 4,
+      "updated_at": "2026-04-22T01:23:01.362295Z"
+    },
+    "ab5856e3-c075-49ed-8823-228205c166e0": {
+      "household_id": "ab5856e3-c075-49ed-8823-228205c166e0",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-308598",
+          "recorded_at": "2026-04-22T01:22:47.101668Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:22:47.101645Z"
+    },
+    "38206e27-1ce2-40a5-826d-162bb06ada0e": {
+      "household_id": "38206e27-1ce2-40a5-826d-162bb06ada0e",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-809976",
+          "recorded_at": "2026-04-22T01:22:47.209359Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-996459",
+          "recorded_at": "2026-04-22T01:23:00.947767Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 3,
+      "updated_at": "2026-04-22T01:23:00.947740Z"
+    },
+    "89e1af65-caa6-432d-810a-d6c24384351f": {
+      "household_id": "89e1af65-caa6-432d-810a-d6c24384351f",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-328351",
+          "recorded_at": "2026-04-22T01:22:47.301012Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:22:47.300992Z"
+    },
+    "fcea087a-f14a-4918-8c60-719b701dfcdd": {
+      "household_id": "fcea087a-f14a-4918-8c60-719b701dfcdd",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-122735",
+          "recorded_at": "2026-04-22T01:22:51.825948Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:22:51.825861Z"
+    },
+    "5edde9b0-978f-4d4d-a10f-b9ffa790c7e0": {
+      "household_id": "5edde9b0-978f-4d4d-a10f-b9ffa790c7e0",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-479087",
+          "recorded_at": "2026-04-22T01:22:53.457077Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:22:53.457069Z"
+    },
+    "28bb4f0e-721b-403b-bddd-e7d6d48eba31": {
+      "household_id": "28bb4f0e-721b-403b-bddd-e7d6d48eba31",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-480544",
+          "recorded_at": "2026-04-22T01:22:53.679823Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:22:53.679807Z"
+    },
+    "8ab57fa3-de45-4f07-8e7c-cb1816e3f145": {
+      "household_id": "8ab57fa3-de45-4f07-8e7c-cb1816e3f145",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-381720",
+          "recorded_at": "2026-04-22T01:22:53.799443Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:22:53.799418Z"
+    },
+    "d8cd7338-15fd-4214-a5ac-a33781e5e8b9": {
+      "household_id": "d8cd7338-15fd-4214-a5ac-a33781e5e8b9",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-481514",
+          "recorded_at": "2026-04-22T01:22:53.923613Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:22:53.923592Z"
+    },
+    "2aed2677-5ccb-4232-9f37-43a6257124dc": {
+      "household_id": "2aed2677-5ccb-4232-9f37-43a6257124dc",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-667144",
+          "recorded_at": "2026-04-22T01:22:55.162855Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:22:55.162838Z"
+    },
+    "f540b3d7-97eb-4d64-8fb4-748f9b0cdfc0": {
+      "household_id": "f540b3d7-97eb-4d64-8fb4-748f9b0cdfc0",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-339706",
+          "recorded_at": "2026-04-22T01:22:55.251094Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:22:55.251072Z"
+    },
+    "429a68b1-f567-4089-a58a-5a1e6dfc111b": {
+      "household_id": "429a68b1-f567-4089-a58a-5a1e6dfc111b",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-775274",
+          "recorded_at": "2026-04-22T01:22:55.891868Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:22:55.891857Z"
+    },
+    "fa1b3fd6-c94f-4ad8-b0ad-821a41192beb": {
+      "household_id": "fa1b3fd6-c94f-4ad8-b0ad-821a41192beb",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-776739",
+          "recorded_at": "2026-04-22T01:22:57.927010Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-532060",
+          "recorded_at": "2026-04-22T01:23:06.722638Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 3,
+      "updated_at": "2026-04-22T01:23:06.722619Z"
+    },
+    "4393f7db-28a6-4821-9206-650bae3c104f": {
+      "household_id": "4393f7db-28a6-4821-9206-650bae3c104f",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-391298",
+          "recorded_at": "2026-04-22T01:22:58.265229Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:22:58.265220Z"
+    },
+    "e13feebd-f6c5-480b-9792-41f5c70d22fd": {
+      "household_id": "e13feebd-f6c5-480b-9792-41f5c70d22fd",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-601224",
+          "recorded_at": "2026-04-22T01:23:00.081335Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-398718",
+          "recorded_at": "2026-04-22T01:23:00.261677Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-709616",
+          "recorded_at": "2026-04-22T01:23:00.824103Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 4,
+      "updated_at": "2026-04-22T01:23:00.824091Z"
+    },
+    "04a86bc3-f69c-4cbe-94b9-17262c1f3b01": {
+      "household_id": "04a86bc3-f69c-4cbe-94b9-17262c1f3b01",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-468421",
+          "recorded_at": "2026-04-22T01:23:01.149316Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:01.149298Z"
+    },
+    "cdafcdc6-1601-413d-bbb8-508f0aa6e9a8": {
+      "household_id": "cdafcdc6-1601-413d-bbb8-508f0aa6e9a8",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-355526",
+          "recorded_at": "2026-04-22T01:23:01.493037Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:01.493011Z"
+    },
+    "830c2067-f776-4efd-ab2d-da4a7f7d85d5": {
+      "household_id": "830c2067-f776-4efd-ab2d-da4a7f7d85d5",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-146005",
+          "recorded_at": "2026-04-22T01:23:04.249821Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:04.249801Z"
+    },
+    "4a6d4ed3-fbce-4dda-a257-7ae8f59be49b": {
+      "household_id": "4a6d4ed3-fbce-4dda-a257-7ae8f59be49b",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-424965",
+          "recorded_at": "2026-04-22T01:23:04.381621Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:04.381597Z"
+    },
+    "37904a45-17c8-4e6e-81d8-fb6bdffa1d7e": {
+      "household_id": "37904a45-17c8-4e6e-81d8-fb6bdffa1d7e",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-834583",
+          "recorded_at": "2026-04-22T01:23:04.503632Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:04.503610Z"
+    },
+    "720d6ec6-cddd-4601-a484-729a823bee07": {
+      "household_id": "720d6ec6-cddd-4601-a484-729a823bee07",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-623593",
+          "recorded_at": "2026-04-22T01:23:04.925679Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:04.925660Z"
+    },
+    "cad0c3f2-1342-4d24-be5d-cd6c52d431e3": {
+      "household_id": "cad0c3f2-1342-4d24-be5d-cd6c52d431e3",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-839157",
+          "recorded_at": "2026-04-22T01:23:04.830092Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:04.830069Z"
+    },
+    "bf2bd89d-3881-4ca7-bffe-1127f707f60a": {
+      "household_id": "bf2bd89d-3881-4ca7-bffe-1127f707f60a",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-956455",
+          "recorded_at": "2026-04-22T01:23:05.065753Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:05.065731Z"
+    },
+    "5d1bead0-ba74-483c-baa4-3a87e4baaad2": {
+      "household_id": "5d1bead0-ba74-483c-baa4-3a87e4baaad2",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-236155",
+          "recorded_at": "2026-04-22T01:23:05.152250Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:05.152227Z"
+    },
+    "4c5531eb-1861-464a-8377-45eff0afd1c3": {
+      "household_id": "4c5531eb-1861-464a-8377-45eff0afd1c3",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-68209",
+          "recorded_at": "2026-04-22T01:23:05.463058Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:05.463041Z"
+    },
+    "de3e2e0b-a58d-4847-a9c3-2486f25cf2c7": {
+      "household_id": "de3e2e0b-a58d-4847-a9c3-2486f25cf2c7",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-271713",
+          "recorded_at": "2026-04-22T01:23:05.603222Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:05.603199Z"
+    },
+    "686d8590-3bbf-41d0-a8cc-b51294ac358d": {
+      "household_id": "686d8590-3bbf-41d0-a8cc-b51294ac358d",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-463428",
+          "recorded_at": "2026-04-22T01:23:33.937296Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-690635",
+          "recorded_at": "2026-04-22T01:23:42.336022Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 3,
+      "updated_at": "2026-04-22T01:23:42.336005Z"
+    },
+    "61a2bc6f-4857-427c-945b-4efd6f27b11e": {
+      "household_id": "61a2bc6f-4857-427c-945b-4efd6f27b11e",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-676076",
+          "recorded_at": "2026-04-22T01:23:34.090239Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-861352",
+          "recorded_at": "2026-04-22T01:23:40.979786Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-745423",
+          "recorded_at": "2026-04-22T01:23:42.670498Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 4,
+      "updated_at": "2026-04-22T01:23:42.670477Z"
+    },
+    "188088bd-edc0-4823-be9c-e3696383a6e9": {
+      "household_id": "188088bd-edc0-4823-be9c-e3696383a6e9",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-308598",
+          "recorded_at": "2026-04-22T01:23:34.429439Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:34.429389Z"
+    },
+    "65105ece-5b9a-4dcc-b7f1-a425a2db28b2": {
+      "household_id": "65105ece-5b9a-4dcc-b7f1-a425a2db28b2",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-809976",
+          "recorded_at": "2026-04-22T01:23:34.569043Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-996459",
+          "recorded_at": "2026-04-22T01:23:48.209488Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-963535",
+          "recorded_at": "2026-04-22T01:23:50.557163Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 4,
+      "updated_at": "2026-04-22T01:23:50.557111Z"
+    },
+    "96e0e7da-fdf5-4b9c-a2e3-d34ff022355d": {
+      "household_id": "96e0e7da-fdf5-4b9c-a2e3-d34ff022355d",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-328351",
+          "recorded_at": "2026-04-22T01:23:34.677192Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:34.677172Z"
+    },
+    "0ed96783-0854-49e5-a3c8-45e7d9eb8794": {
+      "household_id": "0ed96783-0854-49e5-a3c8-45e7d9eb8794",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-122735",
+          "recorded_at": "2026-04-22T01:23:39.280930Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-587094",
+          "recorded_at": "2026-04-22T01:23:43.391731Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 3,
+      "updated_at": "2026-04-22T01:23:43.391708Z"
+    },
+    "3d263027-eb0f-4170-9525-6c879a065cd7": {
+      "household_id": "3d263027-eb0f-4170-9525-6c879a065cd7",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-479087",
+          "recorded_at": "2026-04-22T01:23:40.871679Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:40.871662Z"
+    },
+    "3348763f-78cf-4503-8ef7-b09031f9192a": {
+      "household_id": "3348763f-78cf-4503-8ef7-b09031f9192a",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-480544",
+          "recorded_at": "2026-04-22T01:23:41.121587Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-753818",
+          "recorded_at": "2026-04-22T01:23:43.248453Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 3,
+      "updated_at": "2026-04-22T01:23:43.248437Z"
+    },
+    "0dc3dc2b-8b5f-4b50-afb1-ca7c3b017ec6": {
+      "household_id": "0dc3dc2b-8b5f-4b50-afb1-ca7c3b017ec6",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-381720",
+          "recorded_at": "2026-04-22T01:23:41.237294Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:41.237266Z"
+    },
+    "3d60c389-4db3-4518-9e5d-ef35313a26a0": {
+      "household_id": "3d60c389-4db3-4518-9e5d-ef35313a26a0",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-481514",
+          "recorded_at": "2026-04-22T01:23:41.364375Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:41.364352Z"
+    },
+    "9cebe9cb-a168-485e-8465-19444a9cb449": {
+      "household_id": "9cebe9cb-a168-485e-8465-19444a9cb449",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-216552",
+          "recorded_at": "2026-04-22T01:23:42.068808Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-370234",
+          "recorded_at": "2026-04-22T01:23:51.185448Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-264730",
+          "recorded_at": "2026-04-22T01:23:54.464897Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 4,
+      "updated_at": "2026-04-22T01:23:54.464878Z"
+    },
+    "a28f911b-8255-4511-8e33-1a7398c8d966": {
+      "household_id": "a28f911b-8255-4511-8e33-1a7398c8d966",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-799719",
+          "recorded_at": "2026-04-22T01:23:42.432568Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:42.432548Z"
+    },
+    "e3168078-de1e-49e3-92f4-5aff0010474d": {
+      "household_id": "e3168078-de1e-49e3-92f4-5aff0010474d",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-667144",
+          "recorded_at": "2026-04-22T01:23:42.500345Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:42.500329Z"
+    },
+    "be04f09d-4d54-4f94-b3f9-984b21cbeec9": {
+      "household_id": "be04f09d-4d54-4f94-b3f9-984b21cbeec9",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-746080",
+          "recorded_at": "2026-04-22T01:23:42.554309Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:42.554290Z"
+    },
+    "03feae1a-b431-43f0-94b7-7ef374db43df": {
+      "household_id": "03feae1a-b431-43f0-94b7-7ef374db43df",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-339706",
+          "recorded_at": "2026-04-22T01:23:42.626766Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:42.626741Z"
+    },
+    "2d96e898-fb8b-4c4c-aa14-ec0b817f75de": {
+      "household_id": "2d96e898-fb8b-4c4c-aa14-ec0b817f75de",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-293057",
+          "recorded_at": "2026-04-22T01:23:43.005281Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-351608",
+          "recorded_at": "2026-04-22T01:23:50.195164Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 3,
+      "updated_at": "2026-04-22T01:23:50.195148Z"
+    },
+    "a5799157-d3e5-4b61-b7e0-33a8010f35e9": {
+      "household_id": "a5799157-d3e5-4b61-b7e0-33a8010f35e9",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-65742",
+          "recorded_at": "2026-04-22T01:23:43.106548Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:43.106535Z"
+    },
+    "319600d3-e153-4b65-a6b7-3f962cda93ac": {
+      "household_id": "319600d3-e153-4b65-a6b7-3f962cda93ac",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-71228",
+          "recorded_at": "2026-04-22T01:23:45.351337Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-265625",
+          "recorded_at": "2026-04-22T01:23:51.555671Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-808115",
+          "recorded_at": "2026-04-22T01:23:51.601014Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-96103",
+          "recorded_at": "2026-04-22T01:23:51.963547Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-111442",
+          "recorded_at": "2026-04-22T01:23:52.882700Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 6,
+      "updated_at": "2026-04-22T01:23:52.882677Z"
+    },
+    "0acb1231-7606-496f-a7d7-ede9e945b87f": {
+      "household_id": "0acb1231-7606-496f-a7d7-ede9e945b87f",
+      "reference_time": "2026-04-22T01:23:45.480349Z",
+      "calendar_events": [],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 1,
+      "updated_at": "2026-04-22T01:23:45.480375Z"
+    },
+    "6f9ac299-8b6c-402a-9b2d-881cdc26a6a1": {
+      "household_id": "6f9ac299-8b6c-402a-9b2d-881cdc26a6a1",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-948139",
+          "recorded_at": "2026-04-22T01:23:46Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-726852",
+          "recorded_at": "2026-04-22T01:23:51.753687Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 3,
+      "updated_at": "2026-04-22T01:23:51.753671Z"
+    },
+    "987314dd-d765-4dd2-bf2a-6b59355c1bcd": {
+      "household_id": "987314dd-d765-4dd2-bf2a-6b59355c1bcd",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-601224",
+          "recorded_at": "2026-04-22T01:23:47.520271Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-709616",
+          "recorded_at": "2026-04-22T01:23:48.088607Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-656082",
+          "recorded_at": "2026-04-22T01:23:50.685363Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 4,
+      "updated_at": "2026-04-22T01:23:50.685347Z"
+    },
+    "5a427dde-3b70-4eea-9369-bba1e2863559": {
+      "household_id": "5a427dde-3b70-4eea-9369-bba1e2863559",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-166917",
+          "recorded_at": "2026-04-22T01:23:49.340710Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:49.340689Z"
+    },
+    "02a0a67b-3b45-4730-94b0-6a28b867450d": {
+      "household_id": "02a0a67b-3b45-4730-94b0-6a28b867450d",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-559718",
+          "recorded_at": "2026-04-22T01:23:50.025457Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:50.025443Z"
+    },
+    "815eb911-7b38-4ed3-b491-c2e010387290": {
+      "household_id": "815eb911-7b38-4ed3-b491-c2e010387290",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-735221",
+          "recorded_at": "2026-04-22T01:23:51.348780Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-532060",
+          "recorded_at": "2026-04-22T01:23:54.369792Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 3,
+      "updated_at": "2026-04-22T01:23:54.369773Z"
+    },
+    "1098cfbe-f86d-406a-bd20-f7fc4ccef801": {
+      "household_id": "1098cfbe-f86d-406a-bd20-f7fc4ccef801",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-614260",
+          "recorded_at": "2026-04-22T01:23:52.084599Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "audit-68556",
+          "recorded_at": "2026-04-22T01:23:52.678569Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 3,
+      "updated_at": "2026-04-22T01:23:52.678553Z"
+    },
+    "f44e1500-b509-4ef8-92f0-925ea1faa0af": {
+      "household_id": "f44e1500-b509-4ef8-92f0-925ea1faa0af",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-110724",
+          "recorded_at": "2026-04-22T01:23:52.406188Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:52.406161Z"
+    },
+    "6c601baf-ed1f-4a5f-affc-720d0d0364b6": {
+      "household_id": "6c601baf-ed1f-4a5f-affc-720d0d0364b6",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-687391",
+          "recorded_at": "2026-04-22T01:23:53.590826Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:53.590803Z"
+    },
+    "69d4709b-79fa-45dd-a82e-1595574b80da": {
+      "household_id": "69d4709b-79fa-45dd-a82e-1595574b80da",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-186890",
+          "recorded_at": "2026-04-22T01:23:54.144894Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:54.144874Z"
+    },
+    "f082ee58-4d8c-4783-81bf-4e2a2f596fd4": {
+      "household_id": "f082ee58-4d8c-4783-81bf-4e2a2f596fd4",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "audit-354403",
+          "recorded_at": "2026-04-22T01:23:54.763744Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 2,
+      "updated_at": "2026-04-22T01:23:54.763727Z"
     }
   }
 }

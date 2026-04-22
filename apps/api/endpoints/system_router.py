@@ -12,6 +12,13 @@ from datetime import datetime, timezone
 from fastapi import APIRouter
 
 from apps.api.core.boot_diagnostics import run_boot_probe
+from apps.api.core.asgi_admission import get_runtime_metrics_snapshot
+from apps.api.core.runtime_classifier import RuntimeSaturationClassifier
+from apps.api.runtime.sse_pressure_guard import sse_guard
+from apps.api.runtime.execution_fairness import fairness_gate
+from apps.api.runtime.backpressure_controller import backpressure
+from apps.api.runtime.event_loop_guard import event_loop_guard
+from apps.api.realtime.broadcaster import broadcaster
 
 
 router = APIRouter(prefix="/v1/system", tags=["system"])
@@ -57,3 +64,17 @@ def get_health() -> dict:
         return {"status": "healthy"}
     else:
         return {"status": "unhealthy", "issues": probe}
+
+
+@router.get("/runtime-metrics")
+def get_runtime_metrics() -> dict:
+    """Runtime edge-admission counters for transport vs app-layer diagnosis."""
+    metrics = get_runtime_metrics_snapshot()
+    enriched = dict(metrics)
+    enriched["runtime_classification"] = RuntimeSaturationClassifier.classify(enriched)
+    enriched.update(sse_guard.snapshot())
+    enriched.update(fairness_gate.snapshot())
+    enriched.update(backpressure.snapshot())
+    enriched.update(event_loop_guard.snapshot())
+    enriched.update(broadcaster.diagnostics_snapshot())
+    return enriched

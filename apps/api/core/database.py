@@ -18,8 +18,8 @@ DB_PATH = DATA_DIR / "family_orchestration.db"
 DATABASE_URL = f"sqlite:///{DB_PATH}"
 
 DB_POOL_SIZE = max(1, int(os.getenv("DB_POOL_SIZE", "20")))
-DB_POOL_TIMEOUT_SECONDS = max(0.01, float(os.getenv("DB_POOL_TIMEOUT_SECONDS", "0.05")))
-SQLITE_BUSY_TIMEOUT_SECONDS = max(0.01, float(os.getenv("DB_SQLITE_BUSY_TIMEOUT_SECONDS", "0.1")))
+DB_POOL_TIMEOUT_SECONDS = 0.05
+SQLITE_BUSY_TIMEOUT_SECONDS = 0.05
 
 _pool_lock = Lock()
 _pool_in_use = 0

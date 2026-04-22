@@ -9,6 +9,7 @@ from apps.api.integration_core.models.household_state import HouseholdState
 from apps.assistant_core.planning_engine import _request_id
 from assistant.governance.intent_router import IntentRouter, RoutingDecision, RoutingCase
 from assistant.state.life_state_model import LifeStateModel
+from apps.api.observability.execution_trace import trace_function
 from household_os.core.contracts import HouseholdOSRunResponse
 from household_os.core.decision_engine import HouseholdOSDecisionEngine
 from household_os.core.household_state_graph import HouseholdStateGraphStore
@@ -56,6 +57,7 @@ class HouseholdOSOrchestrator:
         self.action_pipeline = action_pipeline or ActionPipeline()
         self.life_state_model = LifeStateModel()
 
+    @trace_function(entrypoint="orchestrator.tick", actor_type="system_worker", source="orchestrator")
     def tick(
         self,
         *,
@@ -192,6 +194,7 @@ class HouseholdOSOrchestrator:
             secondary_suggestions=secondary_suggestions,
         )
 
+    @trace_function(entrypoint="orchestrator.approve_and_execute", actor_type="system_worker", source="orchestrator")
     def approve_and_execute(
         self,
         *,

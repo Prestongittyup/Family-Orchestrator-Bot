@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+import pytest
+
 from apps.assistant_core.planning_engine import _fallback_household_state
 from household_os.core.decision_engine import HouseholdOSDecisionEngine
 from household_os.core.household_state_graph import HouseholdStateGraphStore
+from household_os.core.lifecycle_state import LifecycleState
 from household_os.runtime.action_pipeline import ActionPipeline
 from household_os.runtime.daily_cycle import HouseholdDailyCycle
 from household_os.runtime.orchestrator import HouseholdOSOrchestrator
+from household_os.runtime.state_firewall import StateMutationViolation
 from household_os.runtime.trigger_detector import RuntimeTrigger, TriggerDetector
 
 
@@ -68,8 +72,11 @@ def test_action_lifecycle_flow(tmp_path):
         response=response,
         now="2026-04-20T06:30:00Z",
     )
-    assert action.current_state == "pending_approval"
-    assert [transition.to_state for transition in action.transitions] == ["proposed", "pending_approval"]
+    assert action.current_state == LifecycleState.PENDING_APPROVAL
+    assert [transition.to_state for transition in action.transitions] == [
+        LifecycleState.PROPOSED,
+        LifecycleState.PENDING_APPROVAL,
+    ]
 
     approved = pipeline.approve_actions(
         graph=graph,
@@ -78,11 +85,11 @@ def test_action_lifecycle_flow(tmp_path):
         now="2026-04-20T06:31:00Z",
     )
     assert len(approved) == 1
-    assert approved[0].current_state == "approved"
+    assert approved[0].current_state == LifecycleState.APPROVED
 
     executed = pipeline.execute_approved_actions(graph=graph, now="2026-04-20T06:32:00Z")
     assert len(executed) == 1
-    assert executed[0].current_state == "executed"
+    assert executed[0].current_state == LifecycleState.COMMITTED
     assert executed[0].execution_result["handler"] == "calendar_update"
     assert any(event.get("event_id") == f"runtime-{action.action_id}" for event in graph["calendar_events"])
 
@@ -104,11 +111,50 @@ def test_orchestrator_tick(tmp_path):
     assert result.processed_trigger.trigger_type == "USER_INPUT"
     assert result.response is not None
     assert result.response.recommended_action.action_id == result.action_record.action_id
-    assert result.action_record.current_state == "pending_approval"
+    assert result.action_record.current_state == LifecycleState.PENDING_APPROVAL
 
     persisted = store.load_graph("runtime-tick-household")
     assert result.response.request_id in persisted["responses"]
     assert result.action_record.action_id in persisted["action_lifecycle"]["actions"]
+
+
+def test_direct_state_mutation_is_blocked(tmp_path):
+    store = _runtime_store(tmp_path)
+    state = _fallback_household_state("runtime-mutation-guard-household")
+    graph = store.refresh_graph(
+        household_id="runtime-mutation-guard-household",
+        state=state,
+        query="bootstrap",
+        fitness_goal="consistency",
+    )
+
+    response = HouseholdOSDecisionEngine().run(
+        household_id="runtime-mutation-guard-household",
+        query="I need to start workout consistency",
+        graph=graph,
+        request_id="runtime-mutation-guard-001",
+    )
+    trigger = RuntimeTrigger(
+        trigger_id="trg-runtime-mutation-guard",
+        trigger_type="USER_INPUT",
+        household_id="runtime-mutation-guard-household",
+        detected_at="2026-04-20T06:30:00Z",
+        detail="User input",
+        metadata={"query": "I need to start working out"},
+    )
+
+    action = ActionPipeline().register_proposed_action(
+        graph=graph,
+        trigger=trigger,
+        response=response,
+        now="2026-04-20T06:30:00Z",
+    )
+
+    with pytest.raises(StateMutationViolation):
+        setattr(action, "current_state", "approved")
+
+    with pytest.raises(AttributeError):
+        action.state = "approved"
 
 
 def test_daily_cycle(tmp_path):
@@ -149,7 +195,7 @@ def test_daily_cycle(tmp_path):
     assert approval.response is not None
     assert approval.response.recommended_action.approval_status == "approved"
     assert len(approval.executed_actions) == 1
-    assert approval.executed_actions[0].current_state == "executed"
+    assert approval.executed_actions[0].current_state == LifecycleState.COMMITTED
     assert approval.executed_actions[0].execution_result["handler"] == "calendar_update"
     assert len(evening.queued_follow_ups) == 1
     assert morning.tick.processed_trigger is not None

@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from datetime import datetime
+from threading import Lock
+from typing import Any, Callable
 from sqlalchemy.exc import IntegrityError
 
 from apps.api.core.database import SessionLocal
@@ -8,6 +11,58 @@ from apps.api.models.idempotency_key import IdempotencyKey
 from apps.api.observability.metrics import metrics
 from apps.api.observability.logging import log_event, log_error
 from apps.api.observability.alerts import check_error_spike
+
+
+@dataclass(frozen=True)
+class ReservationResult:
+    reserved: bool
+    status_code: int
+
+
+class IdempotencyKeyService:
+    """Compatibility service wrapper expected by p1 verification tests.
+
+    The runtime middleware uses module-level functions in this file.
+    This class preserves older service-style call sites used in tests.
+    """
+
+    _completed_cache: dict[str, dict[str, Any]] = {}
+    _cache_lock = Lock()
+    _reserve_lock = Lock()
+
+    def __init__(self, session_factory: Callable[[], Any] = SessionLocal):
+        self._session_factory = session_factory
+
+    @staticmethod
+    def _scoped_key(key: str, scope: str) -> str:
+        return f"{scope}:{key}"
+
+    def reserve(self, key: str, scope: str, event_type: str = "manual") -> ReservationResult:
+        scoped_key = self._scoped_key(key, scope)
+        with self._reserve_lock:
+            try:
+                is_new = reserve(scoped_key, scope, event_type)
+            except IntegrityError:
+                # Backward-compat behavior for duplicate key races in threaded tests.
+                is_new = False
+        return ReservationResult(reserved=is_new, status_code=200 if is_new else 409)
+
+    def release(self, key: str, scope: str) -> None:
+        scoped_key = self._scoped_key(key, scope)
+        release(scoped_key)
+        with self._cache_lock:
+            self._completed_cache.pop(scoped_key, None)
+
+    def mark_completed(self, key: str, scope: str, response_data: dict[str, Any]) -> None:
+        scoped_key = self._scoped_key(key, scope)
+        with self._cache_lock:
+            self._completed_cache[scoped_key] = dict(response_data)
+
+    def get_cached_result(self, key: str, scope: str) -> dict[str, Any] | None:
+        scoped_key = self._scoped_key(key, scope)
+        with self._cache_lock:
+            payload = self._completed_cache.get(scoped_key)
+            return dict(payload) if payload is not None else None
 
 
 def exists(key: str) -> bool:

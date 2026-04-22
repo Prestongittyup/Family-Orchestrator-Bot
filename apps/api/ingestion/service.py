@@ -21,6 +21,7 @@ from apps.api.ingestion.models import (
     validate_webhook_payload,
 )
 from apps.api.ingestion.normalization import convert_webhook_to_os1_event, convert_email_to_os1_event
+from apps.api.observability.execution_trace import trace_function
 from apps.api.observability.trace_context import ensure_event_payload_trace
 from apps.api.services.router_service import route_event
 from apps.api.schemas.event import SystemEvent
@@ -35,6 +36,7 @@ def _debug_payload(enabled: bool, **data: Any) -> dict[str, Any] | None:
     return data
 
 
+@trace_function(entrypoint="ingestion.webhook", actor_type="system_worker", source="ingestion")
 def ingest_webhook(payload: dict[str, Any]) -> dict[str, Any]:
     """
     Ingest external webhook payload.
@@ -173,6 +175,7 @@ def ingest_webhook(payload: dict[str, Any]) -> dict[str, Any]:
         )
 
 
+@trace_function(entrypoint="ingestion.email", actor_type="system_worker", source="ingestion")
 def ingest_email(
     email_id: str,
     sender: str,
