@@ -20,12 +20,25 @@ from sqlalchemy import text
 
 from apps.api.core.event_bus import get_event_bus
 from apps.api.core.database import SessionLocal
-from apps.api.realtime.broadcaster import broadcaster
 from apps.api.services.shared_dependencies import get_til
 from apps.api.schemas.event import SystemEvent
-from apps.api.services.event_log_service import log_system_event
+from apps.api.services.canonical_event_adapter import CanonicalEventAdapter
+from apps.api.services.canonical_event_router import canonical_event_router
 
 logger = logging.getLogger(__name__)
+
+
+class _CalendarServiceRouter:
+    @staticmethod
+    def emit(event: SystemEvent) -> None:
+        canonical_event_router.route(
+            CanonicalEventAdapter.to_envelope(event),
+            persist=True,
+            dispatch=True,
+        )
+
+
+router = _CalendarServiceRouter()
 
 
 def _utc_now_iso() -> str:
@@ -79,6 +92,54 @@ def _persist_calendar_event(
             },
         )
         session.commit()
+
+        router.emit(
+            SystemEvent.CalendarEventCreated(
+                household_id=household_id,
+                event_id=event_id,
+                changes={
+                    "title": title,
+                    "start_time": start_time,
+                    "end_time": end_time,
+                    "description": metadata.get("description"),
+                    "metadata": metadata,
+                },
+            )
+        )
+    except ValueError as e:
+        router.emit(
+            SystemEvent.CalendarEventCreationFailed(
+                household_id=household_id,
+                reason="validation_error",
+                error_message=str(e),
+                input={
+                    "event_id": event_id,
+                    "title": title,
+                    "start_time": start_time,
+                    "end_time": end_time,
+                    "priority": priority,
+                    "metadata": metadata,
+                },
+            )
+        )
+        raise
+    except Exception as e:
+        router.emit(
+            SystemEvent.CalendarEventCreationFailed(
+                household_id=household_id,
+                reason="internal_error",
+                error_message=str(e),
+                input={
+                    "event_id": event_id,
+                    "title": title,
+                    "start_time": start_time,
+                    "end_time": end_time,
+                    "priority": priority,
+                    "metadata": metadata,
+                },
+            )
+        )
+        raise
     finally:
         session.close()
 
@@ -280,12 +341,10 @@ def schedule_event(
         payload=event,
     )
 
-    log_system_event(calendar_event)
-    get_event_bus().publish(calendar_event)
-    broadcaster.publish_sync(
-        household_id=household_id,
-        event_type="calendar_event_created",
-        payload=event,
+    canonical_event_router.route(
+        CanonicalEventAdapter.to_envelope(calendar_event),
+        persist=True,
+        dispatch=True,
     )
 
     logger.debug(f"Calendar event created: {event_id} for user {user_id}")
@@ -410,12 +469,10 @@ def create_recurring_event(
         payload=recurring_event,
     )
 
-    log_system_event(recurring_calendar_event)
-    get_event_bus().publish(recurring_calendar_event)
-    broadcaster.publish_sync(
-        household_id=household_id,
-        event_type="calendar_event_created",
-        payload=recurring_event,
+    canonical_event_router.route(
+        CanonicalEventAdapter.to_envelope(recurring_calendar_event),
+        persist=True,
+        dispatch=True,
     )
 
     logger.debug(f"Recurring calendar event created: {event_id}")
@@ -442,14 +499,34 @@ def update_event(
         Updated event dict, or raises ValueError if not found.
     """
     session = SessionLocal()
+    input_payload = {
+        "household_id": household_id,
+        "event_id": event_id,
+        "title": title,
+        "start_time": start_time,
+        "end_time": end_time,
+        "description": description,
+    }
     try:
         # Verify event belongs to this household
         row = session.execute(
-            text("SELECT id FROM calendar_events WHERE id = :id AND household_id = :hid"),
+            text(
+                "SELECT id, title, start_time, end_time, metadata "
+                "FROM calendar_events WHERE id = :id AND household_id = :hid"
+            ),
             {"id": event_id, "hid": household_id},
-        ).fetchone()
+        ).mappings().fetchone()
         if not row:
             raise ValueError(f"Event {event_id} not found in household {household_id}")
+
+        try:
+            old_metadata = json.loads(row.get("metadata") or "{}")
+        except Exception:
+            old_metadata = {}
+
+        old_start_time = str(row["start_time"])
+        old_end_time = str(row["end_time"])
+        old_title = str(row["title"])
 
         updates: dict[str, object] = {}
         if title is not None:
@@ -481,24 +558,53 @@ def update_event(
             updates,
         )
         session.commit()
+
+        updated = get_event_by_id(household_id, event_id)
+        router.emit(
+            SystemEvent.CalendarEventUpdated(
+                household_id=household_id,
+                event_id=event_id,
+                changes={
+                    "time_changes": {
+                        "before": {"start_time": old_start_time, "end_time": old_end_time},
+                        "after": {
+                            "start_time": updated.get("start_time"),
+                            "end_time": updated.get("end_time"),
+                        },
+                    },
+                    "title": updated.get("title", old_title),
+                    "description": (updated.get("metadata") or {}).get(
+                        "description",
+                        old_metadata.get("description"),
+                    ),
+                    "metadata": updated.get("metadata"),
+                },
+            )
+        )
+    except ValueError as e:
+        router.emit(
+            SystemEvent.CalendarEventUpdateFailed(
+                household_id=household_id,
+                reason="validation_error",
+                error_message=str(e),
+                input=input_payload,
+            )
+        )
+        raise
+    except Exception as e:
+        router.emit(
+            SystemEvent.CalendarEventUpdateFailed(
+                household_id=household_id,
+                reason="internal_error",
+                error_message=str(e),
+                input=input_payload,
+            )
+        )
+        raise
     finally:
         session.close()
 
-    updated = get_event_by_id(household_id, event_id)
-    ev = SystemEvent(
-        household_id=household_id,
-        type="calendar_event_updated",
-        source="calendar_service",
-        payload={"event_id": event_id, **updated},
-    )
-    log_system_event(ev)
-    get_event_bus().publish(ev)
-    broadcaster.publish_sync(
-        household_id=household_id,
-        event_type="calendar_event_updated",
-        payload={"event_id": event_id, **updated},
-    )
-    return updated
+    return get_event_by_id(household_id, event_id)
 
 
 def delete_event(household_id: str, event_id: str) -> dict:
@@ -510,28 +616,75 @@ def delete_event(household_id: str, event_id: str) -> dict:
     snapshot = get_event_by_id(household_id, event_id)  # raises if not found
 
     session = SessionLocal()
+    input_payload = {"household_id": household_id, "event_id": event_id}
     try:
         session.execute(
             text("DELETE FROM calendar_events WHERE id = :id AND household_id = :hid"),
             {"id": event_id, "hid": household_id},
         )
         session.commit()
+
+        router.emit(
+            SystemEvent.CalendarEventDeleted(
+                household_id=household_id,
+                event_id=event_id,
+                changes={
+                    "time_changes": {
+                        "before": {
+                            "start_time": snapshot.get("start_time"),
+                            "end_time": snapshot.get("end_time"),
+                        },
+                        "after": {"start_time": None, "end_time": None},
+                    },
+                    "title": snapshot.get("title"),
+                    "description": (snapshot.get("metadata") or {}).get("description"),
+                    "metadata": snapshot.get("metadata"),
+                },
+            )
+        )
+
+        router.emit(
+            SystemEvent.CalendarEventUpdated(
+                household_id=household_id,
+                event_id=event_id,
+                changes={
+                    "time_changes": {
+                        "before": {
+                            "start_time": snapshot.get("start_time"),
+                            "end_time": snapshot.get("end_time"),
+                        },
+                        "after": {"start_time": None, "end_time": None},
+                    },
+                    "title": snapshot.get("title"),
+                    "description": (snapshot.get("metadata") or {}).get("description"),
+                    "metadata": snapshot.get("metadata"),
+                    "operation": "delete",
+                },
+            )
+        )
+    except ValueError as e:
+        router.emit(
+            SystemEvent.CalendarEventUpdateFailed(
+                household_id=household_id,
+                reason="validation_error",
+                error_message=str(e),
+                input=input_payload,
+            )
+        )
+        raise
+    except Exception as e:
+        router.emit(
+            SystemEvent.CalendarEventUpdateFailed(
+                household_id=household_id,
+                reason="internal_error",
+                error_message=str(e),
+                input=input_payload,
+            )
+        )
+        raise
     finally:
         session.close()
 
-    ev = SystemEvent(
-        household_id=household_id,
-        type="calendar_event_deleted",
-        source="calendar_service",
-        payload={"event_id": event_id},
-    )
-    log_system_event(ev)
-    get_event_bus().publish(ev)
-    broadcaster.publish_sync(
-        household_id=household_id,
-        event_type="calendar_event_deleted",
-        payload={"event_id": event_id},
-    )
     return {"deleted": True, "event_id": event_id}
 
 

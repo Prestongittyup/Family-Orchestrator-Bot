@@ -3,8 +3,9 @@ from __future__ import annotations
 import logging
 from threading import BoundedSemaphore
 from dataclasses import dataclass
+from datetime import UTC, datetime
 
-from apps.assistant_core.planning_engine import _fallback_household_state, _request_id
+from apps.assistant_core.planning_engine import _fallback_household_state
 from apps.api.product_surface.bootstrap_service import UIBootstrapService
 from apps.api.product_surface.contracts import (
     ActionCard,
@@ -13,12 +14,27 @@ from apps.api.product_surface.contracts import (
 )
 from apps.api.product_surface.patch_service import UIPatchService
 from apps.api.services.calendar_service import create_recurring_event, schedule_event
-from apps.api.realtime.broadcaster import broadcaster
-from household_os.core import HouseholdOSDecisionEngine, HouseholdStateGraphStore
+from apps.api.schemas.event import SystemEvent
+from apps.api.services.canonical_event_adapter import CanonicalEventAdapter
+from apps.api.services.canonical_event_router import canonical_event_router
+from household_os.runtime.orchestrator import HouseholdOSOrchestrator, OrchestratorRequest, RequestActionType
 from apps.api.llm.intent_resolver import LLMIntentResolver
 
 logger = logging.getLogger(__name__)
 _MESSAGE_WORKERS = BoundedSemaphore(value=4)
+
+
+class _ChatGatewayRouter:
+    @staticmethod
+    def emit(event: SystemEvent) -> None:
+        canonical_event_router.route(
+            CanonicalEventAdapter.to_envelope(event),
+            persist=False,
+            dispatch=False,
+        )
+
+
+router = _ChatGatewayRouter()
 
 
 @dataclass(frozen=True)
@@ -33,14 +49,12 @@ class ChatGatewayService:
     def __init__(
         self,
         *,
-        decision_engine: HouseholdOSDecisionEngine | None = None,
-        graph_store: HouseholdStateGraphStore | None = None,
+        orchestrator: HouseholdOSOrchestrator | None = None,
         bootstrap_service: UIBootstrapService | None = None,
         patch_service: UIPatchService | None = None,
         intent_resolver: LLMIntentResolver | None = None,
     ) -> None:
-        self._decision_engine = decision_engine or HouseholdOSDecisionEngine()
-        self._graph_store = graph_store or HouseholdStateGraphStore()
+        self._orchestrator = orchestrator or HouseholdOSOrchestrator()
         self._bootstrap_service = bootstrap_service or UIBootstrapService()
         self._patch_service = patch_service or UIPatchService()
         self._intent_resolver = intent_resolver or LLMIntentResolver()
@@ -55,19 +69,45 @@ class ChatGatewayService:
             raise ValueError("session_id is required")
 
         if not _MESSAGE_WORKERS.acquire(blocking=False):
+            router.emit(
+                SystemEvent.ChatMessageFailed(
+                    household_id=family_id,
+                    reason="throttled",
+                    error_message="message worker pool saturated",
+                    input={
+                        "family_id": family_id,
+                        "message": message,
+                        "session_id": session_id,
+                    },
+                )
+            )
             return self._safe_fallback_response(
                 family_id=family_id,
                 session_id=session_id,
                 reason="The assistant is handling high load right now. I kept state consistent; please retry.",
             )
 
+        input_payload = {
+            "family_id": family_id,
+            "message": message,
+            "session_id": session_id,
+        }
+
         try:
             state = _fallback_household_state(family_id)
-            graph = self._graph_store.refresh_graph(
-                household_id=family_id,
-                state=state,
-                query=message,
-                fitness_goal=None,
+            graph = self._orchestrator.handle_request(
+                OrchestratorRequest(
+                    action_type=RequestActionType.READ_SENSITIVE_STATE,
+                    household_id=family_id,
+                    actor={
+                        "actor_type": "api_user",
+                        "subject_id": family_id,
+                        "session_id": session_id,
+                        "verified": True,
+                    },
+                    resource_type="chat_context",
+                    context={"system_worker_verified": False},
+                )
             )
 
             # --- LLM intent resolution (with rule-based fallback) ---
@@ -91,13 +131,25 @@ class ChatGatewayService:
                 "resolution_source": resolved.resolution_source,
             }
 
-            request_id = _request_id(message, family_id, 10, None)
-            decision = self._decision_engine.run(
-                household_id=family_id,
-                query=message,
-                graph=graph,
-                request_id=request_id,
+            decision_result = self._orchestrator.handle_request(
+                OrchestratorRequest(
+                    action_type=RequestActionType.RUN,
+                    household_id=family_id,
+                    actor={
+                        "actor_type": "api_user",
+                        "subject_id": family_id,
+                        "session_id": session_id,
+                        "verified": True,
+                    },
+                    state=state,
+                    user_input=message,
+                    fitness_goal=None,
+                    context={"system_worker_verified": False},
+                )
             )
+            if decision_result.response is None:
+                raise ValueError("Orchestrator did not emit a response")
+            decision = decision_result.response
 
             cards = self._action_cards_from_decision(decision.model_dump())
             requires_confirmation = any(card.type in {"confirm", "approve"} for card in cards)
@@ -123,18 +175,39 @@ class ChatGatewayService:
                 requires_confirmation=requires_confirmation,
                 explanation_summary=current.explanation_digest[:5],
             )
-            broadcaster.publish_sync(
-                household_id=family_id,
-                event_type="chat_message_processed",
-                payload={
-                    "session_id": session_id,
-                    "assistant_message": assistant_message,
-                    "action_cards": [card.model_dump() for card in cards],
-                    "requires_confirmation": requires_confirmation,
-                },
+            router.emit(
+                SystemEvent.ChatMessageSent(
+                    household_id=family_id,
+                    message_id=f"{session_id}:process",
+                    user_id=family_id,
+                    content=assistant_message,
+                )
             )
             return response
+        except ValueError as exc:
+            router.emit(
+                SystemEvent.ChatMessageFailed(
+                    household_id=family_id,
+                    reason="validation_error",
+                    error_message=str(exc),
+                    input=input_payload,
+                )
+            )
+            logger.warning("chat_process_fallback: %s", exc)
+            return self._safe_fallback_response(
+                family_id=family_id,
+                session_id=session_id,
+                reason="I couldn't fully process that request. I kept the household state consistent and you can retry.",
+            )
         except Exception as exc:
+            router.emit(
+                SystemEvent.ChatMessageFailed(
+                    household_id=family_id,
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input=input_payload,
+                )
+            )
             logger.warning("chat_process_fallback: %s", exc)
             return self._safe_fallback_response(
                 family_id=family_id,
@@ -162,48 +235,76 @@ class ChatGatewayService:
         title = payload.get("title")
         recurrence = str(payload.get("recurrence") or "none")
 
-        if title:
-            if recurrence in {"daily", "weekly", "monthly"}:
-                create_recurring_event(
-                    household_id=family_id,
-                    user_id=user_id,
-                    title=str(title),
-                    frequency=recurrence,
-                    duration_minutes=int(payload.get("duration_minutes") or 30),
-                    description=payload.get("description"),
-                )
-            else:
-                schedule_event(
-                    household_id=family_id,
-                    user_id=user_id,
-                    title=str(title),
-                    description=payload.get("description"),
-                    duration_minutes=int(payload.get("duration_minutes") or 30),
-                    start_time=payload.get("start_time"),
-                )
+        input_payload = {
+            "family_id": family_id,
+            "session_id": session_id,
+            "action_card_id": action_card_id,
+            "payload": payload,
+        }
 
-        current = self._bootstrap_service.get_state(family_id=family_id)
-        key = _SessionKey(family_id=family_id, session_id=session_id)
-        previous = self._last_snapshot.get(key)
-        ui_patch = self._patch_service.generate_patches(previous=previous, current=current)
-        self._last_snapshot[key] = current
+        try:
+            if title:
+                if recurrence in {"daily", "weekly", "monthly"}:
+                    create_recurring_event(
+                        household_id=family_id,
+                        user_id=user_id,
+                        title=str(title),
+                        frequency=recurrence,
+                        duration_minutes=int(payload.get("duration_minutes") or 30),
+                        description=payload.get("description"),
+                    )
+                else:
+                    schedule_event(
+                        household_id=family_id,
+                        user_id=user_id,
+                        title=str(title),
+                        description=payload.get("description"),
+                        duration_minutes=int(payload.get("duration_minutes") or 30),
+                        start_time=payload.get("start_time"),
+                    )
 
-        response = ChatResponse(
-            assistant_message="Action executed.",
-            action_cards=[],
-            ui_patch=ui_patch,
-            requires_confirmation=False,
-            explanation_summary=current.explanation_digest[:5],
-        )
-        broadcaster.publish_sync(
-            household_id=family_id,
-            event_type="action_card_executed",
-            payload={
-                "session_id": session_id,
-                "action_card_id": action_card_id,
-            },
-        )
-        return response
+            current = self._bootstrap_service.get_state(family_id=family_id)
+            key = _SessionKey(family_id=family_id, session_id=session_id)
+            previous = self._last_snapshot.get(key)
+            ui_patch = self._patch_service.generate_patches(previous=previous, current=current)
+            self._last_snapshot[key] = current
+
+            response = ChatResponse(
+                assistant_message="Action executed.",
+                action_cards=[],
+                ui_patch=ui_patch,
+                requires_confirmation=False,
+                explanation_summary=current.explanation_digest[:5],
+            )
+            router.emit(
+                SystemEvent.ChatMessageSent(
+                    household_id=family_id,
+                    message_id=action_card_id,
+                    user_id=user_id,
+                    content=str(title or "Action executed."),
+                )
+            )
+            return response
+        except ValueError as exc:
+            router.emit(
+                SystemEvent.ChatMessageFailed(
+                    household_id=family_id,
+                    reason="validation_error",
+                    error_message=str(exc),
+                    input=input_payload,
+                )
+            )
+            raise
+        except Exception as exc:
+            router.emit(
+                SystemEvent.ChatMessageFailed(
+                    household_id=family_id,
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input=input_payload,
+                )
+            )
+            raise
 
     def _safe_fallback_response(self, *, family_id: str, session_id: str, reason: str) -> ChatResponse:
         current = self._bootstrap_service.get_state(family_id=family_id)

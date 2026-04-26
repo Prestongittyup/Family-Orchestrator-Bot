@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -37,7 +37,7 @@ class TriggerDetector:
         graph: dict[str, Any],
         user_input: str | None = None,
         now: str | datetime | None = None,
-        pending_timeout_minutes: int = 720,
+        pending_timeout_minutes: int | None = 720,
     ) -> list[RuntimeTrigger]:
         detected_at = self._coerce_datetime(now or graph.get("reference_time"))
         triggers: list[RuntimeTrigger] = []
@@ -88,7 +88,11 @@ class TriggerDetector:
 
         lifecycle = graph.get("action_lifecycle", {})
         actions = lifecycle.get("actions", {}) if isinstance(lifecycle, dict) else {}
-        timeout_window = timedelta(minutes=pending_timeout_minutes)
+        timeout_override_seconds = (
+            int(pending_timeout_minutes * 60)
+            if pending_timeout_minutes is not None
+            else None
+        )
         for action in actions.values():
             current_state = enforce_boundary_state(action.get("current_state"))
             if current_state != LifecycleState.PENDING_APPROVAL:
@@ -99,7 +103,8 @@ class TriggerDetector:
                 continue
 
             created_at = self._coerce_datetime(created_at_raw)
-            if detected_at - created_at < timeout_window:
+            timeout_seconds = timeout_override_seconds if timeout_override_seconds is not None else int(12 * 60 * 60)
+            if (detected_at - created_at).total_seconds() <= timeout_seconds:
                 continue
 
             triggers.append(

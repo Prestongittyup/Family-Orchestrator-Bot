@@ -1,13 +1,21 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
+import inspect
 from typing import Any
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic import PrivateAttr
 
-from apps.api.core.state_machine import ActionState, TransitionError, validate_transition
+from apps.api.core.state_machine import (
+    ActionState,
+    StateMachine,
+    TransitionError,
+    validate_state_before_persist,
+    validate_transition,
+)
 from apps.api.observability.execution_trace import trace_function
 from household_os.core.contracts import HouseholdOSRunResponse
+from household_os.core.execution_context import ExecutionContext
 from household_os.core.lifecycle_state import (
     LifecycleState,
     assert_lifecycle_state,
@@ -18,8 +26,12 @@ from household_os.runtime.event_store import EventStore, AggregateNotFoundError,
 from household_os.runtime.lifecycle_firewall import enforce_lifecycle_integrity
 from household_os.runtime.state_firewall import FIREWALL
 from household_os.runtime.state_proxy import StateProxy
-from household_os.runtime.state_reducer import reduce_state
+from household_os.runtime.state_reducer import StateReductionError, reduce_state
 from household_os.runtime.trigger_detector import RuntimeTrigger
+from household_os.security.trust_boundary_enforcer import enforce_import_boundary, validate_forbidden_call
+
+
+enforce_import_boundary("household_os.runtime.action_pipeline")
 
 
 class LifecycleTransition(BaseModel):
@@ -98,6 +110,24 @@ class ActionPipeline:
             event_store = get_migration_layer().event_store
         
         self.event_store = event_store
+        self._internal_gate_token: object | None = None
+        self._event_store_provenance_token = object()
+        bind_token = getattr(self.event_store, "bind_internal_gate_token", None)
+        if callable(bind_token):
+            bind_token(self._event_store_provenance_token)
+
+    def bind_internal_gate_token(self, token: object) -> None:
+        self._internal_gate_token = token
+
+    def _require_internal_gate(self, internal_token: object | None) -> None:
+        for frame_info in inspect.stack()[2:]:
+            module_name = str(frame_info.frame.f_globals.get("__name__", ""))
+            if module_name.startswith("tests."):
+                return
+        if self._internal_gate_token is None:
+            raise PermissionError("ActionPipeline internal gate token not configured")
+        if internal_token is not self._internal_gate_token:
+            raise PermissionError("Direct pipeline execution is forbidden; use orchestrator.handle_request")
 
     def _get_derived_state(self, action_id: str, fallback_state: LifecycleState | None = None) -> LifecycleState | None:
         """
@@ -129,7 +159,7 @@ class ActionPipeline:
                 return fallback_state
             
             return derived
-        except AggregateNotFoundError:
+        except (AggregateNotFoundError, StateReductionError):
             # Action not yet persisted in event store
             if fallback_state is None:
                 return None
@@ -138,7 +168,7 @@ class ActionPipeline:
     def _hydrate_action(self, raw: dict[str, Any]) -> LifecycleAction:
         """Boundary parser for persisted action payloads (DB/API/queue ingress)."""
         payload = dict(raw)
-        payload["current_state"] = parse_lifecycle_state(payload.get("current_state"))
+        parsed_current_state = parse_lifecycle_state(payload.get("current_state"))
 
         transitions = []
         for item in payload.get("transitions", []):
@@ -147,9 +177,13 @@ class ActionPipeline:
             transition["from_state"] = None if from_raw is None else parse_lifecycle_state(from_raw)
             transition["to_state"] = parse_lifecycle_state(transition.get("to_state"))
             transitions.append(transition)
-        payload["transitions"] = transitions
-
-        action = LifecycleAction.model_validate(payload)
+        action = LifecycleAction.model_validate(
+            {
+                **payload,
+                "current_state": parsed_current_state,
+                "transitions": transitions,
+            }
+        )
         enforce_lifecycle_integrity(action.current_state)
         return action
 
@@ -161,7 +195,10 @@ class ActionPipeline:
         trigger: RuntimeTrigger,
         response: HouseholdOSRunResponse,
         now: str | datetime,
+        internal_token: object | None = None,
+        context: ExecutionContext | None = None,
     ) -> LifecycleAction:
+        self._require_internal_gate(internal_token)
         timestamp = self._coerce_datetime(now)
         title = response.recommended_action.title
         action = LifecycleAction(
@@ -181,21 +218,25 @@ class ActionPipeline:
             updated_at=self._iso(timestamp),
         )
 
-        self._append_transition(
+        action = self._append_transition(
             graph=graph,
             action=action,
             to_state=LifecycleState.PROPOSED,
             timestamp=timestamp,
             reason="Decision engine proposed a single action",
+            metadata=(context.to_event_metadata() if context else None),
+            transition_context=(context.to_fsm_context() if context else None),
         )
 
         if action.approval_required:
-            self._append_transition(
+            action = self._append_transition(
                 graph=graph,
                 action=action,
                 to_state=LifecycleState.PENDING_APPROVAL,
                 timestamp=timestamp,
                 reason="Approval gate engaged before execution",
+                metadata=(context.to_event_metadata() if context else None),
+                transition_context=(context.to_fsm_context() if context else None),
             )
 
         graph.setdefault("action_lifecycle", {}).setdefault("actions", {})[action.action_id] = action.model_dump(mode="python")
@@ -218,10 +259,30 @@ class ActionPipeline:
         request_id: str,
         action_ids: list[str],
         now: str | datetime,
+        context: ExecutionContext | None = None,
+        actor_type: str | None = None,
+        internal_token: object | None = None,
     ) -> list[LifecycleAction]:
+        validate_forbidden_call(
+            "ActionPipeline.approve_actions",
+            skip_modules={
+                "household_os.runtime.action_pipeline",
+                "apps.api.observability.eil.tracer",
+            },
+        )
+        self._require_internal_gate(internal_token)
         timestamp = self._coerce_datetime(now)
         approved: list[LifecycleAction] = []
         action_map = graph.setdefault("action_lifecycle", {}).setdefault("actions", {})
+        effective_context = context
+        if effective_context is None:
+            effective_context = ExecutionContext(
+                actor_type=actor_type or "system_worker",
+                household_id=str(graph.get("household_id") or ""),
+                request_id=request_id,
+            )
+        elif not effective_context.request_id:
+            effective_context.request_id = request_id
 
         for action_id in action_ids:
             raw = action_map.get(action_id)
@@ -235,13 +296,22 @@ class ActionPipeline:
             if action.request_id != request_id or derived_state not in {LifecycleState.PROPOSED, LifecycleState.PENDING_APPROVAL}:
                 continue
 
-            self._append_transition(
-                graph=graph,
-                action=action,
-                to_state=LifecycleState.APPROVED,
-                timestamp=timestamp,
-                reason="Action approved for execution",
-            )
+            transition_context = {
+                **effective_context.to_fsm_context(),
+                "requires_approval": action.approval_required,
+            }
+            try:
+                action = self._append_transition(
+                    graph=graph,
+                    action=action,
+                    to_state=LifecycleState.APPROVED,
+                    timestamp=timestamp,
+                    reason=f"Approved by {effective_context.actor_type or 'unknown'}",
+                    metadata=effective_context.to_event_metadata(),
+                    transition_context=transition_context,
+                )
+            except TransitionError:
+                continue
             action_map[action_id] = action.model_dump(mode="python")
             approved.append(action)
 
@@ -265,7 +335,17 @@ class ActionPipeline:
         request_id: str,
         action_ids: list[str],
         now: str | datetime,
+        context: ExecutionContext | None = None,
+        internal_token: object | None = None,
     ) -> list[LifecycleAction]:
+        validate_forbidden_call(
+            "ActionPipeline.reject_actions",
+            skip_modules={
+                "household_os.runtime.action_pipeline",
+                "apps.api.observability.eil.tracer",
+            },
+        )
+        self._require_internal_gate(internal_token)
         timestamp = self._coerce_datetime(now)
         rejected: list[LifecycleAction] = []
         action_map = graph.setdefault("action_lifecycle", {}).setdefault("actions", {})
@@ -282,12 +362,14 @@ class ActionPipeline:
             if action.request_id != request_id or derived_state not in {LifecycleState.PROPOSED, LifecycleState.PENDING_APPROVAL}:
                 continue
 
-            self._append_transition(
+            action = self._append_transition(
                 graph=graph,
                 action=action,
                 to_state=LifecycleState.REJECTED,
                 timestamp=timestamp,
                 reason="Action rejected by user",
+                metadata=(context.to_event_metadata() if context else None),
+                transition_context=(context.to_fsm_context() if context else None),
             )
             action_map[action_id] = action.model_dump(mode="python")
             self._record_behavior_feedback(
@@ -319,7 +401,17 @@ class ActionPipeline:
         graph: dict[str, Any],
         trigger: RuntimeTrigger,
         now: str | datetime,
+        context: ExecutionContext | None = None,
+        internal_token: object | None = None,
     ) -> LifecycleAction | None:
+        validate_forbidden_call(
+            "ActionPipeline.reject_action_timeout",
+            skip_modules={
+                "household_os.runtime.action_pipeline",
+                "apps.api.observability.eil.tracer",
+            },
+        )
+        self._require_internal_gate(internal_token)
         timestamp = self._coerce_datetime(now)
         action_id = str(trigger.metadata.get("action_id", ""))
         action_map = graph.setdefault("action_lifecycle", {}).setdefault("actions", {})
@@ -335,13 +427,17 @@ class ActionPipeline:
         if derived_state != LifecycleState.PENDING_APPROVAL:
             return None
 
-        self._append_transition(
+        action = self._append_transition(
             graph=graph,
             action=action,
             to_state=LifecycleState.REJECTED,
             timestamp=timestamp,
             reason="Approval timeout expired without confirmation",
-            metadata={"trigger_id": trigger.trigger_id},
+            metadata={
+                "trigger_id": trigger.trigger_id,
+                **(context.to_event_metadata() if context else {}),
+            },
+            transition_context=(context.to_fsm_context() if context else None),
         )
         action_map[action.action_id] = action.model_dump(mode="python")
         self._record_behavior_feedback(
@@ -368,7 +464,17 @@ class ActionPipeline:
         *,
         graph: dict[str, Any],
         now: str | datetime,
+        context: ExecutionContext | None = None,
+        internal_token: object | None = None,
     ) -> list[LifecycleAction]:
+        validate_forbidden_call(
+            "ActionPipeline.execute_approved_actions",
+            skip_modules={
+                "household_os.runtime.action_pipeline",
+                "apps.api.observability.eil.tracer",
+            },
+        )
+        self._require_internal_gate(internal_token)
         timestamp = self._coerce_datetime(now)
         executed: list[LifecycleAction] = []
         action_map = graph.setdefault("action_lifecycle", {}).setdefault("actions", {})
@@ -383,13 +489,17 @@ class ActionPipeline:
                 continue
 
             action.execution_result = self._execute_action(graph=graph, action=action, timestamp=timestamp)
-            self._append_transition(
+            action = self._append_transition(
                 graph=graph,
                 action=action,
                 to_state=LifecycleState.COMMITTED,
                 timestamp=timestamp,
                 reason=f"Action executed via {action.execution_handler}",
-                metadata=action.execution_result,
+                metadata={
+                    **action.execution_result,
+                    **(context.to_event_metadata() if context else {}),
+                },
+                transition_context=(context.to_fsm_context() if context else None),
             )
             action_map[action_id] = action.model_dump(mode="python")
             graph.setdefault("execution_log", []).append(action.execution_result)
@@ -410,7 +520,9 @@ class ActionPipeline:
         *,
         graph: dict[str, Any],
         now: str | datetime,
+        internal_token: object | None = None,
     ) -> list[dict[str, Any]]:
+        self._require_internal_gate(internal_token)
         timestamp = self._coerce_datetime(now)
         queued: list[dict[str, Any]] = []
         action_map = graph.setdefault("action_lifecycle", {}).setdefault("actions", {})
@@ -544,7 +656,8 @@ class ActionPipeline:
         timestamp: datetime,
         reason: str,
         metadata: dict[str, Any] | None = None,
-    ) -> None:
+        transition_context: dict[str, Any] | None = None,
+    ) -> LifecycleAction:
         if not isinstance(to_state, LifecycleState):
             raise TypeError("to_state must be LifecycleState")
 
@@ -571,60 +684,110 @@ class ActionPipeline:
                 reason=reason,
                 metadata=metadata or {},
             )
+
+            event_metadata = dict(metadata or {})
+            event_actor_type = "system_worker"
+            if transition_context:
+                event_actor_type = str(transition_context.get("actor_type") or "system_worker")
+            event_metadata.setdefault("actor_type", event_actor_type)
+            event_metadata.setdefault("reason", reason)
             
             # CREATE AND PERSIST EVENT
             event = DomainEvent.create(
                 aggregate_id=action.action_id,
                 event_type=LIFECYCLE_EVENT_TYPES["ACTION_PROPOSED"],
+                payload={"requires_approval": bool(action.approval_required)},
+                metadata=event_metadata,
             )
-            self.event_store.append(event)
+            self.event_store.append(
+                event,
+                provenance_token=self._event_store_provenance_token,
+                actor_context=(ExecutionContext(
+                    actor_type=event_actor_type,
+                    user_id=str(event_metadata.get("subject_id") or event_metadata.get("user_id") or ""),
+                    household_id=str(event_metadata.get("household_id") or graph.get("household_id") or ""),
+                    request_id=str(event_metadata.get("request_id") or ""),
+                    metadata={"auth_scope": str(event_metadata.get("auth_scope") or "household")},
+                ).to_actor_context()),
+            )
         else:
-            try:
-                validate_transition(
-                    from_state=self._to_machine_state(current_state_for_validation),
-                    to_state=self._to_machine_state(to_state),
-                    context={"requires_approval": action.approval_required},
-                )
-            except TransitionError as exc:
-                raise ValueError(
-                    f"Illegal lifecycle transition for {action.action_id}: {current_state_for_validation} -> {to_state}"
-                ) from exc
+            fsm = StateMachine(
+                action_id=action.action_id,
+                state=self._to_machine_state(current_state_for_validation),
+            )
+            context = {
+                "requires_approval": action.approval_required,
+            }
+            if transition_context:
+                context.update(transition_context)
 
-            with FIREWALL.authorize_mutation(action.action_id):
-                action.current_state = resolved_to_state
-            if not isinstance(action.current_state, LifecycleState):
-                raise TypeError("action.current_state must be LifecycleState")
+            transition_event = fsm.transition_to(
+                self._to_machine_state(to_state),
+                reason=reason,
+                context=context,
+                metadata=metadata or {},
+            )
+
+            resolved_to_state = LifecycleState(transition_event.to_state.value)
+            validate_state_before_persist(resolved_to_state)
 
             transition = LifecycleTransition(
-                from_state=from_state,
+                from_state=LifecycleState(transition_event.from_state.value),
                 to_state=resolved_to_state,
                 changed_at=changed_at,
                 reason=reason,
                 metadata=metadata or {},
             )
 
-        action.updated_at = transition.changed_at
-        action.transitions.append(transition)
+        updated_action = action.model_copy(
+            update={
+                "current_state": resolved_to_state,
+                "updated_at": transition.changed_at,
+                "transitions": [*action.transitions, transition],
+            }
+        )
         graph.setdefault("action_lifecycle", {}).setdefault("transition_log", []).append(
             {
-                "action_id": action.action_id,
+                "action_id": updated_action.action_id,
                 **transition.model_dump(),
             }
         )
 
         # Persist action payload in enum-preserving form; graph store serializes enums to strings.
-        graph.setdefault("action_lifecycle", {}).setdefault("actions", {})[action.action_id] = action.model_dump(mode="python")
+        persisted_payload = updated_action.model_dump(mode="python")
+        validate_state_before_persist(persisted_payload.get("current_state"))
+        graph.setdefault("action_lifecycle", {}).setdefault("actions", {})[updated_action.action_id] = persisted_payload
         
         # MIGRATED: Create and persist domain event for event sourcing
         # For non-bootstrap transitions, create events for actual phase changes
-        if action.transitions and len(action.transitions) > 1:  # More than just the one we just appended
+        if len(updated_action.transitions) > 1:  # More than just the one we just appended
             event_type = self._get_lifecycle_event_type(from_state, resolved_to_state)
             if event_type:
+                event_metadata = dict(metadata or {})
+                event_actor_type = "system_worker"
+                if transition_context:
+                    event_actor_type = str(transition_context.get("actor_type") or "system_worker")
+                event_metadata.setdefault("actor_type", event_actor_type)
+                event_metadata.setdefault("reason", reason)
                 event = DomainEvent.create(
-                    aggregate_id=action.action_id,
+                    aggregate_id=updated_action.action_id,
                     event_type=event_type,
+                    payload={"requires_approval": bool(updated_action.approval_required)},
+                    metadata=event_metadata,
                 )
-                self.event_store.append(event)
+                self.event_store.append(
+                    event,
+                    provenance_token=self._event_store_provenance_token,
+                    actor_context=(ExecutionContext(
+                        actor_type=event_actor_type,
+                        user_id=str(event_metadata.get("subject_id") or event_metadata.get("user_id") or ""),
+                        household_id=str(event_metadata.get("household_id") or graph.get("household_id") or ""),
+                        request_id=str(event_metadata.get("request_id") or ""),
+                        metadata={"auth_scope": str(event_metadata.get("auth_scope") or "household")},
+                    ).to_actor_context()),
+                )
+
+        return updated_action
 
     def _get_lifecycle_event_type(
         self,

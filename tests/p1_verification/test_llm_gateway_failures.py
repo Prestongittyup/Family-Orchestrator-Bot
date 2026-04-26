@@ -80,6 +80,19 @@ class TestLLMGatewayBudget:
         assert response.resolved_by == "llm"
         assert response.intent_type == "CREATE_TASK"
 
+    def test_normal_prompt_returns_llm_route_under_non_limited_conditions(self):
+        """Normal prompt returns llm route when budget/rate constraints are not hit."""
+        provider = MockLLMProvider(behavior="success")
+        gateway = LLMGateway(provider, max_requests_per_minute=10, max_prompt_chars=1000)
+
+        response = gateway.resolve_intent(
+            message="Please create a task to buy groceries tonight",
+            context_snapshot={"intent": "task", "actor_context": {"actor_type": "api_user"}},
+            household_id="family-1",
+        )
+
+        assert response.resolved_by == "llm"
+
 
 class TestLLMGatewayRateLimit:
     """Validate per-household rate limiting."""

@@ -46,9 +46,11 @@ def test_db_roundtrip_state(tmp_path):
     }
 
     saved = store.save_graph(graph)
+    store._cache.pop(saved["household_id"], None)
     loaded = store.load_graph(saved["household_id"])
 
-    assert isinstance(loaded["action_lifecycle"]["actions"][action_id]["current_state"], LifecycleState)
+    assert loaded["action_lifecycle"]["actions"][action_id]["current_state"] == LifecycleState.COMMITTED.value
+    assert loaded["_lifecycle_hydration"]["action_lifecycle"]["actions"][action_id]["current_state"] == LifecycleState.COMMITTED.value
 
 
 def test_fsm_never_overrides_reducer():

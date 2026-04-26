@@ -12,12 +12,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from household_os.core.lifecycle_state import LifecycleState
+from scripts.lifecycle_conversion import LEGACY_LIFECYCLE_MAP, normalize_lifecycle_literal
 
 
-LEGACY_MAP = {
-    "executed": LifecycleState.COMMITTED.value,
-    "ignored": LifecycleState.FAILED.value,
-}
+LEGACY_MAP = LEGACY_LIFECYCLE_MAP
 
 LIFECYCLE_KEYS = {"state", "status", "current_state", "from_state", "to_state", "lifecycle_state"}
 LIFECYCLE_PATH_HINTS = {"action_lifecycle", "transition_log", "behavior_feedback", "event_history", "lifecycle"}
@@ -50,7 +48,7 @@ def _rewrite(node: Any, *, report: StreamMigrationReport, path: str) -> tuple[An
             next_path = f"{path}.{key}"
             if key in LIFECYCLE_KEYS and isinstance(value, str) and _is_lifecycle_path(next_path):
                 report.scanned += 1
-                lowered = value.strip().lower()
+                lowered = normalize_lifecycle_literal(value)
                 if lowered in LEGACY_MAP:
                     out[key] = LEGACY_MAP[lowered]
                     report.migrated += 1

@@ -30,6 +30,18 @@ _PUBLIC_PATHS = {
 
 _TOKEN_SERVICE = TokenService(repository_factory=SQLAlchemyIdentityRepository)
 
+
+def _extract_actor_type_from_claims(claims: dict[str, Any]) -> str:
+    """Safely extract actor type from token claims with conservative defaults."""
+    actor_type = claims.get("actor_type")
+    if actor_type in {"api_user", "assistant", "system_worker"}:
+        return str(actor_type)
+
+    if claims.get("role") == "assistant":
+        return "assistant"
+
+    return "api_user"
+
 def install_auth_middleware(app: Any) -> None:
     """Install server-validated bearer token middleware for all /v1 routes."""
 
@@ -83,6 +95,7 @@ def install_auth_middleware(app: Any) -> None:
 
         request.state.auth_claims = claims
         request.state.user = claims
+        request.state.actor_type = _extract_actor_type_from_claims(claims)
         response = await call_next(request)
         if getattr(request.state, "user", None) is None:
             metrics.note_invalid_token_non_401()

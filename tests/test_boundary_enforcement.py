@@ -44,7 +44,7 @@ def test_api_rejects_invalid_state(client: TestClient) -> None:
 
 
 def test_boundary_parses_valid_state() -> None:
-    state = parse_lifecycle_state("committed")
+    state = parse_lifecycle_state(LifecycleState.COMMITTED.value)
     assert state == LifecycleState.COMMITTED
 
 
@@ -61,4 +61,4 @@ def test_non_api_boundaries_reject_legacy(boundary) -> None:
 
 @pytest.mark.parametrize("boundary", [_background_job_input, _scheduler_input, _cli_input])
 def test_non_api_boundaries_accept_valid(boundary) -> None:
-    assert boundary("approved") == LifecycleState.APPROVED
+    assert boundary(LifecycleState.APPROVED.value) == LifecycleState.APPROVED

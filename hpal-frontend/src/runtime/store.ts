@@ -49,6 +49,7 @@ interface RuntimeStore {
   syncTimer: number | null;
   realtimeStream: EventSource | null;
   realtimeConnected: boolean;
+  realtimeLastWatermark: number | null;
   isLoading: boolean;
   error: string | null;
 
@@ -97,6 +98,7 @@ export const useRuntimeStore = create<RuntimeStore>((set, get) => ({
   syncTimer: null,
   realtimeStream: null,
   realtimeConnected: false,
+  realtimeLastWatermark: null,
   isLoading: false,
   error: null,
 
@@ -448,7 +450,9 @@ export const useRuntimeStore = create<RuntimeStore>((set, get) => ({
     }
 
     const base = ((import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "http://localhost:8000").replace(/\/$/, "");
-    const url = `${base}/v1/realtime/stream?household_id=${encodeURIComponent(householdId)}`;
+    const lastWatermark = get().realtimeLastWatermark;
+    const watermarkQuery = typeof lastWatermark === "number" ? `&last_watermark=${lastWatermark}` : "";
+    const url = `${base}/v1/realtime/stream?household_id=${encodeURIComponent(householdId)}${watermarkQuery}`;
     const source = new EventSource(url);
 
     source.onopen = () => {
@@ -459,8 +463,41 @@ export const useRuntimeStore = create<RuntimeStore>((set, get) => ({
       set({ realtimeConnected: false });
     };
 
-    source.addEventListener("update", async () => {
+    source.addEventListener("update", async (evt: MessageEvent) => {
+      let parsed: {
+        event_id?: string;
+        event_type?: string;
+        watermark?: number;
+        payload?: unknown;
+      } | null = null;
+      try {
+        parsed = JSON.parse(evt.data) as {
+          event_id?: string;
+          event_type?: string;
+          watermark?: number;
+          payload?: unknown;
+        };
+      } catch {
+        return;
+      }
+
+      const nextWatermark = typeof parsed?.watermark === "number" ? parsed.watermark : null;
+      if (nextWatermark === null || !parsed?.event_id || !parsed?.event_type) {
+        return;
+      }
+
+      const currentWatermark = get().realtimeLastWatermark;
+      if (typeof currentWatermark === "number" && nextWatermark <= currentWatermark) {
+        return;
+      }
+
+      set({ realtimeLastWatermark: nextWatermark });
       // Source-of-truth remains backend snapshot; live event triggers fast reconcile.
+      await get().forceReconcile();
+    });
+
+    source.addEventListener("resync_required", async () => {
+      set({ realtimeLastWatermark: null });
       await get().forceReconcile();
     });
 

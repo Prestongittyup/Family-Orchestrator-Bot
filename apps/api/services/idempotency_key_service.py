@@ -13,6 +13,11 @@ from apps.api.observability.logging import log_event, log_error
 from apps.api.observability.alerts import check_error_spike
 
 
+def internal_only(func):
+    """Marker decorator for internal-only mutations excluded from router.emit enforcement."""
+    return func
+
+
 @dataclass(frozen=True)
 class ReservationResult:
     reserved: bool
@@ -79,10 +84,12 @@ def exists(key: str) -> bool:
         session.close()
 
 
+@internal_only
 def record(key: str, household_id: str, event_type: str) -> None:
     """
     Persist an idempotency key.
 
+    Internal-only mutation for Idempotency tracking.
     Duplicate keys are ignored safely and never raise to callers.
     """
     session = SessionLocal()
@@ -101,9 +108,12 @@ def record(key: str, household_id: str, event_type: str) -> None:
         session.close()
 
 
+@internal_only
 def reserve(key: str, household_id: str, event_type: str) -> bool:
     """
     Attempt to reserve an idempotency key.
+
+    Internal-only mutation for Idempotency tracking.
 
     Returns:
         True if key was newly reserved or has expired.
@@ -157,8 +167,9 @@ def reserve(key: str, household_id: str, event_type: str) -> bool:
         session.close()
 
 
+@internal_only
 def release(key: str) -> None:
-    """Release a reserved key when request fails with 5xx so retries can proceed."""
+    """Release a reserved key for internal-only Idempotency tracking when retries should proceed."""
     session = SessionLocal()
     try:
         session.query(IdempotencyKey).filter(IdempotencyKey.key == key).delete()
@@ -167,9 +178,12 @@ def release(key: str) -> None:
         session.close()
 
 
+@internal_only
 def cleanup_expired() -> int:
     """
     Remove expired idempotency keys.
+
+    Internal-only mutation for Idempotency tracking.
     
     Returns:
         Number of keys deleted.

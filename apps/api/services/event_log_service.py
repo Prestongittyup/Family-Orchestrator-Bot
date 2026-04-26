@@ -17,10 +17,17 @@ from apps.api.models.event_log import EventLog
 from apps.api.schemas.event import SystemEvent
 
 
+def internal_only(func):
+    """Marker decorator for internal-only mutations excluded from router.emit enforcement."""
+    return func
+
+
+@internal_only
 def log_system_event(event: SystemEvent) -> EventLog:
     """
     Persist an incoming SystemEvent to the event log.
     
+    Internal-only mutation for Event logging.
     Pure persistence: writes to DB and returns record.
     No side effects, no business logic.
     
@@ -32,13 +39,22 @@ def log_system_event(event: SystemEvent) -> EventLog:
     """
     session = SessionLocal()
     try:
+        persisted_payload = dict(event.payload or {})
+        persisted_payload.setdefault("event_id", event.event_id)
+        persisted_payload.setdefault("source", event.source)
+        persisted_payload.setdefault("severity", event.severity)
+        if event.idempotency_key is not None:
+            persisted_payload.setdefault("idempotency_key", event.idempotency_key)
+        if event.signature is not None:
+            persisted_payload.setdefault("signature", event.signature)
+
         entry = EventLog(
-            id=str(uuid4()),
+            id=event.event_id or str(uuid4()),
             household_id=event.household_id,
             type=event.type,
             source=event.source,
-            payload=event.payload,
-            severity="info",
+            payload=persisted_payload,
+            severity=event.severity,
             idempotency_key=event.idempotency_key,
         )
 

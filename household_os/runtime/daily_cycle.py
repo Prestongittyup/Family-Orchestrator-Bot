@@ -5,7 +5,12 @@ from datetime import UTC, datetime
 from pydantic import BaseModel, ConfigDict, Field
 
 from apps.api.integration_core.models.household_state import HouseholdState
-from household_os.runtime.orchestrator import HouseholdOSOrchestrator, RuntimeTickResult
+from household_os.runtime.orchestrator import (
+    HouseholdOSOrchestrator,
+    OrchestratorRequest,
+    RequestActionType,
+    RuntimeTickResult,
+)
 
 
 class DailyCycleTickResult(BaseModel):
@@ -33,11 +38,25 @@ class HouseholdDailyCycle:
             household_id=household_id,
             state=state,
             fitness_goal=fitness_goal,
+            actor_type="system_worker",
+            user_id="system",
             now=timestamp,
         )
-        graph = self.orchestrator.state_store.load_graph(household_id)
-        graph.setdefault("runtime", {}).setdefault("daily_cycle", {})["last_morning_run"] = self._iso(timestamp)
-        self.orchestrator.state_store.save_graph(graph)
+        self.orchestrator.handle_request(
+            OrchestratorRequest(
+                action_type=RequestActionType.UPDATE_DAILY_CYCLE_MARKER,
+                household_id=household_id,
+                actor={
+                    "actor_type": "system_worker",
+                    "subject_id": "system",
+                    "session_id": None,
+                    "verified": True,
+                },
+                cycle_marker="morning",
+                cycle_timestamp=timestamp,
+                context={"system_worker_verified": True},
+            )
+        )
         return DailyCycleTickResult(cycle="morning", tick=tick)
 
     def run_evening(
@@ -49,14 +68,41 @@ class HouseholdDailyCycle:
         now: str | datetime | None = None,
     ) -> DailyCycleTickResult:
         timestamp = self._coerce_datetime(now or datetime.now(UTC).replace(hour=19, minute=0, second=0, microsecond=0))
-        graph = self.orchestrator.state_store.load_graph(household_id)
-        queued_follow_ups = self.orchestrator.action_pipeline.queue_next_day_follow_ups(graph=graph, now=timestamp)
-        graph.setdefault("runtime", {}).setdefault("daily_cycle", {})["last_evening_run"] = self._iso(timestamp)
-        self.orchestrator.state_store.save_graph(graph)
+        queued_follow_ups = self.orchestrator.handle_request(
+            OrchestratorRequest(
+                action_type=RequestActionType.QUEUE_FOLLOW_UPS,
+                household_id=household_id,
+                actor={
+                    "actor_type": "system_worker",
+                    "subject_id": "system",
+                    "session_id": None,
+                    "verified": True,
+                },
+                now=timestamp,
+                context={"system_worker_verified": True},
+            )
+        )
+        self.orchestrator.handle_request(
+            OrchestratorRequest(
+                action_type=RequestActionType.UPDATE_DAILY_CYCLE_MARKER,
+                household_id=household_id,
+                actor={
+                    "actor_type": "system_worker",
+                    "subject_id": "system",
+                    "session_id": None,
+                    "verified": True,
+                },
+                cycle_marker="evening",
+                cycle_timestamp=timestamp,
+                context={"system_worker_verified": True},
+            )
+        )
         tick = self.orchestrator.tick(
             household_id=household_id,
             state=state,
             fitness_goal=fitness_goal,
+            actor_type="system_worker",
+            user_id="system",
             now=timestamp,
         )
         return DailyCycleTickResult(cycle="evening", tick=tick, queued_follow_ups=queued_follow_ups)

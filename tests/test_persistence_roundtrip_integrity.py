@@ -18,8 +18,9 @@ def test_state_round_trip(tmp_path) -> None:
     }
 
     saved = store.save_graph(graph)
+    store._cache.pop(saved["household_id"], None)
     loaded = store.load_graph(saved["household_id"])
 
     loaded_state = loaded["action_lifecycle"]["actions"]["roundtrip-action-001"]["current_state"]
-    assert isinstance(loaded_state, LifecycleState)
-    assert loaded_state == LifecycleState.COMMITTED
+    assert loaded_state == LifecycleState.COMMITTED.value
+    assert loaded["_lifecycle_hydration"]["action_lifecycle"]["actions"]["roundtrip-action-001"]["current_state"] == LifecycleState.COMMITTED.value

@@ -26,6 +26,11 @@ All lifecycle state is now:
 - Compared using **enum values** (not raw strings)
 - Automatically **normalized** during data validation
 
+API contract note:
+- **Internal state** means `LifecycleState` enum values used by FSM, replay, validation, and persistence.
+- **API state** means presentation labels serialized for clients at response boundaries.
+- Internal state and API state may differ at the boundary only through an explicit mapper.
+
 ## What Changed
 
 ### 1. **Created Canonical LifecycleState Enum**
@@ -167,16 +172,19 @@ Validation: isinstance(state, LifecycleState) ✓
 Events automatically created on state changes
 ```
 
-## State Name Mapping
+## Internal State vs API State Mapping
 
-| Concept | Old FSM Name | New Canonical Name | Event Type |
-|---------|--------------|-------------------|------------|
-| Initial proposal | `"proposed"` | `PROPOSED` | `ACTION_PROPOSED` |
-| Awaiting approval (internal) | `"pending_approval"` | `PENDING_APPROVAL` | (no event) |
-| Approved for execution | `"approved"` | `APPROVED` | `ACTION_APPROVED` |
-| Successfully executed | `"executed"` | `COMMITTED` | `ACTION_COMMITTED` |
-| Rejected by user | `"rejected"` | `REJECTED` | `ACTION_REJECTED` |
-| Execution failed | `"ignored"` | `FAILED` | `ACTION_FAILED` |
+| Concept | Internal state | API state label | Event Type |
+|---------|----------------|-----------------|------------|
+| Initial proposal | `PROPOSED` | `"proposed"` | `ACTION_PROPOSED` |
+| Awaiting approval (internal) | `PENDING_APPROVAL` | `"pending_approval"` | (no event) |
+| Approved for execution | `APPROVED` | `"approved"` | `ACTION_APPROVED` |
+| Successfully executed | `COMMITTED` | `"executed"` | `ACTION_COMMITTED` |
+| Rejected by user | `REJECTED` | `"rejected"` | `ACTION_REJECTED` |
+| Execution failed | `FAILED` | `"failed"` | `ACTION_FAILED` |
+
+Boundary rule:
+- `COMMITTED -> "executed"` is a presentation-only mapping and must not be parsed back into FSM state.
 
 ## Testing & Validation
 

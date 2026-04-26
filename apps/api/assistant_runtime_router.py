@@ -2,16 +2,18 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from assistant.governance.output_governor import OutputGovernor
 from apps.assistant_core.planning_engine import _fallback_household_state, _request_id
-from household_os.core import HouseholdOSDecisionEngine, HouseholdOSRunResponse
+from household_os.core import HouseholdOSRunResponse
 from household_os.core.lifecycle_state import LifecycleState, enforce_boundary_state
+from household_os.presentation.lifecycle_presentation_mapper import LifecyclePresentationMapper
 from household_os.presentation.humanizer import RecommendationHumanizer
 from household_os.presentation.recommendation_builder import RecommendationBuilder
 from household_os.runtime.orchestrator import HouseholdOSOrchestrator
+from household_os.runtime.orchestrator import OrchestratorRequest, RequestActionType
 from apps.api.observability.execution_trace import trace_function
 
 
@@ -85,6 +87,20 @@ class AssistantRejectResponse(BaseModel):
     status: str
 
 
+class AssistantExecuteRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    action_id: str
+    household_id: str = "default"
+
+
+class AssistantExecuteResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    status: str
+    effects: list[dict[str, Any]] = Field(default_factory=list)
+
+
 class AssistantTodayResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -98,18 +114,25 @@ RunAssistantResponse = AssistantRunResponse | ClarificationResponse | HouseholdO
 
 
 @router.post("/run", response_model=RunAssistantResponse)
-@trace_function(entrypoint="assistant_runtime.run_assistant", actor_type="api_user", source="api")
-def run_assistant(request: AssistantRunRequest) -> RunAssistantResponse:
-    if request.query and not request.message:
-        return _run_legacy_household_os(request)
+@trace_function(entrypoint="assistant_runtime.run_assistant", actor_type="dynamic", source="api")
+def run_assistant(payload: AssistantRunRequest, request: Request) -> RunAssistantResponse:
+    raw_actor = _actor_from_request(request)
 
-    state = _fallback_household_state(request.household_id)
-    message = request.message or request.query or ""
-    result = runtime_orchestrator.tick(
-        household_id=request.household_id,
-        state=state,
-        user_input=message,
-        fitness_goal=request.fitness_goal,
+    if payload.query and not payload.message:
+        return _run_legacy_household_os(payload, raw_actor)
+
+    state = _fallback_household_state(payload.household_id)
+    message = payload.message or payload.query or ""
+    result = runtime_orchestrator.handle_request(
+        OrchestratorRequest(
+            action_type=RequestActionType.RUN,
+            household_id=payload.household_id,
+            actor=raw_actor,
+            state=state,
+            user_input=message,
+            fitness_goal=payload.fitness_goal,
+            context=_request_context_from_actor(raw_actor),
+        )
     )
 
     # Case C — low confidence: no action produced, return clarification
@@ -124,15 +147,25 @@ def run_assistant(request: AssistantRunRequest) -> RunAssistantResponse:
     if response is None or action is None:
         raise HTTPException(status_code=500, detail="Orchestrator did not emit an action")
 
-    graph = runtime_orchestrator.state_store.load_graph(request.household_id)
-    enriched = recommendation_builder.build(response=response, graph=graph)
-    _apply_recommendation_adjustments(
-        household_id=request.household_id,
-        request_id=response.request_id,
-        action_id=action.action_id,
-        recommendation=enriched,
+    graph = runtime_orchestrator.handle_request(
+        OrchestratorRequest(
+            action_type=RequestActionType.READ_SENSITIVE_STATE,
+            household_id=payload.household_id,
+            actor=raw_actor,
+            resource_type="recommendation_enrichment",
+            context=_request_context_from_actor(raw_actor),
+        )
     )
-    graph = runtime_orchestrator.state_store.load_graph(request.household_id)
+    enriched = recommendation_builder.build(response=response, graph=graph)
+    graph = runtime_orchestrator.handle_request(
+        OrchestratorRequest(
+            action_type=RequestActionType.READ_SENSITIVE_STATE,
+            household_id=payload.household_id,
+            actor=raw_actor,
+            resource_type="recommendation_humanization",
+            context=_request_context_from_actor(raw_actor),
+        )
+    )
     humanized = recommendation_humanizer.humanize(
         enriched.as_dict(),
         reference_time=graph.get("reference_time"),
@@ -155,10 +188,22 @@ def run_assistant(request: AssistantRunRequest) -> RunAssistantResponse:
 
 
 @router.post("/approve", response_model=AssistantApproveResponse)
-@trace_function(entrypoint="assistant_runtime.approve", actor_type="api_user", source="api")
-def approve_assistant_action(request: AssistantApproveRequest) -> AssistantApproveResponse:
-    graph = runtime_orchestrator.state_store.load_graph(request.household_id)
-    action_payload = graph.get("action_lifecycle", {}).get("actions", {}).get(request.action_id)
+@trace_function(entrypoint="assistant_runtime.approve", actor_type="dynamic", source="api")
+def approve_assistant_action(payload: AssistantApproveRequest, request: Request) -> AssistantApproveResponse:
+    raw_actor = _actor_from_request(request)
+    try:
+        graph = runtime_orchestrator.handle_request(
+            OrchestratorRequest(
+                action_type=RequestActionType.READ_SENSITIVE_STATE,
+                household_id=payload.household_id,
+                actor=raw_actor,
+                resource_type="action_lifecycle",
+                context=_request_context_from_actor(raw_actor),
+            )
+        )
+    except PermissionError as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
+    action_payload = graph.get("action_lifecycle", {}).get("actions", {}).get(payload.action_id)
     if action_payload is None:
         raise HTTPException(status_code=404, detail="Action not found")
 
@@ -166,11 +211,19 @@ def approve_assistant_action(request: AssistantApproveRequest) -> AssistantAppro
     if not request_id:
         raise HTTPException(status_code=400, detail="Action is missing request association")
 
-    approval_result = runtime_orchestrator.approve_and_execute(
-        household_id=request.household_id,
-        request_id=request_id,
-        action_ids=[request.action_id],
-    )
+    try:
+        approval_result = runtime_orchestrator.handle_request(
+            OrchestratorRequest(
+                action_type=RequestActionType.APPROVE,
+                household_id=payload.household_id,
+                actor=raw_actor,
+                request_id=request_id,
+                action_ids=[payload.action_id],
+                context=_request_context_from_actor(raw_actor),
+            )
+        )
+    except PermissionError as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
     effects = [
         {
             "action_id": action.action_id,
@@ -179,13 +232,25 @@ def approve_assistant_action(request: AssistantApproveRequest) -> AssistantAppro
         }
         for action in approval_result.executed_actions
     ]
-    return AssistantApproveResponse(status="executed", effects=effects)
+    return AssistantApproveResponse(
+        status=LifecyclePresentationMapper.to_api_state(LifecycleState.COMMITTED),
+        effects=effects,
+    )
 
 
 @router.get("/today", response_model=AssistantTodayResponse)
-@trace_function(entrypoint="assistant_runtime.today", actor_type="api_user", source="api")
-def assistant_today(household_id: str = "default") -> AssistantTodayResponse:
-    graph = runtime_orchestrator.state_store.load_graph(household_id)
+@trace_function(entrypoint="assistant_runtime.today", actor_type="dynamic", source="api")
+def assistant_today(request: Request, household_id: str = "default") -> AssistantTodayResponse:
+    raw_actor = _actor_from_request(request)
+    graph = runtime_orchestrator.handle_request(
+        OrchestratorRequest(
+            action_type=RequestActionType.READ_SENSITIVE_STATE,
+            household_id=household_id,
+            actor=raw_actor,
+            resource_type="assistant_today",
+            context=_request_context_from_actor(raw_actor),
+        )
+    )
 
     actions = graph.get("action_lifecycle", {}).get("actions", {})
     pending_actions = []
@@ -200,7 +265,7 @@ def assistant_today(household_id: str = "default") -> AssistantTodayResponse:
                 {
                     "action_id": action.get("action_id"),
                     "title": action.get("title"),
-                    "state": state.value,
+                    "state": LifecyclePresentationMapper.to_api_state(state),
                     "approval_required": bool(action.get("approval_required", True)),
                 }
             )
@@ -227,10 +292,22 @@ def assistant_today(household_id: str = "default") -> AssistantTodayResponse:
 
 
 @router.post("/reject", response_model=AssistantRejectResponse)
-@trace_function(entrypoint="assistant_runtime.reject", actor_type="api_user", source="api")
-def reject_assistant_action(request: AssistantRejectRequest) -> AssistantRejectResponse:
-    graph = runtime_orchestrator.state_store.load_graph(request.household_id)
-    action_payload = graph.get("action_lifecycle", {}).get("actions", {}).get(request.action_id)
+@trace_function(entrypoint="assistant_runtime.reject", actor_type="dynamic", source="api")
+def reject_assistant_action(payload: AssistantRejectRequest, request: Request) -> AssistantRejectResponse:
+    raw_actor = _actor_from_request(request)
+    try:
+        graph = runtime_orchestrator.handle_request(
+            OrchestratorRequest(
+                action_type=RequestActionType.READ_SENSITIVE_STATE,
+                household_id=payload.household_id,
+                actor=raw_actor,
+                resource_type="action_lifecycle",
+                context=_request_context_from_actor(raw_actor),
+            )
+        )
+    except PermissionError as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
+    action_payload = graph.get("action_lifecycle", {}).get("actions", {}).get(payload.action_id)
     if action_payload is None:
         raise HTTPException(status_code=404, detail="Action not found")
 
@@ -238,20 +315,82 @@ def reject_assistant_action(request: AssistantRejectRequest) -> AssistantRejectR
     if not request_id:
         raise HTTPException(status_code=400, detail="Action is missing request association")
 
-    rejected = runtime_orchestrator.action_pipeline.reject_actions(
-        graph=graph,
-        request_id=request_id,
-        action_ids=[request.action_id],
-        now=graph.get("reference_time"),
-    )
-    runtime_orchestrator.state_store.save_graph(graph)
+    try:
+        rejected = runtime_orchestrator.handle_request(
+            OrchestratorRequest(
+                action_type=RequestActionType.REJECT,
+                household_id=payload.household_id,
+                actor=raw_actor,
+                request_id=request_id,
+                action_ids=[payload.action_id],
+                now=graph.get("reference_time"),
+                context=_request_context_from_actor(raw_actor),
+            )
+        )
+    except PermissionError as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
     if not rejected:
         raise HTTPException(status_code=409, detail="Action could not be rejected")
-    return AssistantRejectResponse(status="rejected")
+    return AssistantRejectResponse(
+        status=LifecyclePresentationMapper.to_api_state(LifecycleState.REJECTED)
+    )
+
+
+@router.post("/execute", response_model=AssistantExecuteResponse)
+@trace_function(entrypoint="assistant_runtime.execute", actor_type="dynamic", source="api")
+def execute_assistant_action(payload: AssistantExecuteRequest, request: Request) -> AssistantExecuteResponse:
+    raw_actor = _actor_from_request(request)
+    graph = runtime_orchestrator.handle_request(
+        OrchestratorRequest(
+            action_type=RequestActionType.READ_SENSITIVE_STATE,
+            household_id=payload.household_id,
+            actor=raw_actor,
+            resource_type="action_lifecycle",
+            context=_request_context_from_actor(raw_actor),
+        )
+    )
+    action_payload = graph.get("action_lifecycle", {}).get("actions", {}).get(payload.action_id)
+    if action_payload is None:
+        raise HTTPException(status_code=404, detail="Action not found")
+
+    executed = runtime_orchestrator.handle_request(
+        OrchestratorRequest(
+            action_type=RequestActionType.EXECUTE,
+            household_id=payload.household_id,
+            actor=raw_actor,
+            now=graph.get("reference_time"),
+            context=_request_context_from_actor(raw_actor),
+        )
+    )
+    effects = [
+        {
+            "action_id": action.action_id,
+            "handler": action.execution_result.get("handler") if action.execution_result else None,
+            "result": action.execution_result or {},
+        }
+        for action in executed
+    ]
+    return AssistantExecuteResponse(
+        status=LifecyclePresentationMapper.to_api_state(LifecycleState.COMMITTED),
+        effects=effects,
+    )
 
 
 def _apply_recommendation_adjustments(*, household_id: str, request_id: str, action_id: str, recommendation: Any) -> None:
-    graph = runtime_orchestrator.state_store.load_graph(household_id)
+    graph = runtime_orchestrator.handle_request(
+        OrchestratorRequest(
+            action_type=RequestActionType.READ_SENSITIVE_STATE,
+            household_id=household_id,
+            actor={
+                "actor_type": "system_worker",
+                "subject_id": "assistant-runtime",
+                "session_id": None,
+                "verified": True,
+            },
+            resource_type="recommendation_adjustment",
+            context={"system_worker_verified": True},
+        )
+    )
     action_map = graph.get("action_lifecycle", {}).get("actions", {})
     action_payload = action_map.get(action_id)
     if action_payload is not None and getattr(recommendation, "scheduled_for", None):
@@ -265,24 +404,72 @@ def _apply_recommendation_adjustments(*, household_id: str, request_id: str, act
         response_payload["recommended_action"] = recommended_action
         graph["responses"][request_id] = response_payload
 
-    runtime_orchestrator.state_store.save_graph(graph)
+    runtime_orchestrator.handle_request(
+        OrchestratorRequest(
+            action_type=RequestActionType.WRITE_SENSITIVE_STATE,
+            household_id=household_id,
+            actor={
+                "actor_type": "system_worker",
+                "subject_id": "assistant-runtime",
+                "session_id": None,
+                "verified": True,
+            },
+            graph=graph,
+            context={"system_worker_verified": True},
+        )
+    )
 
 
-def _run_legacy_household_os(request: AssistantRunRequest) -> HouseholdOSRunResponse:
+def _run_legacy_household_os(request: AssistantRunRequest, raw_actor: dict[str, Any]) -> HouseholdOSRunResponse:
     query = request.query or request.message or ""
     state = _fallback_household_state(request.household_id)
-    graph = runtime_orchestrator.state_store.refresh_graph(
-        household_id=request.household_id,
-        state=state,
-        query=query,
-        fitness_goal=request.fitness_goal,
+    result = runtime_orchestrator.handle_request(
+        OrchestratorRequest(
+            action_type=RequestActionType.LEGACY_EXECUTION,
+            household_id=request.household_id,
+            actor=raw_actor,
+            state=state,
+            user_input=query,
+            fitness_goal=request.fitness_goal,
+            context={"legacy_execution": True, **_request_context_from_actor(raw_actor)},
+        )
     )
-    request_id = _request_id(query, request.household_id, request.repeat_window_days, request.fitness_goal)
-    response = HouseholdOSDecisionEngine().run(
-        household_id=request.household_id,
-        query=query,
-        graph=graph,
-        request_id=request_id,
-    )
-    runtime_orchestrator.state_store.store_response(request.household_id, response.model_dump())
-    return response
+    if result.response is None:
+        raise HTTPException(status_code=500, detail="Legacy execution did not produce a response")
+    return result.response
+
+
+def _actor_from_request(request: Request) -> dict[str, Any]:
+    actor_type = getattr(request.state, "actor_type", None)
+    claims = getattr(request.state, "auth_claims", None)
+    user_claims = getattr(request.state, "user", None)
+    if claims is None and isinstance(user_claims, dict):
+        claims = user_claims
+
+    subject_id = ""
+    if isinstance(claims, dict):
+        subject_id = str(claims.get("sub") or claims.get("user_id") or "")
+    elif getattr(request.state, "user", None) is not None:
+        subject_id = str(getattr(request.state.user, "sub", ""))
+
+    if actor_type is None:
+        raise HTTPException(status_code=401, detail="actor identity missing")
+
+    resolved_actor_type = str(actor_type).strip().lower()
+    is_system_worker = resolved_actor_type in {"system_worker", "scheduler"}
+
+    return {
+        "actor_type": resolved_actor_type,
+        "subject_id": subject_id,
+        "session_id": str(claims.get("sid")) if isinstance(claims, dict) and claims.get("sid") else None,
+        "verified": bool(claims is not None) or is_system_worker,
+        "auth_scope": "system" if is_system_worker else "household",
+    }
+
+
+def _request_context_from_actor(raw_actor: dict[str, Any]) -> dict[str, Any]:
+    actor_type = str(raw_actor.get("actor_type") or "").strip().lower()
+    return {
+        "system_worker_verified": actor_type in {"system_worker", "scheduler"},
+        "auth_scope": str(raw_actor.get("auth_scope") or "household"),
+    }

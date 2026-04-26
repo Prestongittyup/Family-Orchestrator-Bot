@@ -1,0 +1,510 @@
+# Event Contract Specification
+# Machine-checkable action→event mapping for strict invariance enforcement
+# Status: Ready for Phase 1 Implementation
+
+version: "1.0"
+last_updated: "2026-04-23"
+
+contracts:
+  task_create:
+    action: "POST /tasks"
+    handler: "apps/api/services/task_service.py:create_task()"
+    success_event:
+      type: "task_created"
+      class: "SystemEvent.TaskCreated"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "task_creation_failed"
+      class: "SystemEvent.TaskCreationFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: null
+    status: "PHASE-2-PENDING: Add failure event"
+    notes: "Complete triad. No DomainEvent involvement."
+
+  task_update_metadata:
+    action: "PATCH /tasks/{id}/metadata"
+    handler: "apps/api/services/task_service.py:update_task_metadata()"
+    success_event:
+      type: "task_metadata_updated"
+      class: "SystemEvent.TaskMetadataUpdated"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "task_metadata_update_failed"
+      class: "SystemEvent.TaskMetadataUpdateFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: null
+    status: "PHASE-1-PENDING: Add success/failure events"
+    notes: "Silent mutation identified at line 67"
+
+  task_propose:
+    action: "POST /tasks/{id}/propose"
+    handler: "household_os/runtime/command_handler.py:handle_task_proposal()"
+    success_event:
+      type: "task_proposed"
+      class: "SystemEvent.TaskProposed"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "task_proposal_failed"
+      class: "SystemEvent.TaskProposalFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: "task_proposed"
+      mapping: "task_proposed → SystemEvent.TaskProposed"
+      annotation: "@canonical_target('TaskProposed')"
+    status: "PHASE-3-PENDING: Add canonical mapping"
+    notes: "DomainEvent exists but not routed to canonical SSE stream"
+
+  task_approve:
+    action: "POST /tasks/{id}/approve"
+    handler: "household_os/runtime/command_handler.py:handle_task_approval()"
+    success_event:
+      type: "task_approved"
+      class: "SystemEvent.TaskApproved"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "task_approval_failed"
+      class: "SystemEvent.TaskApprovalFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: "task_approved"
+      mapping: "task_approved → SystemEvent.TaskApproved"
+      annotation: "@canonical_target('TaskApproved')"
+    status: "PHASE-3-PENDING: Add canonical mapping"
+
+  task_reject:
+    action: "POST /tasks/{id}/reject"
+    handler: "household_os/runtime/command_handler.py:handle_task_rejection()"
+    success_event:
+      type: "task_rejected"
+      class: "SystemEvent.TaskRejected"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: null
+      required: false
+      reason: "Rejection is terminal state machine transition"
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: "task_rejected"
+      mapping: "task_rejected → SystemEvent.TaskRejected"
+      annotation: "@canonical_target('TaskRejected')"
+    status: "PHASE-3-PENDING: Add canonical mapping"
+
+  task_commit:
+    action: "POST /tasks/{id}/commit"
+    handler: "household_os/runtime/command_handler.py:handle_task_commit()"
+    success_event:
+      type: "task_committed"
+      class: "SystemEvent.TaskCommitted"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "task_commit_failed"
+      class: "SystemEvent.TaskCommitFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: "task_committed"
+      mapping: "task_committed → SystemEvent.TaskCommitted"
+      annotation: "@canonical_target('TaskCommitted')"
+    status: "PHASE-3-PENDING: Add canonical mapping"
+
+  task_fail:
+    action: "POST /tasks/{id}/fail"
+    handler: "household_os/runtime/command_handler.py:handle_task_failure()"
+    success_event:
+      type: "task_failed"
+      class: "SystemEvent.TaskFailed"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: null
+      required: false
+      reason: "Failure is terminal state transition"
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: "task_failed"
+      mapping: "task_failed → SystemEvent.TaskFailed"
+      annotation: "@canonical_target('TaskFailed')"
+    status: "PHASE-3-PENDING: Add canonical mapping"
+
+  calendar_create_event:
+    action: "POST /calendar/events"
+    handler: "apps/api/services/calendar_service.py:create_event()"
+    success_event:
+      type: "calendar_event_created"
+      class: "SystemEvent.CalendarEventCreated"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "calendar_event_creation_failed"
+      class: "SystemEvent.CalendarEventCreationFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: null
+    status: "PHASE-2-PENDING: Add failure event"
+
+  calendar_update_event:
+    action: "PATCH /calendar/events/{id}"
+    handler: "apps/api/services/calendar_service.py:update_event()"
+    success_event:
+      type: "calendar_event_updated"
+      class: "SystemEvent.CalendarEventUpdated"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "calendar_event_update_failed"
+      class: "SystemEvent.CalendarEventUpdateFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: null
+    status: "PHASE-2-PENDING: Add failure event"
+    notes: "Line 476: success event emission, no failure"
+
+  calendar_delete_event:
+    action: "DELETE /calendar/events/{id}"
+    handler: "apps/api/services/calendar_service.py:delete_event()"
+    success_event:
+      type: "calendar_event_deleted"
+      class: "SystemEvent.CalendarEventDeleted"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "calendar_event_deletion_failed"
+      class: "SystemEvent.CalendarEventDeletionFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: null
+    status: "PHASE-2-PENDING: Add failure event"
+
+  chat_send_message:
+    action: "POST /chat"
+    handler: "apps/api/product_surface/chat_gateway_service.py:send_message()"
+    success_event:
+      type: "chat_message_sent"
+      class: "SystemEvent.ChatMessageSent"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "chat_message_failed"
+      class: "SystemEvent.ChatMessageFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: null
+    status: "PHASE-2-PENDING: Add failure event"
+
+  chat_resolve_proposal:
+    action: "POST /chat/{id}/resolve"
+    handler: "apps/api/product_surface/chat_gateway_service.py:resolve_proposal()"
+    success_event:
+      type: "chat_proposal_resolved"
+      class: "SystemEvent.ChatProposalResolved"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "chat_proposal_resolution_failed"
+      class: "SystemEvent.ChatProposalResolutionFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: null
+    status: "PHASE-2-PENDING: Add failure event"
+
+  ingestion_process_webhook:
+    action: "POST /ingest/webhook"
+    handler: "apps/api/ingestion/service.py:process_webhook()"
+    success_event:
+      type: "webhook_processed"
+      class: "SystemEvent.WebhookProcessed"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "webhook_processing_failed"
+      class: "SystemEvent.WebhookProcessingFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: null
+    status: "PHASE-2-PENDING: Add failure event"
+
+  ingestion_parse_email:
+    action: "POST /ingest/email"
+    handler: "apps/api/ingestion/service.py:parse_email()"
+    success_event:
+      type: "email_parsed"
+      class: "SystemEvent.EmailParsed"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "email_parsing_failed"
+      class: "SystemEvent.EmailParsingFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: null
+    status: "PHASE-2-PENDING: Add failure event"
+
+  identity_user_account_update:
+    action: "PATCH /users/{id}"
+    handler: "apps/api/identity/sqlalchemy_repository.py:update_user_account()"
+    success_event:
+      type: "user_updated"
+      class: "SystemEvent.UserUpdated"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "user_update_failed"
+      class: "SystemEvent.UserUpdateFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: null
+    status: "PHASE-1-DECISION: Verify classification of identity_repository.py mutations"
+    notes: "Line 66+: UNKNOWN GAP - requires module owner verification"
+
+  identity_token_refresh:
+    action: "POST /auth/refresh"
+    handler: "apps/api/identity/sqlalchemy_repository.py:_refresh_session_token()"
+    success_event:
+      type: null
+      required: false
+      reason: "Internal-only operation"
+    failure_event:
+      type: null
+      required: false
+    rejection_event:
+      type: null
+      required: false
+    internal_only: true
+    lifecycle_plane:
+      domain_event: null
+    annotation: "@internal_only"
+    status: "PHASE-1-PENDING: Apply marker to repository"
+    notes: "Line 150: session.commit() for token refresh - internal-only"
+
+  hpal_orchestration_plan_update:
+    action: "Auto-reconciliation trigger"
+    handler: "apps/api/hpal/auto_reconciliation.py:reconcile()"
+    success_event:
+      type: "orchestration_plan_updated"
+      class: "SystemEvent.OrchestrationPlanUpdated"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "orchestration_plan_update_failed"
+      class: "SystemEvent.OrchestrationPlanUpdateFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: null
+    status: "PHASE-4-PENDING: Add canonical event emission"
+    notes: "Line 78: save_hpal_state() - HIGH RISK, core orchestration layer"
+
+  hpal_command_gateway_update:
+    action: "Command gateway orchestration write"
+    handler: "apps/api/hpal/command_gateway.py:execute_command()"
+    success_event:
+      type: "orchestration_command_executed"
+      class: "SystemEvent.OrchestrationCommandExecuted"
+      required: true
+      ui_visible: true
+    failure_event:
+      type: "orchestration_command_failed"
+      class: "SystemEvent.OrchestrationCommandFailed"
+      required: true
+      ui_visible: true
+    rejection_event:
+      type: null
+      required: false
+    internal_only: false
+    lifecycle_plane:
+      domain_event: null
+    status: "PHASE-4-PENDING: Add canonical event emission"
+    notes: "HPAL mutations bypass canonical plane - HIGH RISK"
+
+  hpal_orchestration_internal_audit:
+    action: "Internal event_history tracking"
+    handler: "apps/api/hpal/orchestrator.py:_append_event_history()"
+    success_event:
+      type: null
+      required: false
+      reason: "Audit trail only - no UI visibility"
+    failure_event:
+      type: null
+      required: false
+    rejection_event:
+      type: null
+      required: false
+    internal_only: true
+    lifecycle_plane:
+      domain_event: null
+    annotation: "@audit_only"
+    status: "PHASE-4-PENDING: Mark internal-only explicitly"
+    notes: "Line 629: event_history append - internal audit only"
+
+# Validation Rules
+rules:
+  silent_mutation_forbidden:
+    definition: "Any session.commit() or graph write must have corresponding event emission or @internal_only marker"
+    enforcement: "Static AST scan + runtime instrumentation"
+    test_gate: "test_static_silent_mutations.py"
+    violation_example: "session.commit() without router.emit() in same function"
+
+  event_triad_required:
+    definition: "User-visible action must emit success OR (success + failure) OR (success + failure + rejection)"
+    valid_triads:
+      - [success]
+      - [success, failure]
+      - [success, failure, rejection]
+    invalid_triads:
+      - [failure]
+      - [rejection]
+      - [failure, rejection]
+    enforcement: "Static contract validation"
+    test_gate: "test_static_event_triads.py"
+
+  parallel_plane_mapping_required:
+    definition: "Every DomainEvent must be explicitly mapped (@canonical_target) or isolated (@internal_only)"
+    enforcement: "Static annotation scan"
+    test_gate: "test_static_domain_event_mapping.py"
+    violation_example: "DomainEvent emitted without annotation in command_handler"
+
+  ui_canonical_only:
+    definition: "UI can consume ONLY canonical SystemEvent via SSE; no direct broker or lifecycle plane access"
+    enforcement: "Static broadcaster code review + runtime topic validation"
+    test_gate: "test_runtime_sse_output.py"
+    violation_example: "DomainEvent detected on SSE stream"
+
+  internal_only_marker_required:
+    definition: "Mutations with no UI visibility must be marked @internal_only or @audit_only"
+    enforcement: "Static decorator scan"
+    test_gate: "test_static_silent_mutations.py"
+    violation_example: "session.commit() without event and no marker"
+
+# Phase Progress Tracking
+phase_status:
+  phase_1_silent_mutations:
+    target_completion: "Week 2"
+    status: "NOT_STARTED"
+    blocked_by: null
+    tasks:
+      - "Add static gate: test_static_silent_mutations.py"
+      - "Decorate internal-only writes in identity_repository.py"
+      - "Add task_metadata_updated event"
+      - "Activate CI gate"
+
+  phase_2_failure_events:
+    target_completion: "Week 4"
+    status: "NOT_STARTED"
+    blocked_by: "phase_1_silent_mutations"
+    tasks:
+      - "Add failure events for all user actions"
+      - "Implement try-except-emit pattern"
+      - "Add event triad validation test"
+      - "Activate triad gate"
+
+  phase_3_domain_mapping:
+    target_completion: "Week 6"
+    status: "NOT_STARTED"
+    blocked_by: "phase_2_failure_events"
+    tasks:
+      - "Create DomainCanonicalMapper service"
+      - "Add annotation requirement test"
+      - "Annotate all domain event functions"
+      - "Enable SSE canonical routing"
+
+  phase_4_hpal_normalization:
+    target_completion: "Week 8"
+    status: "NOT_STARTED"
+    blocked_by: "phase_3_domain_mapping"
+    tasks:
+      - "Add orchestration_plan_updated event"
+      - "Emit from auto_reconciliation.py and command_gateway.py"
+      - "Mark internal HPAL mutations (@audit_only)"
+      - "Validate with planning_agent team"
+
+  phase_5_ci_enforcement:
+    target_completion: "Week 9"
+    status: "NOT_STARTED"
+    blocked_by: "phase_4_hpal_normalization"
+    tasks:
+      - "Activate all static gates"
+      - "Add runtime validation tests"
+      - "Document EVENT_SYSTEM_CLOSURE.md"
+      - "Verify all invariants passing"

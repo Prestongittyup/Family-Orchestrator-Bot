@@ -8,8 +8,12 @@ replaying the sequence of events.
 
 from __future__ import annotations
 
+import hashlib
+import hmac
+import json
+import os
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
@@ -47,7 +51,16 @@ class DomainEvent:
     event_type: str
     timestamp: datetime
     payload: dict[str, Any]
-    metadata: dict[str, Any]
+    metadata: dict[str, Any] = field(default_factory=dict)
+    signature: str = ""
+
+    def __post_init__(self) -> None:
+        if "actor_type" not in self.metadata:
+            metadata = dict(self.metadata)
+            metadata["actor_type"] = "unknown"
+            object.__setattr__(self, "metadata", metadata)
+        if not self.signature:
+            object.__setattr__(self, "signature", self._compute_signature())
 
     @staticmethod
     def create(
@@ -83,6 +96,24 @@ class DomainEvent:
             payload=resolved_payload,
             metadata=metadata or {},
         )
+
+    def verify_signature(self) -> bool:
+        return hmac.compare_digest(self.signature, self._compute_signature())
+
+    def _compute_signature(self) -> str:
+        actor_id = str(
+            self.metadata.get("subject_id")
+            or self.metadata.get("user_id")
+            or self.metadata.get("actor_type")
+            or ""
+        )
+        request_id = str(self.metadata.get("request_id") or "")
+        payload_hash = hashlib.sha256(
+            json.dumps(self.payload, sort_keys=True, default=str, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+        secret = os.getenv("EVENT_SIGNING_SECRET", "local-dev-event-secret").encode("utf-8")
+        message = f"{actor_id}:{request_id}:{payload_hash}".encode("utf-8")
+        return hmac.new(secret, message, hashlib.sha256).hexdigest()
 
     def __hash__(self) -> int:
         """Events are hashable (immutable)."""

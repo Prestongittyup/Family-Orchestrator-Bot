@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from copy import deepcopy
 from datetime import UTC, datetime
 from pathlib import Path
@@ -12,8 +13,16 @@ from household_os.connectors import CalendarConnector, GroceryConnector, TaskCon
 from household_os.core.lifecycle_state import (
     LifecycleState,
     assert_lifecycle_state,
-    enforce_boundary_state,
+    parse_lifecycle_state,
 )
+from household_os.security.trust_boundary_enforcer import enforce_import_boundary, validate_forbidden_call
+
+
+LIFECYCLE_HYDRATION_KEY = "_lifecycle_hydration"
+logger = logging.getLogger(__name__)
+
+
+enforce_import_boundary("household_os.core.household_state_graph")
 
 
 def _utc_now_iso() -> str:
@@ -32,6 +41,10 @@ class HouseholdStateGraphStore:
         self._grocery_connector = GroceryConnector()
 
     def load_graph(self, household_id: str) -> dict[str, Any]:
+        validate_forbidden_call(
+            "HouseholdStateGraphStore.load_graph",
+            skip_modules={"household_os.core.household_state_graph"},
+        )
         if household_id in self._cache:
             return deepcopy(self._cache[household_id])
 
@@ -46,6 +59,26 @@ class HouseholdStateGraphStore:
 
         self._cache[household_id] = deepcopy(graph)
         return deepcopy(graph)
+
+    def verify_household_owner(self, household_id: str, user_id: str) -> bool:
+        """Return True when the user is an active member of the household."""
+        if not household_id or not user_id:
+            return False
+
+        try:
+            from apps.api.identity.sqlalchemy_repository import SQLAlchemyIdentityRepository
+
+            repository = SQLAlchemyIdentityRepository()
+            membership = repository.get_membership_by_household_user(household_id, user_id)
+            return bool(membership and getattr(membership, "is_active", False))
+        except Exception:
+            logger.warning(
+                "verify_household_owner failed for household_id=%s user_id=%s",
+                household_id,
+                user_id,
+                exc_info=True,
+            )
+            return False
 
     def refresh_graph(
         self,
@@ -212,6 +245,10 @@ class HouseholdStateGraphStore:
         }
 
     def save_graph(self, graph: dict[str, Any]) -> dict[str, Any]:
+        validate_forbidden_call(
+            "HouseholdStateGraphStore.save_graph",
+            skip_modules={"household_os.core.household_state_graph"},
+        )
         graph = self._ensure_runtime_sections(deepcopy(graph))
         self._assert_lifecycle_sections(graph)
         graph["updated_at"] = _utc_now_iso()
@@ -255,37 +292,59 @@ class HouseholdStateGraphStore:
         return graph
 
     def _parse_lifecycle_sections(self, graph: dict[str, Any]) -> dict[str, Any]:
-        lifecycle = graph.get("action_lifecycle", {})
+        normalized_graph = deepcopy(graph)
+
+        lifecycle = normalized_graph.get("action_lifecycle", {})
         actions = lifecycle.get("actions", {}) if isinstance(lifecycle, dict) else {}
+        action_snapshots: dict[str, dict[str, Any]] = {}
         if isinstance(actions, dict):
-            for payload in actions.values():
+            for action_id, payload in actions.items():
                 if not isinstance(payload, dict):
                     continue
-                raw_state = payload.get("current_state")
-                if raw_state is not None:
-                    payload["current_state"] = enforce_boundary_state(raw_state)
+                action_snapshots[action_id] = {
+                    "current_state": payload.get("current_state"),
+                }
 
         transition_log = lifecycle.get("transition_log", []) if isinstance(lifecycle, dict) else []
+        transition_snapshots: list[dict[str, Any]] = []
         if isinstance(transition_log, list):
             for item in transition_log:
                 if not isinstance(item, dict):
                     continue
-                from_raw = item.get("from_state")
-                if from_raw is not None:
-                    item["from_state"] = enforce_boundary_state(from_raw)
-                to_raw = item.get("to_state")
-                if to_raw is not None:
-                    item["to_state"] = enforce_boundary_state(to_raw)
+                transition_snapshots.append(
+                    {
+                        "from_state": item.get("from_state"),
+                        "to_state": item.get("to_state"),
+                    }
+                )
 
-        feedback_records = graph.get("behavior_feedback", {}).get("records", [])
+        feedback_records = normalized_graph.get("behavior_feedback", {}).get("records", [])
+        feedback_snapshots: list[dict[str, Any]] = []
         if isinstance(feedback_records, list):
             for record in feedback_records:
                 if not isinstance(record, dict):
                     continue
-                raw_status = record.get("status")
-                if raw_status is not None:
-                    record["status"] = enforce_boundary_state(raw_status)
-        return graph
+                feedback_snapshots.append({"status": record.get("status")})
+
+        if action_snapshots or transition_snapshots or feedback_snapshots:
+            normalized_graph[LIFECYCLE_HYDRATION_KEY] = {
+                "action_lifecycle": {
+                    "actions": action_snapshots,
+                    "transition_log": transition_snapshots,
+                },
+                "behavior_feedback": feedback_snapshots,
+            }
+        return normalized_graph
+
+    def _validated_lifecycle_state(self, value: Any, *, field_name: str) -> LifecycleState:
+        parsed_state = parse_lifecycle_state(value)
+        assert_lifecycle_state(parsed_state)
+        return parsed_state
+
+    def _strip_lifecycle_hydration(self, graph: dict[str, Any]) -> dict[str, Any]:
+        stripped_graph = deepcopy(graph)
+        stripped_graph.pop(LIFECYCLE_HYDRATION_KEY, None)
+        return stripped_graph
 
     def _assert_lifecycle_sections(self, graph: dict[str, Any]) -> None:
         lifecycle = graph.get("action_lifecycle", {})
@@ -296,9 +355,29 @@ class HouseholdStateGraphStore:
                     continue
                 state = payload.get("current_state")
                 if state is not None:
-                    if not isinstance(state, LifecycleState):
-                        raise TypeError(f"Action {action_id} current_state must be LifecycleState")
-                    assert_lifecycle_state(state)
+                    validated_state = self._validated_lifecycle_state(
+                        state,
+                        field_name=f"Action {action_id} current_state",
+                    )
+                else:
+                    validated_state = None
+
+                transitions = payload.get("transitions", [])
+                if isinstance(transitions, list) and transitions:
+                    latest = transitions[-1]
+                    if isinstance(latest, dict):
+                        latest_to_state = latest.get("to_state")
+                        if latest_to_state is not None and validated_state is not None:
+                            validated_latest = self._validated_lifecycle_state(
+                                latest_to_state,
+                                field_name=f"Action {action_id} latest transition to_state",
+                            )
+                        else:
+                            validated_latest = None
+                        if validated_latest is not None and validated_latest != validated_state:
+                            raise ValueError(
+                                f"Action {action_id} current_state must match latest transition to_state"
+                            )
 
         transition_log = lifecycle.get("transition_log", []) if isinstance(lifecycle, dict) else []
         if isinstance(transition_log, list):
@@ -307,14 +386,47 @@ class HouseholdStateGraphStore:
                     continue
                 from_state = entry.get("from_state")
                 if from_state is not None:
-                    if not isinstance(from_state, LifecycleState):
-                        raise TypeError("transition_log.from_state must be LifecycleState")
-                    assert_lifecycle_state(from_state)
+                    self._validated_lifecycle_state(
+                        from_state,
+                        field_name="transition_log.from_state",
+                    )
                 to_state = entry.get("to_state")
                 if to_state is not None:
-                    if not isinstance(to_state, LifecycleState):
-                        raise TypeError("transition_log.to_state must be LifecycleState")
-                    assert_lifecycle_state(to_state)
+                    self._validated_lifecycle_state(
+                        to_state,
+                        field_name="transition_log.to_state",
+                    )
+
+        if isinstance(actions, dict) and isinstance(transition_log, list):
+            latest_log_state_by_action: dict[str, LifecycleState] = {}
+            for entry in transition_log:
+                if not isinstance(entry, dict):
+                    continue
+                action_id = entry.get("action_id")
+                to_state = entry.get("to_state")
+                if isinstance(action_id, str) and to_state is not None:
+                    latest_log_state_by_action[action_id] = self._validated_lifecycle_state(
+                        to_state,
+                        field_name=f"transition_log[{action_id}].to_state",
+                    )
+
+            for action_id, payload in actions.items():
+                if not isinstance(payload, dict):
+                    continue
+                logged_state = latest_log_state_by_action.get(action_id)
+                if logged_state is None:
+                    continue
+                current_state = payload.get("current_state")
+                if current_state is None:
+                    continue
+                validated_current = self._validated_lifecycle_state(
+                    current_state,
+                    field_name=f"Action {action_id} current_state",
+                )
+                if validated_current != logged_state:
+                    raise ValueError(
+                        f"Action {action_id} current_state diverges from transition_log latest to_state"
+                    )
 
         feedback_records = graph.get("behavior_feedback", {}).get("records", [])
         if isinstance(feedback_records, list):
@@ -323,14 +435,16 @@ class HouseholdStateGraphStore:
                     continue
                 status = record.get("status")
                 if status is not None:
-                    if not isinstance(status, LifecycleState):
-                        raise TypeError("behavior_feedback.status must be LifecycleState")
-                    assert_lifecycle_state(status)
+                    self._validated_lifecycle_state(
+                        status,
+                        field_name="behavior_feedback.status",
+                    )
 
     def _write_graph(self, graph: dict[str, Any]) -> None:
-        self._assert_lifecycle_sections(graph)
+        persisted_graph = self._strip_lifecycle_hydration(graph)
+        self._assert_lifecycle_sections(persisted_graph)
         payload = self._read_store()
-        payload.setdefault("households", {})[graph["household_id"]] = deepcopy(graph)
+        payload.setdefault("households", {})[persisted_graph["household_id"]] = deepcopy(persisted_graph)
         self.graph_path.parent.mkdir(parents=True, exist_ok=True)
         self.graph_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-        self._cache[graph["household_id"]] = deepcopy(graph)
+        self._cache[persisted_graph["household_id"]] = self._parse_lifecycle_sections(persisted_graph)

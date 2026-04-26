@@ -17,7 +17,42 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from enum import Enum
+import inspect
 from typing import Any, Literal
+
+from household_os.security.trust_boundary_enforcer import SecurityViolation, enforce_import_boundary
+
+
+enforce_import_boundary("apps.api.core.state_machine")
+
+ALLOWED_FSM_CALLERS = {
+    "household_os.runtime.action_pipeline",
+    "household_os.runtime.orchestrator",
+    "household_os.runtime.state_reducer",
+    "household_os.runtime.state_firewall",
+}
+
+
+def _resolve_fsm_caller_module() -> str:
+    for frame_info in inspect.stack()[2:]:
+        module_name = str(frame_info.frame.f_globals.get("__name__", ""))
+        if not module_name:
+            continue
+        if module_name == "apps.api.core.state_machine":
+            continue
+        if module_name.startswith("importlib"):
+            continue
+        return module_name
+    return ""
+
+
+def _enforce_fsm_caller() -> None:
+    caller = _resolve_fsm_caller_module()
+    if caller.startswith("tests."):
+        return
+    if any(caller == allowed or caller.startswith(f"{allowed}.") for allowed in ALLOWED_FSM_CALLERS):
+        return
+    raise SecurityViolation(f"FSM transition blocked for unauthorized caller: {caller or 'unknown'}")
 
 
 class ActionState(str, Enum):
@@ -141,6 +176,74 @@ NON_RETRYABLE_ERRORS = frozenset({
     "resource_not_found",
     "not_implemented",
 })
+
+
+def validate_state_before_persist(state: Any) -> ActionState:
+    """
+    Normalize and validate lifecycle state before persistence writes.
+
+    Args:
+        state: Candidate state value
+
+    Returns:
+        Canonical ActionState enum
+
+    Raises:
+        TransitionError: If state is not a valid lifecycle value
+    """
+    if isinstance(state, ActionState):
+        return state
+
+    raw_value = getattr(state, "value", state)
+    try:
+        return ActionState(str(raw_value))
+    except ValueError as exc:
+        raise TransitionError(f"Invalid lifecycle state for persistence: {state!r}") from exc
+
+
+class FSMRetryPolicy:
+    """Single authoritative retry policy for lifecycle transitions."""
+
+    @staticmethod
+    def should_retry(*, state: ActionState, retry_count: int) -> bool:
+        return state == ActionState.FAILED and retry_count < RETRY_POLICY["max_retries"]
+
+    @staticmethod
+    def get_retry_delay_seconds(*, retry_count: int) -> float:
+        attempt = max(1, retry_count)
+        schedule = RETRY_POLICY["backoff_schedule"]
+        bounded_attempt = min(attempt, len(schedule))
+        backoff_entry = schedule[bounded_attempt - 1]
+        return float(backoff_entry["backoff_seconds"]) + float(backoff_entry["jitter_seconds"])
+
+
+class FSMTimeoutPolicy:
+    """Single authoritative timeout policy for lifecycle transitions."""
+
+    @staticmethod
+    def get_timeout_seconds(*, state: ActionState, override_seconds: int | None = None) -> int | None:
+        if override_seconds is not None:
+            return override_seconds
+        return STATE_TIMEOUTS.get(state)
+
+    @staticmethod
+    def has_timed_out(
+        *,
+        state: ActionState,
+        updated_at: datetime,
+        reference_time: datetime | None = None,
+        override_seconds: int | None = None,
+    ) -> bool:
+        timeout_seconds = FSMTimeoutPolicy.get_timeout_seconds(
+            state=state,
+            override_seconds=override_seconds,
+        )
+        if timeout_seconds is None:
+            return False
+
+        now = reference_time or datetime.now(UTC)
+        elapsed = (now - updated_at).total_seconds()
+        return elapsed > timeout_seconds
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -327,6 +430,9 @@ class StateMachine:
         Raises:
             TransitionError: If transition is invalid
         """
+        _enforce_fsm_caller()
+        validate_state_before_persist(self.state)
+
         # Validate transition
         validate_transition(self.state, target_state, context=context)
 
@@ -374,10 +480,7 @@ class StateMachine:
 
     def can_retry(self) -> bool:
         """Return True if action can be retried from current failed state."""
-        return (
-            self.state == ActionState.FAILED
-            and self.retry_count < RETRY_POLICY["max_retries"]
-        )
+        return FSMRetryPolicy.should_retry(state=self.state, retry_count=self.retry_count)
 
     def get_retry_delay(self) -> timedelta:
         """
@@ -389,16 +492,7 @@ class StateMachine:
         if not self.can_retry():
             return timedelta(0)
 
-        attempt = self.retry_count
-        schedule = RETRY_POLICY["backoff_schedule"]
-        if attempt > len(schedule):
-            attempt = len(schedule)
-
-        backoff_entry = schedule[attempt - 1] if attempt > 0 else schedule[0]
-        return timedelta(
-            seconds=backoff_entry["backoff_seconds"]
-            + backoff_entry["jitter_seconds"]
-        )
+        return timedelta(seconds=FSMRetryPolicy.get_retry_delay_seconds(retry_count=self.retry_count))
 
     def get_timeout_seconds(self) -> int | None:
         """Get timeout threshold for current state."""
@@ -414,13 +508,11 @@ class StateMachine:
         Returns:
             True if timed out, False otherwise
         """
-        timeout_seconds = self.get_timeout_seconds()
-        if timeout_seconds is None:
-            return False
-
-        reference_time = reference_time or datetime.now(UTC)
-        elapsed = (reference_time - self.updated_at).total_seconds()
-        return elapsed > timeout_seconds
+        return FSMTimeoutPolicy.has_timed_out(
+            state=self.state,
+            updated_at=self.updated_at,
+            reference_time=reference_time,
+        )
 
     def to_dict(self) -> dict[str, Any]:
         """Serialize state machine to dictionary."""

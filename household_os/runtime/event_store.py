@@ -12,10 +12,52 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from datetime import UTC, datetime
+import inspect
 from typing import Any
 
+from household_os.core.execution_context import ActorContext
 from household_os.core.lifecycle_state import LifecycleState
 from household_os.runtime.domain_event import DomainEvent
+from household_os.security.trust_boundary_enforcer import (
+    allow_test_mode_bypass,
+    enforce_import_boundary,
+)
+
+
+enforce_import_boundary("household_os.runtime.event_store")
+
+
+_APPEND_ALLOWED_CALLERS = {
+    "household_os.runtime.command_handler",
+    "household_os.runtime.action_pipeline",
+    "household_os.runtime.lifecycle_migration",
+    "household_os.runtime.state_reducer",
+    "apps.api.core.state_machine",
+}
+
+
+def _resolve_append_caller() -> str:
+    for frame_info in inspect.stack()[2:]:
+        module_name = str(frame_info.frame.f_globals.get("__name__", ""))
+        if not module_name:
+            continue
+        if module_name.startswith("household_os.runtime.event_store"):
+            continue
+        if module_name.startswith("apps.api.observability"):
+            continue
+        if module_name.startswith("importlib"):
+            continue
+        return module_name
+    return ""
+
+
+def _caller_allowed_for_append(caller_module: str) -> bool:
+    if caller_module.startswith("tests."):
+        return True
+    return any(
+        caller_module == allowed or caller_module.startswith(f"{allowed}.")
+        for allowed in _APPEND_ALLOWED_CALLERS
+    )
 
 
 class EventStoreError(Exception):
@@ -41,7 +83,14 @@ class EventStore(ABC):
     """
 
     @abstractmethod
-    def append(self, event: DomainEvent) -> None:
+    def append(
+        self,
+        event: DomainEvent,
+        *,
+        provenance_token: object | None = None,
+        actor_context: ActorContext | None = None,
+        test_mode: bool = False,
+    ) -> None:
         """
         Append an event to the store.
 
@@ -128,8 +177,19 @@ class InMemoryEventStore(EventStore):
         """Initialize empty in-memory store."""
         # aggregate_id -> list of events (always append-only)
         self._events: dict[str, list[DomainEvent]] = {}
+        self._internal_provenance_tokens: set[object] = set()
 
-    def append(self, event: DomainEvent) -> None:
+    def bind_internal_gate_token(self, token: object) -> None:
+        self._internal_provenance_tokens.add(token)
+
+    def append(
+        self,
+        event: DomainEvent,
+        *,
+        provenance_token: object | None = None,
+        actor_context: ActorContext | None = None,
+        test_mode: bool = False,
+    ) -> None:
         """
         Append an event to the store.
 
@@ -139,6 +199,37 @@ class InMemoryEventStore(EventStore):
         Raises:
             EventStoreError: If event_id already exists (duplicate)
         """
+        caller_module = _resolve_append_caller()
+        if not _caller_allowed_for_append(caller_module):
+            raise EventStoreError(
+                f"Forbidden append caller: {caller_module or 'unknown'}"
+            )
+
+        if not event.signature:
+            raise EventStoreError("event_store.append requires signed events")
+        if not event.verify_signature():
+            raise EventStoreError("event_store.append rejected invalid event signature")
+
+        if self._internal_provenance_tokens:
+            if (
+                provenance_token not in self._internal_provenance_tokens
+                and not _caller_allowed_for_append(caller_module)
+                and not allow_test_mode_bypass(test_mode)
+            ):
+                raise EventStoreError("event_store.append requires trusted provenance token")
+
+        if actor_context is not None:
+            if actor_context.actor_type not in {"user", "assistant", "system_worker", "scheduler"}:
+                raise EventStoreError(
+                    f"event_store.append received invalid actor_context.actor_type: {actor_context.actor_type!r}"
+                )
+            if actor_context.auth_scope not in {"household", "system"}:
+                raise EventStoreError(
+                    f"event_store.append received invalid actor_context.auth_scope: {actor_context.auth_scope!r}"
+                )
+            if actor_context.actor_type in {"user", "assistant"} and not str(actor_context.actor_id).strip():
+                raise EventStoreError("event_store.append received unverified actor context")
+
         aggregate_id = event.aggregate_id
 
         payload_state = event.payload.get("state") if isinstance(event.payload, dict) else None

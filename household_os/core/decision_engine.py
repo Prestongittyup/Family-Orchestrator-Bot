@@ -15,6 +15,10 @@ from household_os.core.contracts import (
     RecommendedNextAction,
     UrgencyLevel,
 )
+from household_os.security.trust_boundary_enforcer import enforce_import_boundary, validate_forbidden_call
+
+
+enforce_import_boundary("household_os.core.decision_engine")
 
 
 class HouseholdOSDecisionEngine:
@@ -29,6 +33,10 @@ class HouseholdOSDecisionEngine:
         request_id: str,
         allowed_domains: list[str] | None = None,
     ) -> HouseholdOSRunResponse:
+        validate_forbidden_call(
+            "HouseholdOSDecisionEngine.run",
+            skip_modules={"household_os.core.decision_engine"},
+        )
         """
         Perform unified household reasoning:
         - Parse natural-language intent

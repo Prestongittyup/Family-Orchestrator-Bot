@@ -70,7 +70,8 @@ class TestDomainEvent:
         assert event.aggregate_id == "action-123"
         assert event.event_type == LIFECYCLE_EVENT_TYPES["ACTION_PROPOSED"]
         assert event.payload == {"title": "Test Action"}
-        assert event.metadata == {"request_id": "req-456"}
+        assert event.metadata.get("request_id") == "req-456"
+        assert event.metadata.get("actor_type") == "unknown"
         assert event.event_id is not None
         assert isinstance(event.timestamp, datetime)
 

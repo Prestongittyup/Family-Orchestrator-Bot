@@ -11,10 +11,17 @@ DEAD_LETTER_QUEUE: list[Job] = []
 _dlq_lock = threading.Lock()
 
 
+def internal_only(func):
+    """Marker decorator for internal-only mutations excluded from router.emit enforcement."""
+    return func
+
+
+@internal_only
 def move_to_dlq(job: Job, error: str, status: str = "dead_letter") -> None:
     """
     Move a permanently failed job to the dead letter queue.
 
+    Internal-only mutation for DLQ processing.
     Updates in-memory job state and persists the given status when possible.
     Pass status="poisoned" for jobs that have exceeded the consecutive failure threshold.
     """

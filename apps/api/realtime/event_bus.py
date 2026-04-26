@@ -2,17 +2,10 @@ from __future__ import annotations
 
 import json
 import threading
-from dataclasses import dataclass
+from uuid import uuid4
 from typing import Any, Callable
 
-
-@dataclass
-class RealtimeEvent:
-    household_id: str
-    event_type: str
-    watermark: str
-    payload: dict[str, Any]
-
+from apps.api.realtime.transport_event import RealtimeEvent
 
 class RealtimeEventBus:
     def publish(self, event: RealtimeEvent) -> None:
@@ -61,13 +54,23 @@ class RedisRealtimeEventBus(RealtimeEventBus):
     def publish(self, event: RealtimeEvent) -> None:
         if not self._enabled or self._client is None:
             return
+        # Loop prevention lives in transport ingress/egress, not router.
+        if event.source == "redis_distributed_transport":
+            return
         channel = f"{self.CHANNEL_PREFIX}{event.household_id}"
         body = json.dumps(
             {
+                "event_id": event.event_id,
+                "actor_type": event.actor_type,
                 "household_id": event.household_id,
                 "event_type": event.event_type,
+                "timestamp": event.timestamp.isoformat(),
                 "watermark": event.watermark,
+                "idempotency_key": event.idempotency_key,
+                "source": event.source,
+                "severity": event.severity,
                 "payload": event.payload,
+                "signature": event.signature,
             },
             sort_keys=True,
         )
@@ -77,8 +80,20 @@ class RedisRealtimeEventBus(RealtimeEventBus):
         self._handlers.append(handler)
 
     def _listen_loop(self) -> None:
+        """STRICT INVARIANCE: All events must re-enter canonical pipeline.
+        
+        Redis distributed events are reconstructed as SystemEvent,
+        validated through CanonicalEventAdapter, and routed through
+        CanonicalEventRouter with loop prevention handled in this transport.
+        """
         if not self._enabled or self._pubsub is None:
             return
+        
+        # Deferred imports to avoid circular dependencies
+        from apps.api.schemas.event import SystemEvent
+        from apps.api.services.canonical_event_adapter import CanonicalEventAdapter
+        from apps.api.services.canonical_event_router import canonical_event_router
+        
         for msg in self._pubsub.listen():
             if not isinstance(msg, dict):
                 continue
@@ -87,13 +102,30 @@ class RedisRealtimeEventBus(RealtimeEventBus):
                 continue
             try:
                 parsed = json.loads(raw)
-                event = RealtimeEvent(
+                
+                # STRICT INVARIANCE: Reconstruct SystemEvent from Redis JSON
+                system_event = SystemEvent(
                     household_id=str(parsed.get("household_id", "")),
-                    event_type=str(parsed.get("event_type", "update")),
-                    watermark=str(parsed.get("watermark", "")),
+                    event_id=str(parsed.get("event_id") or str(uuid4())),
+                    type=str(parsed.get("event_type", "update")),
+                    source="redis_distributed_transport",
                     payload=dict(parsed.get("payload", {})),
+                    severity=(str(parsed.get("severity")) if parsed.get("severity") is not None else None),
+                    idempotency_key=(
+                        str(parsed.get("idempotency_key")) if parsed.get("idempotency_key") is not None else None
+                    ),
+                    signature=(str(parsed.get("signature")) if parsed.get("signature") is not None else None),
+                    actor_type=(str(parsed.get("actor_type")) if parsed.get("actor_type") is not None else None),
                 )
-                for handler in list(self._handlers):
-                    handler(event)
+                
+                # STRICT INVARIANCE: Re-enter canonical pipeline (Adapter → Router)
+                envelope = CanonicalEventAdapter.to_envelope(system_event)
+                
+                # Re-enter canonical pipeline (persist disabled to avoid log duplication).
+                canonical_event_router.route(
+                    envelope,
+                    persist=False,
+                    dispatch=True,
+                )
             except Exception:
                 continue

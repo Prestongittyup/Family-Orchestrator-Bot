@@ -7,6 +7,7 @@ from datetime import datetime
 from typing import Any
 
 from household_os.runtime.orchestrator import HouseholdOSOrchestrator
+from household_os.runtime.orchestrator import OrchestratorRequest, RequestActionType
 
 
 @dataclass(frozen=True)
@@ -32,12 +33,35 @@ class OrchestrationAdapter:
         payload: dict[str, Any],
     ) -> OrchestrationSubmission:
         self._iel_precheck(family_id=family_id, payload=payload)
-        result = self.orchestrator.tick(
-            household_id=family_id,
-            user_input=intent_text,
+        result = self.orchestrator.handle_request(
+            OrchestratorRequest(
+                action_type=RequestActionType.RUN,
+                household_id=family_id,
+                actor={
+                    "actor_type": "system_worker",
+                    "subject_id": "hpal-system",
+                    "session_id": None,
+                    "verified": True,
+                },
+                user_input=intent_text,
+                context={"system_worker_verified": True},
+            )
         )
         command_id = self._command_id(family_id=family_id, idempotency_key=idempotency_key, payload=payload)
-        graph = self.orchestrator.state_store.load_graph(family_id)
+        graph = self.orchestrator.handle_request(
+            OrchestratorRequest(
+                action_type=RequestActionType.READ_SENSITIVE_STATE,
+                household_id=family_id,
+                actor={
+                    "actor_type": "system_worker",
+                    "subject_id": "hpal-system",
+                    "session_id": None,
+                    "verified": True,
+                },
+                resource_type="hpal_command_log",
+                context={"system_worker_verified": True},
+            )
+        )
         hpal = graph.setdefault("hpal", {})
         command_log = hpal.setdefault("command_log", [])
         command_log.append(
@@ -51,7 +75,20 @@ class OrchestrationAdapter:
                 "action_id": result.action_record.action_id if result.action_record else None,
             }
         )
-        self.orchestrator.state_store.save_graph(graph)
+        self.orchestrator.handle_request(
+            OrchestratorRequest(
+                action_type=RequestActionType.WRITE_SENSITIVE_STATE,
+                household_id=family_id,
+                actor={
+                    "actor_type": "system_worker",
+                    "subject_id": "hpal-system",
+                    "session_id": None,
+                    "verified": True,
+                },
+                graph=graph,
+                context={"system_worker_verified": True},
+            )
+        )
         return OrchestrationSubmission(
             request_id=result.response.request_id if result.response else None,
             action_id=result.action_record.action_id if result.action_record else None,
@@ -66,17 +103,57 @@ class OrchestrationAdapter:
         expected_state_version: int | None = None,
     ) -> dict[str, Any]:
         self._iel_precheck(family_id=family_id, payload=graph.get("hpal", {}))
-        current = self.orchestrator.state_store.load_graph(family_id)
+        current = self.orchestrator.handle_request(
+            OrchestratorRequest(
+                action_type=RequestActionType.READ_SENSITIVE_STATE,
+                household_id=family_id,
+                actor={
+                    "actor_type": "system_worker",
+                    "subject_id": "hpal-system",
+                    "session_id": None,
+                    "verified": True,
+                },
+                resource_type="hpal_write_precheck",
+                context={"system_worker_verified": True},
+            )
+        )
         current_version = int(current.get("state_version", 0))
         if expected_state_version is not None and current_version != expected_state_version:
             raise ValueError("concurrent state update detected")
 
         out = dict(graph)
         out["state_version"] = current_version + 1
-        return self.orchestrator.state_store.save_graph(out)
+        out["household_id"] = family_id
+        return self.orchestrator.handle_request(
+            OrchestratorRequest(
+                action_type=RequestActionType.WRITE_SENSITIVE_STATE,
+                household_id=family_id,
+                actor={
+                    "actor_type": "system_worker",
+                    "subject_id": "hpal-system",
+                    "session_id": None,
+                    "verified": True,
+                },
+                graph=out,
+                context={"system_worker_verified": True},
+            )
+        )
 
     def load_graph(self, family_id: str) -> dict[str, Any]:
-        return self.orchestrator.state_store.load_graph(family_id)
+        return self.orchestrator.handle_request(
+            OrchestratorRequest(
+                action_type=RequestActionType.READ_SENSITIVE_STATE,
+                household_id=family_id,
+                actor={
+                    "actor_type": "system_worker",
+                    "subject_id": "hpal-system",
+                    "session_id": None,
+                    "verified": True,
+                },
+                resource_type="hpal_read",
+                context={"system_worker_verified": True},
+            )
+        )
 
     def _iel_precheck(self, *, family_id: str, payload: dict[str, Any]) -> None:
         if not family_id.strip():

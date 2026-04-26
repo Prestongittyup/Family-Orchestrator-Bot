@@ -18,6 +18,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any, Literal
 
+from household_os.core.execution_context import ActorContext
 from household_os.core.lifecycle_state import LifecycleState, assert_lifecycle_state
 from household_os.runtime.domain_event import DomainEvent, LIFECYCLE_EVENT_TYPES
 from household_os.runtime.state_reducer import (
@@ -177,12 +178,13 @@ class CommandHandler:
                 f"Valid states: {valid_states}"
             )
 
+        actor_meta = self._actor_metadata_from_command(command)
         return DomainEvent.create(
             aggregate_id=command.aggregate_id,
             event_type=LIFECYCLE_EVENT_TYPES["ACTION_APPROVED"],
             timestamp=command.ts,
             payload={"reason": command.reason},
-            metadata={"request_id": command.request_id, **(command.meta or {})},
+            metadata={"request_id": command.request_id, **(command.meta or {}), **actor_meta},
         )
 
     def _handle_reject(
@@ -197,12 +199,13 @@ class CommandHandler:
                 f"Valid states: {valid_states}"
             )
 
+        actor_meta = self._actor_metadata_from_command(command)
         return DomainEvent.create(
             aggregate_id=command.aggregate_id,
             event_type=LIFECYCLE_EVENT_TYPES["ACTION_REJECTED"],
             timestamp=command.ts,
             payload={"reason": command.reason},
-            metadata={"request_id": command.request_id, **(command.meta or {})},
+            metadata={"request_id": command.request_id, **(command.meta or {}), **actor_meta},
         )
 
     def _handle_commit(
@@ -214,12 +217,13 @@ class CommandHandler:
                 f"Can only commit from APPROVED state, current state: {current_state}"
             )
 
+        actor_meta = self._actor_metadata_from_command(command)
         return DomainEvent.create(
             aggregate_id=command.aggregate_id,
             event_type=LIFECYCLE_EVENT_TYPES["ACTION_COMMITTED"],
             timestamp=command.ts,
             payload={"result": command.result},
-            metadata={"request_id": command.request_id, **(command.meta or {})},
+            metadata={"request_id": command.request_id, **(command.meta or {}), **actor_meta},
         )
 
     def _handle_fail(
@@ -232,6 +236,7 @@ class CommandHandler:
                 f"Cannot fail from terminal state {current_state}"
             )
 
+        actor_meta = self._actor_metadata_from_command(command)
         return DomainEvent.create(
             aggregate_id=command.aggregate_id,
             event_type=LIFECYCLE_EVENT_TYPES["ACTION_FAILED"],
@@ -240,8 +245,37 @@ class CommandHandler:
                 "error": command.error,
                 "error_code": command.error_code,
             },
-            metadata={"request_id": command.request_id, **(command.meta or {})},
+            metadata={"request_id": command.request_id, **(command.meta or {}), **actor_meta},
         )
+
+    def _actor_metadata_from_command(self, command: Command) -> dict[str, Any]:
+        raw_actor_type = str((command.meta or {}).get("actor_type") or "system_worker").strip().lower()
+        if raw_actor_type == "api_user":
+            raw_actor_type = "user"
+        if raw_actor_type not in {"user", "assistant", "system_worker", "scheduler"}:
+            raise CommandError(f"Unknown actor_type in command metadata: {raw_actor_type!r}")
+
+        actor_id = str((command.meta or {}).get("subject_id") or (command.meta or {}).get("user_id") or "system")
+        household_id = str((command.meta or {}).get("household_id") or "")
+        auth_scope = "system" if raw_actor_type in {"system_worker", "scheduler"} else "household"
+        actor_context = ActorContext(
+            actor_type=raw_actor_type,
+            actor_id=actor_id,
+            household_id=household_id,
+            auth_scope=auth_scope,
+        )
+        return {
+            "actor_type": actor_context.actor_type,
+            "subject_id": actor_context.actor_id,
+            "household_id": actor_context.household_id,
+            "auth_scope": actor_context.auth_scope,
+            "actor_context": {
+                "actor_type": actor_context.actor_type,
+                "actor_id": actor_context.actor_id,
+                "household_id": actor_context.household_id,
+                "auth_scope": actor_context.auth_scope,
+            },
+        }
 
 
 # Singleton instance

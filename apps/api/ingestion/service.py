@@ -23,11 +23,25 @@ from apps.api.ingestion.models import (
 from apps.api.ingestion.normalization import convert_webhook_to_os1_event, convert_email_to_os1_event
 from apps.api.observability.execution_trace import trace_function
 from apps.api.observability.trace_context import ensure_event_payload_trace
-from apps.api.services.router_service import route_event
 from apps.api.schemas.event import SystemEvent
+from apps.api.services.canonical_event_adapter import CanonicalEventAdapter
+from apps.api.services.canonical_event_router import canonical_event_router
 
 
 LEGACY_ISOLATED = True
+
+
+class _IngestionRouter:
+    @staticmethod
+    def emit(event: SystemEvent) -> None:
+        canonical_event_router.route(
+            CanonicalEventAdapter.to_envelope(event),
+            persist=False,
+            dispatch=False,
+        )
+
+
+router = _IngestionRouter()
 
 
 def _debug_payload(enabled: bool, **data: Any) -> dict[str, Any] | None:
@@ -94,9 +108,13 @@ def ingest_webhook(payload: dict[str, Any]) -> dict[str, Any]:
                 stage="os1_ingestion",
             )
 
-        # 3) Convert dict to SystemEvent and route through existing path
+        # 3) Convert dict to SystemEvent and route through canonical event path
         event = SystemEvent(**os1_event)
-        result = route_event(event)
+        result = canonical_event_router.route(
+            CanonicalEventAdapter.to_envelope(event),
+            persist=True,
+            dispatch=True,
+        )
 
         if isinstance(result, dict) and result.get("status") == "queue_full":
             raise IngestionError(
@@ -221,6 +239,7 @@ def ingest_email(
 
     email = None
     os1_event = None
+    household_id_for_events = "hh-001"
     try:
         # 1) Validate email payload at ingestion boundary
         email = validate_email_payload(payload)
@@ -234,6 +253,7 @@ def ingest_email(
             received_at=email.received_at,
             provider=email.provider,
         )
+        household_id_for_events = str(os1_event["household_id"])
         flags = resolve_feature_flags(household_id=str(os1_event["household_id"]))
         if not flags.ingestion_enabled:
             response: dict[str, Any] = {
@@ -264,9 +284,13 @@ def ingest_email(
                 stage="os1_ingestion",
             )
 
-        # 3) Convert dict to SystemEvent and route through existing path
+        # 3) Convert dict to SystemEvent and route through canonical event path
         event = SystemEvent(**os1_event)
-        result = route_event(event)
+        result = canonical_event_router.route(
+            CanonicalEventAdapter.to_envelope(event),
+            persist=True,
+            dispatch=True,
+        )
 
         if isinstance(result, dict) and result.get("status") == "queue_full":
             raise IngestionError(
@@ -300,6 +324,20 @@ def ingest_email(
                 response["debug"] = debug
             return response
 
+        router.emit(
+            SystemEvent.EmailParsed(
+                household_id=household_id_for_events,
+                email_id=str(email.email_id),
+                source="ingestion",
+                parsed_fields={
+                    "sender": str(email.sender),
+                    "recipient": str(email.recipient),
+                    "subject": str(email.subject),
+                    "provider": str(email.provider),
+                },
+            )
+        )
+
         response = {
             "status": "success",
             "event_id": os1_event["idempotency_key"],
@@ -320,8 +358,32 @@ def ingest_email(
             response["debug"] = debug
         return response
     except IngestionError:
+        router.emit(
+            SystemEvent.EmailParseFailed(
+                household_id=household_id_for_events,
+                reason="ingestion_error",
+                error_message="Email ingestion failed",
+                raw_input={
+                    **payload,
+                    "email_id": payload.get("email_id"),
+                    "message_id": payload.get("email_id"),
+                },
+            )
+        )
         raise
     except Exception as e:
+        router.emit(
+            SystemEvent.EmailParseFailed(
+                household_id=household_id_for_events,
+                reason=("validation_error" if isinstance(e, EmailValidationError) else "parse_error"),
+                error_message=str(e),
+                raw_input={
+                    **payload,
+                    "email_id": payload.get("email_id"),
+                    "message_id": payload.get("email_id"),
+                },
+            )
+        )
         stage = "validation" if isinstance(e, EmailValidationError) else "normalization_or_routing"
         trace = build_failure_trace(
             adapter="email",

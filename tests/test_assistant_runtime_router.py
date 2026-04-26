@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 from apps.api.main import app
 from household_os.core.household_state_graph import HouseholdStateGraphStore
 from household_os.core.lifecycle_state import LifecycleState
+from household_os.presentation.lifecycle_presentation_mapper import LifecyclePresentationMapper
 from household_os.runtime.orchestrator import HouseholdOSOrchestrator
 
 
@@ -16,7 +17,6 @@ def _test_client_with_temp_runtime_store(tmp_path):
     store = HouseholdStateGraphStore(graph_path=Path(tmp_path) / "assistant_runtime_router_graph.json")
     assistant_runtime_router.runtime_orchestrator = HouseholdOSOrchestrator(state_store=store)
     return TestClient(app), assistant_runtime_router.runtime_orchestrator
-
 
 def test_run_endpoint_returns_action(tmp_path):
     client, _orchestrator = _test_client_with_temp_runtime_store(tmp_path)
@@ -59,13 +59,16 @@ def test_approval_executes_action(tmp_path):
 
     assert approve_response.status_code == 200
     payload = approve_response.json()
-    assert payload["status"] == "executed"
+    assert payload["status"] == LifecyclePresentationMapper.to_api_state(LifecycleState.COMMITTED)
     assert len(payload["effects"]) == 1
     assert payload["effects"][0]["handler"] == "calendar_update"
 
     graph = orchestrator.state_store.load_graph("runtime-api-household")
     action = graph["action_lifecycle"]["actions"][action_id]
-    assert action["current_state"] == LifecycleState.COMMITTED
+    assert graph["_lifecycle_hydration"]["action_lifecycle"]["actions"][action_id]["current_state"] in {
+        LifecycleState.COMMITTED,
+        LifecycleState.COMMITTED.value,
+    }
 
 
 def test_today_view_returns_state(tmp_path):

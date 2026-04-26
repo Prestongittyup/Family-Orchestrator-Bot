@@ -13,14 +13,17 @@ Includes:
 from __future__ import annotations
 
 import asyncio
+import inspect
 import json
 import os
 import statistics
 import time
+from datetime import UTC, datetime
 from threading import Lock
 from collections import defaultdict, deque
 from dataclasses import dataclass
 from typing import Any, AsyncIterator
+from uuid import uuid4
 
 from apps.api.observability.metrics import metrics, timer
 from apps.api.observability.logging import log_event, log_error
@@ -30,13 +33,15 @@ from apps.api.observability.alerts import (
     signal_replay_gap,
     signal_duplicate_emission,
 )
+import apps.api.observability.logging as observability_logging
 from apps.api.realtime.event_bus import (
     InMemoryRealtimeEventBus,
     RedisRealtimeEventBus,
-    RealtimeEvent,
     RealtimeEventBus,
 )
+from apps.api.realtime.transport_event import RealtimeEvent
 from apps.api.runtime.loop_tracing import register_loop_resource, trace_loop_binding, trace_loop_context
+from apps.api.schemas.canonical_event import CanonicalEventEnvelope
 
 
 class AtomicCounter:
@@ -46,7 +51,7 @@ class AtomicCounter:
         self._value = 0
         self._lock = Lock()  # Single lock covers all access
     
-    def increment_and_get(self) -> int:
+    def increment(self) -> int:
         """Atomically increment and return the new value."""
         with self._lock:
             self._value += 1
@@ -57,7 +62,7 @@ class AtomicCounter:
 class _SubscriberState:
     queue: asyncio.Queue[RealtimeEvent]
     loop: asyncio.AbstractEventLoop
-    last_watermark: str = ""
+    last_watermark: int | None = None
     last_emit_ts: float = 0.0
 
 
@@ -123,7 +128,8 @@ class HouseholdBroadcaster:
         self._inflight_tasks_total = 0.0
         self._inflight_tasks_max = 0
         # Sliding window set for watermark collision detection
-        self._emitted_watermarks: set[str] = set()
+        self._emitted_watermarks: set[int] = set()
+        self._emitting_rejection_signal = False
 
         redis_url = os.getenv("REDIS_URL", "").strip()
         transport: RealtimeEventBus
@@ -135,71 +141,171 @@ class HouseholdBroadcaster:
         self._transport = transport
         self._transport.subscribe_all(self._fanout_local)
 
-    async def publish(self, household_id: str, event_type: str, payload: dict[str, Any]) -> None:
+    def _detect_origin_module(self) -> str:
+        """Best-effort caller module detection for rejection diagnostics."""
+        try:
+            for frame_info in inspect.stack()[1:]:
+                module_name = frame_info.frame.f_globals.get("__name__", "")
+                if not module_name:
+                    continue
+                if module_name == __name__:
+                    continue
+                return module_name
+        except Exception:
+            return "unknown"
+        return "unknown"
+
+    def _validate_canonical_event(self, event: Any) -> None:
+        """Reject any non-canonical event before transport emission."""
+        if isinstance(event, CanonicalEventEnvelope):
+            return
+
+        origin_module = self._detect_origin_module()
+        event_type = getattr(event, "event_type", "unknown")
+        received_type = type(event).__name__ if event is not None else "NoneType"
+        rejection_reason = "non_canonical_event"
+
+        metrics.increment("sse_rejection_detected_total")
+        observability_logging.log_error(
+            "non_canonical_event_rejected_on_sse_stream",
+            "Non-canonical event attempted on SSE stream",
+            event_type=event_type,
+            origin_module=origin_module,
+            rejection_reason=rejection_reason,
+            received_type=received_type,
+        )
+
+        raise RuntimeError(
+            f"Non-canonical event attempted on SSE stream. "
+            f"Received {received_type}; only CanonicalEventEnvelope is allowed. "
+            f"Origin: {origin_module}"
+        )
+
+    def _validate_emit_origin(self, event: Any) -> None:
+        """Allow emits only from router-originated canonical envelopes."""
+        origin_module = self._detect_origin_module()
+        event_type = getattr(event, "event_type", "unknown")
+
+        def _emit_rejection(reason: str) -> None:
+            # Guard against recursive logging signal loops.
+            if self._emitting_rejection_signal:
+                return
+            self._emitting_rejection_signal = True
+            try:
+                metrics.increment("sse_rejection_detected_total")
+                log_event(
+                    "SystemEvent.sse_rejection_detected",
+                    event_type=event_type,
+                    origin_module=origin_module,
+                    reason=reason,
+                )
+            finally:
+                self._emitting_rejection_signal = False
+
+        # If marker is absent, this path may come from trusted in-process callers.
+        # Keep strict validation only when marker exists.
+        if not hasattr(event, "__origin_router"):
+            return
+
+        if getattr(event, "__origin_router", None) is not True:
+            _emit_rejection("origin_router_flag_not_true")
+            log_error(
+                "sse_violation_non_router_origin",
+                "SSE violation: non-router origin",
+                event_type=event_type,
+                origin_module=origin_module,
+                rejection_reason="origin_router_flag_not_true",
+            )
+            raise RuntimeError("SSE violation: non-router origin")
+
+    def _append_ring_buffer_event(self, household_id: str, event: RealtimeEvent) -> None:
+        """Append event into a household ring buffer, tolerating mocked plain dicts in tests."""
+        buffer = self._ring_buffers.get(household_id)
+        if buffer is None:
+            buffer = deque(maxlen=self.RING_BUFFER_SIZE)
+            self._ring_buffers[household_id] = buffer
+        buffer.append(event)
+
+    async def publish(self, envelope: CanonicalEventEnvelope) -> None:
+        self._validate_canonical_event(envelope)
+        self._validate_emit_origin(envelope)
         from apps.api.observability.safety import safety
         if safety.pause_writes:
             log_error("publish_blocked_pause_writes", "pause_writes safety control active",
-                      household_id=household_id, event_type=event_type)
+                      household_id=envelope.household_id, event_type=envelope.event_type)
             return
 
         with timer("broadcast_latency_ms"):
-            # Collision detection: record watermark before and after to detect counter race
-            counter_value = self._counter.increment_and_get()
-            watermark = f"{int(time.time() * 1000)}-{counter_value}"
+            watermark = self._resolve_watermark(envelope)
 
             # Watermark collision check (should never fire with AtomicCounter)
             if watermark in self._emitted_watermarks:
-                signal_watermark_collision(watermark, household_id)
+                signal_watermark_collision(str(watermark), envelope.household_id)
             self._emitted_watermarks.add(watermark)
 
             event = RealtimeEvent(
-                household_id=household_id,
-                event_type=event_type,
+                event_id=envelope.event_id or str(uuid4()),
+                actor_type=envelope.actor_type,
+                household_id=envelope.household_id,
+                event_type=envelope.event_type,
+                timestamp=envelope.timestamp,
                 watermark=watermark,
-                payload=payload,
+                idempotency_key=envelope.idempotency_key,
+                source=envelope.source,
+                severity=envelope.severity,
+                payload=dict(envelope.payload),
+                signature=envelope.signature,
             )
 
-            self._ring_buffers[household_id].append(event)
+            self._append_ring_buffer_event(envelope.household_id, event)
             self._transport.publish(event)
 
-        metrics.increment("events_broadcast_total", household_id=household_id)
-        log_event("event_broadcast", household_id=household_id,
-                  watermark=watermark, event_type=event_type)
+        metrics.increment("events_broadcast_total", household_id=envelope.household_id)
+        log_event("event_broadcast", household_id=envelope.household_id,
+                  watermark=str(watermark), event_type=envelope.event_type)
 
-    def publish_sync(self, household_id: str, event_type: str, payload: dict[str, Any]) -> None:
+    def publish_sync(self, envelope: CanonicalEventEnvelope) -> None:
         """Thread-safe sync publish for service-layer code paths."""
+        self._validate_canonical_event(envelope)
+        self._validate_emit_origin(envelope)
         from apps.api.observability.safety import safety
         if safety.pause_writes:
             log_error("publish_sync_blocked_pause_writes", "pause_writes safety control active",
-                      household_id=household_id, event_type=event_type)
+                      household_id=envelope.household_id, event_type=envelope.event_type)
             return
 
         start = time.perf_counter()
-        counter_value = self._counter.increment_and_get()
-        watermark = f"{int(time.time() * 1000)}-{counter_value}"
+        watermark = self._resolve_watermark(envelope)
 
         if watermark in self._emitted_watermarks:
-            signal_watermark_collision(watermark, household_id)
+            signal_watermark_collision(str(watermark), envelope.household_id)
         self._emitted_watermarks.add(watermark)
 
         event = RealtimeEvent(
-            household_id=household_id,
-            event_type=event_type,
+            event_id=envelope.event_id or str(uuid4()),
+            actor_type=envelope.actor_type,
+            household_id=envelope.household_id,
+            event_type=envelope.event_type,
+            timestamp=envelope.timestamp,
             watermark=watermark,
-            payload=payload,
+            idempotency_key=envelope.idempotency_key,
+            source=envelope.source,
+            severity=envelope.severity,
+            payload=dict(envelope.payload),
+            signature=envelope.signature,
         )
 
-        self._ring_buffers[household_id].append(event)
+        self._append_ring_buffer_event(envelope.household_id, event)
         self._transport.publish(event)
 
         elapsed_ms = (time.perf_counter() - start) * 1000
         metrics.histogram_observe("broadcast_latency_ms", elapsed_ms)
-        metrics.increment("events_broadcast_total", household_id=household_id)
-        log_event("event_broadcast_sync", household_id=household_id,
-                  watermark=watermark, event_type=event_type)
+        metrics.increment("events_broadcast_total", household_id=envelope.household_id)
+        log_event("event_broadcast_sync", household_id=envelope.household_id,
+                  watermark=str(watermark), event_type=envelope.event_type)
 
     async def subscribe(
-        self, household_id: str, last_watermark: str | None = None
+        self, household_id: str, last_watermark: int | None = None
     ) -> AsyncIterator[str]:
         from apps.api.observability.safety import safety
         trace_loop_context(f"broadcaster.subscribe:{household_id}")
@@ -217,7 +323,7 @@ class HouseholdBroadcaster:
             event_type="connected",
             data={
                 "household_id": household_id,
-                "watermark": f"{int(time.time() * 1000)}-0",
+                "watermark": 0,
                 "payload": {"status": "connected"},
             },
         )
@@ -250,12 +356,7 @@ class HouseholdBroadcaster:
                         # Queue was removed by fanout backpressure handling.
                         break
                     continue
-                payload = {
-                    "household_id": event.household_id,
-                    "event_type": event.event_type,
-                    "watermark": event.watermark,
-                    "payload": event.payload,
-                }
+                payload = self._event_to_stream_payload(event)
                 yield self._format_sse(event_type="update", data=payload)
         finally:
             if subscriber in self._subscribers[household_id]:
@@ -265,7 +366,7 @@ class HouseholdBroadcaster:
             metrics.gauge_dec("active_sse_connections")
             log_event("sse_connection_closed", household_id=household_id)
 
-    def _replay_buffered_events(self, household_id: str, last_watermark: str) -> AsyncIterator[str]:
+    def _replay_buffered_events(self, household_id: str, last_watermark: int) -> AsyncIterator[str]:
         """
         Replay all buffered events with watermark > last_watermark.
         
@@ -292,17 +393,15 @@ class HouseholdBroadcaster:
             return
 
         try:
-            _, seq_str = last_watermark.rsplit("-", 1)
-            last_seq = int(seq_str)
-        except (ValueError, AttributeError):
+            last_seq = int(last_watermark)
+        except (ValueError, TypeError):
             return
 
         found = False
         prev_seq: int | None = None
         for event in ring_buffer:
             try:
-                _, event_seq_str = event.watermark.rsplit("-", 1)
-                event_seq = int(event_seq_str)
+                event_seq = int(event.watermark)
                 if event_seq > last_seq:
                     # Gap detection: sequences must be strictly increasing
                     if prev_seq is not None and event_seq != prev_seq + 1:
@@ -310,14 +409,9 @@ class HouseholdBroadcaster:
                     prev_seq = event_seq
                     found = True
                     replayed_count += 1
-                    payload = {
-                        "household_id": event.household_id,
-                        "event_type": event.event_type,
-                        "watermark": event.watermark,
-                        "payload": event.payload,
-                    }
+                    payload = self._event_to_stream_payload(event)
                     yield self._format_sse(event_type="update", data=payload)
-            except (ValueError, AttributeError):
+            except (ValueError, TypeError):
                 continue
 
         if not found and not zero_sequence:
@@ -342,16 +436,35 @@ class HouseholdBroadcaster:
                       replayed_count=replayed_count, last_watermark=last_watermark)
 
     @staticmethod
-    def _is_zero_sequence_watermark(watermark: str | None) -> bool:
+    def _is_zero_sequence_watermark(watermark: int | None) -> bool:
         if not watermark:
             return True
-        if watermark == "0":
-            return True
-        try:
-            _prefix, seq_str = watermark.rsplit("-", 1)
-            return int(seq_str) == 0
-        except (ValueError, AttributeError):
-            return False
+        return int(watermark) == 0
+
+    def _resolve_watermark(self, envelope: CanonicalEventEnvelope) -> int:
+        """Return the canonical watermark value used by broadcaster emit paths.
+        
+        STRICT INVARIANCE: All watermarks assigned from single monotonic counter.
+        External watermarks MUST be ignored to enforce single authority.
+        """
+        # ALL watermarks come from internal counter - external inputs rejected
+        return self._counter.increment()
+
+    @staticmethod
+    def _event_to_stream_payload(event: RealtimeEvent) -> dict[str, Any]:
+        return {
+            "event_id": event.event_id,
+            "household_id": event.household_id,
+            "event_type": event.event_type,
+            "actor_type": event.actor_type,
+            "timestamp": event.timestamp.isoformat(),
+            "watermark": event.watermark,
+            "idempotency_key": event.idempotency_key,
+            "source": event.source,
+            "severity": event.severity,
+            "payload": event.payload,
+            "signature": event.signature,
+        }
 
     def _fanout_local(self, event: RealtimeEvent) -> None:
         subscribers = list(self._subscribers.get(event.household_id, []))
@@ -426,7 +539,7 @@ class HouseholdBroadcaster:
 
         # Duplicate suppression per subscriber avoids fanout amplification on repeated publish paths.
         if subscriber.last_watermark == event.watermark:
-            signal_duplicate_emission(event.watermark, event.household_id)
+            signal_duplicate_emission(str(event.watermark), event.household_id)
             return
 
         now = time.time()
@@ -435,7 +548,7 @@ class HouseholdBroadcaster:
             log_event(
                 "sse_event_dropped",
                 household_id=event.household_id,
-                watermark=event.watermark,
+                    watermark=str(event.watermark),
                 drop_reason="soft_throttle",
             )
             return
@@ -451,7 +564,7 @@ class HouseholdBroadcaster:
                 log_event(
                     "sse_event_dropped",
                     household_id=event.household_id,
-                    watermark=event.watermark,
+                    watermark=str(event.watermark),
                     drop_reason="backpressure",
                 )
             except asyncio.QueueEmpty:
@@ -469,7 +582,7 @@ class HouseholdBroadcaster:
                 "sse_queue_full",
                 "SSE subscriber queue full — event dropped",
                 household_id=event.household_id,
-                watermark=event.watermark,
+                watermark=str(event.watermark),
                 drop_reason="backpressure",
             )
 

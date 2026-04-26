@@ -96,6 +96,11 @@ def parse_lifecycle_state(value: Any) -> LifecycleState:
     raise TypeError(f"Unsupported lifecycle state type: {type(value)}")
 
 
+def normalize_state(value: Any) -> LifecycleState:
+    """Single normalization authority for lifecycle state boundary inputs."""
+    return parse_lifecycle_state(value)
+
+
 def assert_lifecycle_state(value: Any) -> LifecycleState:
     """Require enum-only lifecycle state usage inside runtime logic."""
     if not isinstance(value, LifecycleState):
@@ -107,4 +112,4 @@ def assert_lifecycle_state(value: Any) -> LifecycleState:
 
 def enforce_boundary_state(value: Any) -> LifecycleState:
     """Zero-trust ingress parser for lifecycle state values."""
-    return parse_lifecycle_state(value)
+    return normalize_state(value)

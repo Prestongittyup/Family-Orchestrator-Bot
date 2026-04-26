@@ -13,12 +13,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from household_os.core.lifecycle_state import LifecycleState
+from scripts.lifecycle_conversion import LEGACY_LIFECYCLE_MAP, normalize_lifecycle_literal
 
 
-MAPPING = {
-    "executed": LifecycleState.COMMITTED.value,
-    "ignored": LifecycleState.FAILED.value,
-}
+MAPPING = LEGACY_LIFECYCLE_MAP
 
 TARGET_KEYS = {
     "state",
@@ -66,7 +64,7 @@ def _walk_and_migrate(node: Any, *, stats: MigrationStats, path: str = "$") -> t
             node_path = f"{path}.{key}"
             if key in TARGET_KEYS and isinstance(value, str) and _is_lifecycle_path(node_path):
                 stats.total_scanned += 1
-                lowered = value.strip().lower()
+                lowered = normalize_lifecycle_literal(value)
                 if lowered in MAPPING:
                     out[key] = MAPPING[lowered]
                     stats.total_migrated += 1
@@ -142,7 +140,7 @@ def _process_sqlite_file(path: Path, *, dry_run: bool, stats: MigrationStats) ->
 
                     if col in TARGET_KEYS and isinstance(raw, str) and table_is_lifecycle:
                         stats.total_scanned += 1
-                        lowered = raw.strip().lower()
+                        lowered = normalize_lifecycle_literal(raw)
                         if lowered in MAPPING:
                             updates[col] = MAPPING[lowered]
                             stats.total_migrated += 1

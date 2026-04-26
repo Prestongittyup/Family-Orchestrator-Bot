@@ -32,7 +32,8 @@ from apps.api.xai.router import router as xai_router
 from insights.insight_router import router as insights_router
 from policy_engine.policy_router import router as policy_router
 from apps.api.schemas.event import SystemEvent
-from apps.api.services.router_service import route_event
+from apps.api.services.canonical_event_adapter import CanonicalEventAdapter
+from apps.api.services.canonical_event_router import canonical_event_router
 from apps.api.observability.health import router as health_router
 from apps.api.observability.logging import log_error
 from apps.api.observability.metrics import metrics
@@ -199,17 +200,11 @@ def create_app() -> FastAPI:
     @trace_function(entrypoint="api.event_ingest", actor_type="api_user", source="api")
     def ingest_event(event: SystemEvent) -> dict:
         try:
-            task = route_event(event)
-            result = None if task is None else {
-                "id": task.id,
-                "household_id": task.household_id,
-                "title": task.title,
-                "description": task.description,
-                "status": task.status,
-                "priority": task.priority,
-                "created_at": task.created_at,
-                "updated_at": task.updated_at,
-            }
+            result = canonical_event_router.route(
+                CanonicalEventAdapter.to_envelope(event),
+                persist=True,
+                dispatch=True,
+            )
             return {"status": "processed", "result": result}
         except Exception as exc:
             print("/event exception:", repr(exc))

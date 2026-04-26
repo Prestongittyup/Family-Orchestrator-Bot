@@ -5,7 +5,8 @@ from fastapi.testclient import TestClient
 from apps.api.main import app
 from apps.api.integration_core.models.household_state import CalendarEvent
 from apps.assistant_core.planning_engine import _fallback_household_state
-from household_os.core import HouseholdOSDecisionEngine, HouseholdStateGraphStore
+from household_os.core.decision_engine import HouseholdOSDecisionEngine
+from household_os.core.household_state_graph import HouseholdStateGraphStore
 
 
 def _state_with_conflicts():

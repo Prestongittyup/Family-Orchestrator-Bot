@@ -98,6 +98,10 @@ class LifecycleMigrationLayer:
         # Use explicit None check to avoid falsy empty event stores
         # (empty InMemoryEventStore has __len__=0 which is falsy)
         self.event_store = event_store if event_store is not None else InMemoryEventStore()
+        self._event_store_provenance_token = object()
+        bind_token = getattr(self.event_store, "bind_internal_gate_token", None)
+        if callable(bind_token):
+            bind_token(self._event_store_provenance_token)
         self.command_handler = get_command_handler()
 
         # Monitoring
@@ -148,7 +152,7 @@ class LifecycleMigrationLayer:
             raise
 
         # Step 3: Append event to store
-        self.event_store.append(event)
+        self.event_store.append(event, provenance_token=self._event_store_provenance_token)
 
         # Step 4: Apply FSM transition (callback)
         apply_fsm_transition(event)

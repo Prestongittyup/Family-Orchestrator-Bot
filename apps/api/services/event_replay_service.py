@@ -8,10 +8,48 @@ Does NOT duplicate persistence (no log_system_event on replay).
 from __future__ import annotations
 
 from apps.api.core.database import SessionLocal
-from apps.api.core.event_registry import event_bus
 from apps.api.models.event_log import EventLog
 from apps.api.observability.execution_trace import trace_function
 from apps.api.schemas.event import SystemEvent
+from apps.api.services.canonical_event_adapter import CanonicalEventAdapter
+from apps.api.services.canonical_event_router import canonical_event_router
+from apps.api.schemas.canonical_event import is_registered_event_type
+
+
+def _validate_replay_envelope(envelope, persisted_idempotency_key: str | None) -> None:
+    if not is_registered_event_type(envelope.event_type):
+        raise ValueError(f"Replay rejected for unregistered event_type: {envelope.event_type}")
+    if persisted_idempotency_key != envelope.idempotency_key:
+        raise ValueError(
+            "Replay rejected due to idempotency_key mismatch between persisted log and envelope"
+        )
+    if envelope.signature:
+        # Canonical replay currently validates signature presence and format provenance.
+        if not isinstance(envelope.signature, str) or len(envelope.signature) < 16:
+            raise ValueError("Replay rejected due to invalid signature format")
+
+
+def _route_replay_log_entry(log: EventLog) -> object | None:
+    event = SystemEvent(
+        household_id=log.household_id,
+        event_id=log.id,
+        type=log.type,
+        source=log.source,
+        payload=log.payload,
+        severity=log.severity,
+        idempotency_key=log.idempotency_key,
+        signature=(log.payload.get("signature") if isinstance(log.payload, dict) else None),
+    )
+    envelope = CanonicalEventAdapter.to_envelope(event)
+    _validate_replay_envelope(envelope, log.idempotency_key)
+    # STRICT INVARIANCE: Replay is transport-agnostic.
+    # Broadcaster is sole authority for SSE emission.
+    # Replay re-enters canonical pipeline like all events (Adapter→Router→Broadcaster).
+    return canonical_event_router.route(
+        envelope,
+        persist=False,
+        dispatch=True,
+    )
 
 
 @trace_function(entrypoint="event_replay.global", actor_type="system_worker", source="event_replay")
@@ -41,17 +79,7 @@ def replay_events(limit: int = 10) -> list[object]:
         all_results: list[object] = []
         
         for log in logs:
-            # Reconstruct SystemEvent from persisted audit log
-            event = SystemEvent(
-                household_id=log.household_id,
-                type=log.type,
-                source=log.source,
-                payload=log.payload,
-                severity=log.severity,
-            )
-            
-            # Publish to event_bus (triggers handlers WITHOUT re-logging)
-            results = event_bus.publish(event)
+            results = _route_replay_log_entry(log)
             
             if results:
                 all_results.extend(results)
@@ -92,17 +120,7 @@ def replay_events_for_household(
         all_results: list[object] = []
         
         for log in logs:
-            # Reconstruct SystemEvent from persisted audit log
-            event = SystemEvent(
-                household_id=log.household_id,
-                type=log.type,
-                source=log.source,
-                payload=log.payload,
-                severity=log.severity,
-            )
-            
-            # Publish to event_bus (triggers handlers WITHOUT re-logging)
-            results = event_bus.publish(event)
+            results = _route_replay_log_entry(log)
             
             if results:
                 all_results.extend(results)

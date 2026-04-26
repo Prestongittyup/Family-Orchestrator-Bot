@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from copy import deepcopy
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -11,8 +12,17 @@ from apps.assistant_core.meal_planner import default_inventory, default_recipe_h
 from household_os.core.lifecycle_state import (
     LifecycleState,
     assert_lifecycle_state,
-    enforce_boundary_state,
+    parse_lifecycle_state,
 )
+
+
+LIFECYCLE_HYDRATION_VIEWS_KEY = "_lifecycle_hydration_views"
+
+
+@dataclass(frozen=True)
+class LifecycleHydrationView:
+    raw_payload: dict[str, Any]
+    lifecycle_snapshot: dict[str, Any]
 
 
 def _utc_now_iso() -> str:
@@ -197,24 +207,42 @@ class HouseholdStateManager:
             return {"households": {}}
 
     def _write_graph(self, graph: dict[str, Any]) -> None:
-        self._assert_lifecycle_sections(graph)
+        persisted_graph = self._strip_lifecycle_hydration_views(graph)
+        self._assert_lifecycle_sections(persisted_graph)
         payload = self._read_store()
-        payload.setdefault("households", {})[graph["household_id"]] = deepcopy(graph)
+        payload.setdefault("households", {})[persisted_graph["household_id"]] = deepcopy(persisted_graph)
         self.graph_path.parent.mkdir(parents=True, exist_ok=True)
         self.graph_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-        self._graph_cache[graph["household_id"]] = deepcopy(graph)
+        self._graph_cache[persisted_graph["household_id"]] = self._parse_lifecycle_sections(persisted_graph)
 
     def _parse_lifecycle_sections(self, graph: dict[str, Any]) -> dict[str, Any]:
-        lifecycle = graph.get("action_lifecycle", {})
+        normalized_graph = deepcopy(graph)
+        lifecycle = normalized_graph.get("action_lifecycle", {})
         actions = lifecycle.get("actions", {}) if isinstance(lifecycle, dict) else {}
+        hydration_views: dict[str, LifecycleHydrationView] = {}
         if isinstance(actions, dict):
-            for payload in actions.values():
+            for action_id, payload in actions.items():
                 if not isinstance(payload, dict):
                     continue
-                state = payload.get("current_state")
-                if state is not None:
-                    payload["current_state"] = enforce_boundary_state(state)
-        return graph
+                hydration_views[action_id] = LifecycleHydrationView(
+                    raw_payload=deepcopy(payload),
+                    lifecycle_snapshot={"current_state": payload.get("current_state")},
+                )
+        if hydration_views:
+            normalized_graph[LIFECYCLE_HYDRATION_VIEWS_KEY] = {
+                "actions": hydration_views,
+            }
+        return normalized_graph
+
+    def _validated_lifecycle_state(self, value: Any, *, field_name: str) -> LifecycleState:
+        parsed_state = parse_lifecycle_state(value)
+        assert_lifecycle_state(parsed_state)
+        return parsed_state
+
+    def _strip_lifecycle_hydration_views(self, graph: dict[str, Any]) -> dict[str, Any]:
+        stripped_graph = deepcopy(graph)
+        stripped_graph.pop(LIFECYCLE_HYDRATION_VIEWS_KEY, None)
+        return stripped_graph
 
     def _assert_lifecycle_sections(self, graph: dict[str, Any]) -> None:
         lifecycle = graph.get("action_lifecycle", {})
@@ -226,6 +254,23 @@ class HouseholdStateManager:
                 state = payload.get("current_state")
                 if state is None:
                     continue
-                if not isinstance(state, LifecycleState):
-                    raise TypeError(f"Action {action_id} current_state must be LifecycleState")
-                assert_lifecycle_state(state)
+                validated_state = self._validated_lifecycle_state(
+                    state,
+                    field_name=f"Action {action_id} current_state",
+                )
+
+                transitions = payload.get("transitions", [])
+                if isinstance(transitions, list) and transitions:
+                    latest = transitions[-1]
+                    if isinstance(latest, dict):
+                        latest_to_state = latest.get("to_state")
+                        if latest_to_state is None:
+                            continue
+                        validated_latest = self._validated_lifecycle_state(
+                            latest_to_state,
+                            field_name=f"Action {action_id} latest transition to_state",
+                        )
+                        if validated_latest != validated_state:
+                            raise ValueError(
+                                f"Action {action_id} current_state must match latest transition to_state"
+                            )

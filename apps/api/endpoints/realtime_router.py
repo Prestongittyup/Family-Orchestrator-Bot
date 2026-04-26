@@ -25,7 +25,7 @@ _sse_connections_in_use = 0
 @router.get("/stream")
 async def stream_updates(
     household_id: str = Query(..., description="Household scope for real-time events"),
-    last_watermark: str | None = Query(None, description="Last received event watermark for resumable streams. Triggers replay of missed events."),
+    last_watermark: int | None = Query(None, description="Last received event watermark for resumable streams. Triggers replay of missed events."),
 ) -> StreamingResponse:
     """SSE stream for household-scoped live updates with optional replay.
     

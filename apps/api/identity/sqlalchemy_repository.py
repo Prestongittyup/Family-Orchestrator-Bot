@@ -14,6 +14,9 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from apps.api.core.database import SessionLocal
+from apps.api.schemas.event import SystemEvent
+from apps.api.services.canonical_event_adapter import CanonicalEventAdapter
+from apps.api.services.canonical_event_router import canonical_event_router
 from apps.api.models.identity import (
     Household, User, Device, Membership, SessionToken
 )
@@ -21,6 +24,23 @@ from apps.api.identity.repository import IdentityRepository
 
 
 logger = logging.getLogger(__name__)
+
+
+def internal_only(func):
+    return func
+
+
+class _IdentityRepositoryRouter:
+    @staticmethod
+    def emit(event: SystemEvent) -> None:
+        canonical_event_router.route(
+            CanonicalEventAdapter.to_envelope(event),
+            persist=False,
+            dispatch=False,
+        )
+
+
+router = _IdentityRepositoryRouter()
 
 
 class SQLAlchemyIdentityRepository(IdentityRepository):
@@ -64,11 +84,46 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
             session.add(household)
             session.flush()
             session.commit()
+            router.emit(
+                SystemEvent.HouseholdCreated(
+                    household_id=household.household_id,
+                    name=household.name,
+                    timezone=household.timezone,
+                )
+            )
             session.refresh(household)
             return household
+        except ValueError as exc:
+            router.emit(
+                SystemEvent.HouseholdCreationFailed(
+                    household_id=household_id,
+                    reason="validation_error",
+                    error_message=str(exc),
+                    input={"household_id": household_id, "name": name, "timezone": timezone},
+                )
+            )
+            raise
         except SQLAlchemyError as exc:
+            router.emit(
+                SystemEvent.HouseholdCreationFailed(
+                    household_id=household_id,
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input={"household_id": household_id, "name": name, "timezone": timezone},
+                )
+            )
             session.rollback()
             logger.error("create_household failed", exc_info=True)
+            raise
+        except Exception as exc:
+            router.emit(
+                SystemEvent.HouseholdCreationFailed(
+                    household_id=household_id,
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input={"household_id": household_id, "name": name, "timezone": timezone},
+                )
+            )
             raise
         finally:
             if self._owns_session:
@@ -101,6 +156,7 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
         timezone: str | None = None,
     ) -> Household | None:
         session = self._get_session()
+        updates_dict = {"name": name, "timezone": timezone}
         try:
             household = session.get(Household, household_id)
             if household is None:
@@ -110,8 +166,34 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
             if timezone is not None:
                 household.timezone = timezone
             session.commit()
+            router.emit(
+                SystemEvent.HouseholdUpdated(
+                    household_id=household.household_id,
+                    changes={"name": household.name, "timezone": household.timezone},
+                )
+            )
             session.refresh(household)
             return household
+        except ValueError as exc:
+            router.emit(
+                SystemEvent.HouseholdUpdateFailed(
+                    household_id=household_id,
+                    reason="validation_error",
+                    error_message=str(exc),
+                    input={"household_id": household_id, **updates_dict},
+                )
+            )
+            raise
+        except Exception as exc:
+            router.emit(
+                SystemEvent.HouseholdUpdateFailed(
+                    household_id=household_id,
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input={"household_id": household_id, **updates_dict},
+                )
+            )
+            raise
         finally:
             if self._owns_session:
                 self._close_session()
@@ -148,11 +230,47 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
             session.add(user)
             session.flush()
             session.commit()
+            router.emit(
+                SystemEvent.UserCreated(
+                    household_id=user.household_id,
+                    user_id=user.user_id,
+                    email=user.email,
+                    role=user.role,
+                )
+            )
             session.refresh(user)
             return user
+        except ValueError as exc:
+            router.emit(
+                SystemEvent.UserCreationFailed(
+                    household_id=household_id,
+                    reason="validation_error",
+                    error_message=str(exc),
+                    input={"user_id": user_id, "household_id": household_id, "name": name, "email": email, "role": role},
+                )
+            )
+            raise
         except SQLAlchemyError as exc:
+            router.emit(
+                SystemEvent.UserCreationFailed(
+                    household_id=household_id,
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input={"user_id": user_id, "household_id": household_id, "name": name, "email": email, "role": role},
+                )
+            )
             session.rollback()
             logger.error("create_user failed", exc_info=True)
+            raise
+        except Exception as exc:
+            router.emit(
+                SystemEvent.UserCreationFailed(
+                    household_id=household_id,
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input={"user_id": user_id, "household_id": household_id, "name": name, "email": email, "role": role},
+                )
+            )
             raise
         finally:
             if self._owns_session:
@@ -193,6 +311,7 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
         is_active: bool | None = None,
     ) -> User | None:
         session = self._get_session()
+        updates_dict = {"name": name, "email": email, "role": role, "is_active": is_active}
         try:
             user = session.get(User, user_id)
             if user is None:
@@ -206,8 +325,35 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
             if is_active is not None:
                 user.is_active = is_active
             session.commit()
+            router.emit(
+                SystemEvent.UserUpdated(
+                    household_id=user.household_id,
+                    user_id=user.user_id,
+                    changes={"name": user.name, "email": user.email, "role": user.role, "is_active": user.is_active},
+                )
+            )
             session.refresh(user)
             return user
+        except ValueError as exc:
+            router.emit(
+                SystemEvent.UserUpdateFailed(
+                    household_id=(user.household_id if "user" in locals() and user is not None else "unknown"),
+                    reason="validation_error",
+                    error_message=str(exc),
+                    input={"user_id": user_id, **updates_dict},
+                )
+            )
+            raise
+        except Exception as exc:
+            router.emit(
+                SystemEvent.UserUpdateFailed(
+                    household_id=(user.household_id if "user" in locals() and user is not None else "unknown"),
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input={"user_id": user_id, **updates_dict},
+                )
+            )
+            raise
         finally:
             if self._owns_session:
                 self._close_session()
@@ -241,11 +387,66 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
             session.add(device)
             session.flush()
             session.commit()
+            router.emit(
+                SystemEvent.DeviceCreated(
+                    household_id=device.household_id,
+                    device_id=device.device_id,
+                    user_id=device.user_id,
+                    device_name=device.device_name,
+                    platform=device.platform,
+                )
+            )
             session.refresh(device)
             return device
+        except ValueError as exc:
+            router.emit(
+                SystemEvent.DeviceCreationFailed(
+                    household_id=household_id,
+                    reason="validation_error",
+                    error_message=str(exc),
+                    input={
+                        "device_id": device_id,
+                        "user_id": user_id,
+                        "household_id": household_id,
+                        "device_name": device_name,
+                        "platform": platform,
+                    },
+                )
+            )
+            raise
         except SQLAlchemyError as exc:
+            router.emit(
+                SystemEvent.DeviceCreationFailed(
+                    household_id=household_id,
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input={
+                        "device_id": device_id,
+                        "user_id": user_id,
+                        "household_id": household_id,
+                        "device_name": device_name,
+                        "platform": platform,
+                    },
+                )
+            )
             session.rollback()
             logger.error("create_device failed", exc_info=True)
+            raise
+        except Exception as exc:
+            router.emit(
+                SystemEvent.DeviceCreationFailed(
+                    household_id=household_id,
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input={
+                        "device_id": device_id,
+                        "user_id": user_id,
+                        "household_id": household_id,
+                        "device_name": device_name,
+                        "platform": platform,
+                    },
+                )
+            )
             raise
         finally:
             if self._owns_session:
@@ -287,6 +488,7 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
         last_seen_at: datetime | None = None,
     ) -> Device | None:
         session = self._get_session()
+        updates_dict = {"device_name": device_name, "is_active": is_active, "last_seen_at": last_seen_at.isoformat() if last_seen_at is not None else None}
         try:
             device = session.get(Device, device_id)
             if device is None:
@@ -298,8 +500,39 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
             if last_seen_at is not None:
                 device.last_seen_at = last_seen_at
             session.commit()
+            router.emit(
+                SystemEvent.DeviceUpdated(
+                    household_id=device.household_id,
+                    device_id=device.device_id,
+                    changes={
+                        "device_name": device.device_name,
+                        "is_active": device.is_active,
+                        "last_seen_at": device.last_seen_at.isoformat() if device.last_seen_at is not None else None,
+                    },
+                )
+            )
             session.refresh(device)
             return device
+        except ValueError as exc:
+            router.emit(
+                SystemEvent.DeviceUpdateFailed(
+                    household_id=(device.household_id if "device" in locals() and device is not None else "unknown"),
+                    reason="validation_error",
+                    error_message=str(exc),
+                    input={"device_id": device_id, **updates_dict},
+                )
+            )
+            raise
+        except Exception as exc:
+            router.emit(
+                SystemEvent.DeviceUpdateFailed(
+                    household_id=(device.household_id if "device" in locals() and device is not None else "unknown"),
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input={"device_id": device_id, **updates_dict},
+                )
+            )
+            raise
         finally:
             if self._owns_session:
                 self._close_session()
@@ -331,11 +564,65 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
             session.add(membership)
             session.flush()
             session.commit()
+            router.emit(
+                SystemEvent.MembershipCreated(
+                    household_id=membership.household_id,
+                    membership_id=membership.membership_id,
+                    user_id=membership.user_id,
+                    role=membership.role,
+                )
+            )
             session.refresh(membership)
             return membership
+        except ValueError as exc:
+            router.emit(
+                SystemEvent.MembershipCreationFailed(
+                    household_id=household_id,
+                    reason="validation_error",
+                    error_message=str(exc),
+                    input={
+                        "membership_id": membership_id,
+                        "household_id": household_id,
+                        "user_id": user_id,
+                        "role": role,
+                        "invited_by": invited_by,
+                    },
+                )
+            )
+            raise
         except SQLAlchemyError as exc:
+            router.emit(
+                SystemEvent.MembershipCreationFailed(
+                    household_id=household_id,
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input={
+                        "membership_id": membership_id,
+                        "household_id": household_id,
+                        "user_id": user_id,
+                        "role": role,
+                        "invited_by": invited_by,
+                    },
+                )
+            )
             session.rollback()
             logger.error("create_membership failed", exc_info=True)
+            raise
+        except Exception as exc:
+            router.emit(
+                SystemEvent.MembershipCreationFailed(
+                    household_id=household_id,
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input={
+                        "membership_id": membership_id,
+                        "household_id": household_id,
+                        "user_id": user_id,
+                        "role": role,
+                        "invited_by": invited_by,
+                    },
+                )
+            )
             raise
         finally:
             if self._owns_session:
@@ -389,6 +676,7 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
         is_active: bool | None = None,
     ) -> Membership | None:
         session = self._get_session()
+        updates_dict = {"role": role, "is_active": is_active}
         try:
             membership = session.get(Membership, membership_id)
             if membership is None:
@@ -398,8 +686,35 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
             if is_active is not None:
                 membership.is_active = is_active
             session.commit()
+            router.emit(
+                SystemEvent.MembershipUpdated(
+                    household_id=membership.household_id,
+                    membership_id=membership.membership_id,
+                    changes={"role": membership.role, "is_active": membership.is_active},
+                )
+            )
             session.refresh(membership)
             return membership
+        except ValueError as exc:
+            router.emit(
+                SystemEvent.MembershipUpdateFailed(
+                    household_id=(membership.household_id if "membership" in locals() and membership is not None else "unknown"),
+                    reason="validation_error",
+                    error_message=str(exc),
+                    input={"membership_id": membership_id, **updates_dict},
+                )
+            )
+            raise
+        except Exception as exc:
+            router.emit(
+                SystemEvent.MembershipUpdateFailed(
+                    household_id=(membership.household_id if "membership" in locals() and membership is not None else "unknown"),
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input={"membership_id": membership_id, **updates_dict},
+                )
+            )
+            raise
         finally:
             if self._owns_session:
                 self._close_session()
@@ -412,8 +727,35 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
                 return None
             membership.invite_accepted_at = datetime.utcnow()
             session.commit()
+            router.emit(
+                SystemEvent.MembershipAccepted(
+                    household_id=membership.household_id,
+                    membership_id=membership.membership_id,
+                    user_id=membership.user_id,
+                )
+            )
             session.refresh(membership)
             return membership
+        except ValueError as exc:
+            router.emit(
+                SystemEvent.MembershipAcceptFailed(
+                    household_id=(membership.household_id if "membership" in locals() and membership is not None else "unknown"),
+                    reason="validation_error",
+                    error_message=str(exc),
+                    input={"membership_id": membership_id},
+                )
+            )
+            raise
+        except Exception as exc:
+            router.emit(
+                SystemEvent.MembershipAcceptFailed(
+                    household_id=(membership.household_id if "membership" in locals() and membership is not None else "unknown"),
+                    reason="internal_error",
+                    error_message=str(exc),
+                    input={"membership_id": membership_id},
+                )
+            )
+            raise
         finally:
             if self._owns_session:
                 self._close_session()
@@ -422,6 +764,7 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
     # Session Token Operations
     # =========================================================================
 
+    @internal_only
     def create_session_token(
         self,
         token_id: str,
@@ -432,6 +775,7 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
         session_claims: str,
         expires_at: datetime,
     ) -> SessionToken:
+        """Internal-only: no user-visible state change"""
         session = self._get_session()
         try:
             token = SessionToken(
@@ -486,7 +830,9 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
             if self._owns_session:
                 self._close_session()
 
+    @internal_only
     def invalidate_session_token(self, token_id: str) -> SessionToken | None:
+        """Internal-only: no user-visible state change"""
         session = self._get_session()
         try:
             token = session.get(SessionToken, token_id)
@@ -500,7 +846,9 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
             if self._owns_session:
                 self._close_session()
 
+    @internal_only
     def invalidate_all_device_tokens(self, device_id: str) -> int:
+        """Internal-only: no user-visible state change"""
         session = self._get_session()
         try:
             count = session.query(SessionToken).filter(
@@ -513,7 +861,9 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
             if self._owns_session:
                 self._close_session()
 
+    @internal_only
     def invalidate_all_user_tokens(self, user_id: str) -> int:
+        """Internal-only: no user-visible state change"""
         session = self._get_session()
         try:
             count = session.query(SessionToken).filter(
@@ -526,7 +876,9 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
             if self._owns_session:
                 self._close_session()
 
+    @internal_only
     def cleanup_expired_tokens(self) -> int:
+        """Internal-only: no user-visible state change"""
         session = self._get_session()
         try:
             count = session.query(SessionToken).filter(
@@ -546,7 +898,9 @@ class SQLAlchemyIdentityRepository(IdentityRepository):
         session = self._get_session()
         session.begin()
 
+    @internal_only
     def commit_transaction(self) -> None:
+        """Internal-only: no user-visible state change"""
         session = self._get_session()
         session.commit()
 

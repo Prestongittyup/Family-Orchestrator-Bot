@@ -1,0 +1,13 @@
+C:\Users\fb002895\Desktop\Personal\Family Orchestration Bot\.audit_file_manifest.txt
+C:\Users\fb002895\Desktop\Personal\Family Orchestration Bot\.copilot-instructions.md
+C:\Users\fb002895\Desktop\Personal\Family Orchestration Bot\.dockerignore
+C:\Users\fb002895\Desktop\Personal\Family Orchestration Bot\.env
+C:\Users\fb002895\Desktop\Personal\Family Orchestration Bot\.gitignore
+C:\Users\fb002895\Desktop\Personal\Family Orchestration Bot\assistant_core_report.json
+C:\Users\fb002895\Desktop\Personal\Family Orchestration Bot\AUDIT_INDEX_AND_QUICK_REFERENCE.md
+C:\Users\fb002895\Desktop\Personal\Family Orchestration Bot\audit_manifest.txt
+C:\Users\fb002895\Desktop\Personal\Family Orchestration Bot\baseline_test_output.log
+C:\Users\fb002895\Desktop\Personal\Family Orchestration Bot\boot_smoke_report.json
+C:\Users\fb002895\Desktop\Personal\Family Orchestration Bot\breakpoint_checkpoint.json
+C:\Users\fb002895\Desktop\Personal\Family Orchestration Bot\calibration_log.jsonl
+C:\Users\fb002895\Desktop\Personal\Family Orchestration Bot\chaos_checkpoint.json

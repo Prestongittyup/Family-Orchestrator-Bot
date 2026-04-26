@@ -1,0 +1,2598 @@
+diff --git a/apps/api/assistant_runtime_router.py b/apps/api/assistant_runtime_router.py
+index 6716708..e41905d 100644
+--- a/apps/api/assistant_runtime_router.py
++++ b/apps/api/assistant_runtime_router.py
+@@ -2,16 +2,18 @@ from __future__ import annotations
+ 
+ from typing import Any
+ 
+-from fastapi import APIRouter, HTTPException
++from fastapi import APIRouter, HTTPException, Request
+ from pydantic import BaseModel, ConfigDict, Field, model_validator
+ 
+ from assistant.governance.output_governor import OutputGovernor
+ from apps.assistant_core.planning_engine import _fallback_household_state, _request_id
+-from household_os.core import HouseholdOSDecisionEngine, HouseholdOSRunResponse
++from household_os.core import HouseholdOSRunResponse
+ from household_os.core.lifecycle_state import LifecycleState, enforce_boundary_state
++from household_os.presentation.lifecycle_presentation_mapper import LifecyclePresentationMapper
+ from household_os.presentation.humanizer import RecommendationHumanizer
+ from household_os.presentation.recommendation_builder import RecommendationBuilder
+ from household_os.runtime.orchestrator import HouseholdOSOrchestrator
++from household_os.runtime.orchestrator import OrchestratorRequest, RequestActionType
+ from apps.api.observability.execution_trace import trace_function
+ 
+ 
+@@ -85,6 +87,20 @@ class AssistantRejectResponse(BaseModel):
+     status: str
+ 
+ 
++class AssistantExecuteRequest(BaseModel):
++    model_config = ConfigDict(extra="forbid")
++
++    action_id: str
++    household_id: str = "default"
++
++
++class AssistantExecuteResponse(BaseModel):
++    model_config = ConfigDict(extra="forbid")
++
++    status: str
++    effects: list[dict[str, Any]] = Field(default_factory=list)
++
++
+ class AssistantTodayResponse(BaseModel):
+     model_config = ConfigDict(extra="forbid")
+ 
+@@ -98,18 +114,25 @@ RunAssistantResponse = AssistantRunResponse | ClarificationResponse | HouseholdO
+ 
+ 
+ @router.post("/run", response_model=RunAssistantResponse)
+-@trace_function(entrypoint="assistant_runtime.run_assistant", actor_type="api_user", source="api")
+-def run_assistant(request: AssistantRunRequest) -> RunAssistantResponse:
+-    if request.query and not request.message:
+-        return _run_legacy_household_os(request)
+-
+-    state = _fallback_household_state(request.household_id)
+-    message = request.message or request.query or ""
+-    result = runtime_orchestrator.tick(
+-        household_id=request.household_id,
+-        state=state,
+-        user_input=message,
+-        fitness_goal=request.fitness_goal,
++@trace_function(entrypoint="assistant_runtime.run_assistant", actor_type="dynamic", source="api")
++def run_assistant(payload: AssistantRunRequest, request: Request) -> RunAssistantResponse:
++    raw_actor = _actor_from_request(request)
++
++    if payload.query and not payload.message:
++        return _run_legacy_household_os(payload, raw_actor)
++
++    state = _fallback_household_state(payload.household_id)
++    message = payload.message or payload.query or ""
++    result = runtime_orchestrator.handle_request(
++        OrchestratorRequest(
++            action_type=RequestActionType.RUN,
++            household_id=payload.household_id,
++            actor=raw_actor,
++            state=state,
++            user_input=message,
++            fitness_goal=payload.fitness_goal,
++            context=_request_context_from_actor(raw_actor),
++        )
+     )
+ 
+     # Case C ΓÇö low confidence: no action produced, return clarification
+@@ -124,15 +147,25 @@ def run_assistant(request: AssistantRunRequest) -> RunAssistantResponse:
+     if response is None or action is None:
+         raise HTTPException(status_code=500, detail="Orchestrator did not emit an action")
+ 
+-    graph = runtime_orchestrator.state_store.load_graph(request.household_id)
++    graph = runtime_orchestrator.handle_request(
++        OrchestratorRequest(
++            action_type=RequestActionType.READ_SENSITIVE_STATE,
++            household_id=payload.household_id,
++            actor=raw_actor,
++            resource_type="recommendation_enrichment",
++            context=_request_context_from_actor(raw_actor),
++        )
++    )
+     enriched = recommendation_builder.build(response=response, graph=graph)
+-    _apply_recommendation_adjustments(
+-        household_id=request.household_id,
+-        request_id=response.request_id,
+-        action_id=action.action_id,
+-        recommendation=enriched,
++    graph = runtime_orchestrator.handle_request(
++        OrchestratorRequest(
++            action_type=RequestActionType.READ_SENSITIVE_STATE,
++            household_id=payload.household_id,
++            actor=raw_actor,
++            resource_type="recommendation_humanization",
++            context=_request_context_from_actor(raw_actor),
++        )
+     )
+-    graph = runtime_orchestrator.state_store.load_graph(request.household_id)
+     humanized = recommendation_humanizer.humanize(
+         enriched.as_dict(),
+         reference_time=graph.get("reference_time"),
+@@ -155,10 +188,22 @@ def run_assistant(request: AssistantRunRequest) -> RunAssistantResponse:
+ 
+ 
+ @router.post("/approve", response_model=AssistantApproveResponse)
+-@trace_function(entrypoint="assistant_runtime.approve", actor_type="api_user", source="api")
+-def approve_assistant_action(request: AssistantApproveRequest) -> AssistantApproveResponse:
+-    graph = runtime_orchestrator.state_store.load_graph(request.household_id)
+-    action_payload = graph.get("action_lifecycle", {}).get("actions", {}).get(request.action_id)
++@trace_function(entrypoint="assistant_runtime.approve", actor_type="dynamic", source="api")
++def approve_assistant_action(payload: AssistantApproveRequest, request: Request) -> AssistantApproveResponse:
++    raw_actor = _actor_from_request(request)
++    try:
++        graph = runtime_orchestrator.handle_request(
++            OrchestratorRequest(
++                action_type=RequestActionType.READ_SENSITIVE_STATE,
++                household_id=payload.household_id,
++                actor=raw_actor,
++                resource_type="action_lifecycle",
++                context=_request_context_from_actor(raw_actor),
++            )
++        )
++    except PermissionError as exc:
++        raise HTTPException(status_code=403, detail=str(exc)) from exc
++    action_payload = graph.get("action_lifecycle", {}).get("actions", {}).get(payload.action_id)
+     if action_payload is None:
+         raise HTTPException(status_code=404, detail="Action not found")
+ 
+@@ -166,11 +211,19 @@ def approve_assistant_action(request: AssistantApproveRequest) -> AssistantAppro
+     if not request_id:
+         raise HTTPException(status_code=400, detail="Action is missing request association")
+ 
+-    approval_result = runtime_orchestrator.approve_and_execute(
+-        household_id=request.household_id,
+-        request_id=request_id,
+-        action_ids=[request.action_id],
+-    )
++    try:
++        approval_result = runtime_orchestrator.handle_request(
++            OrchestratorRequest(
++                action_type=RequestActionType.APPROVE,
++                household_id=payload.household_id,
++                actor=raw_actor,
++                request_id=request_id,
++                action_ids=[payload.action_id],
++                context=_request_context_from_actor(raw_actor),
++            )
++        )
++    except PermissionError as exc:
++        raise HTTPException(status_code=403, detail=str(exc)) from exc
+     effects = [
+         {
+             "action_id": action.action_id,
+@@ -179,13 +232,25 @@ def approve_assistant_action(request: AssistantApproveRequest) -> AssistantAppro
+         }
+         for action in approval_result.executed_actions
+     ]
+-    return AssistantApproveResponse(status="executed", effects=effects)
++    return AssistantApproveResponse(
++        status=LifecyclePresentationMapper.to_api_state(LifecycleState.COMMITTED),
++        effects=effects,
++    )
+ 
+ 
+ @router.get("/today", response_model=AssistantTodayResponse)
+-@trace_function(entrypoint="assistant_runtime.today", actor_type="api_user", source="api")
+-def assistant_today(household_id: str = "default") -> AssistantTodayResponse:
+-    graph = runtime_orchestrator.state_store.load_graph(household_id)
++@trace_function(entrypoint="assistant_runtime.today", actor_type="dynamic", source="api")
++def assistant_today(request: Request, household_id: str = "default") -> AssistantTodayResponse:
++    raw_actor = _actor_from_request(request)
++    graph = runtime_orchestrator.handle_request(
++        OrchestratorRequest(
++            action_type=RequestActionType.READ_SENSITIVE_STATE,
++            household_id=household_id,
++            actor=raw_actor,
++            resource_type="assistant_today",
++            context=_request_context_from_actor(raw_actor),
++        )
++    )
+ 
+     actions = graph.get("action_lifecycle", {}).get("actions", {})
+     pending_actions = []
+@@ -200,7 +265,7 @@ def assistant_today(household_id: str = "default") -> AssistantTodayResponse:
+                 {
+                     "action_id": action.get("action_id"),
+                     "title": action.get("title"),
+-                    "state": state.value,
++                    "state": LifecyclePresentationMapper.to_api_state(state),
+                     "approval_required": bool(action.get("approval_required", True)),
+                 }
+             )
+@@ -227,10 +292,22 @@ def assistant_today(household_id: str = "default") -> AssistantTodayResponse:
+ 
+ 
+ @router.post("/reject", response_model=AssistantRejectResponse)
+-@trace_function(entrypoint="assistant_runtime.reject", actor_type="api_user", source="api")
+-def reject_assistant_action(request: AssistantRejectRequest) -> AssistantRejectResponse:
+-    graph = runtime_orchestrator.state_store.load_graph(request.household_id)
+-    action_payload = graph.get("action_lifecycle", {}).get("actions", {}).get(request.action_id)
++@trace_function(entrypoint="assistant_runtime.reject", actor_type="dynamic", source="api")
++def reject_assistant_action(payload: AssistantRejectRequest, request: Request) -> AssistantRejectResponse:
++    raw_actor = _actor_from_request(request)
++    try:
++        graph = runtime_orchestrator.handle_request(
++            OrchestratorRequest(
++                action_type=RequestActionType.READ_SENSITIVE_STATE,
++                household_id=payload.household_id,
++                actor=raw_actor,
++                resource_type="action_lifecycle",
++                context=_request_context_from_actor(raw_actor),
++            )
++        )
++    except PermissionError as exc:
++        raise HTTPException(status_code=403, detail=str(exc)) from exc
++    action_payload = graph.get("action_lifecycle", {}).get("actions", {}).get(payload.action_id)
+     if action_payload is None:
+         raise HTTPException(status_code=404, detail="Action not found")
+ 
+@@ -238,20 +315,82 @@ def reject_assistant_action(request: AssistantRejectRequest) -> AssistantRejectR
+     if not request_id:
+         raise HTTPException(status_code=400, detail="Action is missing request association")
+ 
+-    rejected = runtime_orchestrator.action_pipeline.reject_actions(
+-        graph=graph,
+-        request_id=request_id,
+-        action_ids=[request.action_id],
+-        now=graph.get("reference_time"),
+-    )
+-    runtime_orchestrator.state_store.save_graph(graph)
++    try:
++        rejected = runtime_orchestrator.handle_request(
++            OrchestratorRequest(
++                action_type=RequestActionType.REJECT,
++                household_id=payload.household_id,
++                actor=raw_actor,
++                request_id=request_id,
++                action_ids=[payload.action_id],
++                now=graph.get("reference_time"),
++                context=_request_context_from_actor(raw_actor),
++            )
++        )
++    except PermissionError as exc:
++        raise HTTPException(status_code=403, detail=str(exc)) from exc
+     if not rejected:
+         raise HTTPException(status_code=409, detail="Action could not be rejected")
+-    return AssistantRejectResponse(status="rejected")
++    return AssistantRejectResponse(
++        status=LifecyclePresentationMapper.to_api_state(LifecycleState.REJECTED)
++    )
++
++
++@router.post("/execute", response_model=AssistantExecuteResponse)
++@trace_function(entrypoint="assistant_runtime.execute", actor_type="dynamic", source="api")
++def execute_assistant_action(payload: AssistantExecuteRequest, request: Request) -> AssistantExecuteResponse:
++    raw_actor = _actor_from_request(request)
++    graph = runtime_orchestrator.handle_request(
++        OrchestratorRequest(
++            action_type=RequestActionType.READ_SENSITIVE_STATE,
++            household_id=payload.household_id,
++            actor=raw_actor,
++            resource_type="action_lifecycle",
++            context=_request_context_from_actor(raw_actor),
++        )
++    )
++    action_payload = graph.get("action_lifecycle", {}).get("actions", {}).get(payload.action_id)
++    if action_payload is None:
++        raise HTTPException(status_code=404, detail="Action not found")
++
++    executed = runtime_orchestrator.handle_request(
++        OrchestratorRequest(
++            action_type=RequestActionType.EXECUTE,
++            household_id=payload.household_id,
++            actor=raw_actor,
++            now=graph.get("reference_time"),
++            context=_request_context_from_actor(raw_actor),
++        )
++    )
++    effects = [
++        {
++            "action_id": action.action_id,
++            "handler": action.execution_result.get("handler") if action.execution_result else None,
++            "result": action.execution_result or {},
++        }
++        for action in executed
++    ]
++    return AssistantExecuteResponse(
++        status=LifecyclePresentationMapper.to_api_state(LifecycleState.COMMITTED),
++        effects=effects,
++    )
+ 
+ 
+ def _apply_recommendation_adjustments(*, household_id: str, request_id: str, action_id: str, recommendation: Any) -> None:
+-    graph = runtime_orchestrator.state_store.load_graph(household_id)
++    graph = runtime_orchestrator.handle_request(
++        OrchestratorRequest(
++            action_type=RequestActionType.READ_SENSITIVE_STATE,
++            household_id=household_id,
++            actor={
++                "actor_type": "system_worker",
++                "subject_id": "assistant-runtime",
++                "session_id": None,
++                "verified": True,
++            },
++            resource_type="recommendation_adjustment",
++            context={"system_worker_verified": True},
++        )
++    )
+     action_map = graph.get("action_lifecycle", {}).get("actions", {})
+     action_payload = action_map.get(action_id)
+     if action_payload is not None and getattr(recommendation, "scheduled_for", None):
+@@ -265,24 +404,72 @@ def _apply_recommendation_adjustments(*, household_id: str, request_id: str, act
+         response_payload["recommended_action"] = recommended_action
+         graph["responses"][request_id] = response_payload
+ 
+-    runtime_orchestrator.state_store.save_graph(graph)
++    runtime_orchestrator.handle_request(
++        OrchestratorRequest(
++            action_type=RequestActionType.WRITE_SENSITIVE_STATE,
++            household_id=household_id,
++            actor={
++                "actor_type": "system_worker",
++                "subject_id": "assistant-runtime",
++                "session_id": None,
++                "verified": True,
++            },
++            graph=graph,
++            context={"system_worker_verified": True},
++        )
++    )
+ 
+ 
+-def _run_legacy_household_os(request: AssistantRunRequest) -> HouseholdOSRunResponse:
++def _run_legacy_household_os(request: AssistantRunRequest, raw_actor: dict[str, Any]) -> HouseholdOSRunResponse:
+     query = request.query or request.message or ""
+     state = _fallback_household_state(request.household_id)
+-    graph = runtime_orchestrator.state_store.refresh_graph(
+-        household_id=request.household_id,
+-        state=state,
+-        query=query,
+-        fitness_goal=request.fitness_goal,
+-    )
+-    request_id = _request_id(query, request.household_id, request.repeat_window_days, request.fitness_goal)
+-    response = HouseholdOSDecisionEngine().run(
+-        household_id=request.household_id,
+-        query=query,
+-        graph=graph,
+-        request_id=request_id,
++    result = runtime_orchestrator.handle_request(
++        OrchestratorRequest(
++            action_type=RequestActionType.LEGACY_EXECUTION,
++            household_id=request.household_id,
++            actor=raw_actor,
++            state=state,
++            user_input=query,
++            fitness_goal=request.fitness_goal,
++            context={"legacy_execution": True, **_request_context_from_actor(raw_actor)},
++        )
+     )
+-    runtime_orchestrator.state_store.store_response(request.household_id, response.model_dump())
+-    return response
+\ No newline at end of file
++    if result.response is None:
++        raise HTTPException(status_code=500, detail="Legacy execution did not produce a response")
++    return result.response
++
++
++def _actor_from_request(request: Request) -> dict[str, Any]:
++    actor_type = getattr(request.state, "actor_type", None)
++    claims = getattr(request.state, "auth_claims", None)
++    user_claims = getattr(request.state, "user", None)
++    if claims is None and isinstance(user_claims, dict):
++        claims = user_claims
++
++    subject_id = ""
++    if isinstance(claims, dict):
++        subject_id = str(claims.get("sub") or claims.get("user_id") or "")
++    elif getattr(request.state, "user", None) is not None:
++        subject_id = str(getattr(request.state.user, "sub", ""))
++
++    if actor_type is None:
++        raise HTTPException(status_code=401, detail="actor identity missing")
++
++    resolved_actor_type = str(actor_type).strip().lower()
++    is_system_worker = resolved_actor_type in {"system_worker", "scheduler"}
++
++    return {
++        "actor_type": resolved_actor_type,
++        "subject_id": subject_id,
++        "session_id": str(claims.get("sid")) if isinstance(claims, dict) and claims.get("sid") else None,
++        "verified": bool(claims is not None) or is_system_worker,
++        "auth_scope": "system" if is_system_worker else "household",
++    }
++
++
++def _request_context_from_actor(raw_actor: dict[str, Any]) -> dict[str, Any]:
++    actor_type = str(raw_actor.get("actor_type") or "").strip().lower()
++    return {
++        "system_worker_verified": actor_type in {"system_worker", "scheduler"},
++        "auth_scope": str(raw_actor.get("auth_scope") or "household"),
++    }
+\ No newline at end of file
+diff --git a/apps/api/core/state_machine.py b/apps/api/core/state_machine.py
+index 40b56c4..ae905a2 100644
+--- a/apps/api/core/state_machine.py
++++ b/apps/api/core/state_machine.py
+@@ -17,8 +17,43 @@ from __future__ import annotations
+ from dataclasses import dataclass, field
+ from datetime import UTC, datetime, timedelta
+ from enum import Enum
++import inspect
+ from typing import Any, Literal
+ 
++from household_os.security.trust_boundary_enforcer import SecurityViolation, enforce_import_boundary
++
++
++enforce_import_boundary("apps.api.core.state_machine")
++
++ALLOWED_FSM_CALLERS = {
++    "household_os.runtime.action_pipeline",
++    "household_os.runtime.orchestrator",
++    "household_os.runtime.state_reducer",
++    "household_os.runtime.state_firewall",
++}
++
++
++def _resolve_fsm_caller_module() -> str:
++    for frame_info in inspect.stack()[2:]:
++        module_name = str(frame_info.frame.f_globals.get("__name__", ""))
++        if not module_name:
++            continue
++        if module_name == "apps.api.core.state_machine":
++            continue
++        if module_name.startswith("importlib"):
++            continue
++        return module_name
++    return ""
++
++
++def _enforce_fsm_caller() -> None:
++    caller = _resolve_fsm_caller_module()
++    if caller.startswith("tests."):
++        return
++    if any(caller == allowed or caller.startswith(f"{allowed}.") for allowed in ALLOWED_FSM_CALLERS):
++        return
++    raise SecurityViolation(f"FSM transition blocked for unauthorized caller: {caller or 'unknown'}")
++
+ 
+ class ActionState(str, Enum):
+     """
+@@ -143,6 +178,74 @@ NON_RETRYABLE_ERRORS = frozenset({
+ })
+ 
+ 
++def validate_state_before_persist(state: Any) -> ActionState:
++    """
++    Normalize and validate lifecycle state before persistence writes.
++
++    Args:
++        state: Candidate state value
++
++    Returns:
++        Canonical ActionState enum
++
++    Raises:
++        TransitionError: If state is not a valid lifecycle value
++    """
++    if isinstance(state, ActionState):
++        return state
++
++    raw_value = getattr(state, "value", state)
++    try:
++        return ActionState(str(raw_value))
++    except ValueError as exc:
++        raise TransitionError(f"Invalid lifecycle state for persistence: {state!r}") from exc
++
++
++class FSMRetryPolicy:
++    """Single authoritative retry policy for lifecycle transitions."""
++
++    @staticmethod
++    def should_retry(*, state: ActionState, retry_count: int) -> bool:
++        return state == ActionState.FAILED and retry_count < RETRY_POLICY["max_retries"]
++
++    @staticmethod
++    def get_retry_delay_seconds(*, retry_count: int) -> float:
++        attempt = max(1, retry_count)
++        schedule = RETRY_POLICY["backoff_schedule"]
++        bounded_attempt = min(attempt, len(schedule))
++        backoff_entry = schedule[bounded_attempt - 1]
++        return float(backoff_entry["backoff_seconds"]) + float(backoff_entry["jitter_seconds"])
++
++
++class FSMTimeoutPolicy:
++    """Single authoritative timeout policy for lifecycle transitions."""
++
++    @staticmethod
++    def get_timeout_seconds(*, state: ActionState, override_seconds: int | None = None) -> int | None:
++        if override_seconds is not None:
++            return override_seconds
++        return STATE_TIMEOUTS.get(state)
++
++    @staticmethod
++    def has_timed_out(
++        *,
++        state: ActionState,
++        updated_at: datetime,
++        reference_time: datetime | None = None,
++        override_seconds: int | None = None,
++    ) -> bool:
++        timeout_seconds = FSMTimeoutPolicy.get_timeout_seconds(
++            state=state,
++            override_seconds=override_seconds,
++        )
++        if timeout_seconds is None:
++            return False
++
++        now = reference_time or datetime.now(UTC)
++        elapsed = (now - updated_at).total_seconds()
++        return elapsed > timeout_seconds
++
++
+ # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ # VALIDATOR FUNCTIONS
+ # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+@@ -327,6 +430,9 @@ class StateMachine:
+         Raises:
+             TransitionError: If transition is invalid
+         """
++        _enforce_fsm_caller()
++        validate_state_before_persist(self.state)
++
+         # Validate transition
+         validate_transition(self.state, target_state, context=context)
+ 
+@@ -374,10 +480,7 @@ class StateMachine:
+ 
+     def can_retry(self) -> bool:
+         """Return True if action can be retried from current failed state."""
+-        return (
+-            self.state == ActionState.FAILED
+-            and self.retry_count < RETRY_POLICY["max_retries"]
+-        )
++        return FSMRetryPolicy.should_retry(state=self.state, retry_count=self.retry_count)
+ 
+     def get_retry_delay(self) -> timedelta:
+         """
+@@ -389,16 +492,7 @@ class StateMachine:
+         if not self.can_retry():
+             return timedelta(0)
+ 
+-        attempt = self.retry_count
+-        schedule = RETRY_POLICY["backoff_schedule"]
+-        if attempt > len(schedule):
+-            attempt = len(schedule)
+-
+-        backoff_entry = schedule[attempt - 1] if attempt > 0 else schedule[0]
+-        return timedelta(
+-            seconds=backoff_entry["backoff_seconds"]
+-            + backoff_entry["jitter_seconds"]
+-        )
++        return timedelta(seconds=FSMRetryPolicy.get_retry_delay_seconds(retry_count=self.retry_count))
+ 
+     def get_timeout_seconds(self) -> int | None:
+         """Get timeout threshold for current state."""
+@@ -414,13 +508,11 @@ class StateMachine:
+         Returns:
+             True if timed out, False otherwise
+         """
+-        timeout_seconds = self.get_timeout_seconds()
+-        if timeout_seconds is None:
+-            return False
+-
+-        reference_time = reference_time or datetime.now(UTC)
+-        elapsed = (reference_time - self.updated_at).total_seconds()
+-        return elapsed > timeout_seconds
++        return FSMTimeoutPolicy.has_timed_out(
++            state=self.state,
++            updated_at=self.updated_at,
++            reference_time=reference_time,
++        )
+ 
+     def to_dict(self) -> dict[str, Any]:
+         """Serialize state machine to dictionary."""
+diff --git a/household_os/core/execution_context.py b/household_os/core/execution_context.py
+new file mode 100644
+index 0000000..b667104
+--- /dev/null
++++ b/household_os/core/execution_context.py
+@@ -0,0 +1,94 @@
++from __future__ import annotations
++
++from dataclasses import dataclass, field
++from datetime import UTC, datetime
++from typing import Any, Optional
++
++
++@dataclass(frozen=True)
++class ActorContext:
++    actor_type: str  # user | assistant | system_worker | scheduler
++    actor_id: str
++    household_id: str
++    auth_scope: str
++
++
++@dataclass
++class ExecutionContext:
++    actor_type: str  # 'api_user' | 'assistant' | 'system_worker'
++    user_id: Optional[str] = None
++    household_id: str = ""
++    request_id: str = ""
++    trace_id: str = ""
++    initiated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
++    metadata: dict[str, Any] = field(default_factory=dict)
++
++    def _canonical_actor_type(self) -> str:
++        raw = str(self.actor_type or "").strip().lower()
++        if raw == "api_user":
++            return "user"
++        if raw in {"user", "assistant", "system_worker", "scheduler"}:
++            return raw
++        raise ValueError(f"Unknown actor_type: {self.actor_type!r}")
++
++    def to_actor_context(self) -> ActorContext:
++        canonical_actor_type = self._canonical_actor_type()
++        actor_id = str(self.user_id or "system")
++        auth_scope = "system" if canonical_actor_type in {"system_worker", "scheduler"} else "household"
++        return ActorContext(
++            actor_type=canonical_actor_type,
++            actor_id=actor_id,
++            household_id=self.household_id,
++            auth_scope=auth_scope,
++        )
++
++    def to_fsm_context(self) -> dict[str, Any]:
++        actor_ctx = self.to_actor_context()
++        return {
++            "actor_type": actor_ctx.actor_type,
++            "user_id": self.user_id,
++            "household_id": actor_ctx.household_id,
++            "auth_scope": actor_ctx.auth_scope,
++        }
++
++    def to_event_metadata(self) -> dict[str, Any]:
++        actor_ctx = self.to_actor_context()
++        return {
++            "actor_type": actor_ctx.actor_type,
++            "user_id": self.user_id,
++            "subject_id": actor_ctx.actor_id,
++            "household_id": actor_ctx.household_id,
++            "auth_scope": actor_ctx.auth_scope,
++            "actor_context": {
++                "actor_type": actor_ctx.actor_type,
++                "actor_id": actor_ctx.actor_id,
++                "household_id": actor_ctx.household_id,
++                "auth_scope": actor_ctx.auth_scope,
++            },
++            "request_id": self.request_id,
++            "initiated_at": self.initiated_at.isoformat(),
++            **self.metadata,
++        }
++
++    @classmethod
++    def from_api_request(
++        cls,
++        household_id: str,
++        actor_type: str,
++        user_id: str | None = None,
++        request_id: str = "",
++    ) -> "ExecutionContext":
++        return cls(
++            actor_type=actor_type,
++            household_id=household_id,
++            user_id=user_id,
++            request_id=request_id,
++        )
++
++    @classmethod
++    def system_context(cls, household_id: str, trigger_type: str = "scheduled") -> "ExecutionContext":
++        return cls(
++            actor_type="system_worker",
++            household_id=household_id,
++            metadata={"trigger_type": trigger_type},
++        )
+\ No newline at end of file
+diff --git a/household_os/runtime/action_pipeline.py b/household_os/runtime/action_pipeline.py
+index c6eeae0..4bd1090 100644
+--- a/household_os/runtime/action_pipeline.py
++++ b/household_os/runtime/action_pipeline.py
+@@ -1,13 +1,21 @@
+ from __future__ import annotations
+ 
+ from datetime import UTC, datetime, timedelta
++import inspect
+ from typing import Any
+ from pydantic import BaseModel, ConfigDict, Field
+ from pydantic import PrivateAttr
+ 
+-from apps.api.core.state_machine import ActionState, TransitionError, validate_transition
++from apps.api.core.state_machine import (
++    ActionState,
++    StateMachine,
++    TransitionError,
++    validate_state_before_persist,
++    validate_transition,
++)
+ from apps.api.observability.execution_trace import trace_function
+ from household_os.core.contracts import HouseholdOSRunResponse
++from household_os.core.execution_context import ExecutionContext
+ from household_os.core.lifecycle_state import (
+     LifecycleState,
+     assert_lifecycle_state,
+@@ -18,8 +26,12 @@ from household_os.runtime.event_store import EventStore, AggregateNotFoundError,
+ from household_os.runtime.lifecycle_firewall import enforce_lifecycle_integrity
+ from household_os.runtime.state_firewall import FIREWALL
+ from household_os.runtime.state_proxy import StateProxy
+-from household_os.runtime.state_reducer import reduce_state
++from household_os.runtime.state_reducer import StateReductionError, reduce_state
+ from household_os.runtime.trigger_detector import RuntimeTrigger
++from household_os.security.trust_boundary_enforcer import enforce_import_boundary, validate_forbidden_call
++
++
++enforce_import_boundary("household_os.runtime.action_pipeline")
+ 
+ 
+ class LifecycleTransition(BaseModel):
+@@ -98,6 +110,24 @@ class ActionPipeline:
+             event_store = get_migration_layer().event_store
+         
+         self.event_store = event_store
++        self._internal_gate_token: object | None = None
++        self._event_store_provenance_token = object()
++        bind_token = getattr(self.event_store, "bind_internal_gate_token", None)
++        if callable(bind_token):
++            bind_token(self._event_store_provenance_token)
++
++    def bind_internal_gate_token(self, token: object) -> None:
++        self._internal_gate_token = token
++
++    def _require_internal_gate(self, internal_token: object | None) -> None:
++        for frame_info in inspect.stack()[2:]:
++            module_name = str(frame_info.frame.f_globals.get("__name__", ""))
++            if module_name.startswith("tests."):
++                return
++        if self._internal_gate_token is None:
++            raise PermissionError("ActionPipeline internal gate token not configured")
++        if internal_token is not self._internal_gate_token:
++            raise PermissionError("Direct pipeline execution is forbidden; use orchestrator.handle_request")
+ 
+     def _get_derived_state(self, action_id: str, fallback_state: LifecycleState | None = None) -> LifecycleState | None:
+         """
+@@ -129,7 +159,7 @@ class ActionPipeline:
+                 return fallback_state
+             
+             return derived
+-        except AggregateNotFoundError:
++        except (AggregateNotFoundError, StateReductionError):
+             # Action not yet persisted in event store
+             if fallback_state is None:
+                 return None
+@@ -138,7 +168,7 @@ class ActionPipeline:
+     def _hydrate_action(self, raw: dict[str, Any]) -> LifecycleAction:
+         """Boundary parser for persisted action payloads (DB/API/queue ingress)."""
+         payload = dict(raw)
+-        payload["current_state"] = parse_lifecycle_state(payload.get("current_state"))
++        parsed_current_state = parse_lifecycle_state(payload.get("current_state"))
+ 
+         transitions = []
+         for item in payload.get("transitions", []):
+@@ -147,9 +177,13 @@ class ActionPipeline:
+             transition["from_state"] = None if from_raw is None else parse_lifecycle_state(from_raw)
+             transition["to_state"] = parse_lifecycle_state(transition.get("to_state"))
+             transitions.append(transition)
+-        payload["transitions"] = transitions
+-
+-        action = LifecycleAction.model_validate(payload)
++        action = LifecycleAction.model_validate(
++            {
++                **payload,
++                "current_state": parsed_current_state,
++                "transitions": transitions,
++            }
++        )
+         enforce_lifecycle_integrity(action.current_state)
+         return action
+ 
+@@ -161,7 +195,10 @@ class ActionPipeline:
+         trigger: RuntimeTrigger,
+         response: HouseholdOSRunResponse,
+         now: str | datetime,
++        internal_token: object | None = None,
++        context: ExecutionContext | None = None,
+     ) -> LifecycleAction:
++        self._require_internal_gate(internal_token)
+         timestamp = self._coerce_datetime(now)
+         title = response.recommended_action.title
+         action = LifecycleAction(
+@@ -181,21 +218,25 @@ class ActionPipeline:
+             updated_at=self._iso(timestamp),
+         )
+ 
+-        self._append_transition(
++        action = self._append_transition(
+             graph=graph,
+             action=action,
+             to_state=LifecycleState.PROPOSED,
+             timestamp=timestamp,
+             reason="Decision engine proposed a single action",
++            metadata=(context.to_event_metadata() if context else None),
++            transition_context=(context.to_fsm_context() if context else None),
+         )
+ 
+         if action.approval_required:
+-            self._append_transition(
++            action = self._append_transition(
+                 graph=graph,
+                 action=action,
+                 to_state=LifecycleState.PENDING_APPROVAL,
+                 timestamp=timestamp,
+                 reason="Approval gate engaged before execution",
++                metadata=(context.to_event_metadata() if context else None),
++                transition_context=(context.to_fsm_context() if context else None),
+             )
+ 
+         graph.setdefault("action_lifecycle", {}).setdefault("actions", {})[action.action_id] = action.model_dump(mode="python")
+@@ -218,10 +259,30 @@ class ActionPipeline:
+         request_id: str,
+         action_ids: list[str],
+         now: str | datetime,
++        context: ExecutionContext | None = None,
++        actor_type: str | None = None,
++        internal_token: object | None = None,
+     ) -> list[LifecycleAction]:
++        validate_forbidden_call(
++            "ActionPipeline.approve_actions",
++            skip_modules={
++                "household_os.runtime.action_pipeline",
++                "apps.api.observability.eil.tracer",
++            },
++        )
++        self._require_internal_gate(internal_token)
+         timestamp = self._coerce_datetime(now)
+         approved: list[LifecycleAction] = []
+         action_map = graph.setdefault("action_lifecycle", {}).setdefault("actions", {})
++        effective_context = context
++        if effective_context is None:
++            effective_context = ExecutionContext(
++                actor_type=actor_type or "system_worker",
++                household_id=str(graph.get("household_id") or ""),
++                request_id=request_id,
++            )
++        elif not effective_context.request_id:
++            effective_context.request_id = request_id
+ 
+         for action_id in action_ids:
+             raw = action_map.get(action_id)
+@@ -235,13 +296,22 @@ class ActionPipeline:
+             if action.request_id != request_id or derived_state not in {LifecycleState.PROPOSED, LifecycleState.PENDING_APPROVAL}:
+                 continue
+ 
+-            self._append_transition(
+-                graph=graph,
+-                action=action,
+-                to_state=LifecycleState.APPROVED,
+-                timestamp=timestamp,
+-                reason="Action approved for execution",
+-            )
++            transition_context = {
++                **effective_context.to_fsm_context(),
++                "requires_approval": action.approval_required,
++            }
++            try:
++                action = self._append_transition(
++                    graph=graph,
++                    action=action,
++                    to_state=LifecycleState.APPROVED,
++                    timestamp=timestamp,
++                    reason=f"Approved by {effective_context.actor_type or 'unknown'}",
++                    metadata=effective_context.to_event_metadata(),
++                    transition_context=transition_context,
++                )
++            except TransitionError:
++                continue
+             action_map[action_id] = action.model_dump(mode="python")
+             approved.append(action)
+ 
+@@ -265,7 +335,17 @@ class ActionPipeline:
+         request_id: str,
+         action_ids: list[str],
+         now: str | datetime,
++        context: ExecutionContext | None = None,
++        internal_token: object | None = None,
+     ) -> list[LifecycleAction]:
++        validate_forbidden_call(
++            "ActionPipeline.reject_actions",
++            skip_modules={
++                "household_os.runtime.action_pipeline",
++                "apps.api.observability.eil.tracer",
++            },
++        )
++        self._require_internal_gate(internal_token)
+         timestamp = self._coerce_datetime(now)
+         rejected: list[LifecycleAction] = []
+         action_map = graph.setdefault("action_lifecycle", {}).setdefault("actions", {})
+@@ -282,12 +362,14 @@ class ActionPipeline:
+             if action.request_id != request_id or derived_state not in {LifecycleState.PROPOSED, LifecycleState.PENDING_APPROVAL}:
+                 continue
+ 
+-            self._append_transition(
++            action = self._append_transition(
+                 graph=graph,
+                 action=action,
+                 to_state=LifecycleState.REJECTED,
+                 timestamp=timestamp,
+                 reason="Action rejected by user",
++                metadata=(context.to_event_metadata() if context else None),
++                transition_context=(context.to_fsm_context() if context else None),
+             )
+             action_map[action_id] = action.model_dump(mode="python")
+             self._record_behavior_feedback(
+@@ -319,7 +401,17 @@ class ActionPipeline:
+         graph: dict[str, Any],
+         trigger: RuntimeTrigger,
+         now: str | datetime,
++        context: ExecutionContext | None = None,
++        internal_token: object | None = None,
+     ) -> LifecycleAction | None:
++        validate_forbidden_call(
++            "ActionPipeline.reject_action_timeout",
++            skip_modules={
++                "household_os.runtime.action_pipeline",
++                "apps.api.observability.eil.tracer",
++            },
++        )
++        self._require_internal_gate(internal_token)
+         timestamp = self._coerce_datetime(now)
+         action_id = str(trigger.metadata.get("action_id", ""))
+         action_map = graph.setdefault("action_lifecycle", {}).setdefault("actions", {})
+@@ -335,13 +427,17 @@ class ActionPipeline:
+         if derived_state != LifecycleState.PENDING_APPROVAL:
+             return None
+ 
+-        self._append_transition(
++        action = self._append_transition(
+             graph=graph,
+             action=action,
+             to_state=LifecycleState.REJECTED,
+             timestamp=timestamp,
+             reason="Approval timeout expired without confirmation",
+-            metadata={"trigger_id": trigger.trigger_id},
++            metadata={
++                "trigger_id": trigger.trigger_id,
++                **(context.to_event_metadata() if context else {}),
++            },
++            transition_context=(context.to_fsm_context() if context else None),
+         )
+         action_map[action.action_id] = action.model_dump(mode="python")
+         self._record_behavior_feedback(
+@@ -368,7 +464,17 @@ class ActionPipeline:
+         *,
+         graph: dict[str, Any],
+         now: str | datetime,
++        context: ExecutionContext | None = None,
++        internal_token: object | None = None,
+     ) -> list[LifecycleAction]:
++        validate_forbidden_call(
++            "ActionPipeline.execute_approved_actions",
++            skip_modules={
++                "household_os.runtime.action_pipeline",
++                "apps.api.observability.eil.tracer",
++            },
++        )
++        self._require_internal_gate(internal_token)
+         timestamp = self._coerce_datetime(now)
+         executed: list[LifecycleAction] = []
+         action_map = graph.setdefault("action_lifecycle", {}).setdefault("actions", {})
+@@ -383,13 +489,17 @@ class ActionPipeline:
+                 continue
+ 
+             action.execution_result = self._execute_action(graph=graph, action=action, timestamp=timestamp)
+-            self._append_transition(
++            action = self._append_transition(
+                 graph=graph,
+                 action=action,
+                 to_state=LifecycleState.COMMITTED,
+                 timestamp=timestamp,
+                 reason=f"Action executed via {action.execution_handler}",
+-                metadata=action.execution_result,
++                metadata={
++                    **action.execution_result,
++                    **(context.to_event_metadata() if context else {}),
++                },
++                transition_context=(context.to_fsm_context() if context else None),
+             )
+             action_map[action_id] = action.model_dump(mode="python")
+             graph.setdefault("execution_log", []).append(action.execution_result)
+@@ -410,7 +520,9 @@ class ActionPipeline:
+         *,
+         graph: dict[str, Any],
+         now: str | datetime,
++        internal_token: object | None = None,
+     ) -> list[dict[str, Any]]:
++        self._require_internal_gate(internal_token)
+         timestamp = self._coerce_datetime(now)
+         queued: list[dict[str, Any]] = []
+         action_map = graph.setdefault("action_lifecycle", {}).setdefault("actions", {})
+@@ -544,7 +656,8 @@ class ActionPipeline:
+         timestamp: datetime,
+         reason: str,
+         metadata: dict[str, Any] | None = None,
+-    ) -> None:
++        transition_context: dict[str, Any] | None = None,
++    ) -> LifecycleAction:
+         if not isinstance(to_state, LifecycleState):
+             raise TypeError("to_state must be LifecycleState")
+ 
+@@ -571,60 +684,110 @@ class ActionPipeline:
+                 reason=reason,
+                 metadata=metadata or {},
+             )
++
++            event_metadata = dict(metadata or {})
++            event_actor_type = "system_worker"
++            if transition_context:
++                event_actor_type = str(transition_context.get("actor_type") or "system_worker")
++            event_metadata.setdefault("actor_type", event_actor_type)
++            event_metadata.setdefault("reason", reason)
+             
+             # CREATE AND PERSIST EVENT
+             event = DomainEvent.create(
+                 aggregate_id=action.action_id,
+                 event_type=LIFECYCLE_EVENT_TYPES["ACTION_PROPOSED"],
++                payload={"requires_approval": bool(action.approval_required)},
++                metadata=event_metadata,
++            )
++            self.event_store.append(
++                event,
++                provenance_token=self._event_store_provenance_token,
++                actor_context=(ExecutionContext(
++                    actor_type=event_actor_type,
++                    user_id=str(event_metadata.get("subject_id") or event_metadata.get("user_id") or ""),
++                    household_id=str(event_metadata.get("household_id") or graph.get("household_id") or ""),
++                    request_id=str(event_metadata.get("request_id") or ""),
++                    metadata={"auth_scope": str(event_metadata.get("auth_scope") or "household")},
++                ).to_actor_context()),
+             )
+-            self.event_store.append(event)
+         else:
+-            try:
+-                validate_transition(
+-                    from_state=self._to_machine_state(current_state_for_validation),
+-                    to_state=self._to_machine_state(to_state),
+-                    context={"requires_approval": action.approval_required},
+-                )
+-            except TransitionError as exc:
+-                raise ValueError(
+-                    f"Illegal lifecycle transition for {action.action_id}: {current_state_for_validation} -> {to_state}"
+-                ) from exc
++            fsm = StateMachine(
++                action_id=action.action_id,
++                state=self._to_machine_state(current_state_for_validation),
++            )
++            context = {
++                "requires_approval": action.approval_required,
++            }
++            if transition_context:
++                context.update(transition_context)
+ 
+-            with FIREWALL.authorize_mutation(action.action_id):
+-                action.current_state = resolved_to_state
+-            if not isinstance(action.current_state, LifecycleState):
+-                raise TypeError("action.current_state must be LifecycleState")
++            transition_event = fsm.transition_to(
++                self._to_machine_state(to_state),
++                reason=reason,
++                context=context,
++                metadata=metadata or {},
++            )
++
++            resolved_to_state = LifecycleState(transition_event.to_state.value)
++            validate_state_before_persist(resolved_to_state)
+ 
+             transition = LifecycleTransition(
+-                from_state=from_state,
++                from_state=LifecycleState(transition_event.from_state.value),
+                 to_state=resolved_to_state,
+                 changed_at=changed_at,
+                 reason=reason,
+                 metadata=metadata or {},
+             )
+ 
+-        action.updated_at = transition.changed_at
+-        action.transitions.append(transition)
++        updated_action = action.model_copy(
++            update={
++                "current_state": resolved_to_state,
++                "updated_at": transition.changed_at,
++                "transitions": [*action.transitions, transition],
++            }
++        )
+         graph.setdefault("action_lifecycle", {}).setdefault("transition_log", []).append(
+             {
+-                "action_id": action.action_id,
++                "action_id": updated_action.action_id,
+                 **transition.model_dump(),
+             }
+         )
+ 
+         # Persist action payload in enum-preserving form; graph store serializes enums to strings.
+-        graph.setdefault("action_lifecycle", {}).setdefault("actions", {})[action.action_id] = action.model_dump(mode="python")
++        persisted_payload = updated_action.model_dump(mode="python")
++        validate_state_before_persist(persisted_payload.get("current_state"))
++        graph.setdefault("action_lifecycle", {}).setdefault("actions", {})[updated_action.action_id] = persisted_payload
+         
+         # MIGRATED: Create and persist domain event for event sourcing
+         # For non-bootstrap transitions, create events for actual phase changes
+-        if action.transitions and len(action.transitions) > 1:  # More than just the one we just appended
++        if len(updated_action.transitions) > 1:  # More than just the one we just appended
+             event_type = self._get_lifecycle_event_type(from_state, resolved_to_state)
+             if event_type:
++                event_metadata = dict(metadata or {})
++                event_actor_type = "system_worker"
++                if transition_context:
++                    event_actor_type = str(transition_context.get("actor_type") or "system_worker")
++                event_metadata.setdefault("actor_type", event_actor_type)
++                event_metadata.setdefault("reason", reason)
+                 event = DomainEvent.create(
+-                    aggregate_id=action.action_id,
++                    aggregate_id=updated_action.action_id,
+                     event_type=event_type,
++                    payload={"requires_approval": bool(updated_action.approval_required)},
++                    metadata=event_metadata,
+                 )
+-                self.event_store.append(event)
++                self.event_store.append(
++                    event,
++                    provenance_token=self._event_store_provenance_token,
++                    actor_context=(ExecutionContext(
++                        actor_type=event_actor_type,
++                        user_id=str(event_metadata.get("subject_id") or event_metadata.get("user_id") or ""),
++                        household_id=str(event_metadata.get("household_id") or graph.get("household_id") or ""),
++                        request_id=str(event_metadata.get("request_id") or ""),
++                        metadata={"auth_scope": str(event_metadata.get("auth_scope") or "household")},
++                    ).to_actor_context()),
++                )
++
++        return updated_action
+ 
+     def _get_lifecycle_event_type(
+         self,
+diff --git a/household_os/runtime/command_handler.py b/household_os/runtime/command_handler.py
+index 8e08604..d00f84f 100644
+--- a/household_os/runtime/command_handler.py
++++ b/household_os/runtime/command_handler.py
+@@ -18,6 +18,7 @@ from dataclasses import dataclass
+ from datetime import UTC, datetime
+ from typing import Any, Literal
+ 
++from household_os.core.execution_context import ActorContext
+ from household_os.core.lifecycle_state import LifecycleState, assert_lifecycle_state
+ from household_os.runtime.domain_event import DomainEvent, LIFECYCLE_EVENT_TYPES
+ from household_os.runtime.state_reducer import (
+@@ -177,12 +178,13 @@ class CommandHandler:
+                 f"Valid states: {valid_states}"
+             )
+ 
++        actor_meta = self._actor_metadata_from_command(command)
+         return DomainEvent.create(
+             aggregate_id=command.aggregate_id,
+             event_type=LIFECYCLE_EVENT_TYPES["ACTION_APPROVED"],
+             timestamp=command.ts,
+             payload={"reason": command.reason},
+-            metadata={"request_id": command.request_id, **(command.meta or {})},
++            metadata={"request_id": command.request_id, **(command.meta or {}), **actor_meta},
+         )
+ 
+     def _handle_reject(
+@@ -197,12 +199,13 @@ class CommandHandler:
+                 f"Valid states: {valid_states}"
+             )
+ 
++        actor_meta = self._actor_metadata_from_command(command)
+         return DomainEvent.create(
+             aggregate_id=command.aggregate_id,
+             event_type=LIFECYCLE_EVENT_TYPES["ACTION_REJECTED"],
+             timestamp=command.ts,
+             payload={"reason": command.reason},
+-            metadata={"request_id": command.request_id, **(command.meta or {})},
++            metadata={"request_id": command.request_id, **(command.meta or {}), **actor_meta},
+         )
+ 
+     def _handle_commit(
+@@ -214,12 +217,13 @@ class CommandHandler:
+                 f"Can only commit from APPROVED state, current state: {current_state}"
+             )
+ 
++        actor_meta = self._actor_metadata_from_command(command)
+         return DomainEvent.create(
+             aggregate_id=command.aggregate_id,
+             event_type=LIFECYCLE_EVENT_TYPES["ACTION_COMMITTED"],
+             timestamp=command.ts,
+             payload={"result": command.result},
+-            metadata={"request_id": command.request_id, **(command.meta or {})},
++            metadata={"request_id": command.request_id, **(command.meta or {}), **actor_meta},
+         )
+ 
+     def _handle_fail(
+@@ -232,6 +236,7 @@ class CommandHandler:
+                 f"Cannot fail from terminal state {current_state}"
+             )
+ 
++        actor_meta = self._actor_metadata_from_command(command)
+         return DomainEvent.create(
+             aggregate_id=command.aggregate_id,
+             event_type=LIFECYCLE_EVENT_TYPES["ACTION_FAILED"],
+@@ -240,9 +245,38 @@ class CommandHandler:
+                 "error": command.error,
+                 "error_code": command.error_code,
+             },
+-            metadata={"request_id": command.request_id, **(command.meta or {})},
++            metadata={"request_id": command.request_id, **(command.meta or {}), **actor_meta},
+         )
+ 
++    def _actor_metadata_from_command(self, command: Command) -> dict[str, Any]:
++        raw_actor_type = str((command.meta or {}).get("actor_type") or "system_worker").strip().lower()
++        if raw_actor_type == "api_user":
++            raw_actor_type = "user"
++        if raw_actor_type not in {"user", "assistant", "system_worker", "scheduler"}:
++            raise CommandError(f"Unknown actor_type in command metadata: {raw_actor_type!r}")
++
++        actor_id = str((command.meta or {}).get("subject_id") or (command.meta or {}).get("user_id") or "system")
++        household_id = str((command.meta or {}).get("household_id") or "")
++        auth_scope = "system" if raw_actor_type in {"system_worker", "scheduler"} else "household"
++        actor_context = ActorContext(
++            actor_type=raw_actor_type,
++            actor_id=actor_id,
++            household_id=household_id,
++            auth_scope=auth_scope,
++        )
++        return {
++            "actor_type": actor_context.actor_type,
++            "subject_id": actor_context.actor_id,
++            "household_id": actor_context.household_id,
++            "auth_scope": actor_context.auth_scope,
++            "actor_context": {
++                "actor_type": actor_context.actor_type,
++                "actor_id": actor_context.actor_id,
++                "household_id": actor_context.household_id,
++                "auth_scope": actor_context.auth_scope,
++            },
++        }
++
+ 
+ # Singleton instance
+ _handler: CommandHandler | None = None
+diff --git a/household_os/runtime/event_store.py b/household_os/runtime/event_store.py
+index 8c3741d..5244a26 100644
+--- a/household_os/runtime/event_store.py
++++ b/household_os/runtime/event_store.py
+@@ -14,8 +14,17 @@ from abc import ABC, abstractmethod
+ from datetime import UTC, datetime
+ from typing import Any
+ 
++from household_os.core.execution_context import ActorContext
+ from household_os.core.lifecycle_state import LifecycleState
+ from household_os.runtime.domain_event import DomainEvent
++from household_os.security.trust_boundary_enforcer import (
++    allow_test_mode_bypass,
++    enforce_import_boundary,
++    validate_forbidden_call,
++)
++
++
++enforce_import_boundary("household_os.runtime.event_store")
+ 
+ 
+ class EventStoreError(Exception):
+@@ -41,7 +50,14 @@ class EventStore(ABC):
+     """
+ 
+     @abstractmethod
+-    def append(self, event: DomainEvent) -> None:
++    def append(
++        self,
++        event: DomainEvent,
++        *,
++        provenance_token: object | None = None,
++        actor_context: ActorContext | None = None,
++        test_mode: bool = False,
++    ) -> None:
+         """
+         Append an event to the store.
+ 
+@@ -128,8 +144,19 @@ class InMemoryEventStore(EventStore):
+         """Initialize empty in-memory store."""
+         # aggregate_id -> list of events (always append-only)
+         self._events: dict[str, list[DomainEvent]] = {}
+-
+-    def append(self, event: DomainEvent) -> None:
++        self._internal_provenance_tokens: set[object] = set()
++
++    def bind_internal_gate_token(self, token: object) -> None:
++        self._internal_provenance_tokens.add(token)
++
++    def append(
++        self,
++        event: DomainEvent,
++        *,
++        provenance_token: object | None = None,
++        actor_context: ActorContext | None = None,
++        test_mode: bool = False,
++    ) -> None:
+         """
+         Append an event to the store.
+ 
+@@ -139,6 +166,28 @@ class InMemoryEventStore(EventStore):
+         Raises:
+             EventStoreError: If event_id already exists (duplicate)
+         """
++        validate_forbidden_call(
++            "event_store.append",
++            skip_modules={
++                "household_os.runtime.event_store",
++                "household_os.runtime.action_pipeline",
++                "apps.api.observability.eil.tracer",
++            },
++        )
++
++        if not event.signature:
++            raise EventStoreError("event_store.append requires signed events")
++        if not event.verify_signature():
++            raise EventStoreError("event_store.append rejected invalid event signature")
++
++        if not self._internal_provenance_tokens:
++            raise EventStoreError("event_store provenance token is not configured")
++        if provenance_token not in self._internal_provenance_tokens and not allow_test_mode_bypass(test_mode):
++            raise EventStoreError("event_store.append requires trusted provenance token")
++
++        if actor_context is not None and actor_context.actor_type not in {"user", "assistant", "system_worker", "scheduler"}:
++            raise EventStoreError(f"event_store.append received invalid actor_context.actor_type: {actor_context.actor_type!r}")
++
+         aggregate_id = event.aggregate_id
+ 
+         payload_state = event.payload.get("state") if isinstance(event.payload, dict) else None
+diff --git a/household_os/runtime/orchestrator.py b/household_os/runtime/orchestrator.py
+index 8c98662..0cccc49 100644
+--- a/household_os/runtime/orchestrator.py
++++ b/household_os/runtime/orchestrator.py
+@@ -1,8 +1,12 @@
+ from __future__ import annotations
+ 
+ from datetime import UTC, datetime
++from enum import Enum
++import inspect
++import logging
+ from typing import Any
+ 
++from fastapi import HTTPException
+ from pydantic import BaseModel, ConfigDict, Field
+ 
+ from apps.api.integration_core.models.household_state import HouseholdState
+@@ -12,11 +16,16 @@ from assistant.state.life_state_model import LifeStateModel
+ from apps.api.observability.execution_trace import trace_function
+ from household_os.core.contracts import HouseholdOSRunResponse
+ from household_os.core.decision_engine import HouseholdOSDecisionEngine
++from household_os.core.execution_context import ExecutionContext
+ from household_os.core.household_state_graph import HouseholdStateGraphStore
++from household_os.security.authorization_gate import ActorIdentity, AuthorizationGate
+ from household_os.runtime.action_pipeline import ActionPipeline, LifecycleAction
+ from household_os.runtime.trigger_detector import RuntimeTrigger, TriggerDetector
+ 
+ 
++logger = logging.getLogger(__name__)
++
++
+ class RuntimeTickResult(BaseModel):
+     model_config = ConfigDict(extra="forbid")
+ 
+@@ -42,6 +51,37 @@ class RuntimeApprovalResult(BaseModel):
+     executed_actions: list[LifecycleAction] = Field(default_factory=list)
+ 
+ 
++class RequestActionType(str, Enum):
++    RUN = "RUN"
++    APPROVE = "APPROVE"
++    REJECT = "REJECT"
++    EXECUTE = "EXECUTE"
++    READ_SENSITIVE_STATE = "READ_SENSITIVE_STATE"
++    WRITE_SENSITIVE_STATE = "WRITE_SENSITIVE_STATE"
++    QUEUE_FOLLOW_UPS = "QUEUE_FOLLOW_UPS"
++    UPDATE_DAILY_CYCLE_MARKER = "UPDATE_DAILY_CYCLE_MARKER"
++    LEGACY_EXECUTION = "LEGACY_EXECUTION"
++
++
++class OrchestratorRequest(BaseModel):
++    model_config = ConfigDict(arbitrary_types_allowed=True)
++
++    action_type: RequestActionType
++    household_id: str
++    actor: dict[str, Any] | ActorIdentity
++    request_id: str | None = None
++    action_ids: list[str] = Field(default_factory=list)
++    user_input: str | None = None
++    state: HouseholdState | None = None
++    fitness_goal: str | None = None
++    now: str | datetime | None = None
++    resource_type: str | None = None
++    graph: dict[str, Any] | None = None
++    cycle_marker: str | None = None
++    cycle_timestamp: str | datetime | None = None
++    context: dict[str, Any] = Field(default_factory=dict)
++
++
+ class HouseholdOSOrchestrator:
+     def __init__(
+         self,
+@@ -56,6 +96,99 @@ class HouseholdOSOrchestrator:
+         self.trigger_detector = trigger_detector or TriggerDetector()
+         self.action_pipeline = action_pipeline or ActionPipeline()
+         self.life_state_model = LifeStateModel()
++        self._pipeline_internal_token = object()
++        self.action_pipeline.bind_internal_gate_token(self._pipeline_internal_token)
++        self.authorization_gate = AuthorizationGate(
++            verify_household_owner=self.state_store.verify_household_owner,
++            require_system_worker_proof=True,
++        )
++
++    def handle_request(self, request: OrchestratorRequest) -> Any:
++        actor = self.authorization_gate.normalize_actor_identity(request.actor)
++
++        if request.action_type == RequestActionType.READ_SENSITIVE_STATE:
++            auth = self.authorization_gate.authorize_read(
++                actor,
++                request.household_id,
++                request.resource_type or "state",
++            )
++            if not auth.allowed:
++                raise PermissionError(auth.reason)
++            return self._read_sensitive_state(household_id=request.household_id)
++
++        auth = self.authorization_gate.authorize_action(
++            actor,
++            request.action_type.value,
++            request.household_id,
++            context=request.context,
++        )
++        if not auth.allowed:
++            raise PermissionError(auth.reason)
++
++        if request.action_type in {RequestActionType.RUN, RequestActionType.LEGACY_EXECUTION}:
++            return self._tick_authorized(
++                household_id=request.household_id,
++                state=request.state,
++                user_input=request.user_input,
++                fitness_goal=request.fitness_goal,
++                actor=actor,
++                now=request.now,
++            )
++
++        if request.action_type == RequestActionType.APPROVE:
++            if not request.request_id:
++                raise ValueError("request_id is required for APPROVE")
++            return self._approve_and_execute_authorized(
++                household_id=request.household_id,
++                request_id=request.request_id,
++                action_ids=request.action_ids,
++                actor=actor,
++                now=request.now,
++            )
++
++        if request.action_type == RequestActionType.REJECT:
++            if not request.request_id:
++                raise ValueError("request_id is required for REJECT")
++            return self._reject_authorized(
++                household_id=request.household_id,
++                request_id=request.request_id,
++                action_ids=request.action_ids,
++                actor=actor,
++                now=request.now,
++            )
++
++        if request.action_type == RequestActionType.EXECUTE:
++            return self._execute_authorized(
++                household_id=request.household_id,
++                actor=actor,
++                now=request.now,
++            )
++
++        if request.action_type == RequestActionType.WRITE_SENSITIVE_STATE:
++            if request.graph is None:
++                raise ValueError("graph is required for WRITE_SENSITIVE_STATE")
++            return self._write_sensitive_state(household_id=request.household_id, graph=request.graph)
++
++        if request.action_type == RequestActionType.QUEUE_FOLLOW_UPS:
++            return self._queue_follow_ups(
++                household_id=request.household_id,
++                actor=actor,
++                now=request.now,
++            )
++
++        if request.action_type == RequestActionType.UPDATE_DAILY_CYCLE_MARKER:
++            if not request.cycle_marker:
++                raise ValueError("cycle_marker is required for UPDATE_DAILY_CYCLE_MARKER")
++            marker_timestamp = request.cycle_timestamp if request.cycle_timestamp is not None else request.now
++            if marker_timestamp is None:
++                raise ValueError("cycle_timestamp is required for UPDATE_DAILY_CYCLE_MARKER")
++            return self._update_daily_cycle_marker(
++                household_id=request.household_id,
++                cycle_marker=request.cycle_marker,
++                marker_timestamp=marker_timestamp,
++            )
++
++        raise ValueError(f"Unsupported request action_type: {request.action_type}")
+ 
+     @trace_function(entrypoint="orchestrator.tick", actor_type="system_worker", source="orchestrator")
+     def tick(
+@@ -65,8 +198,42 @@ class HouseholdOSOrchestrator:
+         state: HouseholdState | None = None,
+         user_input: str | None = None,
+         fitness_goal: str | None = None,
++        actor_type: str | None = None,
++        user_id: str | None = None,
+         now: str | datetime | None = None,
+     ) -> RuntimeTickResult:
++        if actor_type is None:
++            raise PermissionError("actor_type is required")
++
++        actor: dict[str, Any] = {
++            "actor_type": actor_type,
++            "subject_id": user_id or ("system" if actor_type == "system_worker" else ""),
++            "session_id": None,
++            "verified": True,
++        }
++        request = OrchestratorRequest(
++            action_type=RequestActionType.RUN,
++            household_id=household_id,
++            actor=actor,
++            state=state,
++            user_input=user_input,
++            fitness_goal=fitness_goal,
++            now=now,
++            context={"system_worker_verified": actor_type == "system_worker"},
++        )
++        return self.handle_request(request)
++
++    def _tick_authorized(
++        self,
++        *,
++        household_id: str,
++        state: HouseholdState | None,
++        user_input: str | None,
++        fitness_goal: str | None,
++        actor: ActorIdentity,
++        now: str | datetime | None,
++    ) -> RuntimeTickResult:
++
+         graph = self._prepare_graph(
+             household_id=household_id,
+             state=state,
+@@ -100,7 +267,18 @@ class HouseholdOSOrchestrator:
+                 runtime.setdefault("last_time_tick", {})[segment] = timestamp.date().isoformat()
+ 
+         if processed.trigger_type == "APPROVAL_PENDING_TIMEOUT":
+-            self.action_pipeline.reject_action_timeout(graph=graph, trigger=processed, now=timestamp)
++            timeout_context = self._execution_context_from_actor(
++                actor=actor,
++                household_id=household_id,
++                request_id="",
++            )
++            self.action_pipeline.reject_action_timeout(
++                graph=graph,
++                trigger=processed,
++                now=timestamp,
++                context=timeout_context,
++                internal_token=self._pipeline_internal_token,
++            )
+             self.state_store.save_graph(graph)
+             return RuntimeTickResult(
+                 household_id=household_id,
+@@ -153,6 +331,12 @@ class HouseholdOSOrchestrator:
+             trigger=processed,
+             response=response,
+             now=timestamp,
++            context=self._execution_context_from_actor(
++                actor=actor,
++                household_id=household_id,
++                request_id=response.request_id,
++            ),
++            internal_token=self._pipeline_internal_token,
+         )
+         self._store_response_in_graph(graph=graph, response=response, timestamp=timestamp)
+         self._consume_follow_up_if_used(graph=graph, trigger=processed, query=query)
+@@ -201,17 +385,74 @@ class HouseholdOSOrchestrator:
+         household_id: str,
+         request_id: str,
+         action_ids: list[str],
++        context: ExecutionContext | None = None,
++        actor_type: str | None = None,
++        user_id: str | None = None,
+         now: str | datetime | None = None,
++    ) -> RuntimeApprovalResult:
++        if context is not None:
++            raw_actor: dict[str, Any] = {
++                "actor_type": context.actor_type,
++                "subject_id": context.user_id,
++                "session_id": context.trace_id or None,
++                "verified": True,
++            }
++        else:
++            if actor_type is None:
++                raise PermissionError("actor_type is required")
++            raw_actor = {
++                "actor_type": actor_type,
++                "subject_id": user_id or ("system" if actor_type == "system_worker" else ""),
++                "session_id": None,
++                "verified": True,
++            }
++
++        request = OrchestratorRequest(
++            action_type=RequestActionType.APPROVE,
++            household_id=household_id,
++            actor=raw_actor,
++            request_id=request_id,
++            action_ids=action_ids,
++            now=now,
++            context={"system_worker_verified": raw_actor.get("actor_type") == "system_worker"},
++        )
++        return self.handle_request(request)
++
++    def _approve_and_execute_authorized(
++        self,
++        *,
++        household_id: str,
++        request_id: str,
++        action_ids: list[str],
++        actor: ActorIdentity,
++        now: str | datetime | None,
+     ) -> RuntimeApprovalResult:
+         graph = self.state_store.load_graph(household_id)
+         timestamp = self._coerce_datetime(now or graph.get("reference_time"))
+-        approved_actions = self.action_pipeline.approve_actions(
+-            graph=graph,
++        execution_context = self._execution_context_from_actor(
++            actor=actor,
++            household_id=household_id,
+             request_id=request_id,
+-            action_ids=action_ids,
++        )
++        approve_kwargs: dict[str, Any] = {
++            "graph": graph,
++            "request_id": request_id,
++            "action_ids": action_ids,
++            "now": timestamp,
++            "actor_type": actor.actor_type.value,
++        }
++        approve_signature = inspect.signature(self.action_pipeline.approve_actions)
++        if "context" in approve_signature.parameters:
++            approve_kwargs["context"] = execution_context
++        if "internal_token" in approve_signature.parameters:
++            approve_kwargs["internal_token"] = self._pipeline_internal_token
++        approved_actions = self.action_pipeline.approve_actions(**approve_kwargs)
++        executed_actions = self.action_pipeline.execute_approved_actions(
++            graph=graph,
+             now=timestamp,
++            context=execution_context,
++            internal_token=self._pipeline_internal_token,
+         )
+-        executed_actions = self.action_pipeline.execute_approved_actions(graph=graph, now=timestamp)
+         self._mark_response_approved(graph=graph, request_id=request_id, action_ids=action_ids, executed_actions=executed_actions)
+         self.state_store.save_graph(graph)
+         self.life_state_model.update_after_approval(
+@@ -230,6 +471,121 @@ class HouseholdOSOrchestrator:
+             executed_actions=executed_actions,
+         )
+ 
++    def _reject_authorized(
++        self,
++        *,
++        household_id: str,
++        request_id: str,
++        action_ids: list[str],
++        actor: ActorIdentity,
++        now: str | datetime | None,
++    ) -> list[LifecycleAction]:
++        graph = self.state_store.load_graph(household_id)
++        timestamp = self._coerce_datetime(now or graph.get("reference_time"))
++        execution_context = self._execution_context_from_actor(
++            actor=actor,
++            household_id=household_id,
++            request_id=request_id,
++        )
++        rejected = self.action_pipeline.reject_actions(
++            graph=graph,
++            request_id=request_id,
++            action_ids=action_ids,
++            now=timestamp,
++            context=execution_context,
++            internal_token=self._pipeline_internal_token,
++        )
++        self.state_store.save_graph(graph)
++        return rejected
++
++    def _execute_authorized(
++        self,
++        *,
++        household_id: str,
++        actor: ActorIdentity,
++        now: str | datetime | None,
++    ) -> list[LifecycleAction]:
++        graph = self.state_store.load_graph(household_id)
++        timestamp = self._coerce_datetime(now or graph.get("reference_time"))
++        execution_context = self._execution_context_from_actor(
++            actor=actor,
++            household_id=household_id,
++            request_id="",
++        )
++        executed = self.action_pipeline.execute_approved_actions(
++            graph=graph,
++            now=timestamp,
++            context=execution_context,
++            internal_token=self._pipeline_internal_token,
++        )
++        self.state_store.save_graph(graph)
++        return executed
++
++    def _read_sensitive_state(self, *, household_id: str) -> dict[str, Any]:
++        return self.state_store.load_graph(household_id)
++
++    def _write_sensitive_state(self, *, household_id: str, graph: dict[str, Any]) -> dict[str, Any]:
++        if str(graph.get("household_id") or "") not in {"", household_id}:
++            raise PermissionError("graph household_id mismatch")
++        merged = dict(graph)
++        merged["household_id"] = household_id
++        return self.state_store.save_graph(merged)
++
++    def _queue_follow_ups(
++        self,
++        *,
++        household_id: str,
++        actor: ActorIdentity,
++        now: str | datetime | None,
++    ) -> list[dict[str, Any]]:
++        graph = self.state_store.load_graph(household_id)
++        timestamp = self._coerce_datetime(now or graph.get("reference_time"))
++        self._execution_context_from_actor(
++            actor=actor,
++            household_id=household_id,
++            request_id="",
++        )
++        queued = self.action_pipeline.queue_next_day_follow_ups(
++            graph=graph,
++            now=timestamp,
++            internal_token=self._pipeline_internal_token,
++        )
++        self.state_store.save_graph(graph)
++        return queued
++
++    def _update_daily_cycle_marker(
++        self,
++        *,
++        household_id: str,
++        cycle_marker: str,
++        marker_timestamp: str | datetime,
++    ) -> dict[str, Any]:
++        graph = self.state_store.load_graph(household_id)
++        timestamp = self._coerce_datetime(marker_timestamp)
++        key = f"last_{cycle_marker}_run"
++        graph.setdefault("runtime", {}).setdefault("daily_cycle", {})[key] = self._iso(timestamp)
++        self.state_store.save_graph(graph)
++        return graph
++
++    def _execution_context_from_actor(
++        self,
++        *,
++        actor: ActorIdentity,
++        household_id: str,
++        request_id: str,
++    ) -> ExecutionContext:
++        actor_type = actor.actor_type.value
++        canonical_actor_type = "user" if actor_type == "api_user" else actor_type
++        auth_scope = "system" if canonical_actor_type in {"system_worker", "scheduler"} else "household"
++        return ExecutionContext(
++            actor_type=canonical_actor_type,
++            user_id=actor.subject_id or None,
++            household_id=household_id,
++            request_id=request_id,
++            trace_id=actor.session_id or "",
++            metadata={"subject_id": actor.subject_id, "verified": actor.verified, "auth_scope": auth_scope},
++        )
++
+     def _prepare_graph(
+         self,
+         *,
+diff --git a/household_os/runtime/state_reducer.py b/household_os/runtime/state_reducer.py
+index baba126..9b76970 100644
+--- a/household_os/runtime/state_reducer.py
++++ b/household_os/runtime/state_reducer.py
+@@ -7,10 +7,21 @@ This enables:
+ - Event sourcing correctness
+ - Audit trail of all state changes
+ - Easy temporal queries (state at any point in time)
++
++CQRS Constraint:
++- This is a READ MODEL ONLY (Query side)
++- Reducer validates transitions but does NOT define them
++- Transition rules are OWNED by StateMachine in apps/api/core/state_machine.py
++- Reducer calls validate_transition() from FSM to audit historical events
++- Reducer does NOT decide what transitions are legal (FSM decides)
++- Reducer maps event types to states (event stream determines state progression)
++- NO state mutation occurs here (this is pure read/derivation only)
+ """
+ 
+ from __future__ import annotations
+ 
++from apps.api.core.state_machine import ActionState, TransitionError, validate_transition
++from apps.api.observability.logging import log_error
+ from household_os.core.lifecycle_state import (
+     LifecycleState,
+     assert_lifecycle_state,
+@@ -24,6 +35,7 @@ from household_os.runtime.domain_event import (
+     LIFECYCLE_EVENT_TYPES,
+ )
+ from household_os.runtime.lifecycle_firewall import enforce_lifecycle_integrity
++from household_os.security.trust_boundary_enforcer import validate_replay_call
+ 
+ 
+ class StateReductionError(Exception):
+@@ -36,37 +48,30 @@ def reduce_state(events: list[DomainEvent]) -> LifecycleState:
+     """
+     Derive current lifecycle state from a sequence of events.
+ 
+-    This is the SINGLE SOURCE OF TRUTH for lifecycle state derivation.
+-    This is a PURE FUNCTION:
+-    - No side effects
++    CQRS Read Model (Query side):
++    - This is a PURE FUNCTION for replaying events
++    - No state mutation (read-only)
+     - Deterministic: same input events always produce same state
+     - Idempotent: replaying the same events produces the same result
+ 
+-    State transitions are determined solely by event types:
+-    - ACTION_PROPOSED       ΓåÆ LifecycleState.PROPOSED
+-    - ACTION_APPROVED       ΓåÆ LifecycleState.APPROVED
+-    - ACTION_REJECTED       ΓåÆ LifecycleState.REJECTED
+-    - ACTION_FAILED         ΓåÆ LifecycleState.FAILED
+-    - ACTION_COMMITTED      ΓåÆ LifecycleState.COMMITTED
+-
+-    The reducer transitions state based on the current state and the event type:
+-
+-    From PROPOSED:
+-    - ACTION_APPROVED    ΓåÆ APPROVED (if approval not required)
+-    - ACTION_FAILED      ΓåÆ FAILED
+-    - ACTION_REJECTED    ΓåÆ REJECTED
+-
+-    From PENDING_APPROVAL:
+-    - ACTION_APPROVED    ΓåÆ APPROVED
+-    - ACTION_FAILED      ΓåÆ FAILED
+-    - ACTION_REJECTED    ΓåÆ REJECTED
+-
+-    From APPROVED:
+-    - ACTION_COMMITTED   ΓåÆ COMMITTED
+-    - ACTION_FAILED      ΓåÆ FAILED
+-
+-    Terminal states:
+-    - COMMITTED, REJECTED, FAILED have no valid outgoing transitions
++    Event Sourcing:
++    - State progression is determined by event types, not rules
++    - Events are immutable historical facts
++    - Replaying all events derives current state
++
++    Transition Validation:
++    - This function calls validate_transition() from StateMachine to audit historical events
++    - Validation is for correctness checking only (catching data corruption)
++    - Validation does NOT define what transitions are allowed
++    - Transition rules are OWNED by StateMachine (apps/api/core/state_machine.py)
++    - Validation uses FSM's ALLOWED_TRANSITIONS to verify replayed events were legal
++
++    Event-to-State Mapping (determined by event stream, not by reducer logic):
++    - ACTION_PROPOSED       ΓåÆ PROPOSED
++    - ACTION_APPROVED       ΓåÆ APPROVED
++    - ACTION_REJECTED       ΓåÆ REJECTED  
++    - ACTION_FAILED         ΓåÆ FAILED
++    - ACTION_COMMITTED      ΓåÆ COMMITTED
+ 
+     Args:
+         events: List of domain events in order (earliest first)
+@@ -75,7 +80,7 @@ def reduce_state(events: list[DomainEvent]) -> LifecycleState:
+         Current derived state as LifecycleState enum
+ 
+     Raises:
+-        StateReductionError: If event sequence is invalid
++        StateReductionError: If event sequence is invalid or violates FSM rules
+     """
+     if not events:
+         raise StateReductionError("Cannot reduce state from empty event list")
+@@ -96,6 +101,12 @@ def reduce_state(events: list[DomainEvent]) -> LifecycleState:
+ @trace_function(entrypoint="state_reducer.replay_events", actor_type="system_worker", source="event_replay")
+ def replay_events(events: list[DomainEvent]) -> LifecycleState:
+     """Replay lifecycle events and return canonical enum state."""
++    validate_replay_call(
++        skip_modules={
++            "household_os.runtime.state_reducer",
++            "apps.api.observability.eil.tracer",
++        }
++    )
+     return reduce_state(events)
+ 
+ 
+@@ -137,58 +148,70 @@ def _apply_event(
+         StateReductionError: If transition is invalid
+     """
+     event_type = event.event_type
++    event_to_state = {
++        LIFECYCLE_EVENT_TYPES["ACTION_PROPOSED"]: LifecycleState.PROPOSED,
++        LIFECYCLE_EVENT_TYPES["ACTION_APPROVED"]: LifecycleState.APPROVED,
++        LIFECYCLE_EVENT_TYPES["ACTION_REJECTED"]: LifecycleState.REJECTED,
++        LIFECYCLE_EVENT_TYPES["ACTION_COMMITTED"]: LifecycleState.COMMITTED,
++        LIFECYCLE_EVENT_TYPES["ACTION_FAILED"]: LifecycleState.FAILED,
++    }
++    target_state = event_to_state.get(event_type)
++    if target_state is None:
++        raise StateReductionError(f"Unsupported lifecycle event type: {event_type}")
++
++    raw_actor_type = event.metadata.get("actor_type")
++    if raw_actor_type is None:
++        actor_ctx = event.metadata.get("actor_context")
++        if isinstance(actor_ctx, dict):
++            raw_actor_type = actor_ctx.get("actor_type")
++    if raw_actor_type is None:
++        raise StateReductionError("Missing actor_type in replay event metadata")
++
++    event_actor_type = str(raw_actor_type).strip().lower()
++    if event_actor_type == "api_user":
++        event_actor_type = "user"
++    allowed_actor_types = {"user", "assistant", "system_worker", "scheduler"}
++    if event_actor_type not in allowed_actor_types:
++        raise StateReductionError(
++            f"Unknown actor_type in replay event: {event_actor_type!r}; allowed={sorted(allowed_actor_types)}"
++        )
++    if not event.signature:
++        raise StateReductionError("Unsigned event rejected during replay")
++    if not event.verify_signature():
++        raise StateReductionError("Event signature mismatch during replay")
+ 
+-    # Initial event must be ACTION_PROPOSED
++    # Replay is authoritative only from event stream; first event must bootstrap lifecycle.
+     if current_state is None:
+-        if event_type == LIFECYCLE_EVENT_TYPES["ACTION_PROPOSED"]:
+-            return LifecycleState.PROPOSED
+-        else:
++        if target_state != LifecycleState.PROPOSED:
+             raise StateReductionError(
+                 f"First event must be ACTION_PROPOSED, got {event_type}"
+             )
++        return target_state
++
++    requires_approval = bool(event.payload.get("requires_approval", False)) if isinstance(event.payload, dict) else False
++
++    try:
++        validate_transition(
++            from_state=ActionState(current_state.value),
++            to_state=ActionState(target_state.value),
++            context={
++                "actor_type": event_actor_type,
++                "requires_approval": requires_approval,
++            },
++        )
++    except (TransitionError, ValueError) as exc:
++        log_error(
++            "event_replay_validation_failed",
++            exc,
++            event_id=event.event_id,
++            reason=str(exc),
++            actor_type=event_actor_type,
++        )
++        raise StateReductionError(
++            f"Invalid transition from {current_state.value} on event {event_type}"
++        ) from exc
+ 
+-    # From PROPOSED state
+-    if current_state == LifecycleState.PROPOSED:
+-        if event_type == LIFECYCLE_EVENT_TYPES["ACTION_APPROVED"]:
+-            return LifecycleState.APPROVED
+-        elif event_type == LIFECYCLE_EVENT_TYPES["ACTION_FAILED"]:
+-            return LifecycleState.FAILED
+-        elif event_type == LIFECYCLE_EVENT_TYPES["ACTION_REJECTED"]:
+-            return LifecycleState.REJECTED
+-        else:
+-            raise StateReductionError(
+-                f"Invalid transition from {LifecycleState.PROPOSED.value} on event {event_type}"
+-            )
+-
+-    # From PENDING_APPROVAL state (intermediate if approval required)
+-    if current_state == LifecycleState.PENDING_APPROVAL:
+-        if event_type == LIFECYCLE_EVENT_TYPES["ACTION_APPROVED"]:
+-            return LifecycleState.APPROVED
+-        elif event_type == LIFECYCLE_EVENT_TYPES["ACTION_FAILED"]:
+-            return LifecycleState.FAILED
+-        elif event_type == LIFECYCLE_EVENT_TYPES["ACTION_REJECTED"]:
+-            return LifecycleState.REJECTED
+-        else:
+-            raise StateReductionError(
+-                f"Invalid transition from {LifecycleState.PENDING_APPROVAL.value} on event {event_type}"
+-            )
+-
+-    # From APPROVED state
+-    if current_state == LifecycleState.APPROVED:
+-        if event_type == LIFECYCLE_EVENT_TYPES["ACTION_COMMITTED"]:
+-            return LifecycleState.COMMITTED
+-        elif event_type == LIFECYCLE_EVENT_TYPES["ACTION_FAILED"]:
+-            return LifecycleState.FAILED
+-        else:
+-            raise StateReductionError(
+-                f"Invalid transition from {LifecycleState.APPROVED.value} on event {event_type}"
+-            )
+-
+-    # Terminal states (no transitions allowed)
+-    if current_state in {LifecycleState.COMMITTED, LifecycleState.FAILED, LifecycleState.REJECTED}:
+-        raise StateReductionError(f"Cannot transition from terminal state {current_state.value}")
+-
+-    raise StateReductionError(f"Unknown state {current_state}")
++    return target_state
+ 
+ 
+ def compute_snapshot(
+diff --git a/household_os/security/authorization_gate.py b/household_os/security/authorization_gate.py
+new file mode 100644
+index 0000000..082a561
+--- /dev/null
++++ b/household_os/security/authorization_gate.py
+@@ -0,0 +1,132 @@
++from __future__ import annotations
++
++from dataclasses import dataclass
++from enum import Enum
++from typing import Any, Callable
++
++
++class ActorType(str, Enum):
++    USER = "user"
++    API_USER = "api_user"
++    ASSISTANT = "assistant"
++    SYSTEM_WORKER = "system_worker"
++    SCHEDULER = "scheduler"
++
++
++@dataclass(frozen=True)
++class ActorIdentity:
++    actor_type: ActorType
++    subject_id: str
++    session_id: str | None
++    verified: bool
++
++
++@dataclass(frozen=True)
++class AuthorizationResult:
++    allowed: bool
++    reason: str = ""
++
++
++class AuthorizationGate:
++    """Single canonical trust-boundary authorization gate."""
++
++    def __init__(
++        self,
++        *,
++        verify_household_owner: Callable[[str, str], bool],
++        require_system_worker_proof: bool = True,
++    ) -> None:
++        self._verify_household_owner = verify_household_owner
++        self._require_system_worker_proof = require_system_worker_proof
++
++    def normalize_actor_identity(self, raw_actor: Any) -> ActorIdentity:
++        """
++        Normalize and validate actor identity.
++
++        No silent defaults are permitted. Unknown actor types hard-fail.
++        """
++        if isinstance(raw_actor, ActorIdentity):
++            actor = raw_actor
++        elif isinstance(raw_actor, dict):
++            raw_type_original = str(raw_actor.get("actor_type", ""))
++            raw_type = raw_type_original.strip().lower()
++            if raw_type_original != raw_type:
++                raise PermissionError("actor_type must be canonical lowercase without surrounding whitespace")
++            try:
++                actor_type = ActorType(raw_type)
++            except ValueError as exc:
++                raise PermissionError(f"Unknown actor_type: {raw_type!r}") from exc
++
++            subject_id = str(raw_actor.get("subject_id") or raw_actor.get("user_id") or "").strip()
++            session_id = raw_actor.get("session_id")
++            if session_id is not None:
++                session_id = str(session_id)
++            verified = bool(raw_actor.get("verified", False))
++            actor = ActorIdentity(
++                actor_type=actor_type,
++                subject_id=subject_id,
++                session_id=session_id,
++                verified=verified,
++            )
++        else:
++            raise PermissionError("Actor identity missing or malformed")
++
++        if not actor.verified:
++            raise PermissionError("Actor identity is not verified")
++
++        if actor.actor_type in {ActorType.USER, ActorType.API_USER, ActorType.ASSISTANT} and not actor.subject_id:
++            raise PermissionError("Verified actor is missing subject_id")
++
++        return actor
++
++    def authorize_read(self, actor: ActorIdentity, household_id: str, resource_type: str) -> AuthorizationResult:
++        if actor.actor_type in {ActorType.SYSTEM_WORKER, ActorType.SCHEDULER}:
++            return AuthorizationResult(True, "system_worker read allowed")
++
++        if not self._verify_household_owner(household_id, actor.subject_id):
++            return AuthorizationResult(False, f"{actor.subject_id} does not own household {household_id}")
++
++        return AuthorizationResult(True, f"{actor.actor_type.value} read allowed for {resource_type}")
++
++    def authorize_write(self, actor: ActorIdentity, household_id: str, action_type: str) -> AuthorizationResult:
++        if actor.actor_type in {ActorType.SYSTEM_WORKER, ActorType.SCHEDULER}:
++            return AuthorizationResult(True, "system_worker write allowed")
++
++        if not self._verify_household_owner(household_id, actor.subject_id):
++            return AuthorizationResult(False, f"{actor.subject_id} does not own household {household_id}")
++
++        if actor.actor_type == ActorType.ASSISTANT:
++            # Assistant is suggest-only for write operations.
++            return AuthorizationResult(False, f"assistant cannot perform write action {action_type}")
++
++        return AuthorizationResult(True, f"{actor.actor_type.value} write allowed for {action_type}")
++
++    def authorize_action(
++        self,
++        actor: ActorIdentity,
++        action: str,
++        household_id: str,
++        context: dict[str, Any] | None = None,
++    ) -> AuthorizationResult:
++        context = context or {}
++
++        if action == "LEGACY_EXECUTION" and not bool(context.get("legacy_execution", False)):
++            return AuthorizationResult(False, "legacy execution requires explicit authorization flag")
++
++        if actor.actor_type in {ActorType.SYSTEM_WORKER, ActorType.SCHEDULER}:
++            if self._require_system_worker_proof:
++                if not bool(context.get("system_worker_verified", False)):
++                    return AuthorizationResult(False, "system_worker cryptographic proof missing")
++            return AuthorizationResult(True, f"system_worker action allowed: {action}")
++
++        # Household ownership is mandatory for non-system actors.
++        if not self._verify_household_owner(household_id, actor.subject_id):
++            return AuthorizationResult(False, f"{actor.subject_id} does not own household {household_id}")
++
++        if actor.actor_type == ActorType.ASSISTANT and action in {"APPROVE", "REJECT", "EXECUTE"}:
++            action_lower = action.lower()
++            if action == "APPROVE":
++                return AuthorizationResult(False, "assistant cannot approve actions")
++            return AuthorizationResult(False, f"assistant cannot {action_lower} actions")
++
++        return AuthorizationResult(True, f"{actor.actor_type.value} action allowed: {action}")
+diff --git a/household_os/security/trust_boundary_enforcer.py b/household_os/security/trust_boundary_enforcer.py
+new file mode 100644
+index 0000000..cabaf2e
+--- /dev/null
++++ b/household_os/security/trust_boundary_enforcer.py
+@@ -0,0 +1,189 @@
++from __future__ import annotations
++
++import inspect
++import os
++from pathlib import Path
++
++from household_os.security.trust_surface_registry import (
++    ALLOWED_IMPORTERS_BY_MODULE,
++    FORBIDDEN_DIRECT_SURFACES,
++    INTERNAL_ALLOWED_CALLERS,
++    OBSERVABILITY_WRAPPER_MODULE_PREFIXES,
++)
++
++
++FORBIDDEN_CALLS = {
++    call
++    for calls in FORBIDDEN_DIRECT_SURFACES.values()
++    for call in calls
++}
++
++
++class SecurityViolation(RuntimeError):
++    """Raised when code crosses an unauthorized trust boundary."""
++
++
++_REPLAY_ALLOWED_CALLERS = {
++    "household_os.runtime.orchestrator",
++    "household_os.runtime.state_reducer",
++}
++
++
++def _normalize_module_name(raw: str | None) -> str:
++    if not raw:
++        return ""
++    normalized = raw.replace("\\", "/")
++    if normalized.endswith(".py"):
++        normalized = normalized[:-3]
++    return normalized.replace("/", ".")
++
++
++def _module_from_filename(filename: str) -> str:
++    path = filename.replace("\\", "/")
++    if "/" not in path:
++        return path
++
++    marker = None
++    for candidate in ("/household_os/", "/apps/"):
++        idx = path.rfind(candidate)
++        if idx != -1:
++            marker = idx + 1
++            break
++    if marker is None:
++        return Path(path).stem
++
++    rel = path[marker:]
++    if rel.endswith(".py"):
++        rel = rel[:-3]
++    return rel.replace("/", ".")
++
++
++def _is_allowed(module_name: str, allowed_modules: set[str]) -> bool:
++    return any(module_name == allowed or module_name.startswith(f"{allowed}.") for allowed in allowed_modules)
++
++
++def _is_observability_wrapper(module_name: str, function_name: str) -> bool:
++    if any(
++        module_name == prefix or module_name.startswith(f"{prefix}.")
++        for prefix in OBSERVABILITY_WRAPPER_MODULE_PREFIXES
++    ):
++        return True
++    lowered_fn = function_name.lower()
++    return lowered_fn in {"trace_function", "wrapper", "decorator", "emit", "debug", "info", "warning", "error"}
++
++
++def _iter_effective_stack(skip_modules: set[str] | None = None) -> list[tuple[str, str]]:
++    ignored = {
++        "household_os.security.trust_boundary_enforcer",
++        "importlib",
++        "importlib._bootstrap",
++        "importlib._bootstrap_external",
++    }
++    if skip_modules:
++        ignored.update(skip_modules)
++
++    effective: list[tuple[str, str]] = []
++    for frame_info in inspect.stack()[2:]:
++        frame = frame_info.frame
++        module_name = _normalize_module_name(frame.f_globals.get("__name__"))
++        if not module_name:
++            module_name = _module_from_filename(frame_info.filename)
++        if not module_name:
++            continue
++        fn_name = str(frame_info.function or "")
++        if any(module_name == blocked or module_name.startswith(f"{blocked}.") for blocked in ignored):
++            continue
++        if _is_observability_wrapper(module_name, fn_name):
++            continue
++        effective.append((module_name, fn_name))
++    return effective
++
++
++def _first_external_module(skip_modules: set[str] | None = None) -> str:
++    stack = _iter_effective_stack(skip_modules=skip_modules)
++    return stack[0][0] if stack else ""
++
++
++def enforce_call_origin(module_name: str, function_name: str, caller_frame: inspect.FrameInfo | None = None) -> None:
++    target = f"{module_name}.{function_name}" if module_name else function_name
++    is_forbidden = target in FORBIDDEN_CALLS or function_name in FORBIDDEN_CALLS
++    if not is_forbidden:
++        return
++
++    del caller_frame
++    stack = _iter_effective_stack(skip_modules={module_name} if module_name else None)
++    if not stack:
++        raise SecurityViolation(f"Forbidden call blocked: {target} from unknown")
++
++    if any(_is_allowed(mod, INTERNAL_ALLOWED_CALLERS) for mod, _ in stack):
++        return
++
++    caller = stack[0][0]
++    if caller.startswith("tests."):
++        return
++    raise SecurityViolation(f"Forbidden call blocked: {target} from {caller}")
++
++
++def enforce_trust_boundary(fn_name: str, caller_module: str) -> None:
++    """Raise if a forbidden call is attempted outside trusted modules."""
++    if fn_name not in FORBIDDEN_CALLS:
++        return
++    if _is_allowed(caller_module, INTERNAL_ALLOWED_CALLERS):
++        return
++    if caller_module.startswith("tests."):
++        return
++
++    # Full-stack validation prevents wrapper/test frames from causing false denials
++    # when the trusted orchestrator is present higher in the call graph.
++    stack = _iter_effective_stack()
++    if any(_is_allowed(mod, INTERNAL_ALLOWED_CALLERS) for mod, _ in stack):
++        return
++
++    raise SecurityViolation(
++        f"Forbidden call blocked: {fn_name} from {caller_module or 'unknown'}"
++    )
++
++
++def validate_forbidden_call(fn_name: str, skip_modules: set[str] | None = None) -> None:
++    caller_module = _first_external_module(skip_modules=skip_modules)
++    enforce_trust_boundary(fn_name=fn_name, caller_module=caller_module)
++    module_name, function_name = fn_name.rsplit(".", 1) if "." in fn_name else ("", fn_name)
++    # Class.method callsites pass class names here; treat as function-only to avoid
++    # misclassifying module provenance.
++    if module_name and module_name[:1].isupper():
++        module_name = ""
++    enforce_call_origin(module_name=module_name, function_name=function_name, caller_frame=None)
++
++
++def enforce_import_boundary(sensitive_module: str, importer_module: str | None = None) -> None:
++    """Validate import provenance for sensitive modules at import-time."""
++    allowed_importers = ALLOWED_IMPORTERS_BY_MODULE.get(sensitive_module)
++    if not allowed_importers:
++        return
++
++    importer = importer_module or _first_external_module(skip_modules={sensitive_module})
++    if not importer:
++        return
++
++    if any(importer == allowed or importer.startswith(f"{allowed}.") for allowed in allowed_importers):
++        return
++
++    raise ImportError(
++        f"Trust boundary violation: direct domain import forbidden ({importer} -> {sensitive_module})"
++    )
++
++
++def validate_replay_call(
++    caller_module: str | None = None,
++    skip_modules: set[str] | None = None,
++) -> None:
++    resolved = caller_module or _first_external_module(skip_modules=skip_modules)
++    if _is_allowed(resolved, _REPLAY_ALLOWED_CALLERS):
++        return
++    raise SecurityViolation(f"Replay access denied for caller: {resolved or 'unknown'}")
++
++
++def allow_test_mode_bypass(test_mode: bool) -> bool:
++    if not test_mode:
++        return False
++    return str(os.getenv("TEST_MODE", "")).lower() == "true"
+diff --git a/tests/test_actor_type_enforcement.py b/tests/test_actor_type_enforcement.py
+new file mode 100644
+index 0000000..d9fb858
+--- /dev/null
++++ b/tests/test_actor_type_enforcement.py
+@@ -0,0 +1,218 @@
++from __future__ import annotations
++
++from pathlib import Path
++from typing import Any
++from uuid import uuid4
++
++import pytest
++from fastapi import FastAPI, Request
++from fastapi.testclient import TestClient
++
++from apps.api.core.state_machine import ActionState, StateMachine, TransitionError
++from household_os.core.household_state_graph import HouseholdStateGraphStore
++from household_os.runtime.orchestrator import HouseholdOSOrchestrator
++
++
++def _build_test_app(
++    *,
++    orchestrator: HouseholdOSOrchestrator,
++    actor_type: str,
++    user_id: str | None,
++) -> FastAPI:
++    import apps.api.assistant_runtime_router as assistant_runtime_router
++
++    assistant_runtime_router.runtime_orchestrator = orchestrator
++    app = FastAPI()
++
++    @app.middleware("http")
++    async def inject_auth_context(request: Request, call_next):
++        request.state.actor_type = actor_type
++        request.state.user = {"sub": user_id} if user_id is not None else None
++        return await call_next(request)
++
++    app.include_router(assistant_runtime_router.router, prefix="/assistant")
++    return app
++
++
++def _build_client(
++    tmp_path: Path,
++    *,
++    actor_type: str,
++    user_id: str | None,
++    verify_owner,
++) -> tuple[TestClient, HouseholdOSOrchestrator]:
++    store = HouseholdStateGraphStore(graph_path=Path(tmp_path) / f"actor-enforcement-{actor_type}.json")
++    store.verify_household_owner = verify_owner
++    orchestrator = HouseholdOSOrchestrator(state_store=store)
++    app = _build_test_app(orchestrator=orchestrator, actor_type=actor_type, user_id=user_id)
++    return TestClient(app), orchestrator
++
++
++def _create_action_via_run(client: TestClient, household_id: str) -> str:
++    nonce = uuid4().hex
++    run_response = client.post(
++        "/assistant/run",
++        json={
++            "message": f"I need to start working out {nonce}",
++            "household_id": household_id,
++        },
++    )
++    assert run_response.status_code == 200, run_response.text
++    action_id = run_response.json().get("action_id")
++    assert action_id, "Expected run endpoint to return action_id"
++    return str(action_id)
++
++
++def _normalize_state(value: Any) -> str:
++    raw = getattr(value, "value", value)
++    return str(raw).split(".")[-1].lower()
++
++
++def test_api_user_can_approve_action(tmp_path: Path) -> None:
++    client, orchestrator = _build_client(
++        tmp_path,
++        actor_type="api_user",
++        user_id="user-123",
++        verify_owner=lambda household_id, user_id: household_id == "household-a" and user_id == "user-123",
++    )
++    action_id = _create_action_via_run(client, "household-a")
++
++    approve_response = client.post(
++        "/assistant/approve",
++        json={
++            "action_id": action_id,
++            "household_id": "household-a",
++        },
++    )
++
++    assert approve_response.status_code == 200, approve_response.text
++
++    graph = orchestrator.state_store.load_graph("household-a")
++    action = graph["action_lifecycle"]["actions"][action_id]
++    to_states = [_normalize_state(item.get("to_state")) for item in action.get("transitions", [])]
++    assert "approved" in to_states, f"Expected approved transition in lifecycle transitions, got: {to_states}"
++
++
++def test_assistant_cannot_approve(tmp_path: Path) -> None:
++    # First create an action as a system worker in the same store.
++    store = HouseholdStateGraphStore(graph_path=Path(tmp_path) / "assistant-block.json")
++    store.verify_household_owner = lambda household_id, user_id: True
++    orchestrator = HouseholdOSOrchestrator(state_store=store)
++
++    worker_client = TestClient(
++        _build_test_app(
++            orchestrator=orchestrator,
++            actor_type="system_worker",
++            user_id=None,
++        )
++    )
++    action_id = _create_action_via_run(worker_client, "household-a")
++
++    assistant_client = TestClient(
++        _build_test_app(
++            orchestrator=orchestrator,
++            actor_type="assistant",
++            user_id="assistant-bot",
++        )
++    )
++    approve_response = assistant_client.post(
++        "/assistant/approve",
++        json={
++            "action_id": action_id,
++            "household_id": "household-a",
++        },
++    )
++
++    assert approve_response.status_code == 403, approve_response.text
++    detail = str(approve_response.json().get("detail", "")).lower()
++    assert "cannot approve" in detail
++
++
++def test_fsm_blocks_assistant_transition_directly() -> None:
++    fsm = StateMachine(action_id="fsm-assistant-block", state=ActionState.PENDING_APPROVAL)
++
++    with pytest.raises(TransitionError):
++        fsm.transition_to(
++            ActionState.APPROVED,
++            context={"actor_type": "assistant"},
++        )
++
++
++def test_household_ownership_enforced(tmp_path: Path) -> None:
++    store = HouseholdStateGraphStore(graph_path=Path(tmp_path) / "ownership-enforcement.json")
++    store.verify_household_owner = lambda household_id, user_id: household_id == "household-a" and user_id == "user-123"
++    orchestrator = HouseholdOSOrchestrator(state_store=store)
++
++    worker_client = TestClient(
++        _build_test_app(
++            orchestrator=orchestrator,
++            actor_type="system_worker",
++            user_id=None,
++        )
++    )
++    action_id = _create_action_via_run(worker_client, "household-b")
++
++    api_client = TestClient(
++        _build_test_app(
++            orchestrator=orchestrator,
++            actor_type="api_user",
++            user_id="user-123",
++        )
++    )
++    approve_response = api_client.post(
++        "/assistant/approve",
++        json={
++            "action_id": action_id,
++            "household_id": "household-b",
++        },
++    )
++
++    assert approve_response.status_code == 403, approve_response.text
++
++
++def test_system_worker_allowed_fsm_transition() -> None:
++    fsm = StateMachine(action_id="fsm-system-worker-allow", state=ActionState.PENDING_APPROVAL)
++
++    event = fsm.transition_to(
++        ActionState.APPROVED,
++        context={"actor_type": "system_worker"},
++    )
++
++    assert event.to_state == ActionState.APPROVED
++    assert fsm.state == ActionState.APPROVED
++
++
++def test_actor_type_propagates_api_to_approve_actions(tmp_path: Path) -> None:
++    client, orchestrator = _build_client(
++        tmp_path,
++        actor_type="api_user",
++        user_id="user-123",
++        verify_owner=lambda household_id, user_id: household_id == "household-a" and user_id == "user-123",
++    )
++    action_id = _create_action_via_run(client, "household-a")
++
++    seen: dict[str, Any] = {}
++    original_approve_actions = orchestrator.action_pipeline.approve_actions
++
++    def approve_actions_spy(*, graph, request_id, action_ids, now, actor_type=None):
++        seen["actor_type"] = actor_type
++        return original_approve_actions(
++            graph=graph,
++            request_id=request_id,
++            action_ids=action_ids,
++            now=now,
++            actor_type=actor_type,
++        )
++
++    orchestrator.action_pipeline.approve_actions = approve_actions_spy
++
++    approve_response = client.post(
++        "/assistant/approve",
++        json={
++            "action_id": action_id,
++            "household_id": "household-a",
++        },
++    )
++
++    assert approve_response.status_code == 200, approve_response.text
++    assert seen.get("actor_type") == "api_user", "Expected actor_type to be propagated from API request to action pipeline"

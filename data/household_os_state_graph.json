@@ -5817,6 +5817,1436 @@
       },
       "state_version": 2,
       "updated_at": "2026-04-22T01:23:54.763727Z"
+    },
+    "household-os-reasoning-1": {
+      "household_id": "household-os-reasoning-1",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "I'm overwhelmed this week",
+          "recorded_at": "2026-04-22T19:46:40.376928Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "I'm overwhelmed this week",
+          "recorded_at": "2026-04-22T19:47:04.747213Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 3,
+      "updated_at": "2026-04-22T19:47:04.747167Z"
+    },
+    "household-os-consistency": {
+      "household_id": "household-os-consistency",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [
+        "consistency"
+      ],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "First query",
+          "recorded_at": "2026-04-22T19:46:40.420721Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "First query",
+          "recorded_at": "2026-04-22T19:47:04.799481Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 3,
+      "updated_at": "2026-04-22T19:47:04.799434Z"
+    },
+    "household-os-deterministic": {
+      "household_id": "household-os-deterministic",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "What's for dinner?",
+          "recorded_at": "2026-04-22T19:46:40.480286Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "What's for dinner?",
+          "recorded_at": "2026-04-22T19:46:40.484528Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "What's for dinner?",
+          "recorded_at": "2026-04-22T19:47:04.876052Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "What's for dinner?",
+          "recorded_at": "2026-04-22T19:47:04.884716Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 5,
+      "updated_at": "2026-04-22T19:47:04.884633Z"
+    },
+    "governor-household": {
+      "household_id": "governor-household",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [
+        "consistency"
+      ],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "I need to start working out",
+          "recorded_at": "2026-04-22T19:46:48.306548Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "Schedule a doctor appointment",
+          "recorded_at": "2026-04-22T19:46:48.325651Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "What's for dinner tonight?",
+          "recorded_at": "2026-04-22T19:46:48.344786Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "I need to start working out",
+          "recorded_at": "2026-04-22T19:47:14.333890Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "Schedule a doctor appointment",
+          "recorded_at": "2026-04-22T19:47:14.356438Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "What's for dinner tonight?",
+          "recorded_at": "2026-04-22T19:47:14.384068Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 7,
+      "updated_at": "2026-04-22T19:47:14.383998Z"
+    },
+    "recommendation-builder-household": {
+      "household_id": "recommendation-builder-household",
+      "reference_time": "2026-04-19T08:00:00Z",
+      "calendar_events": [
+        {
+          "event_id": "evt-school-dropoff",
+          "title": "School drop-off",
+          "start": "2026-04-20T08:00:00Z",
+          "end": "2026-04-20T08:45:00Z"
+        },
+        {
+          "event_id": "evt-standup",
+          "title": "Work standup",
+          "start": "2026-04-20T09:30:00Z",
+          "end": "2026-04-20T10:00:00Z"
+        },
+        {
+          "event_id": "evt-review",
+          "title": "Project review",
+          "start": "2026-04-20T13:00:00Z",
+          "end": "2026-04-20T14:00:00Z"
+        },
+        {
+          "event_id": "evt-pickup",
+          "title": "School pickup",
+          "start": "2026-04-20T15:15:00Z",
+          "end": "2026-04-20T15:45:00Z"
+        },
+        {
+          "event_id": "evt-soccer",
+          "title": "Soccer practice",
+          "start": "2026-04-22T17:30:00Z",
+          "end": "2026-04-22T18:30:00Z"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [
+        "consistency"
+      ],
+      "household_constraints": [],
+      "approval_actions": [],
+      "responses": {},
+      "event_history": [
+        {
+          "event_type": "query_received",
+          "query": "I need to start working out",
+          "recorded_at": "2026-04-22T19:46:49.289545Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "I need to start working out",
+          "recorded_at": "2026-04-22T19:46:49.317487Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "I need to start working out",
+          "recorded_at": "2026-04-22T19:46:49.345054Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "I need to start working out",
+          "recorded_at": "2026-04-22T19:47:15.658443Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "I need to start working out",
+          "recorded_at": "2026-04-22T19:47:15.695117Z"
+        },
+        {
+          "event_type": "query_received",
+          "query": "I need to start working out",
+          "recorded_at": "2026-04-22T19:47:15.724865Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {},
+        "transition_log": []
+      },
+      "execution_log": [],
+      "behavior_feedback": {
+        "records": []
+      },
+      "runtime": {
+        "processed_trigger_ids": [],
+        "last_time_tick": {},
+        "last_processed_state_version": 0,
+        "daily_cycle": {
+          "pending_follow_up_queries": [],
+          "last_morning_run": null,
+          "last_evening_run": null
+        }
+      },
+      "state_version": 7,
+      "updated_at": "2026-04-22T19:47:15.724784Z"
+    },
+    "h1": {
+      "household_id": "h1",
+      "reference_time": "2026-04-23T21:29:17.655366Z",
+      "calendar_events": [
+        {
+          "event_id": "runtime-assist-877de7a3cc6c-primary",
+          "title": "Schedule appointment for 2026-04-23 06:00-06:45",
+          "start": "2026-04-23T06:00:00Z",
+          "end": "2026-04-23T06:45:00Z",
+          "source": "household_os_runtime"
+        }
+      ],
+      "tasks": [],
+      "meal_history": [
+        {
+          "recipe_name": "Salmon Rice Plate",
+          "served_on": "2026-04-12"
+        },
+        {
+          "recipe_name": "Egg and Sweet Potato Skillet",
+          "served_on": "2026-04-16"
+        },
+        {
+          "recipe_name": "Chicken Quinoa Bowl",
+          "served_on": "2026-04-08"
+        }
+      ],
+      "grocery_inventory": {
+        "salmon": 1,
+        "brown rice": 2,
+        "broccoli": 1,
+        "olive oil": 1,
+        "chicken": 2,
+        "quinoa": 1,
+        "spinach": 2,
+        "black beans": 2,
+        "tortillas": 1,
+        "eggs": 8,
+        "sweet potato": 3
+      },
+      "fitness_routines": [],
+      "household_constraints": [],
+      "approval_actions": [
+        {
+          "request_id": "assist-877de7a3cc6c",
+          "action_id": "assist-877de7a3cc6c-primary",
+          "approval_status": "approved"
+        },
+        {
+          "request_id": "assist-80e97147810a",
+          "action_id": "assist-80e97147810a-primary",
+          "approval_status": "pending"
+        },
+        {
+          "request_id": "assist-b4fca6a83045",
+          "action_id": "assist-b4fca6a83045-primary",
+          "approval_status": "pending"
+        },
+        {
+          "request_id": "assist-457c98fbf866",
+          "action_id": "assist-457c98fbf866-primary",
+          "approval_status": "pending"
+        },
+        {
+          "request_id": "assist-457c98fbf866",
+          "action_id": "assist-457c98fbf866-primary",
+          "approval_status": "pending"
+        }
+      ],
+      "responses": {
+        "assist-877de7a3cc6c": {
+          "request_id": "assist-877de7a3cc6c",
+          "intent_interpretation": {
+            "summary": "appointment query with low priority and 1 signal(s)",
+            "urgency": "low",
+            "extracted_signals": [
+              "doctor"
+            ]
+          },
+          "current_state_summary": {
+            "household_id": "h1",
+            "reference_time": "2026-04-23T21:29:17.655366Z",
+            "calendar_events": 0,
+            "open_tasks": 0,
+            "meals_recorded": 3,
+            "low_grocery_items": [],
+            "fitness_routines": 0,
+            "constraints_count": 0,
+            "pending_approvals": 1,
+            "state_version": 1
+          },
+          "recommended_action": {
+            "action_id": "assist-877de7a3cc6c-primary",
+            "title": "Schedule appointment for 2026-04-23 06:00-06:45",
+            "description": "Reserve 2026-04-23 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.",
+            "urgency": "high",
+            "scheduled_for": "2026-04-23 06:00-06:45",
+            "approval_required": true,
+            "approval_status": "approved"
+          },
+          "follow_ups": [],
+          "grouped_approval_payload": {
+            "group_id": "assist-877de7a3cc6c-group",
+            "label": "Batch Household Action Execution",
+            "action_ids": [
+              "assist-877de7a3cc6c-primary"
+            ],
+            "execution_mode": "inert_until_approved",
+            "approval_status": "approved"
+          },
+          "reasoning_trace": [
+            "Calendar analysis shows 0 near-term commitments.",
+            "2026-04-23 06:00-06:45 is the next low-conflict window.",
+            "Scheduling protects meal and family time.",
+            "Action executed via calendar_update."
+          ]
+        },
+        "assist-80e97147810a": {
+          "request_id": "assist-80e97147810a",
+          "intent_interpretation": {
+            "summary": "appointment query with low priority and 1 signal(s)",
+            "urgency": "low",
+            "extracted_signals": [
+              "doctor"
+            ]
+          },
+          "current_state_summary": {
+            "household_id": "h1",
+            "reference_time": "2026-04-23T21:29:17.655366Z",
+            "calendar_events": 1,
+            "open_tasks": 0,
+            "meals_recorded": 3,
+            "low_grocery_items": [],
+            "fitness_routines": 0,
+            "constraints_count": 0,
+            "pending_approvals": 1,
+            "state_version": 1
+          },
+          "recommended_action": {
+            "action_id": "assist-80e97147810a-primary",
+            "title": "Schedule appointment for 2026-04-23 07:00-07:45",
+            "description": "Reserve 2026-04-23 07:00-07:45 for the requested appointment because it avoids known calendar conflicts.",
+            "urgency": "high",
+            "scheduled_for": "2026-04-23 07:00-07:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "follow_ups": [],
+          "grouped_approval_payload": {
+            "group_id": "assist-80e97147810a-group",
+            "label": "Batch Household Action Execution",
+            "action_ids": [
+              "assist-80e97147810a-primary"
+            ],
+            "execution_mode": "inert_until_approved",
+            "approval_status": "pending"
+          },
+          "reasoning_trace": [
+            "Calendar analysis shows 1 near-term commitments.",
+            "2026-04-23 07:00-07:45 is the next low-conflict window.",
+            "Scheduling protects meal and family time."
+          ]
+        },
+        "assist-b4fca6a83045": {
+          "request_id": "assist-b4fca6a83045",
+          "intent_interpretation": {
+            "summary": "general query with low priority and 1 signal(s)",
+            "urgency": "low",
+            "extracted_signals": [
+              "household"
+            ]
+          },
+          "current_state_summary": {
+            "household_id": "h1",
+            "reference_time": "2026-04-23T21:29:17.655366Z",
+            "calendar_events": 1,
+            "open_tasks": 0,
+            "meals_recorded": 3,
+            "low_grocery_items": [],
+            "fitness_routines": 0,
+            "constraints_count": 0,
+            "pending_approvals": 1,
+            "state_version": 1
+          },
+          "recommended_action": {
+            "action_id": "assist-b4fca6a83045-primary",
+            "title": "Schedule appointment for 2026-04-23 07:00-07:45",
+            "description": "Reserve 2026-04-23 07:00-07:45 for the requested appointment because it avoids known calendar conflicts.",
+            "urgency": "high",
+            "scheduled_for": "2026-04-23 07:00-07:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "follow_ups": [],
+          "grouped_approval_payload": {
+            "group_id": "assist-b4fca6a83045-group",
+            "label": "Batch Household Action Execution",
+            "action_ids": [
+              "assist-b4fca6a83045-primary"
+            ],
+            "execution_mode": "inert_until_approved",
+            "approval_status": "pending"
+          },
+          "reasoning_trace": [
+            "Calendar analysis shows 1 near-term commitments.",
+            "2026-04-23 07:00-07:45 is the next low-conflict window.",
+            "Scheduling protects meal and family time."
+          ]
+        },
+        "assist-457c98fbf866": {
+          "request_id": "assist-457c98fbf866",
+          "intent_interpretation": {
+            "summary": "appointment query with low priority and 1 signal(s)",
+            "urgency": "low",
+            "extracted_signals": [
+              "doctor"
+            ]
+          },
+          "current_state_summary": {
+            "household_id": "h1",
+            "reference_time": "2026-04-23T21:29:17.655366Z",
+            "calendar_events": 1,
+            "open_tasks": 0,
+            "meals_recorded": 3,
+            "low_grocery_items": [],
+            "fitness_routines": 0,
+            "constraints_count": 0,
+            "pending_approvals": 1,
+            "state_version": 1
+          },
+          "recommended_action": {
+            "action_id": "assist-457c98fbf866-primary",
+            "title": "Schedule appointment for 2026-04-23 07:00-07:45",
+            "description": "Reserve 2026-04-23 07:00-07:45 for the requested appointment because it avoids known calendar conflicts.",
+            "urgency": "high",
+            "scheduled_for": "2026-04-23 07:00-07:45",
+            "approval_required": true,
+            "approval_status": "pending"
+          },
+          "follow_ups": [],
+          "grouped_approval_payload": {
+            "group_id": "assist-457c98fbf866-group",
+            "label": "Batch Household Action Execution",
+            "action_ids": [
+              "assist-457c98fbf866-primary"
+            ],
+            "execution_mode": "inert_until_approved",
+            "approval_status": "pending"
+          },
+          "reasoning_trace": [
+            "Calendar analysis shows 1 near-term commitments.",
+            "2026-04-23 07:00-07:45 is the next low-conflict window.",
+            "Scheduling protects meal and family time."
+          ]
+        }
+      },
+      "event_history": [
+        {
+          "event_type": "action_proposed",
+          "action_id": "assist-877de7a3cc6c-primary",
+          "request_id": "assist-877de7a3cc6c",
+          "trigger_type": "USER_INPUT",
+          "recorded_at": "2026-04-23T21:29:17.655366Z"
+        },
+        {
+          "event_type": "response_emitted",
+          "request_id": "assist-877de7a3cc6c",
+          "recorded_at": "2026-04-23T21:29:17.655366Z"
+        },
+        {
+          "event_type": "action_approved",
+          "request_id": "assist-877de7a3cc6c",
+          "action_ids": [
+            "assist-877de7a3cc6c-primary"
+          ],
+          "recorded_at": "2026-04-23T21:29:17.655366Z"
+        },
+        {
+          "event_type": "calendar_event_created",
+          "action_id": "assist-877de7a3cc6c-primary",
+          "event_id": "runtime-assist-877de7a3cc6c-primary",
+          "recorded_at": "2026-04-23T21:29:17.655366Z"
+        },
+        {
+          "event_type": "action_proposed",
+          "action_id": "assist-80e97147810a-primary",
+          "request_id": "assist-80e97147810a",
+          "trigger_type": "USER_INPUT",
+          "recorded_at": "2026-04-23T21:29:17.655366Z"
+        },
+        {
+          "event_type": "response_emitted",
+          "request_id": "assist-80e97147810a",
+          "recorded_at": "2026-04-23T21:29:17.655366Z"
+        },
+        {
+          "event_type": "action_rejected",
+          "request_id": "assist-80e97147810a",
+          "action_ids": [
+            "assist-80e97147810a-primary"
+          ],
+          "recorded_at": "2026-04-23T21:29:17.655366Z"
+        },
+        {
+          "event_type": "next_day_follow_up_queued",
+          "count": 1,
+          "recorded_at": "2026-04-23T19:00:00Z"
+        },
+        {
+          "event_type": "action_proposed",
+          "action_id": "assist-b4fca6a83045-primary",
+          "request_id": "assist-b4fca6a83045",
+          "trigger_type": "TIME_TICK",
+          "recorded_at": "2026-04-23T19:00:00Z"
+        },
+        {
+          "event_type": "response_emitted",
+          "request_id": "assist-b4fca6a83045",
+          "recorded_at": "2026-04-23T19:00:00Z"
+        },
+        {
+          "event_type": "action_proposed",
+          "action_id": "assist-457c98fbf866-primary",
+          "request_id": "assist-457c98fbf866",
+          "trigger_type": "USER_INPUT",
+          "recorded_at": "2026-04-23T21:29:17.655366Z"
+        },
+        {
+          "event_type": "response_emitted",
+          "request_id": "assist-457c98fbf866",
+          "recorded_at": "2026-04-23T21:29:17.655366Z"
+        },
+        {
+          "event_type": "action_proposed",
+          "action_id": "assist-457c98fbf866-primary",
+          "request_id": "assist-457c98fbf866",
+          "trigger_type": "USER_INPUT",
+          "recorded_at": "2026-04-23T21:29:17.655366Z"
+        },
+        {
+          "event_type": "response_emitted",
+          "request_id": "assist-457c98fbf866",
+          "recorded_at": "2026-04-23T21:29:17.655366Z"
+        }
+      ],
+      "action_lifecycle": {
+        "actions": {
+          "assist-877de7a3cc6c-primary": {
+            "action_id": "assist-877de7a3cc6c-primary",
+            "request_id": "assist-877de7a3cc6c",
+            "title": "Schedule appointment for 2026-04-23 06:00-06:45",
+            "description": "Reserve 2026-04-23 06:00-06:45 for the requested appointment because it avoids known calendar conflicts.",
+            "domain": "appointment",
+            "execution_handler": "calendar_update",
+            "current_state": "committed",
+            "approval_required": true,
+            "trigger_id": "trg-558d53b8daf6",
+            "trigger_type": "USER_INPUT",
+            "scheduled_for": "2026-04-23 06:00-06:45",
+            "reasoning_trace": [
+              "Calendar analysis shows 0 near-term commitments.",
+              "2026-04-23 06:00-06:45 is the next low-conflict window.",
+              "Scheduling protects meal and family time."
+            ],
+            "created_at": "2026-04-23T21:29:17.655366Z",
+            "updated_at": "2026-04-23T19:00:00Z",
+            "execution_result": {
+              "action_id": "assist-877de7a3cc6c-primary",
+              "handler": "calendar_update",
+              "status": "committed",
+              "event_id": "runtime-assist-877de7a3cc6c-primary",
+              "start": "2026-04-23T06:00:00Z",
+              "end": "2026-04-23T06:45:00Z"
+            },
+            "transitions": [
+              {
+                "from_state": null,
+                "to_state": "proposed",
+                "changed_at": "2026-04-23T21:29:17.655366Z",
+                "reason": "Decision engine proposed a single action",
+                "metadata": {
+                  "actor_type": "system_worker",
+                  "user_id": "system",
+                  "request_id": "assist-877de7a3cc6c",
+                  "initiated_at": "2026-04-23T21:29:17.663911+00:00",
+                  "subject_id": "system",
+                  "verified": true
+                }
+              },
+              {
+                "from_state": "proposed",
+                "to_state": "pending_approval",
+                "changed_at": "2026-04-23T21:29:17.655366Z",
+                "reason": "Approval gate engaged before execution",
+                "metadata": {
+                  "actor_type": "system_worker",
+                  "user_id": "system",
+                  "request_id": "assist-877de7a3cc6c",
+                  "initiated_at": "2026-04-23T21:29:17.663911+00:00",
+                  "subject_id": "system",
+                  "verified": true
+                }
+              },
+              {
+                "from_state": "pending_approval",
+                "to_state": "approved",
+                "changed_at": "2026-04-23T21:29:17.655366Z",
+                "reason": "Approved by system_worker",
+                "metadata": {
+                  "actor_type": "system_worker",
+                  "user_id": "system",
+                  "request_id": "assist-877de7a3cc6c",
+                  "initiated_at": "2026-04-23T21:29:17.694621+00:00",
+                  "subject_id": "system",
+                  "verified": true
+                }
+              },
+              {
+                "from_state": "approved",
+                "to_state": "committed",
+                "changed_at": "2026-04-23T21:29:17.655366Z",
+                "reason": "Action executed via calendar_update",
+                "metadata": {
+                  "action_id": "assist-877de7a3cc6c-primary",
+                  "handler": "calendar_update",
+                  "status": "committed",
+                  "event_id": "runtime-assist-877de7a3cc6c-primary",
+                  "start": "2026-04-23T06:00:00Z",
+                  "end": "2026-04-23T06:45:00Z",
+                  "actor_type": "system_worker",
+                  "user_id": "system",
+                  "request_id": "assist-877de7a3cc6c",
+                  "initiated_at": "2026-04-23T21:29:17.694621+00:00",
+                  "subject_id": "system",
+                  "verified": true
+                }
+              }
+            ],
+            "reviewed_in_evening": true
+          },
+          "assist-80e97147810a-primary": {
+            "action_id": "assist-80e97147810a-primary",
+            "request_id": "assist-80e97147810a",
+            "title": "Schedule appointment for 2026-04-23 07:00-07:45",
+            "description": "Reserve 2026-04-23 07:00-07:45 for the requested appointment because it avoids known calendar conflicts.",
+            "domain": "appointment",
+            "execution_handler": "calendar_update",
+            "current_state": "rejected",
+            "approval_required": true,
+            "trigger_id": "trg-bc4e23b505c7",
+            "trigger_type": "USER_INPUT",
+            "scheduled_for": "2026-04-23 07:00-07:45",
+            "reasoning_trace": [
+              "Calendar analysis shows 1 near-term commitments.",
+              "2026-04-23 07:00-07:45 is the next low-conflict window.",
+              "Scheduling protects meal and family time."
+            ],
+            "created_at": "2026-04-23T21:29:17.655366Z",
+            "updated_at": "2026-04-23T21:29:17.655366Z",
+            "execution_result": {},
+            "transitions": [
+              {
+                "from_state": null,
+                "to_state": "proposed",
+                "changed_at": "2026-04-23T21:29:17.655366Z",
+                "reason": "Decision engine proposed a single action",
+                "metadata": {
+                  "actor_type": "system_worker",
+                  "user_id": "system",
+                  "request_id": "assist-80e97147810a",
+                  "initiated_at": "2026-04-23T21:29:17.768086+00:00",
+                  "subject_id": "system",
+                  "verified": true
+                }
+              },
+              {
+                "from_state": "proposed",
+                "to_state": "pending_approval",
+                "changed_at": "2026-04-23T21:29:17.655366Z",
+                "reason": "Approval gate engaged before execution",
+                "metadata": {
+                  "actor_type": "system_worker",
+                  "user_id": "system",
+                  "request_id": "assist-80e97147810a",
+                  "initiated_at": "2026-04-23T21:29:17.768086+00:00",
+                  "subject_id": "system",
+                  "verified": true
+                }
+              },
+              {
+                "from_state": "pending_approval",
+                "to_state": "rejected",
+                "changed_at": "2026-04-23T21:29:17.655366Z",
+                "reason": "Action rejected by user",
+                "metadata": {
+                  "actor_type": "system_worker",
+                  "user_id": "system",
+                  "request_id": "assist-80e97147810a",
+                  "initiated_at": "2026-04-23T21:29:17.797940+00:00",
+                  "subject_id": "system",
+                  "verified": true
+                }
+              }
+            ],
+            "reviewed_in_evening": false
+          },
+          "assist-b4fca6a83045-primary": {
+            "action_id": "assist-b4fca6a83045-primary",
+            "request_id": "assist-b4fca6a83045",
+            "title": "Schedule appointment for 2026-04-23 07:00-07:45",
+            "description": "Reserve 2026-04-23 07:00-07:45 for the requested appointment because it avoids known calendar conflicts.",
+            "domain": "appointment",
+            "execution_handler": "calendar_update",
+            "current_state": "pending_approval",
+            "approval_required": true,
+            "trigger_id": "trg-72c064ef24e9",
+            "trigger_type": "TIME_TICK",
+            "scheduled_for": "2026-04-23 07:00-07:45",
+            "reasoning_trace": [
+              "Calendar analysis shows 1 near-term commitments.",
+              "2026-04-23 07:00-07:45 is the next low-conflict window.",
+              "Scheduling protects meal and family time."
+            ],
+            "created_at": "2026-04-23T19:00:00Z",
+            "updated_at": "2026-04-23T19:00:00Z",
+            "execution_result": {},
+            "transitions": [
+              {
+                "from_state": null,
+                "to_state": "proposed",
+                "changed_at": "2026-04-23T19:00:00Z",
+                "reason": "Decision engine proposed a single action",
+                "metadata": {
+                  "actor_type": "system_worker",
+                  "user_id": "system",
+                  "request_id": "assist-b4fca6a83045",
+                  "initiated_at": "2026-04-23T21:29:17.897049+00:00",
+                  "subject_id": "system",
+                  "verified": true
+                }
+              },
+              {
+                "from_state": "proposed",
+                "to_state": "pending_approval",
+                "changed_at": "2026-04-23T19:00:00Z",
+                "reason": "Approval gate engaged before execution",
+                "metadata": {
+                  "actor_type": "system_worker",
+                  "user_id": "system",
+                  "request_id": "assist-b4fca6a83045",
+                  "initiated_at": "2026-04-23T21:29:17.897049+00:00",
+                  "subject_id": "system",
+                  "verified": true
+                }
+              }
+            ],
+            "reviewed_in_evening": false
+          },
+          "assist-457c98fbf866-primary": {
+            "action_id": "assist-457c98fbf866-primary",
+            "request_id": "assist-457c98fbf866",
+            "title": "Schedule appointment for 2026-04-23 07:00-07:45",
+            "description": "Reserve 2026-04-23 07:00-07:45 for the requested appointment because it avoids known calendar conflicts.",
+            "domain": "appointment",
+            "execution_handler": "calendar_update",
+            "current_state": "pending_approval",
+            "approval_required": true,
+            "trigger_id": "trg-ead730571ed7",
+            "trigger_type": "USER_INPUT",
+            "scheduled_for": "2026-04-23 07:00-07:45",
+            "reasoning_trace": [
+              "Calendar analysis shows 1 near-term commitments.",
+              "2026-04-23 07:00-07:45 is the next low-conflict window.",
+              "Scheduling protects meal and family time."
+            ],
+            "created_at": "2026-04-23T21:29:17.655366Z",
+            "updated_at": "2026-04-23T21:29:17.655366Z",
+            "execution_result": {},
+            "transitions": [
+              {
+                "from_state": null,
+                "to_state": "proposed",
+                "changed_at": "2026-04-23T21:29:17.655366Z",
+                "reason": "Decision engine proposed a single action",
+                "metadata": {
+                  "actor_type": "system_worker",
+                  "user_id": "system",
+                  "request_id": "assist-457c98fbf866",
+                  "initiated_at": "2026-04-23T21:29:18.936426+00:00",
+                  "subject_id": "system",
+                  "verified": true
+                }
+              },
+              {
+                "from_state": "proposed",
+                "to_state": "pending_approval",
+                "changed_at": "2026-04-23T21:29:17.655366Z",
+                "reason": "Approval gate engaged before execution",
+                "metadata": {
+                  "actor_type": "system_worker",
+                  "user_id": "system",
+                  "request_id": "assist-457c98fbf866",
+                  "initiated_at": "2026-04-23T21:29:18.936426+00:00",
+                  "subject_id": "system",
+                  "verified": true
+                }
+              }
+            ],
+            "reviewed_in_evening": false
+          }
+        },
+        "transition_log": [
+          {
+            "action_id": "assist-877de7a3cc6c-primary",
+            "from_state": null,
+            "to_state": "proposed",
+            "changed_at": "2026-04-23T21:29:17.655366Z",
+            "reason": "Decision engine proposed a single action",
+            "metadata": {
+              "actor_type": "system_worker",
+              "user_id": "system",
+              "request_id": "assist-877de7a3cc6c",
+              "initiated_at": "2026-04-23T21:29:17.663911+00:00",
+              "subject_id": "system",
+              "verified": true
+            }
+          },
+          {
+            "action_id": "assist-877de7a3cc6c-primary",
+            "from_state": "proposed",
+            "to_state": "pending_approval",
+            "changed_at": "2026-04-23T21:29:17.655366Z",
+            "reason": "Approval gate engaged before execution",
+            "metadata": {
+              "actor_type": "system_worker",
+              "user_id": "system",
+              "request_id": "assist-877de7a3cc6c",
+              "initiated_at": "2026-04-23T21:29:17.663911+00:00",
+              "subject_id": "system",
+              "verified": true
+            }
+          },
+          {
+            "action_id": "assist-877de7a3cc6c-primary",
+            "from_state": "pending_approval",
+            "to_state": "approved",
+            "changed_at": "2026-04-23T21:29:17.655366Z",
+            "reason": "Approved by system_worker",
+            "metadata": {
+              "actor_type": "system_worker",
+              "user_id": "system",
+              "request_id": "assist-877de7a3cc6c",
+              "initiated_at": "2026-04-23T21:29:17.694621+00:00",
+              "subject_id": "system",
+              "verified": true
+            }
+          },
+          {
+            "action_id": "assist-877de7a3cc6c-primary",
+            "from_state": "approved",
+            "to_state": "committed",
+            "changed_at": "2026-04-23T21:29:17.655366Z",
+            "reason": "Action executed via calendar_update",
+            "metadata": {
+              "action_id": "assist-877de7a3cc6c-primary",
+              "handler": "calendar_update",
+              "status": "committed",
+              "event_id": "runtime-assist-877de7a3cc6c-primary",
+              "start": "2026-04-23T06:00:00Z",
+              "end": "2026-04-23T06:45:00Z",
+              "actor_type": "system_worker",
+              "user_id": "system",
+              "request_id": "assist-877de7a3cc6c",
+              "initiated_at": "2026-04-23T21:29:17.694621+00:00",
+              "subject_id": "system",
+              "verified": true
+            }
+          },
+          {
+            "action_id": "assist-80e97147810a-primary",
+            "from_state": null,
+            "to_state": "proposed",
+            "changed_at": "2026-04-23T21:29:17.655366Z",
+            "reason": "Decision engine proposed a single action",
+            "metadata": {
+              "actor_type": "system_worker",
+              "user_id": "system",
+              "request_id": "assist-80e97147810a",
+              "initiated_at": "2026-04-23T21:29:17.768086+00:00",
+              "subject_id": "system",
+              "verified": true
+            }
+          },
+          {
+            "action_id": "assist-80e97147810a-primary",
+            "from_state": "proposed",
+            "to_state": "pending_approval",
+            "changed_at": "2026-04-23T21:29:17.655366Z",
+            "reason": "Approval gate engaged before execution",
+            "metadata": {
+              "actor_type": "system_worker",
+              "user_id": "system",
+              "request_id": "assist-80e97147810a",
+              "initiated_at": "2026-04-23T21:29:17.768086+00:00",
+              "subject_id": "system",
+              "verified": true
+            }
+          },
+          {
+            "action_id": "assist-80e97147810a-primary",
+            "from_state": "pending_approval",
+            "to_state": "rejected",
+            "changed_at": "2026-04-23T21:29:17.655366Z",
+            "reason": "Action rejected by user",
+            "metadata": {
+              "actor_type": "system_worker",
+              "user_id": "system",
+              "request_id": "assist-80e97147810a",
+              "initiated_at": "2026-04-23T21:29:17.797940+00:00",
+              "subject_id": "system",
+              "verified": true
+            }
+          },
+          {
+            "action_id": "assist-b4fca6a83045-primary",
+            "from_state": null,
+            "to_state": "proposed",
+            "changed_at": "2026-04-23T19:00:00Z",
+            "reason": "Decision engine proposed a single action",
+            "metadata": {
+              "actor_type": "system_worker",
+              "user_id": "system",
+              "request_id": "assist-b4fca6a83045",
+              "initiated_at": "2026-04-23T21:29:17.897049+00:00",
+              "subject_id": "system",
+              "verified": true
+            }
+          },
+          {
+            "action_id": "assist-b4fca6a83045-primary",
+            "from_state": "proposed",
+            "to_state": "pending_approval",
+            "changed_at": "2026-04-23T19:00:00Z",
+            "reason": "Approval gate engaged before execution",
+            "metadata": {
+              "actor_type": "system_worker",
+              "user_id": "system",
+              "request_id": "assist-b4fca6a83045",
+              "initiated_at": "2026-04-23T21:29:17.897049+00:00",
+              "subject_id": "system",
+              "verified": true
+            }
+          },
+          {
+            "action_id": "assist-457c98fbf866-primary",
+            "from_state": null,
+            "to_state": "proposed",
+            "changed_at": "2026-04-23T21:29:17.655366Z",
+            "reason": "Decision engine proposed a single action",
+            "metadata": {
+              "actor_type": "system_worker",
+              "user_id": "system",
+              "request_id": "assist-457c98fbf866",
+              "initiated_at": "2026-04-23T21:29:18.767749+00:00",
+              "subject_id": "system",
+              "verified": true
+            }
+          },
+          {
+            "action_id": "assist-457c98fbf866-primary",
+            "from_state": "proposed",
+            "to_state": "pending_approval",
+            "changed_at": "2026-04-23T21:29:17.655366Z",
+            "reason": "Approval gate engaged before execution",
+            "metadata": {
+              "actor_type": "system_worker",
+              "user_id": "system",
+              "request_id": "assist-457c98fbf866",
+              "initiated_at": "2026-04-23T21:29:18.767749+00:00",
+              "subject_id": "system",
+              "verified": true
+            }
+          },
+          {
+            "action_id": "assist-457c98fbf866-primary",
+            "from_state": null,
+            "to_state": "proposed",
+            "changed_at": "2026-04-23T21:29:17.655366Z",
+            "reason": "Decision engine proposed a single action",
+            "metadata": {
+              "actor_type": "system_worker",
+              "user_id": "system",
+              "request_id": "assist-457c98fbf866",
+              "initiated_at": "2026-04-23T21:29:18.936426+00:00",
+              "subject_id": "system",
+              "verified": true
+            }
+          },
+          {
+            "action_id": "assist-457c98fbf866-primary",
+            "from_state": "proposed",
+            "to_state": "pending_approval",
+            "changed_at": "2026-04-23T21:29:17.655366Z",
+            "reason": "Approval gate engaged before execution",
+            "metadata": {
+              "actor_type": "system_worker",
+              "user_id": "system",
+              "request_id": "assist-457c98fbf866",
+              "initiated_at": "2026-04-23T21:29:18.936426+00:00",
+              "subject_id": "system",
+              "verified": true
+            }
+          }
+        ]
+      },
+      "execution_log": [
+        {
+          "action_id": "assist-877de7a3cc6c-primary",
+          "handler": "calendar_update",
+          "status": "committed",
+          "event_id": "runtime-assist-877de7a3cc6c-primary",
+          "start": "2026-04-23T06:00:00Z",
+          "end": "2026-04-23T06:45:00Z"
+        }
+      ],
+      "behavior_feedback": {
+        "records": [
+          {
+            "action_id": "assist-877de7a3cc6c-primary",
+            "status": "approved",
+            "committed": true,
+            "timestamp": "2026-04-23T21:29:17.655366Z",
+            "category": "calendar",
+            "scheduled_time": "2026-04-23 06:00-06:45",
+            "actual_execution_time": "2026-04-23T06:00:00Z"
+          },
+          {
+            "action_id": "assist-80e97147810a-primary",
+            "status": "rejected",
+            "committed": false,
+            "timestamp": "2026-04-23T21:29:17.655366Z",
+            "category": "calendar",
+            "scheduled_time": "2026-04-23 07:00-07:45",
+            "actual_execution_time": null
+          }
+        ]
+      },
+      "runtime": {
+        "processed_trigger_ids": [
+          "trg-558d53b8daf6",
+          "trg-bc4e23b505c7",
+          "trg-72c064ef24e9",
+          "trg-ead730571ed7",
+          "trg-ead730571ed7"
+        ],
+        "last_time_tick": {
+          "evening": "2026-04-23"
+        },
+        "last_processed_state_version": 1,
+        "daily_cycle": {
+          "pending_follow_up_queries": [
+            {
+              "source_action_id": "assist-877de7a3cc6c-primary",
+              "due_on": "2026-04-24",
+              "query": "Adjust tomorrow's schedule after today's approved calendar update"
+            }
+          ],
+          "last_morning_run": null,
+          "last_evening_run": "2026-04-23T19:00:00Z"
+        }
+      },
+      "state_version": 1,
+      "updated_at": "2026-04-23T21:29:18.965757Z"
     }
   }
 }

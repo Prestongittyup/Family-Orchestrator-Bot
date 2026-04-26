@@ -17,7 +17,8 @@ from assistant.runtime.assistant_runtime import AssistantRuntimeEngine
 from apps.assistant_core.contracts import AssistantApprovalRequest, AssistantQueryRequest, AssistantResponse
 from apps.assistant_core.planning_engine import _fallback_household_state
 from apps.assistant_core.request_store import request_store
-from household_os.core import HouseholdOSDecisionEngine, HouseholdOSRunResponse, HouseholdStateGraphStore
+from household_os.core import HouseholdOSRunResponse
+from household_os.runtime.orchestrator import HouseholdOSOrchestrator, OrchestratorRequest, RequestActionType
 from household_state.contracts import HouseholdDecisionResponse
 from household_state.household_state_manager import HouseholdStateManager
 
@@ -26,8 +27,7 @@ log = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/assistant", tags=["assistant"])
 state_manager = HouseholdStateManager()
-os_state_store = HouseholdStateGraphStore()
-os_decision_engine = HouseholdOSDecisionEngine()
+runtime_orchestrator = HouseholdOSOrchestrator()
 
 
 def _load_household_state(
@@ -62,35 +62,32 @@ def submit_assistant_query(
 ) -> HouseholdOSRunResponse:
     household_id = request.household_id
     state = _load_household_state(household_id, credential_store, http_client)
-    
-    # Refresh the household OS state graph
-    graph = os_state_store.refresh_graph(
-        household_id=household_id,
-        state=state,
-        query=request.query,
-        fitness_goal=request.fitness_goal,
+
+    result = runtime_orchestrator.handle_request(
+        OrchestratorRequest(
+            action_type=RequestActionType.RUN,
+            household_id=household_id,
+            actor={
+                "actor_type": "api_user",
+                "subject_id": household_id,
+                "session_id": None,
+                "verified": True,
+            },
+            state=state,
+            user_input=request.query,
+            fitness_goal=request.fitness_goal,
+            context={"system_worker_verified": False},
+        )
     )
-    
-    # Generate request ID
-    from apps.assistant_core.planning_engine import _request_id
-    request_id = _request_id(request.query, household_id, request.repeat_window_days, request.fitness_goal)
-    
-    # Run unified decision
-    response = os_decision_engine.run(
-        household_id=household_id,
-        query=request.query,
-        graph=graph,
-        request_id=request_id,
-    )
-    
-    # Store response
-    os_state_store.store_response(household_id, response.model_dump())
-    
+    if result.response is None:
+        raise HTTPException(status_code=500, detail="Orchestrator did not emit a response")
+
+    response = result.response
     log.info("household_os_query", extra={
         "request_id": response.request_id,
         "intent": response.intent_interpretation.summary,
     })
-    
+
     return response
 
 
@@ -102,36 +99,33 @@ def run_assistant_os(
 ) -> HouseholdOSRunResponse:
     household_id = request.household_id
     state = _load_household_state(household_id, credential_store, http_client)
-    
-    # Refresh the household OS state graph with new state
-    graph = os_state_store.refresh_graph(
-        household_id=household_id,
-        state=state,
-        query=request.query,
-        fitness_goal=request.fitness_goal,
+
+    result = runtime_orchestrator.handle_request(
+        OrchestratorRequest(
+            action_type=RequestActionType.RUN,
+            household_id=household_id,
+            actor={
+                "actor_type": "api_user",
+                "subject_id": household_id,
+                "session_id": None,
+                "verified": True,
+            },
+            state=state,
+            user_input=request.query,
+            fitness_goal=request.fitness_goal,
+            context={"system_worker_verified": False},
+        )
     )
-    
-    # Generate request ID from query
-    from apps.assistant_core.planning_engine import _request_id
-    request_id = _request_id(request.query, household_id, request.repeat_window_days, request.fitness_goal)
-    
-    # Run unified cross-domain decision engine
-    response = os_decision_engine.run(
-        household_id=household_id,
-        query=request.query,
-        graph=graph,
-        request_id=request_id,
-    )
-    
-    # Store response in OS state graph
-    os_state_store.store_response(household_id, response.model_dump())
-    
+    if result.response is None:
+        raise HTTPException(status_code=500, detail="Orchestrator did not emit a response")
+
+    response = result.response
     log.info("household_os_decision", extra={
         "request_id": response.request_id,
         "intent": response.intent_interpretation.summary,
         "action_domain": response.recommended_action.title[:30],
     })
-    
+
     return response
 
 
@@ -180,11 +174,21 @@ def regenerate_daily_loop_plan(
 
 @router.get("/suggestions/{request_id}", response_model=HouseholdOSRunResponse)
 def get_assistant_suggestions(request_id: str, household_id: str = "household-001") -> HouseholdOSRunResponse:
-    resolved_household_id = household_id
-    payload = os_state_store.get_response(resolved_household_id, request_id)
-    if payload is None:
-        resolved_household_id = os_state_store.find_household_id_for_request(request_id) or household_id
-        payload = os_state_store.get_response(resolved_household_id, request_id)
+    graph = runtime_orchestrator.handle_request(
+        OrchestratorRequest(
+            action_type=RequestActionType.READ_SENSITIVE_STATE,
+            household_id=household_id,
+            actor={
+                "actor_type": "api_user",
+                "subject_id": household_id,
+                "session_id": None,
+                "verified": True,
+            },
+            resource_type="assistant_suggestions",
+            context={"system_worker_verified": False},
+        )
+    )
+    payload = graph.get("responses", {}).get(request_id)
     response = None if payload is None else HouseholdOSRunResponse.model_validate(payload)
     if response is None:
         raise HTTPException(status_code=404, detail="Household OS request not found")
@@ -193,13 +197,22 @@ def get_assistant_suggestions(request_id: str, household_id: str = "household-00
 
 @router.post("/os/approve", response_model=HouseholdOSRunResponse)
 def approve_household_os_action(request: AssistantApprovalRequest, household_id: str = "household-001") -> HouseholdOSRunResponse:
-    resolved_household_id = household_id
-    payload = os_state_store.apply_approval(resolved_household_id, request.request_id, request.action_ids)
-    if payload is None:
-        resolved_household_id = os_state_store.find_household_id_for_request(request.request_id) or household_id
-        payload = os_state_store.apply_approval(resolved_household_id, request.request_id, request.action_ids)
-    response = None if payload is None else HouseholdOSRunResponse.model_validate(payload)
-    if response is None:
+    result = runtime_orchestrator.handle_request(
+        OrchestratorRequest(
+            action_type=RequestActionType.APPROVE,
+            household_id=household_id,
+            actor={
+                "actor_type": "api_user",
+                "subject_id": household_id,
+                "session_id": None,
+                "verified": True,
+            },
+            request_id=request.request_id,
+            action_ids=request.action_ids,
+            context={"system_worker_verified": False},
+        )
+    )
+    if result.response is None:
         raise HTTPException(status_code=404, detail="Household OS request not found")
     log.info("household_os_approval", extra={"request_id": request.request_id, "action_ids": request.action_ids})
-    return response
+    return result.response

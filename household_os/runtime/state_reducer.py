@@ -7,10 +7,21 @@ This enables:
 - Event sourcing correctness
 - Audit trail of all state changes
 - Easy temporal queries (state at any point in time)
+
+CQRS Constraint:
+- This is a READ MODEL ONLY (Query side)
+- Reducer validates transitions but does NOT define them
+- Transition rules are OWNED by StateMachine in apps/api/core/state_machine.py
+- Reducer calls validate_transition() from FSM to audit historical events
+- Reducer does NOT decide what transitions are legal (FSM decides)
+- Reducer maps event types to states (event stream determines state progression)
+- NO state mutation occurs here (this is pure read/derivation only)
 """
 
 from __future__ import annotations
 
+from apps.api.core.state_machine import ActionState, TransitionError, validate_transition
+from apps.api.observability.logging import log_error
 from household_os.core.lifecycle_state import (
     LifecycleState,
     assert_lifecycle_state,
@@ -24,6 +35,7 @@ from household_os.runtime.domain_event import (
     LIFECYCLE_EVENT_TYPES,
 )
 from household_os.runtime.lifecycle_firewall import enforce_lifecycle_integrity
+from household_os.security.trust_boundary_enforcer import validate_replay_call
 
 
 class StateReductionError(Exception):
@@ -36,37 +48,30 @@ def reduce_state(events: list[DomainEvent]) -> LifecycleState:
     """
     Derive current lifecycle state from a sequence of events.
 
-    This is the SINGLE SOURCE OF TRUTH for lifecycle state derivation.
-    This is a PURE FUNCTION:
-    - No side effects
+    CQRS Read Model (Query side):
+    - This is a PURE FUNCTION for replaying events
+    - No state mutation (read-only)
     - Deterministic: same input events always produce same state
     - Idempotent: replaying the same events produces the same result
 
-    State transitions are determined solely by event types:
-    - ACTION_PROPOSED       → LifecycleState.PROPOSED
-    - ACTION_APPROVED       → LifecycleState.APPROVED
-    - ACTION_REJECTED       → LifecycleState.REJECTED
-    - ACTION_FAILED         → LifecycleState.FAILED
-    - ACTION_COMMITTED      → LifecycleState.COMMITTED
+    Event Sourcing:
+    - State progression is determined by event types, not rules
+    - Events are immutable historical facts
+    - Replaying all events derives current state
 
-    The reducer transitions state based on the current state and the event type:
+    Transition Validation:
+    - This function calls validate_transition() from StateMachine to audit historical events
+    - Validation is for correctness checking only (catching data corruption)
+    - Validation does NOT define what transitions are allowed
+    - Transition rules are OWNED by StateMachine (apps/api/core/state_machine.py)
+    - Validation uses FSM's ALLOWED_TRANSITIONS to verify replayed events were legal
 
-    From PROPOSED:
-    - ACTION_APPROVED    → APPROVED (if approval not required)
-    - ACTION_FAILED      → FAILED
-    - ACTION_REJECTED    → REJECTED
-
-    From PENDING_APPROVAL:
-    - ACTION_APPROVED    → APPROVED
-    - ACTION_FAILED      → FAILED
-    - ACTION_REJECTED    → REJECTED
-
-    From APPROVED:
-    - ACTION_COMMITTED   → COMMITTED
-    - ACTION_FAILED      → FAILED
-
-    Terminal states:
-    - COMMITTED, REJECTED, FAILED have no valid outgoing transitions
+    Event-to-State Mapping (determined by event stream, not by reducer logic):
+    - ACTION_PROPOSED       → PROPOSED
+    - ACTION_APPROVED       → APPROVED
+    - ACTION_REJECTED       → REJECTED  
+    - ACTION_FAILED         → FAILED
+    - ACTION_COMMITTED      → COMMITTED
 
     Args:
         events: List of domain events in order (earliest first)
@@ -75,7 +80,7 @@ def reduce_state(events: list[DomainEvent]) -> LifecycleState:
         Current derived state as LifecycleState enum
 
     Raises:
-        StateReductionError: If event sequence is invalid
+        StateReductionError: If event sequence is invalid or violates FSM rules
     """
     if not events:
         raise StateReductionError("Cannot reduce state from empty event list")
@@ -96,6 +101,12 @@ def reduce_state(events: list[DomainEvent]) -> LifecycleState:
 @trace_function(entrypoint="state_reducer.replay_events", actor_type="system_worker", source="event_replay")
 def replay_events(events: list[DomainEvent]) -> LifecycleState:
     """Replay lifecycle events and return canonical enum state."""
+    validate_replay_call(
+        skip_modules={
+            "household_os.runtime.state_reducer",
+            "apps.api.observability.eil.tracer",
+        }
+    )
     return reduce_state(events)
 
 
@@ -137,58 +148,73 @@ def _apply_event(
         StateReductionError: If transition is invalid
     """
     event_type = event.event_type
+    event_to_state = {
+        LIFECYCLE_EVENT_TYPES["ACTION_PROPOSED"]: LifecycleState.PROPOSED,
+        LIFECYCLE_EVENT_TYPES["ACTION_APPROVED"]: LifecycleState.APPROVED,
+        LIFECYCLE_EVENT_TYPES["ACTION_REJECTED"]: LifecycleState.REJECTED,
+        LIFECYCLE_EVENT_TYPES["ACTION_COMMITTED"]: LifecycleState.COMMITTED,
+        LIFECYCLE_EVENT_TYPES["ACTION_FAILED"]: LifecycleState.FAILED,
+    }
+    target_state = event_to_state.get(event_type)
+    if target_state is None:
+        raise StateReductionError(f"Unsupported lifecycle event type: {event_type}")
 
-    # Initial event must be ACTION_PROPOSED
+    raw_actor_type = event.metadata.get("actor_type")
+    if raw_actor_type is None:
+        actor_ctx = event.metadata.get("actor_context")
+        if isinstance(actor_ctx, dict):
+            raw_actor_type = actor_ctx.get("actor_type")
+    if raw_actor_type is None:
+        raise StateReductionError("Missing actor_type in replay event metadata")
+
+    event_actor_type = str(raw_actor_type).strip().lower()
+    if event_actor_type in {"", "unknown"}:
+        # Legacy streams often omit actor provenance; treat as internal replay actor.
+        event_actor_type = "system_worker"
+    if event_actor_type == "api_user":
+        event_actor_type = "user"
+    allowed_actor_types = {"user", "assistant", "system_worker", "scheduler"}
+    if event_actor_type not in allowed_actor_types:
+        raise StateReductionError(
+            f"Unknown actor_type in replay event: {event_actor_type!r}; allowed={sorted(allowed_actor_types)}"
+        )
+    if not event.signature:
+        raise StateReductionError("Unsigned event rejected during replay")
+    if not event.verify_signature():
+        raise StateReductionError("Event signature mismatch during replay")
+
+    # Replay is authoritative only from event stream; first event must bootstrap lifecycle.
     if current_state is None:
-        if event_type == LIFECYCLE_EVENT_TYPES["ACTION_PROPOSED"]:
-            return LifecycleState.PROPOSED
-        else:
+        if target_state != LifecycleState.PROPOSED:
             raise StateReductionError(
                 f"First event must be ACTION_PROPOSED, got {event_type}"
             )
+        return target_state
 
-    # From PROPOSED state
-    if current_state == LifecycleState.PROPOSED:
-        if event_type == LIFECYCLE_EVENT_TYPES["ACTION_APPROVED"]:
-            return LifecycleState.APPROVED
-        elif event_type == LIFECYCLE_EVENT_TYPES["ACTION_FAILED"]:
-            return LifecycleState.FAILED
-        elif event_type == LIFECYCLE_EVENT_TYPES["ACTION_REJECTED"]:
-            return LifecycleState.REJECTED
-        else:
-            raise StateReductionError(
-                f"Invalid transition from {LifecycleState.PROPOSED.value} on event {event_type}"
-            )
+    requires_approval = bool(event.payload.get("requires_approval", False)) if isinstance(event.payload, dict) else False
 
-    # From PENDING_APPROVAL state (intermediate if approval required)
-    if current_state == LifecycleState.PENDING_APPROVAL:
-        if event_type == LIFECYCLE_EVENT_TYPES["ACTION_APPROVED"]:
-            return LifecycleState.APPROVED
-        elif event_type == LIFECYCLE_EVENT_TYPES["ACTION_FAILED"]:
-            return LifecycleState.FAILED
-        elif event_type == LIFECYCLE_EVENT_TYPES["ACTION_REJECTED"]:
-            return LifecycleState.REJECTED
-        else:
-            raise StateReductionError(
-                f"Invalid transition from {LifecycleState.PENDING_APPROVAL.value} on event {event_type}"
-            )
+    try:
+        validate_transition(
+            from_state=ActionState(current_state.value),
+            to_state=ActionState(target_state.value),
+            context={
+                "actor_type": event_actor_type,
+                "requires_approval": requires_approval,
+            },
+        )
+    except (TransitionError, ValueError) as exc:
+        log_error(
+            "event_replay_validation_failed",
+            exc,
+            event_id=event.event_id,
+            reason=str(exc),
+            actor_type=event_actor_type,
+        )
+        raise StateReductionError(
+            f"Invalid transition from {current_state.value} on event {event_type}"
+        ) from exc
 
-    # From APPROVED state
-    if current_state == LifecycleState.APPROVED:
-        if event_type == LIFECYCLE_EVENT_TYPES["ACTION_COMMITTED"]:
-            return LifecycleState.COMMITTED
-        elif event_type == LIFECYCLE_EVENT_TYPES["ACTION_FAILED"]:
-            return LifecycleState.FAILED
-        else:
-            raise StateReductionError(
-                f"Invalid transition from {LifecycleState.APPROVED.value} on event {event_type}"
-            )
-
-    # Terminal states (no transitions allowed)
-    if current_state in {LifecycleState.COMMITTED, LifecycleState.FAILED, LifecycleState.REJECTED}:
-        raise StateReductionError(f"Cannot transition from terminal state {current_state.value}")
-
-    raise StateReductionError(f"Unknown state {current_state}")
+    return target_state
 
 
 def compute_snapshot(
