@@ -29,7 +29,7 @@ from tests.harness.load_curve_model import LoadCurveModel
 from tests.harness.noise_isolation import classify_noise, isolate
 from tests.harness.production_readiness_classifier import ProductionReadinessClassifier
 from tests.harness.repeatability_gate import RepeatabilityConfig, RepeatabilityGate
-from apps.api.runtime.loop_tracing import trace_gather_binding, trace_loop_context, trace_task_binding
+from archive.apps.api.runtime.loop_tracing import trace_gather_binding, trace_loop_context, trace_task_binding
 
 
 HOST = "127.0.0.1"
@@ -669,8 +669,8 @@ class ProductionTortureAudit:
     def _sample_regime(self, stop_event: threading.Event, samples: list[dict[str, Any]], started_at: float) -> None:
         while not stop_event.is_set():
             if self.config.mode == "sse_breakpoint_gate":
-                from apps.api.observability.metrics import metrics as local_metrics
-                from apps.api.runtime.event_loop_guard import event_loop_guard
+                from archive.apps.api.observability.metrics import metrics as local_metrics
+                from archive.apps.api.runtime.event_loop_guard import event_loop_guard
                 metrics = local_metrics.snapshot()
                 runtime_metrics = {}
                 event_loop = event_loop_guard.snapshot()
@@ -1128,8 +1128,8 @@ class ProductionTortureAudit:
         return summary
 
     def _run_sse_breakpoint_only(self) -> dict[str, Any]:
-        from apps.api.realtime.broadcaster import broadcaster
-        from apps.api.runtime.event_loop_guard import event_loop_guard
+        from archive.apps.api.realtime.broadcaster import broadcaster
+        from archive.apps.api.runtime.event_loop_guard import event_loop_guard
 
         stages: list[dict[str, Any]] = []
         max_stable_concurrency = 0
@@ -2414,7 +2414,7 @@ class ProductionTortureAudit:
     def _start_inprocess_server(self) -> None:
         self.harness._kill_listeners_on_ports([self.config.port])
         time.sleep(0.4)
-        from apps.api.main import app as asgi_app
+        from archive.apps.api.main import app as asgi_app
         config = uvicorn.Config(
             asgi_app,
             host=HOST,
@@ -2833,8 +2833,8 @@ def _find_free_tcp_port() -> int:
 
 async def _asyncio_integrity_probe_once() -> dict[str, Any]:
     """Single-loop probe of critical asyncio primitives under contention."""
-    from apps.api.runtime.execution_fairness import fairness_gate
-    from apps.api.core.backpressure_middleware import _get_audit_bootstrap_semaphore
+    from archive.apps.api.runtime.execution_fairness import fairness_gate
+    from archive.apps.api.core.backpressure_middleware import _get_audit_bootstrap_semaphore
 
     trace_loop_context("production_torture_audit._asyncio_integrity_probe_once")
 
@@ -2915,7 +2915,7 @@ async def _validate_loop_local_resources_isolation() -> dict[str, Any]:
 
     Creates resources in fresh loops and verifies separate buckets via WeakKeyDictionary.
     """
-    from apps.api.runtime.execution_fairness import get_loop_local_resource, fairness_gate
+    from archive.apps.api.runtime.execution_fairness import get_loop_local_resource, fairness_gate
 
     violations: list[str] = []
 
@@ -2964,8 +2964,8 @@ def validate_loop_integrity_strict() -> dict[str, Any]:
             "overall_pass": bool,
         }
     """
-    from apps.api.runtime.execution_fairness import assert_loop_owner
-    from apps.api.runtime.loop_tracing import get_violation_events, clear_violation_events
+    from archive.apps.api.runtime.execution_fairness import assert_loop_owner
+    from archive.apps.api.runtime.loop_tracing import get_violation_events, clear_violation_events
 
     results = {
         "loop_registry_safe": False,
@@ -2995,7 +2995,7 @@ def validate_loop_integrity_strict() -> dict[str, Any]:
     async def test_ownership_enforcement() -> dict[str, Any]:
         """Test that assert_loop_owner raises on cross-loop violations."""
         import asyncio as asyncio_module
-        from apps.api.runtime.execution_fairness import _FairnessGate
+        from archive.apps.api.runtime.execution_fairness import _FairnessGate
 
         gate = _FairnessGate({"SHORT": 10, "LONG": 5, "STREAM": 3}, 5)
         state = gate._state()
@@ -3025,7 +3025,7 @@ def validate_loop_integrity_strict() -> dict[str, Any]:
     # Test 3: ASGI path validation with concurrent load
     async def test_asgi_concurrent_fairness() -> dict[str, Any]:
         """Run concurrent fairness acquisitions to verify loop binding."""
-        from apps.api.runtime.execution_fairness import fairness_gate
+        from archive.apps.api.runtime.execution_fairness import fairness_gate
 
         errors = []
         successful_acquisitions = 0

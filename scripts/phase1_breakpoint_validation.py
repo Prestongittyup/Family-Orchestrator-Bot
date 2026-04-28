@@ -23,7 +23,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.runtime_stress_audit import RuntimeStressHarness
-from apps.api.core.runtime_classifier import RuntimeSaturationClassifier
+from archive.apps.api.core.runtime_classifier import RuntimeSaturationClassifier
 from tests.harness.load_curve_model import LoadCurveModel
 from tests.harness.noise_isolation import classify_noise, isolate
 from tests.harness.repeatability_gate import RepeatabilityConfig, RepeatabilityGate

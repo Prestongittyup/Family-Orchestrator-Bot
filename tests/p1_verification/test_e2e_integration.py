@@ -9,10 +9,10 @@ from dataclasses import dataclass
 
 import pytest
 
-from apps.api.auth.token_service import TokenService
-from apps.api.llm.gateway import LLMGateway
-from apps.api.realtime.event_bus import InMemoryRealtimeEventBus
-from apps.api.services.idempotency_key_service import IdempotencyKeyService
+from archive.apps.api.auth.token_service import TokenService
+from archive.apps.api.llm.gateway import LLMGateway
+from archive.apps.api.realtime.event_bus import InMemoryRealtimeEventBus
+from archive.apps.api.services.idempotency_key_service import IdempotencyKeyService
 from tests.p1_verification.fixtures import (
     EventCapture,
     MockLLMProvider,
@@ -152,7 +152,7 @@ class TestE2EEventEmission:
         household_id = "family-1"
         
         # Simulate write → event emission
-        from apps.api.realtime.event_bus import RealtimeEvent
+        from archive.apps.api.realtime.event_bus import RealtimeEvent
         event = RealtimeEvent(
             household_id=household_id,
             event_type="TASK_CREATED",
@@ -232,7 +232,7 @@ class TestE2EEndToEndNominal:
         )
         
         # 6. Emit event
-        from apps.api.realtime.event_bus import RealtimeEvent
+        from archive.apps.api.realtime.event_bus import RealtimeEvent
         event = RealtimeEvent(
             household_id=household_id,
             event_type="TASK_CREATED",
@@ -252,6 +252,6 @@ class TestE2EEndToEndNominal:
 @pytest.fixture
 def identity_repo():
     """Provide test identity repository."""
-    from apps.api.core.database import SessionLocal
-    from apps.api.identity.repository import IdentityRepository
+    from archive.apps.api.core.database import SessionLocal
+    from archive.apps.api.identity.repository import IdentityRepository
     return IdentityRepository(SessionLocal())

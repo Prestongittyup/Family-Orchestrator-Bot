@@ -13,8 +13,8 @@ import copy
 
 import pytest
 
-from apps.api.integration_core.event_adapter import adapt_external_events, external_event_to_os1_payload
-from apps.api.integration_core.normalization import ExternalEvent
+from archive.apps.api.integration_core.event_adapter import adapt_external_events, external_event_to_os1_payload
+from archive.apps.api.integration_core.normalization import ExternalEvent
 
 
 # ---------------------------------------------------------------------------

@@ -6,14 +6,14 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic import PrivateAttr
 
-from apps.api.core.state_machine import (
+from archive.apps.api.core.state_machine import (
     ActionState,
     StateMachine,
     TransitionError,
     validate_state_before_persist,
     validate_transition,
 )
-from apps.api.observability.execution_trace import trace_function
+from archive.apps.api.observability.eil.tracer import trace_function
 from household_os.core.contracts import HouseholdOSRunResponse
 from household_os.core.execution_context import ExecutionContext
 from household_os.core.lifecycle_state import (
@@ -200,9 +200,17 @@ class ActionPipeline:
     ) -> LifecycleAction:
         self._require_internal_gate(internal_token)
         timestamp = self._coerce_datetime(now)
+        resolved_action_id = self._resolve_proposed_action_id(
+            graph=graph,
+            requested_action_id=response.recommended_action.action_id,
+            timestamp=timestamp,
+        )
+        if resolved_action_id != response.recommended_action.action_id:
+            response.recommended_action.action_id = resolved_action_id
+
         title = response.recommended_action.title
         action = LifecycleAction(
-            action_id=response.recommended_action.action_id,
+            action_id=resolved_action_id,
             request_id=response.request_id,
             title=title,
             description=response.recommended_action.description,
@@ -858,6 +866,38 @@ class ActionPipeline:
         if action.execution_handler == "calendar_update":
             return str(action.execution_result.get("start") or self._iso(timestamp))
         return self._iso(timestamp)
+
+    def _resolve_proposed_action_id(self, *, graph: dict[str, Any], requested_action_id: str, timestamp: datetime) -> str:
+        action_map = graph.setdefault("action_lifecycle", {}).setdefault("actions", {})
+        existing_raw = action_map.get(requested_action_id)
+        if existing_raw is None:
+            return requested_action_id
+
+        existing_action = self._hydrate_action(existing_raw)
+        derived_state = self._get_derived_state(requested_action_id, fallback_state=existing_action.current_state)
+        if derived_state is None or not derived_state.is_terminal():
+            return requested_action_id
+
+        return self._mint_reproposal_action_id(
+            requested_action_id=requested_action_id,
+            action_map=action_map,
+            timestamp=timestamp,
+        )
+
+    def _mint_reproposal_action_id(
+        self,
+        *,
+        requested_action_id: str,
+        action_map: dict[str, Any],
+        timestamp: datetime,
+    ) -> str:
+        suffix = timestamp.strftime("%Y%m%d%H%M%S")
+        candidate = f"{requested_action_id}:reproposal:{suffix}"
+        counter = 2
+        while candidate in action_map:
+            candidate = f"{requested_action_id}:reproposal:{suffix}:{counter}"
+            counter += 1
+        return candidate
 
     def _infer_domain(self, response: HouseholdOSRunResponse) -> str:
         summary = response.intent_interpretation.summary.lower()

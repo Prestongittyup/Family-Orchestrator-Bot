@@ -4,7 +4,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from apps.assistant_core.contracts import ProposedAction
+from archive.apps.assistant_core.contracts import ProposedAction
 
 
 DaySegment = Literal["morning", "midday", "evening"]

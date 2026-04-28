@@ -11,6 +11,7 @@ Injects deterministic failures:
 """
 
 import asyncio
+import copy
 import random
 from dataclasses import dataclass
 from enum import Enum
@@ -41,6 +42,26 @@ class FailureInjectionProfile:
     exponential_backoff: bool = True
     cascade_failures: bool = False  # Can one failure trigger others
     deterministic: bool = True
+
+    @classmethod
+    def no_failures(cls) -> "FailureInjectionProfile":
+        return copy.deepcopy(FailureInjector.PROFILES["no_failures"])
+
+    @classmethod
+    def light_transient(cls) -> "FailureInjectionProfile":
+        return copy.deepcopy(FailureInjector.PROFILES["light_transient"])
+
+    @classmethod
+    def moderate_network(cls) -> "FailureInjectionProfile":
+        return copy.deepcopy(FailureInjector.PROFILES["moderate_network"])
+
+    @classmethod
+    def high_chaos(cls) -> "FailureInjectionProfile":
+        return copy.deepcopy(FailureInjector.PROFILES["high_chaos"])
+
+    @classmethod
+    def byzantine(cls) -> "FailureInjectionProfile":
+        return copy.deepcopy(FailureInjector.PROFILES["byzantine"])
 
 
 class FailureInjector:

@@ -27,7 +27,7 @@ def test_til_import_in_task_service() -> bool:
     """TEST 1: task_service imports TIL without errors."""
     test_name = "TEST 1 - TIL Import in task_service"
     try:
-        from apps.api.services.task_service import create_task
+        from archive.apps.api.services.task_service import create_task
         logger.info(f"✔ {test_name} PASS")
         return True
     except ImportError as e:

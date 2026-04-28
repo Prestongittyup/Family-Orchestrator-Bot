@@ -26,9 +26,9 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.production_torture_audit import validate_loop_integrity_strict
-from apps.api.core.boot_diagnostics import run_boot_diagnostics, BootStatus
-from apps.api.main import create_app
-from apps.api.runtime.loop_tracing import (
+from archive.apps.api.core.boot_diagnostics import run_boot_diagnostics, BootStatus
+from archive.apps.api.main import create_app
+from archive.apps.api.runtime.loop_tracing import (
     clear_context_events,
     clear_violation_events,
     get_violation_events,

@@ -8,12 +8,12 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
-from apps.api.auth.token_service import TokenService
-from apps.api.identity.repository import IdentityRepository
-from apps.api.llm.gateway import LLMGateway
-from apps.api.llm.provider import LLMIntentResponse, LLMProvider
-from apps.api.realtime.event_bus import InMemoryRealtimeEventBus, RealtimeEvent, RealtimeEventBus
-from apps.api.services.idempotency_key_service import IdempotencyKeyService
+from archive.apps.api.auth.token_service import TokenService
+from archive.apps.api.identity.repository import IdentityRepository
+from archive.apps.api.llm.gateway import LLMGateway
+from archive.apps.api.llm.provider import LLMIntentResponse, LLMProvider
+from archive.apps.api.realtime.event_bus import InMemoryRealtimeEventBus, RealtimeEvent, RealtimeEventBus
+from archive.apps.api.services.idempotency_key_service import IdempotencyKeyService
 
 
 @dataclass
@@ -111,7 +111,7 @@ class TestFixtures:
     @staticmethod
     def create_idempotency_service() -> IdempotencyKeyService:
         # Import deferred to avoid circular deps
-        from apps.api.core.database import SessionLocal
+        from archive.apps.api.core.database import SessionLocal
         return IdempotencyKeyService(SessionLocal)
     
     @staticmethod

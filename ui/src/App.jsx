@@ -2,6 +2,8 @@ import { useState } from 'react'
 import TopNav from './components/core/TopNav'
 import ModeSelector from './components/core/ModeSelector'
 import OrchestrationDashboard from './components/live/OrchestrationDashboard'
+import CoziDashboard from './components/live/CoziDashboard'
+import PantryDebriefDashboard from './components/live/PantryDebriefDashboard'
 import ScenarioRunner from './components/simulation/ScenarioRunner'
 import EvaluationDashboard from './components/insights/EvaluationDashboard'
 
@@ -14,6 +16,8 @@ export default function App() {
       <ModeSelector mode={mode} onModeChange={setMode} />
 
       {mode === 'LIVE' && <OrchestrationDashboard />}
+      {mode === 'COZI' && <CoziDashboard />}
+      {mode === 'PANTRY' && <PantryDebriefDashboard />}
       {mode === 'SIMULATION' && <ScenarioRunner />}
       {mode === 'INSIGHTS' && <EvaluationDashboard />}
     </div>

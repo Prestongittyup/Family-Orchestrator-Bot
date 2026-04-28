@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from apps.api.integration_core.decision_engine import DecisionEngine
+from archive.apps.api.integration_core.decision_engine import DecisionEngine
 
 
 @dataclass

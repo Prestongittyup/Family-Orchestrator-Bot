@@ -6,7 +6,7 @@ import pytest
 from fastapi import FastAPI, Request
 from fastapi.testclient import TestClient
 
-from apps.api.core.state_machine import ActionState
+from archive.apps.api.core.state_machine import ActionState
 from household_os.core.execution_context import ExecutionContext
 from household_os.core.household_state_graph import HouseholdStateGraphStore
 from household_os.runtime.action_pipeline import ActionPipeline
@@ -27,7 +27,7 @@ def _build_assistant_app(
     actor_type: str,
     user_id: str | None,
 ) -> TestClient:
-    import apps.api.assistant_runtime_router as assistant_runtime_router
+    import archive.apps.api.assistant_runtime_router as assistant_runtime_router
 
     assistant_runtime_router.runtime_orchestrator = orchestrator
     app = FastAPI()

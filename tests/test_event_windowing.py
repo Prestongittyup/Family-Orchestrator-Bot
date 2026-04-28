@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
 
-from apps.api.integration_core.event_windowing import (
+from archive.apps.api.integration_core.event_windowing import (
     OrchestrationView,
     filter_events_to_window,
     get_time_window,

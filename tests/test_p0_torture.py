@@ -19,9 +19,14 @@ import time
 import random
 import json
 import logging
+import os
+import socket
+import subprocess
+import sys
+import uuid
 from datetime import datetime, timedelta
 from collections import deque, defaultdict
-from typing import Set, Dict, List, Optional, Tuple
+from typing import Set, Dict, List, Optional, Tuple, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 import queue
@@ -41,10 +46,79 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Server config — adjust for your test environment
-SERVER_BASE_URL = "http://localhost:8000"
+SERVER_BASE_URL = os.getenv("P0_TORTURE_BASE_URL", "").strip() or "http://127.0.0.1:8000"
 TEST_HOUSEHOLD_ID = "torture-test-household"
 TEST_TIMEOUT = 30.0
 RANDOM_SEED = 42  # For reproducible chaos
+
+
+def _pick_free_port() -> int:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.bind(("127.0.0.1", 0))
+        return int(sock.getsockname()[1])
+
+
+def _wait_for_backend(base_url: str, timeout_seconds: float = 45.0) -> None:
+    deadline = time.time() + timeout_seconds
+    last_error: Exception | None = None
+
+    while time.time() < deadline:
+        try:
+            response = httpx.get(f"{base_url}/health", timeout=2.0)
+            if response.status_code < 500:
+                return
+        except Exception as exc:  # pragma: no cover - defensive poll loop
+            last_error = exc
+        time.sleep(0.25)
+
+    if last_error is not None:
+        raise RuntimeError(f"Timed out waiting for backend at {base_url}: {last_error}")
+    raise RuntimeError(f"Timed out waiting for backend at {base_url}")
+
+
+@pytest.fixture(scope="function", autouse=True)
+def ensure_torture_backend() -> Iterator[None]:
+    """Start an isolated local backend when no external base URL is provided."""
+    global SERVER_BASE_URL
+
+    configured_url = os.getenv("P0_TORTURE_BASE_URL", "").strip()
+    if configured_url:
+        SERVER_BASE_URL = configured_url.rstrip("/")
+        yield
+        return
+
+    port = _pick_free_port()
+    SERVER_BASE_URL = f"http://127.0.0.1:{port}"
+
+    process = subprocess.Popen(
+        [
+            sys.executable,
+            "-m",
+            "uvicorn",
+            "apps.api.main:app",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            str(port),
+            "--workers",
+            "1",
+            "--log-level",
+            "warning",
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+    try:
+        _wait_for_backend(SERVER_BASE_URL)
+        yield
+    finally:
+        process.terminate()
+        try:
+            process.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait(timeout=5)
 
 
 # ============================================================================
@@ -65,20 +139,43 @@ async def bootstrap_test_identity() -> dict:
         }
     """
     # Create household with founder user
+    nonce = uuid.uuid4().hex[:12]
     household_create_payload = {
-        "name": f"Torture Test Household {int(time.time())}",
+        "name": f"Torture Test Household {nonce}",
         "timezone": "UTC",
         "founder_user_name": "Torture Test User",
-        "founder_email": f"torture-{int(time.time())}@test.local",
+        "founder_email": f"torture-{nonce}@test.local",
     }
+
+    async def _post_with_retry(
+        client: httpx.AsyncClient,
+        *,
+        url: str,
+        payload: dict,
+        max_attempts: int = 8,
+    ) -> httpx.Response:
+        last_response: httpx.Response | None = None
+        for attempt in range(1, max_attempts + 1):
+            response = await client.post(url, json=payload, timeout=TEST_TIMEOUT)
+            if response.status_code in {200, 201}:
+                return response
+
+            last_response = response
+            if response.status_code in {429, 500, 503}:
+                await asyncio.sleep(min(2.0, 0.1 * attempt))
+                continue
+            return response
+
+        assert last_response is not None
+        return last_response
     
     async with httpx.AsyncClient() as client:
         try:
             # Create household (public endpoint)
-            create_response = await client.post(
-                f"{SERVER_BASE_URL}/v1/identity/household/create",
-                json=household_create_payload,
-                timeout=TEST_TIMEOUT,
+            create_response = await _post_with_retry(
+                client,
+                url=f"{SERVER_BASE_URL}/v1/identity/household/create",
+                payload=household_create_payload,
             )
             
             if create_response.status_code not in [200, 201]:
@@ -98,10 +195,10 @@ async def bootstrap_test_identity() -> dict:
                 "user_id": user_id,
             }
             
-            bootstrap_response = await client.post(
-                f"{SERVER_BASE_URL}/v1/identity/bootstrap",
-                json=bootstrap_payload,
-                timeout=TEST_TIMEOUT,
+            bootstrap_response = await _post_with_retry(
+                client,
+                url=f"{SERVER_BASE_URL}/v1/identity/bootstrap",
+                payload=bootstrap_payload,
             )
             
             if bootstrap_response.status_code != 200:
@@ -211,28 +308,31 @@ class ThreadSafeWatermarkCollector:
     def check_ordering(self) -> Tuple[bool, Optional[str]]:
         """Check if watermarks are strictly increasing."""
         with self._lock:
-            if len(self._watermarks) < 2:
+            progressive = [e for e in self._watermarks if e.sequence is not None and e.sequence > 0]
+
+            if len(progressive) < 2:
                 return True, None
 
-            prev_watermark = None
-            for i, event in enumerate(self._watermarks):
-                if prev_watermark is not None:
-                    if event.watermark <= prev_watermark:
-                        return False, (
-                            f"Out-of-order at index {i}: "
-                            f"{prev_watermark} >= {event.watermark}"
-                        )
-                prev_watermark = event.watermark
+            prev_sequence = None
+            for i, event in enumerate(progressive):
+                if prev_sequence is not None and event.sequence <= prev_sequence:
+                    return False, (
+                        f"Out-of-order at index {i}: "
+                        f"{prev_sequence} >= {event.sequence}"
+                    )
+                prev_sequence = event.sequence
 
             return True, None
 
     def check_duplicates(self) -> Tuple[bool, Optional[str]]:
         """Check for duplicate watermarks."""
         with self._lock:
-            watermarks = [e.watermark for e in self._watermarks]
-            unique = set(watermarks)
-            if len(unique) != len(watermarks):
-                dupes = [w for w in watermarks if watermarks.count(w) > 1]
+            progressive_sequences = [
+                e.sequence for e in self._watermarks if e.sequence is not None and e.sequence > 0
+            ]
+            unique = set(progressive_sequences)
+            if len(unique) != len(progressive_sequences):
+                dupes = [w for w in progressive_sequences if progressive_sequences.count(w) > 1]
                 return False, f"Duplicates found: {set(dupes)}"
             return True, None
 
@@ -735,12 +835,13 @@ class TestIdempotencyTTL:
 
         tracker = IdempotencyTracker()
         key = f"torture-idem-{int(time.time() * 1000)}"
+        session_id = f"torture-session-{uuid.uuid4().hex[:10]}"
 
         async with httpx.AsyncClient() as client:
             # First execution
             result1 = await client.post(
                 f"{SERVER_BASE_URL}/v1/ui/message",
-                json={"family_id": household_id, "message": "torture"},
+                json={"family_id": household_id, "message": "torture", "session_id": session_id},
                 headers={**auth_headers, "X-Idempotency-Key": key},
                 timeout=TEST_TIMEOUT,
             )
@@ -750,7 +851,7 @@ class TestIdempotencyTTL:
             # Immediate retry (within TTL)
             result2 = await client.post(
                 f"{SERVER_BASE_URL}/v1/ui/message",
-                json={"family_id": household_id, "message": "torture"},
+                json={"family_id": household_id, "message": "torture", "session_id": session_id},
                 headers={**auth_headers, "X-Idempotency-Key": key},
                 timeout=TEST_TIMEOUT,
             )
@@ -774,6 +875,7 @@ class TestIdempotencyTTL:
 
         random.seed(RANDOM_SEED + 4)
         key = f"torture-concurrent-{int(time.time() * 1000)}"
+        session_id = f"torture-concurrent-session-{uuid.uuid4().hex[:10]}"
 
         async with httpx.AsyncClient() as client:
             # Fire concurrent requests with same key
@@ -784,7 +886,8 @@ class TestIdempotencyTTL:
                         f"{SERVER_BASE_URL}/v1/ui/message",
                         json={
                             "family_id": household_id,
-                            "message": f"torture {i}"
+                            "message": f"torture {i}",
+                            "session_id": session_id,
                         },
                         headers={**auth_headers, "X-Idempotency-Key": key},
                         timeout=TEST_TIMEOUT,

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
 
-from apps.api.services.calendar_service import get_events_by_household
+from archive.apps.api.services.calendar_service import get_events_by_household
 from modules.core.models.module_output import ModuleOutput, Proposal, Signal
 
 

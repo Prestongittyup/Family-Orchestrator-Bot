@@ -18,7 +18,7 @@ All tests are deterministic and safe-by-default.
 import pytest
 from datetime import datetime, timedelta
 
-from apps.api.intent_contract.schema import (
+from archive.apps.api.intent_contract.schema import (
     IntentType,
     CreateTaskIntent,
     CompleteTaskIntent,
@@ -30,14 +30,14 @@ from apps.api.intent_contract.schema import (
     UpdatePlanIntent,
     RecomputePlanIntent,
 )
-from apps.api.intent_contract.classifier import IntentClassifier
-from apps.api.intent_contract.validator import (
+from archive.apps.api.intent_contract.classifier import IntentClassifier
+from archive.apps.api.intent_contract.validator import (
     IntentValidator,
     ValidatedIntent,
     ValidationError_,
     EntityStore,
 )
-from apps.api.intent_contract.action_planner import (
+from archive.apps.api.intent_contract.action_planner import (
     ActionPlanner,
     ActionPlan,
     Action,
@@ -207,8 +207,8 @@ class TestValidatorRequiredFields:
 
     def test_validator_rejects_missing_task_name(self):
         """Validator rejects CREATE_TASK with missing task_name."""
-        from apps.api.intent_contract.classifier import IntentClassification
-        from apps.api.intent_contract.schema import ExtractedFields
+        from archive.apps.api.intent_contract.classifier import IntentClassification
+        from archive.apps.api.intent_contract.schema import ExtractedFields
 
         classification = IntentClassification(
             intent_type=IntentType.CREATE_TASK,
@@ -227,8 +227,8 @@ class TestValidatorRequiredFields:
 
     def test_validator_rejects_missing_task_id_for_complete(self):
         """Validator rejects COMPLETE_TASK with missing task_id."""
-        from apps.api.intent_contract.classifier import IntentClassification
-        from apps.api.intent_contract.schema import ExtractedFields
+        from archive.apps.api.intent_contract.classifier import IntentClassification
+        from archive.apps.api.intent_contract.schema import ExtractedFields
 
         classification = IntentClassification(
             intent_type=IntentType.COMPLETE_TASK,
@@ -244,8 +244,8 @@ class TestValidatorRequiredFields:
 
     def test_validator_rejects_invalid_datetime(self):
         """Validator rejects invalid datetime values."""
-        from apps.api.intent_contract.classifier import IntentClassification
-        from apps.api.intent_contract.schema import ExtractedFields
+        from archive.apps.api.intent_contract.classifier import IntentClassification
+        from archive.apps.api.intent_contract.schema import ExtractedFields
 
         classification = IntentClassification(
             intent_type=IntentType.RESCHEDULE_TASK,
@@ -266,8 +266,8 @@ class TestValidatorRequiredFields:
 
     def test_validator_rejects_low_confidence(self):
         """Validator rejects classification with confidence < 0.3."""
-        from apps.api.intent_contract.classifier import IntentClassification
-        from apps.api.intent_contract.schema import ExtractedFields
+        from archive.apps.api.intent_contract.classifier import IntentClassification
+        from archive.apps.api.intent_contract.schema import ExtractedFields
 
         classification = IntentClassification(
             intent_type=IntentType.CREATE_TASK,
@@ -284,8 +284,8 @@ class TestValidatorRequiredFields:
 
     def test_validator_accepts_valid_create_event_with_optional_fields(self):
         """Validator accepts CREATE_EVENT with optional description."""
-        from apps.api.intent_contract.classifier import IntentClassification
-        from apps.api.intent_contract.schema import ExtractedFields
+        from archive.apps.api.intent_contract.classifier import IntentClassification
+        from archive.apps.api.intent_contract.schema import ExtractedFields
 
         now = datetime.utcnow()
         classification = IntentClassification(
@@ -309,8 +309,8 @@ class TestValidatorRequiredFields:
 
     def test_validator_rejects_end_time_before_start_time(self):
         """Validator rejects CREATE_EVENT with end_time < start_time."""
-        from apps.api.intent_contract.classifier import IntentClassification
-        from apps.api.intent_contract.schema import ExtractedFields
+        from archive.apps.api.intent_contract.classifier import IntentClassification
+        from archive.apps.api.intent_contract.schema import ExtractedFields
 
         now = datetime.utcnow()
         past = now - timedelta(hours=1)
@@ -344,8 +344,8 @@ class TestValidatorEntityReferences:
 
     def test_validator_rejects_nonexistent_task(self):
         """Validator rejects COMPLETE_TASK with nonexistent task_id."""
-        from apps.api.intent_contract.classifier import IntentClassification
-        from apps.api.intent_contract.schema import ExtractedFields
+        from archive.apps.api.intent_contract.classifier import IntentClassification
+        from archive.apps.api.intent_contract.schema import ExtractedFields
 
         classification = IntentClassification(
             intent_type=IntentType.COMPLETE_TASK,
@@ -362,8 +362,8 @@ class TestValidatorEntityReferences:
 
     def test_validator_accepts_existing_task(self):
         """Validator accepts COMPLETE_TASK with existing task_id."""
-        from apps.api.intent_contract.classifier import IntentClassification
-        from apps.api.intent_contract.schema import ExtractedFields
+        from archive.apps.api.intent_contract.classifier import IntentClassification
+        from archive.apps.api.intent_contract.schema import ExtractedFields
 
         entity_store = EntityStore()
         entity_store.add_task("task-123", {"name": "Test Task"})
@@ -382,8 +382,8 @@ class TestValidatorEntityReferences:
 
     def test_validator_rejects_nonexistent_event(self):
         """Validator rejects DELETE_EVENT with nonexistent event_id."""
-        from apps.api.intent_contract.classifier import IntentClassification
-        from apps.api.intent_contract.schema import ExtractedFields
+        from archive.apps.api.intent_contract.classifier import IntentClassification
+        from archive.apps.api.intent_contract.schema import ExtractedFields
 
         classification = IntentClassification(
             intent_type=IntentType.DELETE_EVENT,
@@ -399,8 +399,8 @@ class TestValidatorEntityReferences:
 
     def test_validator_accepts_existing_event(self):
         """Validator accepts DELETE_EVENT with existing event_id."""
-        from apps.api.intent_contract.classifier import IntentClassification
-        from apps.api.intent_contract.schema import ExtractedFields
+        from archive.apps.api.intent_contract.classifier import IntentClassification
+        from archive.apps.api.intent_contract.schema import ExtractedFields
 
         entity_store = EntityStore()
         entity_store.add_event("event-456", {"name": "Test Event"})
@@ -419,8 +419,8 @@ class TestValidatorEntityReferences:
 
     def test_validator_checks_plan_id_optional_reference(self):
         """Validator requires plan_id to exist if provided in CREATE_TASK."""
-        from apps.api.intent_contract.classifier import IntentClassification
-        from apps.api.intent_contract.schema import ExtractedFields
+        from archive.apps.api.intent_contract.classifier import IntentClassification
+        from archive.apps.api.intent_contract.schema import ExtractedFields
 
         # Without plan_id → should pass
         classification = IntentClassification(
@@ -449,8 +449,8 @@ class TestValidatorEntityReferences:
 
     def test_validator_accepts_existing_plan(self):
         """Validator accepts UPDATE_PLAN with existing plan_id."""
-        from apps.api.intent_contract.classifier import IntentClassification
-        from apps.api.intent_contract.schema import ExtractedFields
+        from archive.apps.api.intent_contract.classifier import IntentClassification
+        from archive.apps.api.intent_contract.schema import ExtractedFields
 
         entity_store = EntityStore()
         entity_store.add_plan("plan-789", {"name": "Test Plan"})

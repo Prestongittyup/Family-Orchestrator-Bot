@@ -14,15 +14,17 @@ Tests for the Google Calendar OAuth flow:
 """
 from __future__ import annotations
 
+from datetime import UTC, datetime, timedelta
 import urllib.parse
 from unittest.mock import MagicMock
 
 import pytest
 from fastapi.testclient import TestClient
 
-from apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential
-from apps.api.integration_core.google_oauth_config import (
+from archive.apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential
+from archive.apps.api.integration_core.google_oauth_config import (
     CALENDAR_READONLY_SCOPE,
+    GMAIL_READONLY_SCOPE,
     GOOGLE_AUTH_URL,
     GoogleOAuthClientConfig,
     OAuthStateStore,
@@ -31,7 +33,7 @@ from apps.api.integration_core.google_oauth_config import (
     exchange_code_for_tokens,
     refresh_access_token,
 )
-from apps.api.integration_core.architecture_guard import FORBIDDEN_IMPORT_PREFIXES
+from archive.apps.api.integration_core.architecture_guard import FORBIDDEN_IMPORT_PREFIXES
 
 
 # ---------------------------------------------------------------------------
@@ -75,8 +77,8 @@ def _make_test_client(
     http_client: MagicMock | None = None,
 ) -> tuple[TestClient, InMemoryOAuthCredentialStore, OAuthStateStore]:
     """Build an isolated TestClient with injected dependencies."""
-    from apps.api import main
-    from apps.api.endpoints import integrations_router as ir
+    from archive.apps.api import main
+    from archive.apps.api.endpoints import integrations_router as ir
 
     creds = credential_store or InMemoryOAuthCredentialStore()
     states = state_store or OAuthStateStore()
@@ -86,6 +88,7 @@ def _make_test_client(
     main.app.dependency_overrides[ir.get_oauth_config] = lambda: TEST_CONFIG
     main.app.dependency_overrides[ir.get_credential_store] = lambda: creds
     main.app.dependency_overrides[ir.get_http_client] = lambda: http
+    main.app.dependency_overrides[ir.get_oauth_state_store] = lambda: states
 
     client = TestClient(main.app, raise_server_exceptions=True, follow_redirects=False)
     return client, creds, states
@@ -154,6 +157,46 @@ class TestOAuthStateStore:
         assert t1 != t2
         assert store.validate_and_consume(state=t1, user_id="alice") is True
         assert store.validate_and_consume(state=t2, user_id="bob") is True
+
+    def test_state_persists_across_store_restart_when_path_configured(self, tmp_path):
+        persistence_path = tmp_path / "oauth_state_store.json"
+        writer = OAuthStateStore(persistence_path=str(persistence_path), state_ttl_seconds=900)
+        token = writer.generate_state(
+            "persist-user",
+            redirect_base_url="http://127.0.0.1:5173",
+            household_id="hh-persist",
+        )
+
+        # Simulate process restart by constructing a fresh store from disk.
+        reader = OAuthStateStore(persistence_path=str(persistence_path), state_ttl_seconds=900)
+        context = reader.peek_context(token)
+        assert context is not None
+        assert context.user_id == "persist-user"
+        assert context.redirect_base_url == "http://127.0.0.1:5173"
+        assert context.household_id == "hh-persist"
+
+        consumed = reader.consume_state_context(token)
+        assert consumed is not None
+
+        # Ensure single-use semantics survive reload as well.
+        reloaded_reader = OAuthStateStore(persistence_path=str(persistence_path), state_ttl_seconds=900)
+        assert reloaded_reader.peek_context(token) is None
+
+    def test_processed_state_outcome_persists_across_store_restart(self, tmp_path):
+        persistence_path = tmp_path / "oauth_state_store.json"
+        writer = OAuthStateStore(persistence_path=str(persistence_path), state_ttl_seconds=900)
+        token = writer.generate_state("processed-user", household_id="hh-processed")
+        context = writer.consume_state_context(token)
+        assert context is not None
+
+        writer.record_processed_state(token, context, "success")
+
+        reader = OAuthStateStore(persistence_path=str(persistence_path), state_ttl_seconds=900)
+        processed = reader.peek_processed_state(token)
+        assert processed is not None
+        assert processed.outcome == "success"
+        assert processed.context.user_id == "processed-user"
+        assert processed.context.household_id == "hh-processed"
 
 
 # ===========================================================================
@@ -252,7 +295,7 @@ class TestExchangeCodeForTokens:
         assert result.refresh_token == "rt-xyz"
 
     def test_posts_to_google_token_url(self):
-        from apps.api.integration_core.google_oauth_config import GOOGLE_TOKEN_URL
+        from archive.apps.api.integration_core.google_oauth_config import GOOGLE_TOKEN_URL
         http = _mock_token_http()
         exchange_code_for_tokens(code="auth-code-003", config=TEST_CONFIG, http_client=http)
         call_args = http.post.call_args
@@ -273,6 +316,24 @@ class TestExchangeCodeForTokens:
         http.post.return_value = resp
         with pytest.raises(Exception):
             exchange_code_for_tokens(code="bad-code", config=TEST_CONFIG, http_client=http)
+
+    def test_http_error_includes_google_error_details(self):
+        http = MagicMock()
+        resp = MagicMock()
+        resp.status_code = 400
+        resp.raise_for_status.side_effect = RuntimeError("400 Bad Request")
+        resp.json.return_value = {
+            "error": "invalid_grant",
+            "error_description": "Bad Request",
+        }
+        http.post.return_value = resp
+
+        with pytest.raises(RuntimeError) as exc_info:
+            exchange_code_for_tokens(code="bad-code", config=TEST_CONFIG, http_client=http)
+
+        message = str(exc_info.value)
+        assert "google_token_exchange_failed" in message
+        assert "invalid_grant" in message
 
 
 class TestRefreshAccessToken:
@@ -305,7 +366,7 @@ class TestRefreshAccessToken:
 
 class TestConnectEndpoint:
     def setup_method(self):
-        from apps.api import main
+        from archive.apps.api import main
         self._app = main.app
 
     def teardown_method(self):
@@ -338,7 +399,35 @@ class TestConnectEndpoint:
             params={"code": "verify-code", "state": state_token, "user_id": USER_ID},
         )
         assert callback.status_code == 302, "valid state+user_id should redirect to UI"
-        assert callback.headers["location"].startswith("/?status=integration_successful")
+        callback_location = callback.headers["location"]
+        callback_params = urllib.parse.parse_qs(urllib.parse.urlparse(callback_location).query)
+        assert callback_params.get("status", [""])[0] == "integration_successful"
+
+    def test_callback_redirect_preserves_origin_and_household_id(self):
+        states = OAuthStateStore()
+        http = _mock_token_http()
+        client, _, _ = _make_test_client(state_store=states, http_client=http)
+        connect = client.get(
+            f"/integrations/google-calendar/connect/{USER_ID}",
+            params={
+                "return_base": "http://localhost:5173",
+                "household_id": "hh-redirect-123",
+            },
+        )
+        state_token = urllib.parse.parse_qs(urllib.parse.urlparse(connect.headers["location"]).query)["state"][0]
+
+        callback = client.get(
+            "/integrations/google-calendar/callback",
+            params={"code": "verify-code", "state": state_token, "user_id": USER_ID},
+        )
+        assert callback.status_code == 302
+        callback_location = callback.headers["location"]
+        parsed = urllib.parse.urlparse(callback_location)
+        callback_params = urllib.parse.parse_qs(parsed.query)
+        assert parsed.scheme == "http"
+        assert parsed.netloc == "localhost:5173"
+        assert callback_params.get("status", [""])[0] == "integration_successful"
+        assert callback_params.get("familyId", [""])[0] == "hh-redirect-123"
 
     def test_connect_url_has_readonly_scope(self):
         client, _, _ = _make_test_client()
@@ -347,8 +436,8 @@ class TestConnectEndpoint:
         assert "calendar.readonly" in location
 
     def test_connect_unconfigured_returns_structured_400(self):
-        from apps.api import main
-        from apps.api.endpoints import integrations_router as ir
+        from archive.apps.api import main
+        from archive.apps.api.endpoints import integrations_router as ir
         empty_config = GoogleOAuthClientConfig(client_id="", client_secret="", redirect_uri="")
         main.app.dependency_overrides[ir.get_oauth_config] = lambda: empty_config
         client = TestClient(main.app, raise_server_exceptions=True, follow_redirects=False)
@@ -382,7 +471,7 @@ class TestConnectEndpoint:
 
 class TestCallbackHappyPath:
     def setup_method(self):
-        from apps.api import main
+        from archive.apps.api import main
         self._app = main.app
 
     def teardown_method(self):
@@ -414,7 +503,8 @@ class TestCallbackHappyPath:
             "/integrations/google-calendar/callback",
             params={"code": "auth-code-ok", "state": state, "user_id": USER_ID},
         )
-        assert response.headers["location"].startswith("/?status=integration_successful")
+        callback_params = urllib.parse.parse_qs(urllib.parse.urlparse(response.headers["location"]).query)
+        assert callback_params.get("status", [""])[0] == "integration_successful"
 
     def test_callback_stores_credentials(self):
         states = OAuthStateStore()
@@ -500,12 +590,31 @@ class TestCallbackHappyPath:
             "/integrations/google-calendar/callback",
             params={"code": "code-1", "state": state, "user_id": USER_ID},
         )
-        # Second use with same state must fail
+        # Second use with same state should be idempotent redirect to success.
         response2 = client.get(
             "/integrations/google-calendar/callback",
             params={"code": "code-2", "state": state, "user_id": USER_ID},
         )
         assert response2.status_code == 302
+        assert "status=integration_successful" in str(response2.headers.get("location", ""))
+
+    def test_callback_accepts_signed_state_when_pending_store_is_cleared(self):
+        states = OAuthStateStore()
+        http = _mock_token_http()
+        client, creds, _ = _make_test_client(state_store=states, http_client=http)
+        state = self._do_connect_and_get_state(client, states)
+
+        # Simulate transient pending-store loss (e.g., reload between connect and callback).
+        states.clear()
+
+        response = client.get(
+            "/integrations/google-calendar/callback",
+            params={"code": "code-after-clear", "state": state, "user_id": USER_ID},
+        )
+        assert response.status_code == 302
+
+        stored = creds.get_credentials(user_id=USER_ID, provider_name="google_calendar")
+        assert stored is not None
 
 
 # ===========================================================================
@@ -515,7 +624,7 @@ class TestCallbackHappyPath:
 
 class TestStateMismatch:
     def setup_method(self):
-        from apps.api import main
+        from archive.apps.api import main
         self._app = main.app
 
     def teardown_method(self):
@@ -546,12 +655,62 @@ class TestStateMismatch:
             "/integrations/google-calendar/callback",
             params={"code": "code-fake", "state": "completely-made-up-state"},
         )
-        assert response.status_code == 302
+        assert response.status_code == 400
         stored = creds.get_credentials(
             user_id="completely-made-up-state",
             provider_name="google_calendar",
         )
-        assert stored is not None
+        assert stored is None
+
+
+# ===========================================================================
+# 7. Connection status endpoint
+# ===========================================================================
+
+
+class TestConnectionStatusEndpoint:
+    def setup_method(self):
+        from archive.apps.api import main
+        self._app = main.app
+
+    def teardown_method(self):
+        _teardown(self._app)
+
+    def test_status_returns_not_connected_when_missing_credentials(self):
+        creds = InMemoryOAuthCredentialStore()
+        client, _, _ = _make_test_client(credential_store=creds)
+
+        response = client.get("/integrations/google-calendar/status/status-user-1")
+
+        assert response.status_code == 200
+        payload = response.json()
+        assert payload["connected"] is False
+        assert payload["provider_name"] == "google_calendar"
+        assert payload["scopes"] == []
+        assert payload["expires_at"] is None
+
+    def test_status_returns_connected_with_metadata(self):
+        creds = InMemoryOAuthCredentialStore()
+        creds.save_credentials(
+            OAuthCredential(
+                user_id="status-user-2",
+                provider_name="google_calendar",
+                access_token="token",
+                refresh_token="refresh",
+                scopes=(CALENDAR_READONLY_SCOPE,),
+                expires_at=datetime.now(UTC) + timedelta(hours=1),
+            )
+        )
+
+        client, _, _ = _make_test_client(credential_store=creds)
+        response = client.get("/integrations/google-calendar/status/status-user-2")
+
+        assert response.status_code == 200
+        payload = response.json()
+        assert payload["connected"] is True
+        assert payload["provider_name"] == "google_calendar"
+        assert CALENDAR_READONLY_SCOPE in payload["scopes"]
+        assert isinstance(payload["expires_at"], str)
 
     def test_mismatch_error_message(self):
         states = OAuthStateStore()
@@ -575,6 +734,133 @@ class TestStateMismatch:
         )
         stored = creds.get_credentials(user_id=USER_ID, provider_name="google_calendar")
         assert stored is None
+
+
+class TestGoogleEmailSyncEndpoint:
+    def setup_method(self):
+        from archive.apps.api import main
+        self._app = main.app
+
+    def teardown_method(self):
+        _teardown(self._app)
+
+    def test_sync_requires_connected_google_credentials(self):
+        creds = InMemoryOAuthCredentialStore()
+        client, _, _ = _make_test_client(credential_store=creds)
+
+        response = client.post(
+            "/integrations/google-email/sync/no-creds-user",
+            params={"household_id": "hh-sync"},
+        )
+
+        assert response.status_code == 404
+        payload = response.json()
+        assert payload["detail"]["message"] == "google_calendar_not_connected"
+
+    def test_sync_ingests_gmail_messages_with_household_override(self, monkeypatch):
+        from archive.apps.api.endpoints import integrations_router as ir
+
+        creds = InMemoryOAuthCredentialStore()
+        creds.save_credentials(
+            OAuthCredential(
+                user_id="sync-user",
+                provider_name="google_calendar",
+                access_token="google-access-token",
+                refresh_token="google-refresh-token",
+                scopes=(CALENDAR_READONLY_SCOPE,),
+                expires_at=datetime.now(UTC) + timedelta(hours=1),
+            )
+        )
+
+        list_response = MagicMock()
+        list_response.raise_for_status = MagicMock()
+        list_response.json.return_value = {
+            "messages": [
+                {"id": "gmail-msg-001"},
+            ]
+        }
+
+        detail_response = MagicMock()
+        detail_response.raise_for_status = MagicMock()
+        detail_response.json.return_value = {
+            "id": "gmail-msg-001",
+            "snippet": "Please sign and return the permission form.",
+            "internalDate": "1777255800000",
+            "payload": {
+                "headers": [
+                    {"name": "From", "value": "alerts@school.test"},
+                    {"name": "To", "value": "family@example.test"},
+                    {"name": "Subject", "value": "Permission Slip Reminder"},
+                ]
+            },
+        }
+
+        http = MagicMock()
+        http.get.side_effect = [list_response, detail_response]
+
+        captured: dict[str, str] = {}
+
+        def _fake_ingest_email(**kwargs):
+            captured.update({
+                "email_id": str(kwargs.get("email_id", "")),
+                "household_id": str(kwargs.get("household_id", "")),
+                "provider": str(kwargs.get("provider", "")),
+            })
+            return {"status": "success", "event_id": "evt-gmail-001"}
+
+        monkeypatch.setattr(ir, "ingest_email", _fake_ingest_email)
+
+        client, _, _ = _make_test_client(credential_store=creds, http_client=http)
+        response = client.post(
+            "/integrations/google-email/sync/sync-user",
+            params={"household_id": "hh-sync-123", "max_results": 5},
+        )
+
+        assert response.status_code == 200
+        payload = response.json()
+        assert payload["provider"] == "gmail"
+        assert payload["processed_count"] == 1
+        assert payload["failed_count"] == 0
+        assert captured["email_id"] == "gmail-msg-001"
+        assert captured["household_id"] == "hh-sync-123"
+        assert captured["provider"] == "gmail"
+
+    def test_sync_returns_reconnect_hint_when_gmail_scope_missing(self):
+        creds = InMemoryOAuthCredentialStore()
+        creds.save_credentials(
+            OAuthCredential(
+                user_id="scope-user",
+                provider_name="google_calendar",
+                access_token="google-access-token",
+                refresh_token="google-refresh-token",
+                scopes=(CALENDAR_READONLY_SCOPE,),
+                expires_at=datetime.now(UTC) + timedelta(hours=1),
+            )
+        )
+
+        list_response = MagicMock()
+        list_response.status_code = 403
+        list_response.raise_for_status.side_effect = RuntimeError("403 Forbidden")
+        list_response.json.return_value = {
+            "error": {
+                "message": "Request had insufficient authentication scopes.",
+                "status": "PERMISSION_DENIED",
+            }
+        }
+
+        http = MagicMock()
+        http.get.return_value = list_response
+
+        client, _, _ = _make_test_client(credential_store=creds, http_client=http)
+        response = client.post(
+            "/integrations/google-email/sync/scope-user",
+            params={"household_id": "hh-sync-123"},
+        )
+
+        assert response.status_code == 412
+        payload = response.json()
+        assert payload["detail"]["message"] == "gmail_scope_or_token_invalid"
+        assert payload["detail"]["detail"]["required_scope"] == GMAIL_READONLY_SCOPE
 
 
 # ===========================================================================
@@ -605,7 +891,7 @@ class TestDeterminism:
         assert stored.access_token == "det-at"
         assert stored.refresh_token == "det-rt"
 
-        from apps.api import main
+        from archive.apps.api import main
         _teardown(main.app)
 
     def test_callback_response_html_is_stable(self):
@@ -628,7 +914,7 @@ class TestDeterminism:
         r2 = _run()
         assert r1 == r2
 
-        from apps.api import main
+        from archive.apps.api import main
         _teardown(main.app)
 
 

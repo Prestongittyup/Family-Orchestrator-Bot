@@ -3,9 +3,9 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
-from apps.api.endpoints import brief_endpoint
-from apps.api.endpoints.brief_invariants_v1 import validate_brief_v1
-from apps.api.endpoints.brief_renderer_v1 import render_brief_v1
+from archive.apps.api.endpoints import brief_endpoint
+from archive.apps.api.endpoints.brief_invariants_v1 import validate_brief_v1
+from archive.apps.api.endpoints.brief_renderer_v1 import render_brief_v1
 
 
 def _sample_brief_v1() -> dict[str, Any]:

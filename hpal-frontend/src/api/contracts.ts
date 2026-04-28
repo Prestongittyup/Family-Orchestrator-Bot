@@ -52,12 +52,90 @@ export interface CalendarState {
   events: CalendarEventSummary[];
 }
 
+export interface PantryInventoryItem {
+  name: string;
+  quantity: number;
+  unit: string;
+  status: "in_stock" | "low" | "out_of_stock";
+}
+
+export interface PantryIngredientRequirement {
+  item: string;
+  quantity: number;
+  unit: string;
+}
+
+export interface PantryRecipeSuggestion {
+  day: string;
+  date: string;
+  recipe_name: string;
+  meal_type: string;
+  servings: number;
+  recipe_source?: string | null;
+  recipe_url?: string | null;
+  ingredient_requirements: PantryIngredientRequirement[];
+  ingredients_used: string[];
+  missing_ingredients: string[];
+  nutrition_balance: string[];
+  inventory_match_score: number;
+}
+
+export interface PantryState {
+  low_stock_count: number;
+  inventory_items: PantryInventoryItem[];
+  weekly_recipe_suggestions: PantryRecipeSuggestion[];
+  grocery_recommendations: string[];
+}
+
 export interface Notification {
   notification_id: string;
   title: string;
   message: string;
   level: "info" | "warning" | "critical";
   related_entity?: string | null;
+}
+
+export interface EmailDetailActionItem {
+  title: string;
+  details?: string;
+  importance_score?: number;
+  importance_bucket?: string;
+  due_hint?: string | null;
+  due_hint_local?: string | null;
+}
+
+export interface EmailDetailCalendarCandidate {
+  title: string;
+  time_hint?: string | null;
+  time_hint_local?: string | null;
+  confidence?: number;
+}
+
+export interface EmailDetail {
+  email_id: string;
+  subject: string;
+  sender: string;
+  recipient: string;
+  provider: string;
+  received_at: string;
+  summary: string;
+  importance_score: number;
+  importance_bucket: string;
+  junk_score: number;
+  triage_decision: string;
+  is_junk: boolean;
+  processing_status?: string | null;
+  task_id?: string | null;
+  task_title?: string | null;
+  priority?: string | null;
+  calendar_event_id?: string | null;
+  action_items: EmailDetailActionItem[];
+  calendar_candidates: EmailDetailCalendarCandidate[];
+  informational_items: EmailDetailActionItem[];
+  body_excerpt: string;
+  body: string;
+  parsed_event_id: string;
+  received_event_id: string;
 }
 
 export interface XAIExplanationSummary {
@@ -91,6 +169,7 @@ export interface UIBootstrapState {
   active_plans: PlanSummary[];
   task_board: TaskBoardState;
   calendar: CalendarState;
+  pantry?: PantryState;
   notifications: Notification[];
   explanation_digest: XAIExplanationSummary[];
   system_health: SystemHealthSnapshot;

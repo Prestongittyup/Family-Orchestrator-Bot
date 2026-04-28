@@ -7,8 +7,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from apps.api.integration_core.models.household_state import HouseholdState
-from apps.assistant_core.meal_planner import default_inventory, default_recipe_history
+from archive.apps.api.integration_core.models.household_state import HouseholdState
+from archive.apps.assistant_core.meal_planner import default_inventory, default_recipe_history
 from household_os.core.lifecycle_state import (
     LifecycleState,
     assert_lifecycle_state,

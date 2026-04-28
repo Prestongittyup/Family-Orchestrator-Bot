@@ -56,11 +56,11 @@ def print_test(test_name: str, result: bool, details: str = ""):
 def verify_imports() -> bool:
     """TEST 1.1 - System imports without errors"""
     try:
-        from apps.api.services.task_service import create_task
-        from apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
-        from apps.api.services.shared_dependencies import get_til
-        from apps.api.services.calendar_service import schedule_event
-        from apps.api.modules.email.email_service import handle_email_received
+        from archive.apps.api.services.task_service import create_task
+        from archive.apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
+        from archive.apps.api.services.shared_dependencies import get_til
+        from archive.apps.api.services.calendar_service import schedule_event
+        from archive.apps.api.modules.email.email_service import handle_email_received
         logger.info("✓ All critical imports successful")
         return True
     except ImportError as e:
@@ -70,8 +70,8 @@ def verify_imports() -> bool:
 def verify_task_api_response() -> bool:
     """TEST 1.2 - Task API can create tasks successfully"""
     try:
-        from apps.api.services.task_service import create_task
-        from apps.api.core.database import SessionLocal
+        from archive.apps.api.services.task_service import create_task
+        from archive.apps.api.core.database import SessionLocal
         
         # Attempt task creation
         task = create_task(
@@ -98,7 +98,7 @@ def verify_task_api_response() -> bool:
 def verify_no_schema_changes() -> bool:
     """TEST 1.3 - No schema breaking changes"""
     try:
-        from apps.api.models.task import Task
+        from archive.apps.api.models.task import Task
         from sqlalchemy.inspection import inspect
         
         # Get DB columns (schema definition)
@@ -126,7 +126,7 @@ def verify_no_schema_changes() -> bool:
 def verify_metadata_enrichment() -> bool:
     """TEST 2 - Metadata enrichment on all tasks"""
     try:
-        from apps.api.services.task_service import create_task
+        from archive.apps.api.services.task_service import create_task
         
         # Create multiple tasks to ensure consistent metadata
         tasks = []
@@ -163,8 +163,8 @@ def verify_metadata_enrichment() -> bool:
 def verify_failover_safety() -> bool:
     """TEST 3 - TIL failure does NOT break task creation"""
     try:
-        from apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
-        from apps.api.services.shared_dependencies import get_til
+        from archive.apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
+        from archive.apps.api.services.shared_dependencies import get_til
         
         til = get_til()
         
@@ -204,7 +204,7 @@ def verify_failover_safety() -> bool:
 def verify_task_creation_with_til_disabled() -> bool:
     """TEST 3.2 - Task creation succeeds even with TIL returning defaults"""
     try:
-        from apps.api.services.task_service import create_task
+        from archive.apps.api.services.task_service import create_task
         
         # Create task (TIL will use safe defaults internally if any issue)
         task = create_task(
@@ -231,8 +231,8 @@ def verify_isolation_guarantee() -> bool:
     import inspect
     
     try:
-        from apps.api.services.calendar_service import schedule_event, create_recurring_event
-        from apps.api.modules.email.email_service import handle_email_received
+        from archive.apps.api.services.calendar_service import schedule_event, create_recurring_event
+        from archive.apps.api.modules.email.email_service import handle_email_received
         
         # Verify Calendar Service functions exist and are callable
         calendar_ok = (
@@ -303,7 +303,7 @@ def verify_async_pipeline_unchanged() -> bool:
     """TEST 4.3 - Async pipeline remains unchanged"""
     try:
         # Import and verify async components still exist
-        from apps.api.services.task_service import create_task, set_job_status
+        from archive.apps.api.services.task_service import create_task, set_job_status
         
         # Verify function signatures unchanged
         import inspect

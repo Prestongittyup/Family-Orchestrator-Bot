@@ -5,8 +5,8 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 from assistant.governance.output_governor import OutputGovernor
-from apps.api.main import app
-from apps.assistant_core.planning_engine import _fallback_household_state
+from archive.apps.api.main import app
+from archive.apps.assistant_core.planning_engine import _fallback_household_state
 from household_os.core.decision_engine import HouseholdOSDecisionEngine
 from household_os.core.household_state_graph import HouseholdStateGraphStore
 from household_os.runtime.orchestrator import HouseholdOSOrchestrator
@@ -31,7 +31,7 @@ def _runtime_response_for(query: str, household_id: str = "governor-household"):
 
 
 def _test_client_with_temp_runtime_store(tmp_path):
-    import apps.api.assistant_runtime_router as assistant_runtime_router
+    import archive.apps.api.assistant_runtime_router as assistant_runtime_router
 
     store = HouseholdStateGraphStore(graph_path=Path(tmp_path) / "output_governor_graph.json")
     assistant_runtime_router.runtime_orchestrator = HouseholdOSOrchestrator(state_store=store)

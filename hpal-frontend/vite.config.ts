@@ -7,18 +7,25 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+const apiBaseUrl = process.env.VITE_API_BASE_URL || "http://localhost:8000";
+const proxyTarget = process.env.VITE_PROXY_TARGET || apiBaseUrl;
+
 export default defineConfig({
   plugins: [react()],
   server: {
     host: "localhost",
     port: 5173,
     strictPort: false,
-    open: true,
+    open: false,
     proxy: {
       "/api": {
-        target: process.env.VITE_API_BASE_URL || "http://localhost:8000",
+        target: proxyTarget,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+      "/contracts": {
+        target: proxyTarget,
+        changeOrigin: true,
       },
     },
   },
@@ -30,7 +37,7 @@ export default defineConfig({
   },
   define: {
     "process.env.VITE_API_BASE_URL": JSON.stringify(
-      process.env.VITE_API_BASE_URL || "http://localhost:8000"
+      apiBaseUrl
     ),
   },
 });

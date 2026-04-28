@@ -26,7 +26,7 @@ def test_task_creation_with_til_metadata() -> bool:
     """TEST 1: Tasks now have TIL-derived scheduling metadata."""
     test_name = "TEST 1 - Task Creation with TIL Metadata"
     try:
-        from apps.api.services.task_service import create_task
+        from archive.apps.api.services.task_service import create_task
 
         task = create_task(
             household_id="test-hh-upgrade",
@@ -73,9 +73,9 @@ def test_metadata_not_in_db() -> bool:
     """TEST 2: Metadata is NOT persisted to database (Python attribute only)."""
     test_name = "TEST 2 - Metadata Not Persisted to DB"
     try:
-        from apps.api.services.task_service import create_task, set_job_status
-        from apps.api.core.database import SessionLocal
-        from apps.api.models.task import Task
+        from archive.apps.api.services.task_service import create_task, set_job_status
+        from archive.apps.api.core.database import SessionLocal
+        from archive.apps.api.models.task import Task
 
         # Create a task with metadata
         task1 = create_task(
@@ -165,7 +165,7 @@ def test_no_schema_changes() -> bool:
     """TEST 5: No DB schema changes."""
     test_name = "TEST 5 - No DB Schema Changes"
     try:
-        from apps.api.models.task import Task
+        from archive.apps.api.models.task import Task
         import inspect
 
         # Get Task columns from SQLAlchemy
@@ -258,10 +258,10 @@ def test_system_imports_and_runs() -> bool:
     """TEST 8: Full system still imports and runs."""
     test_name = "TEST 8 - System Import and Runtime"
     try:
-        from apps.api import main
-        from apps.api.services.task_service import create_task
-        from apps.api.services.calendar_service import schedule_event
-        from apps.api.modules.email.email_service import handle_email_received
+        from archive.apps.api import main
+        from archive.apps.api.services.task_service import create_task
+        from archive.apps.api.services.calendar_service import schedule_event
+        from archive.apps.api.modules.email.email_service import handle_email_received
 
         logger.info(f"✔ {test_name} PASS (system imports and functional)")
         return True

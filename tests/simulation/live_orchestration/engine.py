@@ -5,6 +5,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from artifact_paths import artifact_write_path
 from tests.simulation.live_orchestration.brief_tracker import (
     build_brief_evolution,
     evaluate_live_assertions,
@@ -98,7 +99,7 @@ def run_live_simulation(
     }
 
     if persist:
-        Path("simulation_results.json").write_text(
+        artifact_write_path("simulation_results.json").write_text(
             json.dumps(result, indent=2),
             encoding="utf-8",
         )

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import pytest
 from fastapi.testclient import TestClient
 
-from apps.api.main import app
-from apps.api.integration_core.models.household_state import CalendarEvent
-from apps.assistant_core.planning_engine import _fallback_household_state
+from archive.apps.api.main import app
+from archive.apps.api.integration_core.models.household_state import CalendarEvent
+from archive.apps.assistant_core.planning_engine import _fallback_household_state
 from household_os.core.decision_engine import HouseholdOSDecisionEngine
 from household_os.core.household_state_graph import HouseholdStateGraphStore
 
@@ -176,3 +177,114 @@ def test_household_os_deterministic_output():
     # Structure should be consistent (not necessarily identical ids/timestamps)
     assert response1.intent_interpretation.summary == response2.intent_interpretation.summary
     assert response1.recommended_action.urgency == response2.recommended_action.urgency
+
+
+def test_household_os_preserves_explicit_requested_appointment_time():
+    store = HouseholdStateGraphStore()
+    state = _fallback_household_state("household-os-explicit-time")
+    query = "lets create a calender event for 4/26/26 at 2:00pm"
+
+    graph = store.refresh_graph(
+        household_id="household-os-explicit-time",
+        state=state,
+        query=query,
+        fitness_goal=None,
+    )
+
+    response = HouseholdOSDecisionEngine().run(
+        household_id="household-os-explicit-time",
+        query=query,
+        graph=graph,
+        request_id="explicit-time-req",
+    )
+
+    assert response.recommended_action.scheduled_for == "2026-04-26 14:00-14:45"
+    assert response.recommended_action.title == "Schedule appointment for 2026-04-26 14:00-14:45"
+    assert "requested time" in response.recommended_action.description.lower()
+
+
+def test_household_os_preserves_explicit_requested_time_without_year():
+    store = HouseholdStateGraphStore()
+    state = _fallback_household_state("household-os-explicit-time-no-year")
+    query = "lets create a calendar event for 4/26 at 2pm"
+
+    graph = store.refresh_graph(
+        household_id="household-os-explicit-time-no-year",
+        state=state,
+        query=query,
+        fitness_goal=None,
+    )
+
+    response = HouseholdOSDecisionEngine().run(
+        household_id="household-os-explicit-time-no-year",
+        query=query,
+        graph=graph,
+        request_id="explicit-time-no-year-req",
+    )
+
+    assert response.recommended_action.scheduled_for == "2026-04-26 14:00-14:45"
+
+
+def test_household_os_maps_relative_daypart_to_requested_slot():
+    store = HouseholdStateGraphStore()
+    state = _fallback_household_state("household-os-relative-daypart")
+    query = "schedule a calendar event tomorrow afternoon"
+
+    graph = store.refresh_graph(
+        household_id="household-os-relative-daypart",
+        state=state,
+        query=query,
+        fitness_goal=None,
+    )
+
+    response = HouseholdOSDecisionEngine().run(
+        household_id="household-os-relative-daypart",
+        query=query,
+        graph=graph,
+        request_id="relative-daypart-req",
+    )
+
+    assert response.recommended_action.scheduled_for == "2026-04-20 14:00-14:45"
+
+
+def test_household_os_rejects_empty_allowed_domains() -> None:
+    store = HouseholdStateGraphStore()
+    state = _fallback_household_state("household-os-empty-domains")
+
+    graph = store.refresh_graph(
+        household_id="household-os-empty-domains",
+        state=state,
+        query="what should i cook tonight",
+        fitness_goal=None,
+    )
+
+    with pytest.raises(ValueError, match="allowed_domains"):
+        HouseholdOSDecisionEngine().run(
+            household_id="household-os-empty-domains",
+            query="what should i cook tonight",
+            graph=graph,
+            request_id="empty-domains-req",
+            allowed_domains=[],
+        )
+
+
+def test_household_os_meal_schedule_uses_reference_date() -> None:
+    store = HouseholdStateGraphStore()
+    state = _fallback_household_state("household-os-meal-date")
+    state.metadata["reference_time"] = "2026-04-23T09:00:00Z"
+
+    graph = store.refresh_graph(
+        household_id="household-os-meal-date",
+        state=state,
+        query="what should i cook tonight",
+        fitness_goal=None,
+    )
+
+    response = HouseholdOSDecisionEngine().run(
+        household_id="household-os-meal-date",
+        query="what should i cook tonight",
+        graph=graph,
+        request_id="meal-date-req",
+    )
+
+    assert response.recommended_action.scheduled_for == "2026-04-23 18:30-19:15"

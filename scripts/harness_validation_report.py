@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from apps.api.main import create_app
+from archive.apps.api.main import create_app
 
 
 def extract_registered_endpoints() -> list[dict[str, str]]:

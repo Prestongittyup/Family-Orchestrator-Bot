@@ -61,7 +61,7 @@ def test_1_scheduling_logic_removal() -> bool:
 
 def test_2_til_dependency_enforcement() -> bool:
     """All event creation paths call estimate_duration/suggest_time_slot/check_availability."""
-    from apps.api.services import calendar_service
+    from archive.apps.api.services import calendar_service
 
     src = inspect.getsource(calendar_service)
 
@@ -83,7 +83,7 @@ def test_2_til_dependency_enforcement() -> bool:
 
 def test_3_behavioral_stability() -> bool:
     """Events still created, persisted, and signatures remain compatible."""
-    from apps.api.services.calendar_service import schedule_event, create_recurring_event
+    from archive.apps.api.services.calendar_service import schedule_event, create_recurring_event
 
     # Signature compatibility check (no API-breaking removals)
     sig_schedule = inspect.signature(schedule_event)
@@ -121,7 +121,7 @@ def test_3_behavioral_stability() -> bool:
 
 def test_4_fallback_safety() -> bool:
     """If TIL reports unavailable, service must still schedule via fallback slot."""
-    from apps.api.services.calendar_service import schedule_event
+    from archive.apps.api.services.calendar_service import schedule_event
 
     class FakeTIL:
         def __init__(self) -> None:

@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import re
 
-from apps.api.core.database import SessionLocal
-from apps.api.models.task import Task
+from archive.apps.api.core.database import SessionLocal
+from archive.apps.api.models.task import Task
 from modules.core.models.module_output import ModuleOutput, Proposal, Signal
 
 

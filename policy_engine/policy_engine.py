@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from artifact_paths import artifact_read_path
 from policy_engine.contracts import HouseholdMemorySnapshot, PolicySuggestion, PolicySummaryResponse
 from policy_engine.itinerary_generator import generate_daily_itinerary
 from policy_engine.memory_store import PolicyMemoryStore
@@ -18,7 +19,7 @@ class PolicyRecommendationEngine:
         self.memory_store = PolicyMemoryStore(self.root_path)
 
     def _load_json(self, file_name: str) -> dict:
-        return json.loads((self.root_path / file_name).read_text(encoding="utf-8"))
+        return json.loads(artifact_read_path(file_name).read_text(encoding="utf-8"))
 
     def build_policy_summary(self, memory_snapshot: HouseholdMemorySnapshot | None = None) -> PolicySummaryResponse:
         memory_snapshot = memory_snapshot or self.memory_store.load_or_build_memory_snapshot()

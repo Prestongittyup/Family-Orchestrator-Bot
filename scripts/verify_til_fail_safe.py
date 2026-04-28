@@ -23,7 +23,7 @@ def test_check_availability_never_raises() -> bool:
     """TEST 1: check_availability never raises exceptions."""
     test_name = "TEST 1 - check_availability Never Raises"
     try:
-        from apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
+        from archive.apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
 
         til = TemporalIntelligenceLayer()
 
@@ -50,7 +50,7 @@ def test_suggest_time_slot_never_raises() -> bool:
     """TEST 2: suggest_time_slot never raises exceptions."""
     test_name = "TEST 2 - suggest_time_slot Never Raises"
     try:
-        from apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
+        from archive.apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
 
         til = TemporalIntelligenceLayer()
 
@@ -79,7 +79,7 @@ def test_estimate_duration_never_raises() -> bool:
     """TEST 3: estimate_duration never raises exceptions."""
     test_name = "TEST 3 - estimate_duration Never Raises"
     try:
-        from apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
+        from archive.apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
 
         til = TemporalIntelligenceLayer()
 
@@ -115,7 +115,7 @@ def test_suggest_time_slot_with_invalid_duration() -> bool:
     """TEST 4: suggest_time_slot handles invalid duration gracefully."""
     test_name = "TEST 4 - suggest_time_slot with Invalid Duration"
     try:
-        from apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
+        from archive.apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
 
         til = TemporalIntelligenceLayer()
 
@@ -137,7 +137,7 @@ def test_estimate_duration_with_invalid_payload() -> bool:
     """TEST 5: estimate_duration handles invalid payload gracefully."""
     test_name = "TEST 5 - estimate_duration with Invalid Payload"
     try:
-        from apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
+        from archive.apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
 
         til = TemporalIntelligenceLayer()
 
@@ -165,7 +165,7 @@ def test_task_service_with_til_fail_safe() -> bool:
     """TEST 6: Task Service benefits from TIL fail-safe behavior."""
     test_name = "TEST 6 - Task Service with TIL Fail-Safe"
     try:
-        from apps.api.services.task_service import create_task
+        from archive.apps.api.services.task_service import create_task
 
         # Create a task - should succeed regardless of TIL behavior
         task = create_task("hh-fail-safe", "Task with TIL Fail-Safe")

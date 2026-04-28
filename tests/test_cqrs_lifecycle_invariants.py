@@ -17,7 +17,7 @@ from typing import Any
 
 import pytest
 
-from apps.api.core.state_machine import (
+from archive.apps.api.core.state_machine import (
     StateMachine,
     ALLOWED_TRANSITIONS,
     validate_transition,
@@ -376,7 +376,7 @@ def test_validate_transition_is_authoritative():
     Verify validate_transition() function is the only validator.
     No other validation logic should duplicate transition rules.
     """
-    from apps.api.core.state_machine import validate_transition
+    from archive.apps.api.core.state_machine import validate_transition
 
     # The function must validate using ALLOWED_TRANSITIONS
     source = inspect.getsource(validate_transition)

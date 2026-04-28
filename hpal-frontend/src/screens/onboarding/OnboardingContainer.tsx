@@ -9,12 +9,52 @@ import { WelcomeScreen } from "./WelcomeScreen";
 import { HouseholdSetupScreen } from "./HouseholdSetupScreen";
 import { RoleSelectionScreen } from "./RoleSelectionScreen";
 import { DeviceSetupScreen } from "./DeviceSetupScreen";
-import { PushNotificationManager } from "../../runtime/pushNotifications";
+import { pushNotificationManager } from "../../runtime/pushNotifications";
+import { buildApiUrl, fetchWithApiFallback } from "../../api/network";
 import type { OnboardingState } from "../../runtime/onboarding";
 
-const API_BASE_URL =
-  (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
-  "http://localhost:8000";
+const makeIdempotencyKey = (scope: string): string => {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return `${scope}-${crypto.randomUUID()}`;
+  }
+  return `${scope}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+};
+
+const parseResponseDetail = async (response: Response): Promise<string> => {
+  try {
+    const payload = (await response.clone().json()) as {
+      detail?: unknown;
+      error?: unknown;
+      error_code?: unknown;
+    };
+    if (typeof payload.detail === "string") {
+      return payload.detail;
+    }
+    if (typeof payload.error === "string") {
+      return payload.error;
+    }
+    if (typeof payload.error_code === "string") {
+      return payload.error_code;
+    }
+  } catch {
+    // Ignore JSON parse errors; fallback to text.
+  }
+
+  try {
+    const text = await response.clone().text();
+    return text.trim();
+  } catch {
+    return "";
+  }
+};
+
+const buildCreateHouseholdBody = (state: OnboardingState, includeFounderEmail: boolean): string =>
+  JSON.stringify({
+    name: state.householdName,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+    founder_user_name: state.founderName,
+    founder_email: includeFounderEmail ? state.founderEmail || undefined : undefined,
+  });
 
 interface OnboardingContainerProps {
   onComplete: () => void;
@@ -27,9 +67,8 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
   onComplete,
 }) => {
   const [state, setState] = useState<OnboardingState>(onboardingFlow.getState());
+  const [uiError, setUiError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-
-  const pushManager = PushNotificationManager.getInstance();
 
   // Subscribe to onboarding state changes
   useEffect(() => {
@@ -40,12 +79,20 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (state.step === "complete") {
+      onComplete();
+    }
+  }, [state.step, onComplete]);
+
   // Handle welcome screen selection
   const handleCreateHousehold = () => {
+    setUiError(null);
     onboardingFlow.selectCreateHousehold();
   };
 
   const handleJoinHousehold = () => {
+    setUiError(null);
     onboardingFlow.selectJoinHousehold("");
   };
 
@@ -63,23 +110,52 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
   };
 
   const handleHouseholdSetupNext = async () => {
+    if (isProcessing) {
+      return;
+    }
+
     try {
+      setUiError(null);
       setIsProcessing(true);
 
       // 1) Create household + founder user (server authoritative)
-      const response = await fetch(`${API_BASE_URL}/v1/identity/household/create`, {
+      const createKey = makeIdempotencyKey("household-create");
+      let response = await fetchWithApiFallback("/v1/identity/household/create", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: state.householdName,
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
-          founder_user_name: state.founderName,
-          founder_email: state.founderEmail || undefined,
-        }),
+        headers: {
+          "Content-Type": "application/json",
+          "x-idempotency-key": createKey,
+        },
+        body: buildCreateHouseholdBody(state, true),
       });
 
+      // Founder emails are globally unique; if email already exists, retry once without email.
+      if (!response.ok && response.status === 400 && state.founderEmail) {
+        const detail = await parseResponseDetail(response);
+        if (detail.includes("founder_email_already_exists")) {
+          const fallbackCreateKey = makeIdempotencyKey("household-create-no-email");
+          response = await fetchWithApiFallback("/v1/identity/household/create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-idempotency-key": fallbackCreateKey,
+            },
+            body: buildCreateHouseholdBody(state, false),
+          });
+        }
+      }
+
       if (!response.ok) {
-        throw new Error("Failed to create household");
+        const detail = await parseResponseDetail(response);
+        if (response.status === 409 && detail.includes("duplicate_request")) {
+          throw new Error("Duplicate request detected. Please press Continue once after a short pause.");
+        }
+        if (response.status === 400 && detail.includes("founder_email_already_exists")) {
+          throw new Error("That email is already linked to another account. Try a different email or leave email blank.");
+        }
+        throw new Error(
+          `Failed to create household (HTTP ${response.status})${detail ? `: ${detail}` : ""}`
+        );
       }
 
       const data = await response.json();
@@ -90,17 +166,24 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
       }
 
       localStorage.setItem("hpal-household-id", householdId);
+      localStorage.setItem(
+        "hpal-household-name",
+        (typeof data.household?.name === "string" && data.household.name.trim())
+          ? data.household.name
+          : state.householdName,
+      );
       localStorage.setItem("hpal-user-id", founderUserId);
       localStorage.setItem("hpal-auth-name", state.founderName);
-      if (state.founderEmail) {
-        localStorage.setItem("hpal-auth-email", state.founderEmail);
+      if (typeof data.founder_user?.email === "string" && data.founder_user.email) {
+        localStorage.setItem("hpal-auth-email", data.founder_user.email);
       }
 
       // Move to role selection
       onboardingFlow.selectRole("ADULT");
     } catch (error) {
       console.error("Household creation failed:", error);
-      // Show error to user - TODO: add error toast
+      const message = error instanceof Error ? error.message : "Failed to create household";
+      setUiError(message);
     } finally {
       setIsProcessing(false);
     }
@@ -116,11 +199,28 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
     onboardingFlow.setDeviceName(name);
   };
 
+  const handleConnectGoogleAccount = () => {
+    const userId = localStorage.getItem("hpal-user-id");
+    if (!userId) {
+      setUiError("Complete household creation first so we can link the right Google account.");
+      return;
+    }
+
+    const householdId = localStorage.getItem("hpal-household-id") || "";
+    const returnBase = window.location.origin;
+    const encodedUser = encodeURIComponent(userId);
+    const query = new URLSearchParams({
+      return_base: returnBase,
+      household_id: householdId,
+    }).toString();
+    window.location.href = buildApiUrl(`/integrations/google-calendar/connect/${encodedUser}?${query}`);
+  };
+
   const handleRequestPermissions = async (): Promise<boolean> => {
     try {
       const householdId = localStorage.getItem("hpal-household-id") || "family-1";
       const userId = localStorage.getItem("hpal-user-id") || "user-admin";
-      const permission = await pushManager.requestPermission(householdId, userId);
+      const permission = await pushNotificationManager.requestPermission(householdId, userId);
       return permission === "granted";
     } catch (error) {
       console.error("Permission request failed:", error);
@@ -129,7 +229,12 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
   };
 
   const handleDeviceSetupComplete = async () => {
+    if (isProcessing) {
+      return;
+    }
+
     try {
+      setUiError(null);
       setIsProcessing(true);
 
       const householdId = localStorage.getItem("hpal-household-id");
@@ -144,10 +249,14 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
         : /android/i.test(navigator.userAgent)
         ? "Android"
         : "Web";
+      const deviceRegisterKey = makeIdempotencyKey("device-register");
 
-      const deviceResponse = await fetch(`${API_BASE_URL}/v1/identity/device/register`, {
+      const deviceResponse = await fetchWithApiFallback("/v1/identity/device/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-idempotency-key": deviceRegisterKey,
+        },
         body: JSON.stringify({
           household_id: householdId,
           user_id: userId,
@@ -158,7 +267,7 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
       });
 
       if (!deviceResponse.ok) {
-        throw new Error("Failed to register device");
+        throw new Error(`Failed to register device (HTTP ${deviceResponse.status})`);
       }
 
       const deviceData = await deviceResponse.json();
@@ -169,9 +278,13 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
       localStorage.setItem("hpal-device-id", deviceId);
 
       // 3) Bootstrap identity to establish server-issued session token
-      const bootstrapResponse = await fetch(`${API_BASE_URL}/v1/identity/bootstrap`, {
+      const bootstrapKey = makeIdempotencyKey("identity-bootstrap");
+      const bootstrapResponse = await fetchWithApiFallback("/v1/identity/bootstrap", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-idempotency-key": bootstrapKey,
+        },
         body: JSON.stringify({
           household_id: householdId,
           user_id: userId,
@@ -179,7 +292,7 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
         }),
       });
       if (!bootstrapResponse.ok) {
-        throw new Error("Failed to establish session");
+        throw new Error(`Failed to establish session (HTTP ${bootstrapResponse.status})`);
       }
 
       const bootstrap = await bootstrapResponse.json();
@@ -191,9 +304,9 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
       localStorage.setItem("hpal-role", bootstrap.identity_context?.user_role || "ADULT");
 
       // Subscribe to push notifications if user granted permission
-      const permission = pushManager.getPermissionStatus();
+      const permission = pushNotificationManager.getPermissionStatus();
       if (permission === "granted") {
-        await pushManager.subscribeAndRegister(householdId, userId);
+        await pushNotificationManager.subscribeAndRegister(householdId, userId);
       }
 
       // Complete onboarding
@@ -201,7 +314,8 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
       onComplete();
     } catch (error) {
       console.error("Device setup failed:", error);
-      // Show error to user - TODO: add error toast
+      const message = error instanceof Error ? error.message : "Failed to complete device setup";
+      setUiError(message);
     } finally {
       setIsProcessing(false);
     }
@@ -218,7 +332,13 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
           />
         );
 
+      case "create-household":
+
       case "household-name":
+
+      case "founder-name":
+
+      case "founder-email":
         return (
           <HouseholdSetupScreen
             householdName={state.householdName}
@@ -229,8 +349,18 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
             onFounderEmailChange={handleFounderEmailChange}
             onNext={handleHouseholdSetupNext}
             onBack={() => onboardingFlow.goBack()}
-            canProgress={onboardingFlow.canProgress()}
+            canProgress={onboardingFlow.canProgress() && !isProcessing}
+            isProcessing={isProcessing}
             progress={state.progress}
+          />
+        );
+
+      case "join-household":
+        // Join flow UI is not implemented yet; avoid a blank screen and keep navigation usable.
+        return (
+          <WelcomeScreen
+            onCreateHousehold={handleCreateHousehold}
+            onJoinHousehold={handleJoinHousehold}
           />
         );
 
@@ -250,17 +380,43 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
             deviceName={state.deviceName}
             onDeviceNameChange={handleDeviceNameChange}
             onRequestPermissions={handleRequestPermissions}
+            onConnectGoogleAccount={handleConnectGoogleAccount}
             onComplete={handleDeviceSetupComplete}
             onBack={() => onboardingFlow.goBack()}
-            canProgress={onboardingFlow.canProgress()}
+            canProgress={onboardingFlow.canProgress() && !isProcessing}
+            isProcessing={isProcessing}
             progress={state.progress}
           />
         );
 
+      case "connecting":
+        return (
+          <div className="screen-panel">
+            Finalizing setup...
+          </div>
+        );
+
+      case "complete":
+        return (
+          <div className="screen-panel">
+            Setup complete. Loading dashboard...
+          </div>
+        );
+
       default:
-        return null;
+        return (
+          <WelcomeScreen
+            onCreateHousehold={handleCreateHousehold}
+            onJoinHousehold={handleJoinHousehold}
+          />
+        );
     }
   };
 
-  return <div className="onboarding-container">{renderScreen()}</div>;
+  return (
+    <div className="onboarding-container">
+      {uiError ? <p className="error-text">{uiError}</p> : null}
+      {renderScreen()}
+    </div>
+  );
 };

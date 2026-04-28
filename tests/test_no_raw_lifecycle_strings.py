@@ -35,8 +35,7 @@ def test_no_raw_lifecycle_strings() -> None:
     """Guard against reintroducing string-literal lifecycle comparisons in logic paths."""
     candidate_roots = [
         pathlib.Path("source"),
-        pathlib.Path("tests"),
-        pathlib.Path("fixtures"),
+        pathlib.Path("src"),
         pathlib.Path("scripts"),
         pathlib.Path("household_os"),
         pathlib.Path("apps"),

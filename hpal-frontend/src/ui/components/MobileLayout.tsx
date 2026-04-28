@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { useRuntimeStore } from "../runtime/store";
-import { backgroundSyncManager } from "../runtime/backgroundSync";
+import { backgroundSyncManager } from "../../runtime/backgroundSync";
 import { MobileNavigation } from "./MobileNavigation";
 import styles from "./MobileLayout.module.css";
 
@@ -38,7 +37,7 @@ export const MobileLayout: React.FC<MobileLayoutProps> = ({ children }) => {
       {/* Offline status indicator */}
       {showOfflineIndicator && (
         <div className={styles.offlineIndicator} role="status" aria-live="polite">
-          <span className={styles.offline Icon}>📡</span>
+          <span className={styles.offlineIcon}>📡</span>
           <span className={styles.offlineText}>
             {syncStatus.syncing
               ? `Syncing ${syncStatus.pending} pending...`

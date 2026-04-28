@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from copy import deepcopy
 
-from apps.api.integration_core.models.household_state import HouseholdState
-from apps.assistant_core.fitness_planner import generate_fitness_plan
-from apps.assistant_core.meal_planner import default_recipe_history
-from apps.assistant_core.planning_engine import _find_available_windows, _resolve_reference_time, _state_events
+from archive.apps.api.integration_core.models.household_state import HouseholdState
+from archive.apps.assistant_core.fitness_planner import generate_fitness_plan
+from archive.apps.assistant_core.meal_planner import default_recipe_history
+from archive.apps.assistant_core.planning_engine import _find_available_windows, _resolve_reference_time, _state_events
 from assistant.contracts.assistant_plan import (
     AssistantStateSnapshot,
     SnapshotCalendarEvent,

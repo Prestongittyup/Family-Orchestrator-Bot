@@ -54,14 +54,45 @@ class ScenarioRunner:
         self.verbose = verbose
         self.runs: List[ScenarioRunResult] = []
         self.run_counter = 0
+
+    def _default_scenario_mapping(self) -> Dict[str, Callable]:
+        return {
+            "concurrent_plan_creation_scenario": concurrent_plan_creation_scenario,
+            "task_execution_idempotency_scenario": task_execution_idempotency_scenario,
+            "conflicting_plan_updates_scenario": conflicting_plan_updates_scenario,
+        }
+
+    def _resolve_generator(
+        self,
+        *,
+        engine: SimulationEngine,
+        scenario_name: str,
+        scenario_generator: Callable | None,
+        scenario_kwargs: Dict,
+    ) -> Callable:
+        if scenario_generator is not None:
+            return scenario_generator
+
+        scenario_mapping = self._default_scenario_mapping()
+        scenario_factory = scenario_mapping.get(scenario_name)
+        if scenario_factory is None:
+            for key, value in scenario_mapping.items():
+                if scenario_name.startswith(f"{key}_"):
+                    scenario_factory = value
+                    break
+        if scenario_factory is None:
+            raise ValueError(f"Unknown scenario '{scenario_name}' and no generator supplied")
+
+        return scenario_factory(engine, **scenario_kwargs)
     
     async def run_scenario(
         self,
         scenario_name: str,
-        family_id: str,
-        scenario_generator: Callable,
+        family_id: str | None = None,
+        scenario_generator: Callable | None = None,
         failure_profile: str = "no_failures",
         random_seed: int = 42,
+        **scenario_kwargs,
     ) -> ScenarioRunResult:
         """
         Run a single simulation scenario
@@ -82,8 +113,17 @@ class ScenarioRunner:
         if self.verbose:
             print(f"\n[SCENARIO] Starting: {scenario_name}")
         
+        resolved_family_id = family_id or f"family-{self.run_counter}"
+
         # Create simulation
-        engine = SimulationEngine(family_id, random_seed=random_seed)
+        engine = SimulationEngine(resolved_family_id, random_seed=random_seed)
+
+        resolved_generator = self._resolve_generator(
+            engine=engine,
+            scenario_name=scenario_name,
+            scenario_generator=scenario_generator,
+            scenario_kwargs=scenario_kwargs,
+        )
         
         # Create failure injector
         failure_injector = FailureInjector(
@@ -95,7 +135,7 @@ class ScenarioRunner:
         # Run scenario
         sim_results = await engine.run_scenario(
             scenario_name=scenario_name,
-            scenario_generator=scenario_generator,
+            scenario_generator=resolved_generator,
             failure_injector=failure_injector,
         )
         
@@ -131,11 +171,13 @@ class ScenarioRunner:
     async def run_scenario_with_replay(
         self,
         scenario_name: str,
-        family_id: str,
-        scenario_generator: Callable,
+        family_id: str | None = None,
+        scenario_generator: Callable | None = None,
         failure_profile: str = "no_failures",
         replay_count: int = 3,
-    ) -> Dict:
+        num_replays: int | None = None,
+        **scenario_kwargs,
+    ) -> tuple[bool, list[str]]:
         """
         Run scenario multiple times with same seed for determinism verification
         
@@ -144,14 +186,16 @@ class ScenarioRunner:
         """
         run_results = []
         state_hashes = []
+        total_replays = num_replays if num_replays is not None else replay_count
         
-        for i in range(replay_count):
+        for i in range(total_replays):
             result = await self.run_scenario(
                 scenario_name=f"{scenario_name}_replay_{i}",
                 family_id=family_id,
                 scenario_generator=scenario_generator,
                 failure_profile=failure_profile,
                 random_seed=42,  # Same seed each time
+                **scenario_kwargs,
             )
             run_results.append(result)
             state_hashes.append(result.state_hash)
@@ -174,25 +218,16 @@ class ScenarioRunner:
             and len(set(map(tuple, explanation_text_sets))) == 1
         )
 
-        return {
-            "scenario_name": scenario_name,
-            "replay_count": replay_count,
-            "converged": converged,
-            "unique_state_hashes": len(unique_hashes),
-            "state_hashes": state_hashes,
-            "runs": run_results,
-            "convergence_rate": len([h for h in state_hashes if h == state_hashes[0]]) / replay_count,
-            "xai_deterministic": xai_deterministic,
-            "xai_explanation_counts": [len(r.xai_explanations) for r in run_results],
-        }
+        _ = xai_deterministic
+        return converged, state_hashes
     
     async def run_test_matrix(
         self,
-        scenario_generators: Dict[str, Callable],
+        scenario_generators: Dict[str, Callable] | None = None,
         family_id: str = "test-family",
         failure_profiles: Optional[List[str]] = None,
         random_seed: int = 42,
-    ) -> Dict:
+    ) -> List[ScenarioRunResult]:
         """
         Run multiple scenarios across multiple failure profiles
         
@@ -203,11 +238,17 @@ class ScenarioRunner:
         """
         if failure_profiles is None:
             failure_profiles = ["no_failures", "light_transient", "moderate_network", "high_chaos"]
+
+        if scenario_generators is None:
+            scenario_generators = {
+                "concurrent_plan_creation_scenario": None,
+                "task_execution_idempotency_scenario": None,
+                "conflicting_plan_updates_scenario": None,
+            }
         
-        matrix_results = {}
+        matrix_run_results: List[ScenarioRunResult] = []
         
         for scenario_name, generator in scenario_generators.items():
-            scenario_results = {}
             
             for failure_profile in failure_profiles:
                 if self.verbose:
@@ -220,23 +261,9 @@ class ScenarioRunner:
                     failure_profile=failure_profile,
                     random_seed=random_seed,
                 )
-                
-                scenario_results[failure_profile] = {
-                    "success": result.success,
-                    "duration_seconds": result.duration_seconds,
-                    "violations": len(result.violations),
-                    "critical_violations": result.violation_summary.get("critical_count", 0),
-                    "execution_stats": result.execution_stats,
-                }
-            
-            matrix_results[scenario_name] = scenario_results
-        
-        return {
-            "test_matrix": matrix_results,
-            "total_runs": len(scenario_generators) * len(failure_profiles),
-            "total_scenarios": len(scenario_generators),
-            "total_failure_profiles": len(failure_profiles),
-        }
+                matrix_run_results.append(result)
+
+        return matrix_run_results
     
     def get_results_summary(self) -> Dict:
         """Get summary of all runs"""
@@ -255,6 +282,8 @@ class ScenarioRunner:
         return {
             "total_runs": len(self.runs),
             "successful_runs": successful_runs,
+            "success_count": successful_runs,
+            "failure_count": len(self.runs) - successful_runs,
             "success_rate": successful_runs / len(self.runs),
             "total_violations": total_violations,
             "critical_violations": critical_violations,
@@ -284,11 +313,11 @@ class ScenarioRunner:
 
 # Pre-defined test scenarios
 
-async def concurrent_plan_creation_scenario(
+def concurrent_plan_creation_scenario(
     engine: SimulationEngine,
     num_members: int = 3,
     plans_per_member: int = 5,
-) -> None:
+) -> Callable:
     """
     Scenario: Multiple family members concurrently creating plans
     
@@ -318,14 +347,14 @@ async def concurrent_plan_creation_scenario(
         for cmd in tasks:
             yield cmd
     
-    yield generate
+    return generate
 
 
-async def task_execution_idempotency_scenario(
+def task_execution_idempotency_scenario(
     engine: SimulationEngine,
     num_members: int = 2,
     tasks_per_member: int = 10,
-) -> None:
+) -> Callable:
     """
     Scenario: Task execution with idempotency key replay
     
@@ -374,13 +403,13 @@ async def task_execution_idempotency_scenario(
                 retry_cmd.idempotency_key = cmd.idempotency_key
                 yield retry_cmd
     
-    yield generate
+    return generate
 
 
-async def conflicting_plan_updates_scenario(
+def conflicting_plan_updates_scenario(
     engine: SimulationEngine,
     num_conflicting_updates: int = 5,
-) -> None:
+) -> Callable:
     """
     Scenario: Multiple concurrent updates to same plan
     
@@ -423,7 +452,7 @@ async def conflicting_plan_updates_scenario(
             yield cmd1
             yield cmd2
     
-    yield generate
+    return generate
 
 
 import random

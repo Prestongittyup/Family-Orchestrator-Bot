@@ -14,12 +14,12 @@ from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
 from typing import Any
-from apps.api.integration_core.models.household_state import (
+from archive.apps.api.integration_core.models.household_state import (
     HouseholdState,
     WindowedCalendar,
 )
-from apps.api.integration_core.event_windowing import OrchestrationView
-from apps.api.integration_core.state_builder import StateBuilder
+from archive.apps.api.integration_core.event_windowing import OrchestrationView
+from archive.apps.api.integration_core.state_builder import StateBuilder
 
 
 # ---------------------------------------------------------------------------

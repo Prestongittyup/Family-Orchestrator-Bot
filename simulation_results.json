@@ -1,6 +1,6 @@
 {
   "simulation_id": "sim-15-low",
-  "generated_at": "2026-04-20T14:17:17.501632Z",
+  "generated_at": "2026-04-26T02:30:09.990124Z",
   "config": {
     "seed": 15,
     "household_size": 3,
@@ -34,7 +34,7 @@
       "brief": {
         "status": "success",
         "brief": {
-          "date": "2026-04-20",
+          "date": "2026-04-26",
           "today_events": [],
           "events": [],
           "event_count": 0,
@@ -57,7 +57,7 @@
           "top_events": [],
           "conflicts": []
         },
-        "generated_at": "2026-04-20T14:17:17.499857Z"
+        "generated_at": "2026-04-26T02:30:09.986852Z"
       }
     }
   ],

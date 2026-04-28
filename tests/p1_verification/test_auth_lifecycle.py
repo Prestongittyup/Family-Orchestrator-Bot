@@ -9,8 +9,8 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from apps.api.auth.token_service import TokenService
-from apps.api.identity.repository import IdentityRepository
+from archive.apps.api.auth.token_service import TokenService
+from archive.apps.api.identity.repository import IdentityRepository
 from tests.p1_verification.fixtures import TestFixtures, TestHousehold
 
 
@@ -279,5 +279,5 @@ class TestAuthHouseholdScopeBinding:
 @pytest.fixture
 def identity_repo() -> IdentityRepository:
     """Provide test identity repository."""
-    from apps.api.core.database import SessionLocal
+    from archive.apps.api.core.database import SessionLocal
     return IdentityRepository(SessionLocal())

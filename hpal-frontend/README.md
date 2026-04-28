@@ -100,7 +100,7 @@ hpal-frontend/
 ### Prerequisites
 
 - **Node.js** 18+ and **npm** 9+
-- **HPAL Backend** running at `http://localhost:8000/api` (or configured via `VITE_API_BASE_URL`)
+- **HPAL Backend** running at `http://localhost:8000` (or configured via `VITE_API_BASE_URL`)
 
 ### 1. Install Dependencies
 
@@ -119,7 +119,7 @@ cp .env.example .env
 Edit `.env` if your HPAL backend is not at the default location:
 
 ```env
-VITE_API_BASE_URL=http://localhost:8000/api
+VITE_API_BASE_URL=http://localhost:8000
 ```
 
 ### 3. Start Development Server

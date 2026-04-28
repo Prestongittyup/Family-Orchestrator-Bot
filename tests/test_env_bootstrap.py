@@ -18,12 +18,12 @@ def test_load_environment_populates_google_oauth_env_from_dotenv(tmp_path, monke
     monkeypatch.delenv("GOOGLE_CLIENT_SECRET", raising=False)
     monkeypatch.delenv("GOOGLE_REDIRECT_URI", raising=False)
 
-    import apps.api.core.env_bootstrap as env_bootstrap
+    import archive.apps.api.core.env_bootstrap as env_bootstrap
     env_bootstrap = importlib.reload(env_bootstrap)
 
     env_bootstrap.load_environment(force=True)
 
-    import apps.api.integration_core.google_oauth_config as google_oauth_config
+    import archive.apps.api.integration_core.google_oauth_config as google_oauth_config
     google_oauth_config = importlib.reload(google_oauth_config)
 
     config = google_oauth_config.GoogleOAuthClientConfig.from_env()
@@ -38,7 +38,7 @@ def test_get_missing_google_oauth_env_vars_reports_missing_keys(monkeypatch):
     monkeypatch.delenv("GOOGLE_CLIENT_SECRET", raising=False)
     monkeypatch.delenv("GOOGLE_REDIRECT_URI", raising=False)
 
-    import apps.api.core.env_bootstrap as env_bootstrap
+    import archive.apps.api.core.env_bootstrap as env_bootstrap
     missing = env_bootstrap.get_missing_google_oauth_env_vars()
 
     assert "GOOGLE_CLIENT_ID" in missing

@@ -5,9 +5,9 @@ from datetime import datetime
 
 from fastapi.testclient import TestClient
 
-from apps.api.main import app
-from apps.assistant_core import assistant_router
-from apps.assistant_core.planning_engine import _fallback_household_state
+from archive.apps.api.main import app
+from archive.apps.assistant_core import assistant_router
+from archive.apps.assistant_core.planning_engine import _fallback_household_state
 from assistant.daily_loop.daily_loop_engine import DEFAULT_DAILY_LOOP_QUERY, DailyLoopEngine
 from assistant.daily_loop.time_slicer import parse_iso_datetime
 from assistant.runtime.assistant_runtime import AssistantRuntimeEngine

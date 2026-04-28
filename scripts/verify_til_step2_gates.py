@@ -34,7 +34,7 @@ def test_no_schema_changes() -> bool:
     test_name = "TEST 1.1 - No Schema Changes"
     try:
         # Check that Task model hasn't changed
-        from apps.api.models.task import Task
+        from archive.apps.api.models.task import Task
         import inspect
 
         # Get current schema fields
@@ -65,8 +65,8 @@ def test_task_response_structure_unchanged() -> bool:
     """TEST 1.2: Task creation response structure unchanged."""
     test_name = "TEST 1.2 - Task Response Structure"
     try:
-        from apps.api.services.task_service import create_task
-        from apps.api.core.database import SessionLocal
+        from archive.apps.api.services.task_service import create_task
+        from archive.apps.api.core.database import SessionLocal
         
         # Create a test task (will use TIL in shadow mode)
         task = create_task(
@@ -108,7 +108,7 @@ def test_calendar_event_response_structure() -> bool:
     """TEST 1.3: Calendar event response structure intact."""
     test_name = "TEST 1.3 - Calendar Response Structure"
     try:
-        from apps.api.services.calendar_service import schedule_event
+        from archive.apps.api.services.calendar_service import schedule_event
         
         # Create a test event
         event = schedule_event(
@@ -278,7 +278,7 @@ def test_original_business_logic_intact() -> bool:
     test_name = "TEST 3.2 - Original Logic Intact"
     try:
         # Task service: create_task should still create tasks
-        from apps.api.services.task_service import create_task
+        from archive.apps.api.services.task_service import create_task
         task = create_task(
             household_id="test-hh-logic",
             title="Logic Test Task"
@@ -288,7 +288,7 @@ def test_original_business_logic_intact() -> bool:
             return False
         
         # Calendar service: schedule_event should still create events
-        from apps.api.services.calendar_service import schedule_event
+        from archive.apps.api.services.calendar_service import schedule_event
         event = schedule_event(
             household_id="test-hh-logic",
             user_id="test-user",
@@ -299,8 +299,8 @@ def test_original_business_logic_intact() -> bool:
             return False
         
         # Email service: should still handle emails
-        from apps.api.modules.email.email_service import handle_email_received
-        from apps.api.schemas.events.email_events import EmailReceivedEvent
+        from archive.apps.api.modules.email.email_service import handle_email_received
+        from archive.apps.api.schemas.events.email_events import EmailReceivedEvent
         
         email_data = EmailReceivedEvent(
             subject="Test Email",
@@ -428,10 +428,10 @@ def test_system_imports() -> bool:
     """TEST 4.5: Full system imports without errors."""
     test_name = "TEST 4.5 - System Import Health"
     try:
-        from apps.api import main
-        from apps.api.services.task_service import create_task
-        from apps.api.services.calendar_service import schedule_event
-        from apps.api.modules.email.email_service import handle_email_received
+        from archive.apps.api import main
+        from archive.apps.api.services.task_service import create_task
+        from archive.apps.api.services.calendar_service import schedule_event
+        from archive.apps.api.modules.email.email_service import handle_email_received
         
         logger.info(f"✔ {test_name} PASS (full system imports successfully)")
         return True

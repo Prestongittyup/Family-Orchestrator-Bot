@@ -4,7 +4,7 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from apps.api.main import app
+from archive.apps.api.main import app
 from household_os.core.household_state_graph import HouseholdStateGraphStore
 from household_os.core.lifecycle_state import LifecycleState
 from household_os.presentation.lifecycle_presentation_mapper import LifecyclePresentationMapper
@@ -12,7 +12,7 @@ from household_os.runtime.orchestrator import HouseholdOSOrchestrator
 
 
 def _test_client_with_temp_runtime_store(tmp_path):
-    import apps.api.assistant_runtime_router as assistant_runtime_router
+    import archive.apps.api.assistant_runtime_router as assistant_runtime_router
 
     store = HouseholdStateGraphStore(graph_path=Path(tmp_path) / "assistant_runtime_router_graph.json")
     assistant_runtime_router.runtime_orchestrator = HouseholdOSOrchestrator(state_store=store)

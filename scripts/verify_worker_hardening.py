@@ -59,8 +59,8 @@ def _fresh_worker():
 def _flush_stale_queued_tasks() -> int:
     """Set all currently-queued DB tasks to 'completed' to prevent stale rows
     from interfering with worker-based tests.  Returns the count flushed."""
-    from apps.api.core.database import SessionLocal
-    from apps.api.models.task import Task
+    from archive.apps.api.core.database import SessionLocal
+    from archive.apps.api.models.task import Task
     session = SessionLocal()
     try:
         rows = session.query(Task).filter(Task.status == "queued").all()
@@ -73,8 +73,8 @@ def _flush_stale_queued_tasks() -> int:
 
 
 def _task_status(task_id: str) -> str:
-    from apps.api.core.database import SessionLocal
-    from apps.api.models.task import Task
+    from archive.apps.api.core.database import SessionLocal
+    from archive.apps.api.models.task import Task
     session = SessionLocal()
     try:
         t = session.get(Task, task_id)
@@ -84,8 +84,8 @@ def _task_status(task_id: str) -> str:
 
 
 def _task_retry_count(task_id: str) -> int:
-    from apps.api.core.database import SessionLocal
-    from apps.api.models.task import Task
+    from archive.apps.api.core.database import SessionLocal
+    from archive.apps.api.models.task import Task
     session = SessionLocal()
     try:
         t = session.get(Task, task_id)
@@ -96,8 +96,8 @@ def _task_retry_count(task_id: str) -> int:
 
 def _count_tasks_in_terminal(household_id: str, force_fail: bool, statuses: tuple) -> int:
     """Count tasks with a given household_id + force_fail flag that are in terminal statuses."""
-    from apps.api.core.database import SessionLocal
-    from apps.api.models.task import Task
+    from archive.apps.api.core.database import SessionLocal
+    from archive.apps.api.models.task import Task
     session = SessionLocal()
     try:
         return (
@@ -118,10 +118,10 @@ def _count_tasks_in_terminal(household_id: str, force_fail: bool, statuses: tupl
 def test_a_crash_recovery() -> None:
     print("\nTEST A — Crash Recovery")
 
-    import apps.api.services.queue_store as qs_mod
-    import apps.api.core.event_bus_async as bus_async_mod
-    from apps.api.core.event_bus_async import AsyncEventBus
-    from apps.api.schemas.event import SystemEvent
+    import archive.apps.api.services.queue_store as qs_mod
+    import archive.apps.api.core.event_bus_async as bus_async_mod
+    from archive.apps.api.core.event_bus_async import AsyncEventBus
+    from archive.apps.api.schemas.event import SystemEvent
 
     # Isolated checkpoint file: monkey-patch the functions imported into
     # event_bus_async's namespace so ALL internal save/load calls use the
@@ -224,7 +224,7 @@ def test_a_crash_recovery() -> None:
 def test_b_poison_isolation() -> None:
     print("\nTEST B — Poison Message Isolation")
 
-    from apps.api.services.task_service import create_task
+    from archive.apps.api.services.task_service import create_task
     import apps.api.services.worker as worker_mod
 
     _fresh_worker()
@@ -277,10 +277,10 @@ def test_b_poison_isolation() -> None:
 def test_c_queue_persistence() -> None:
     print("\nTEST C — Queue Persistence Integrity")
 
-    import apps.api.services.queue_store as qs_mod
-    import apps.api.core.event_bus_async as bus_async_mod
-    from apps.api.core.event_bus_async import AsyncEventBus
-    from apps.api.schemas.event import SystemEvent
+    import archive.apps.api.services.queue_store as qs_mod
+    import archive.apps.api.core.event_bus_async as bus_async_mod
+    from archive.apps.api.core.event_bus_async import AsyncEventBus
+    from archive.apps.api.schemas.event import SystemEvent
 
     tmp = tempfile.NamedTemporaryFile(suffix=".json", delete=False)
     tmp.close()
@@ -364,8 +364,8 @@ def test_c_queue_persistence() -> None:
 def test_d_backpressure() -> None:
     print("\nTEST D — Backpressure Safety")
 
-    from apps.api.core.event_bus_async import AsyncEventBus, MAX_QUEUE_SIZE
-    from apps.api.schemas.event import SystemEvent
+    from archive.apps.api.core.event_bus_async import AsyncEventBus, MAX_QUEUE_SIZE
+    from archive.apps.api.schemas.event import SystemEvent
 
     # Worker intentionally NOT started so the queue fills up.
     bus = AsyncEventBus()
@@ -409,11 +409,11 @@ def test_d_backpressure() -> None:
 def test_e_mixed_load() -> None:
     print("\nTEST E — Stability Under Mixed Load")
 
-    from apps.api.core.event_bus import InMemoryEventBus
-    from apps.api.core.bootstrap import register_event_handlers
-    from apps.api.services.router_service import route_event
-    from apps.api.schemas.event import SystemEvent
-    import apps.api.core.event_bus as bus_mod
+    from archive.apps.api.core.event_bus import InMemoryEventBus
+    from archive.apps.api.core.bootstrap import register_event_handlers
+    from archive.apps.api.services.router_service import route_event
+    from archive.apps.api.schemas.event import SystemEvent
+    import archive.apps.api.core.event_bus as bus_mod
     import apps.api.services.worker as worker_mod
 
     _fresh_worker()

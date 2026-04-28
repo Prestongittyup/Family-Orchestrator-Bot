@@ -19,17 +19,17 @@ All tests are deterministic and verify safe-by-default behavior.
 import pytest
 from datetime import datetime
 
-from apps.api.intent_contract.schema import IntentType
-from apps.api.intent_contract.action_planner import ActionPlan, Action
-from apps.api.policy_engine.schema import (
+from archive.apps.api.intent_contract.schema import IntentType
+from archive.apps.api.intent_contract.action_planner import ActionPlan, Action
+from archive.apps.api.policy_engine.schema import (
     PolicyDecision,
     PolicyInput,
     PolicyResult,
     PolicyRule,
     PolicyConfig,
 )
-from apps.api.policy_engine.evaluator import PolicyEvaluator
-from apps.api.policy_engine.rules import PolicyRules, get_rule_summary
+from archive.apps.api.policy_engine.evaluator import PolicyEvaluator
+from archive.apps.api.policy_engine.rules import PolicyRules, get_rule_summary
 
 
 # ============================================================================

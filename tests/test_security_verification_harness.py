@@ -33,10 +33,10 @@ import pytest
 from fastapi import FastAPI, Request
 from fastapi.testclient import TestClient
 
-from apps.api.core.state_machine import (
+from archive.apps.api.core.state_machine import (
     ActionState,
-    StateMachine,
     TransitionError,
+    validate_transition,
 )
 from household_os.core.execution_context import ExecutionContext
 from household_os.core.household_state_graph import HouseholdStateGraphStore
@@ -65,30 +65,6 @@ def make_mock_request(
     }
 
 
-def create_test_action(graph: dict[str, Any], household_id: str = "household-test") -> str:
-    """
-    Inject a minimal proposed action directly into a graph dict.
-    Returns the action_id.
-    """
-    action_id = f"action-{uuid.uuid4().hex[:8]}"
-    graph.setdefault("action_lifecycle", {}).setdefault("actions", {})[action_id] = {
-        "action_id": action_id,
-        "request_id": str(uuid.uuid4()),
-        "title": "Security Test Action",
-        "description": "Injected by security harness",
-        "domain": "health",
-        "execution_handler": "noop",
-        "current_state": "proposed",
-        "approval_required": False,
-        "trigger_id": "trigger-sec-001",
-        "trigger_type": "manual",
-        "created_at": "2026-01-01T00:00:00+00:00",
-        "updated_at": "2026-01-01T00:00:00+00:00",
-        "transitions": [],
-    }
-    return action_id
-
-
 def inject_event(
     aggregate_id: str,
     event_type: str,
@@ -111,7 +87,7 @@ def _build_app_with_orchestrator(
     user_id: str | None,
 ) -> FastAPI:
     """Wire a FastAPI app injecting actor context via middleware — mirrors production auth."""
-    import apps.api.assistant_runtime_router as assistant_runtime_router
+    import archive.apps.api.assistant_runtime_router as assistant_runtime_router
 
     assistant_runtime_router.runtime_orchestrator = orchestrator
     app = FastAPI()
@@ -161,6 +137,16 @@ def _create_action_via_run(client: TestClient, household_id: str) -> str:
     return str(action_id)
 
 
+def _create_action_as_system_worker(
+    orchestrator: HouseholdOSOrchestrator,
+    household_id: str,
+) -> str:
+    worker_client = TestClient(
+        _build_app_with_orchestrator(orchestrator, "system_worker", None)
+    )
+    return _create_action_via_run(worker_client, household_id)
+
+
 def _normalize_state(value: Any) -> str:
     raw = getattr(value, "value", value)
     return str(raw).split(".")[-1].lower()
@@ -192,7 +178,7 @@ class TestInvariant1ActorContextPropagation:
         action_id = _create_action_via_run(client, "household-prop")
 
         original_validate = None
-        from apps.api.core import state_machine as sm_module
+        from archive.apps.api.core import state_machine as sm_module
 
         original_validate = sm_module.validate_transition
 
@@ -234,8 +220,8 @@ class TestInvariant1ActorContextPropagation:
 
     def test_invariant_context_not_silently_dropped_on_retry(self, tmp_path: Path) -> None:
         """
-        If the action pipeline falls back due to a TypeError, the fallback must
-        still carry the correct actor_type — not silently drop it.
+        Approval path must preserve actor_type in FSM context and must not
+        silently drop it during execution.
         """
         client, orchestrator = _build_client(
             tmp_path,
@@ -245,29 +231,30 @@ class TestInvariant1ActorContextPropagation:
         )
         action_id = _create_action_via_run(client, "household-retry")
 
-        pipeline_calls: list[dict[str, Any]] = []
-        original_approve = orchestrator.action_pipeline.approve_actions
+        observed_contexts: list[dict[str, Any]] = []
+        from archive.apps.api.core import state_machine as sm_module
 
-        def spy_approve(**kwargs):
-            pipeline_calls.append(dict(kwargs))
-            return original_approve(**kwargs)
+        original_validate = sm_module.validate_transition
 
-        orchestrator.action_pipeline.approve_actions = spy_approve
+        def spy_validate(from_state, to_state, context=None):
+            if context:
+                observed_contexts.append(dict(context))
+            return original_validate(from_state, to_state, context=context)
 
-        resp = client.post(
-            "/assistant/approve",
-            json={"action_id": action_id, "household_id": "household-retry"},
-        )
+        with patch.object(sm_module, "validate_transition", side_effect=spy_validate):
+            resp = client.post(
+                "/assistant/approve",
+                json={"action_id": action_id, "household_id": "household-retry"},
+            )
         assert resp.status_code == 200, resp.text
 
-        assert pipeline_calls, "VIOLATION: approve_actions was never called."
-        final_call = pipeline_calls[-1]
-        actor_in_call = final_call.get("actor_type") or (
-            final_call.get("context") and final_call["context"].actor_type
+        actor_types_seen = [ctx.get("actor_type") for ctx in observed_contexts]
+        assert any(at is not None for at in actor_types_seen), (
+            "VIOLATION: approve path executed without actor_type in FSM context. "
+            f"Contexts observed: {observed_contexts}"
         )
-        assert actor_in_call == "api_user", (
-            f"VIOLATION: Final approve_actions call lost actor_type. "
-            f"Got: {actor_in_call!r}. kwargs: {final_call}"
+        assert all(at == "api_user" for at in actor_types_seen if at is not None), (
+            f"VIOLATION: actor_type mutated in transit. Observed: {actor_types_seen}"
         )
 
 
@@ -322,10 +309,7 @@ class TestInvariant2AssistantCannotApprove:
         store.verify_household_owner = lambda hid, uid: True
         orchestrator = HouseholdOSOrchestrator(state_store=store)
 
-        # Create an action first.
-        graph = store.load_graph("household-a")
-        action_id = create_test_action(graph, "household-a")
-        store.save_graph(graph)
+        action_id = _create_action_as_system_worker(orchestrator, "household-a")
 
         from fastapi import HTTPException
 
@@ -354,14 +338,10 @@ class TestInvariant2AssistantCannotApprove:
             )
 
     def test_invariant_assistant_blocked_at_fsm_layer(self) -> None:
-        """2C — Direct FSM transition with assistant context raises TransitionError."""
-        fsm = StateMachine(
-            action_id="fsm-assistant-inv2c",
-            state=ActionState.PENDING_APPROVAL,
-        )
-
+        """2C — FSM transition validation with assistant context raises TransitionError."""
         with pytest.raises(TransitionError) as exc_info:
-            fsm.transition_to(
+            validate_transition(
+                ActionState.PENDING_APPROVAL,
                 ActionState.APPROVED,
                 context={"actor_type": "assistant"},
             )
@@ -381,9 +361,7 @@ class TestInvariant2AssistantCannotApprove:
         store.verify_household_owner = lambda hid, uid: True
         orchestrator = HouseholdOSOrchestrator(state_store=store)
 
-        graph = store.load_graph("household-a")
-        action_id = create_test_action(graph, "household-a")
-        store.save_graph(graph)
+        action_id = _create_action_as_system_worker(orchestrator, "household-a")
 
         ctx = ExecutionContext.from_api_request(
             household_id="household-a",
@@ -463,9 +441,7 @@ class TestInvariant3CrossHouseholdIsolation:
         )
         orchestrator = HouseholdOSOrchestrator(state_store=store)
 
-        graph = store.load_graph("household-b")
-        action_id = create_test_action(graph, "household-b")
-        store.save_graph(graph)
+        action_id = _create_action_as_system_worker(orchestrator, "household-b")
 
         from fastapi import HTTPException
 
@@ -548,9 +524,7 @@ class TestInvariant4NoSilentDefaultEscalation:
         store.verify_household_owner = lambda hid, uid: True
         orchestrator = HouseholdOSOrchestrator(state_store=store)
 
-        graph = store.load_graph("household-a")
-        action_id = create_test_action(graph, "household-a")
-        store.save_graph(graph)
+        action_id = _create_action_as_system_worker(orchestrator, "household-a")
 
         import logging
 
@@ -598,9 +572,7 @@ class TestInvariant4NoSilentDefaultEscalation:
         store.verify_household_owner = lambda hid, uid: True
         orchestrator = HouseholdOSOrchestrator(state_store=store)
 
-        graph = store.load_graph("household-a")
-        action_id = create_test_action(graph, "household-a")
-        store.save_graph(graph)
+        action_id = _create_action_as_system_worker(orchestrator, "household-a")
 
         effective_actor_types: list[str] = []
         original_approve = orchestrator.action_pipeline.approve_actions
@@ -649,39 +621,26 @@ class TestInvariant5FSMGuardAlwaysEnforced:
 
     def test_invariant_fsm_blocks_assistant_with_context(self) -> None:
         """FSM guard fires when context explicitly says actor_type=assistant."""
-        fsm = StateMachine(
-            action_id="inv5-with-ctx",
-            state=ActionState.PENDING_APPROVAL,
-        )
         with pytest.raises(TransitionError, match="(?i)assistant|suggest-only"):
-            fsm.transition_to(
+            validate_transition(
+                ActionState.PENDING_APPROVAL,
                 ActionState.APPROVED,
                 context={"actor_type": "assistant"},
             )
 
     def test_invariant_fsm_allows_api_user_with_context(self) -> None:
         """FSM guard permits api_user to approve (no restriction on that actor)."""
-        fsm = StateMachine(
-            action_id="inv5-api-user-ok",
-            state=ActionState.PENDING_APPROVAL,
-        )
-        event = fsm.transition_to(
+        validate_transition(
+            ActionState.PENDING_APPROVAL,
             ActionState.APPROVED,
             context={"actor_type": "api_user"},
-        )
-        assert event.to_state == ActionState.APPROVED, (
-            "VIOLATION: api_user was blocked from approving. "
-            "api_user should be a permitted approver."
         )
 
     def test_invariant_fsm_blocks_approval_skip_when_requires_approval(self) -> None:
         """FSM guard prevents PROPOSED → APPROVED when requires_approval=True."""
-        fsm = StateMachine(
-            action_id="inv5-skip-approval",
-            state=ActionState.PROPOSED,
-        )
         with pytest.raises(TransitionError, match="(?i)approval|pending"):
-            fsm.transition_to(
+            validate_transition(
+                ActionState.PROPOSED,
                 ActionState.APPROVED,
                 context={"actor_type": "api_user", "requires_approval": True},
             )
@@ -692,24 +651,16 @@ class TestInvariant5FSMGuardAlwaysEnforced:
         if the guard is incorporated properly at the pipeline level.
         This directly tests the FSM level with an empty context vs None.
         """
-        fsm = StateMachine(
-            action_id="inv5-no-ctx",
-            state=ActionState.PENDING_APPROVAL,
-        )
         # No context supplied — should NOT raise (no actor info, no guard trigger).
         # This is the boundary: absence of context should NOT accidentally block
         # legitimate users.
-        event = fsm.transition_to(ActionState.APPROVED, context=None)
-        assert event.to_state == ActionState.APPROVED
+        validate_transition(ActionState.PENDING_APPROVAL, ActionState.APPROVED, context=None)
 
     def test_invariant_fsm_blocks_assistant_in_proposed_to_approved(self) -> None:
         """Assistant cannot jump from PROPOSED to APPROVED directly."""
-        fsm = StateMachine(
-            action_id="inv5-jump",
-            state=ActionState.PROPOSED,
-        )
         with pytest.raises(TransitionError):
-            fsm.transition_to(
+            validate_transition(
+                ActionState.PROPOSED,
                 ActionState.APPROVED,
                 context={"actor_type": "assistant"},
             )
@@ -764,13 +715,10 @@ class TestInvariant6EventReplayAuthorizationBypass:
         aggregate_id = f"replay-inv6-{uuid.uuid4().hex[:8]}"
 
         # 1. Verify that the FSM write-side would have blocked this transition.
-        fsm = StateMachine(
-            action_id=aggregate_id,
-            state=ActionState.PENDING_APPROVAL,
-        )
         fsm_blocked = False
         try:
-            fsm.transition_to(
+            validate_transition(
+                ActionState.PENDING_APPROVAL,
                 ActionState.APPROVED,
                 context={"actor_type": "assistant"},
             )
@@ -809,10 +757,10 @@ class TestInvariant6EventReplayAuthorizationBypass:
         """
         aggregate_id = f"replay-skip-{uuid.uuid4().hex[:8]}"
 
-        fsm = StateMachine(action_id=aggregate_id, state=ActionState.PROPOSED)
         fsm_blocked = False
         try:
-            fsm.transition_to(
+            validate_transition(
+                ActionState.PROPOSED,
                 ActionState.APPROVED,
                 context={"actor_type": "api_user", "requires_approval": True},
             )
@@ -1067,10 +1015,6 @@ class TestBoundarySecurityEdgeCases:
         store.verify_household_owner = lambda hid, uid: True
         orchestrator = HouseholdOSOrchestrator(state_store=store)
 
-        graph = store.load_graph("household-a")
-        action_id = create_test_action(graph, "household-a")
-        store.save_graph(graph)
-
         raised = False
         try:
             orchestrator.tick(
@@ -1090,12 +1034,11 @@ class TestBoundarySecurityEdgeCases:
     def test_fsm_terminal_states_cannot_be_transitioned_out_of(self) -> None:
         """COMMITTED and REJECTED are terminal — no further transitions allowed."""
         for terminal_state in (ActionState.COMMITTED, ActionState.REJECTED):
-            fsm = StateMachine(action_id=f"terminal-{terminal_state.value}", state=terminal_state)
             for target in ActionState:
                 if target == terminal_state:
                     continue
                 with pytest.raises(TransitionError, match="(?i)not allowed|invalid|terminal|no allowed"):
-                    fsm.transition_to(target)
+                    validate_transition(terminal_state, target)
 
     def test_execution_context_from_api_request_carries_correct_fields(self) -> None:
         """ExecutionContext.from_api_request populates all required fields."""

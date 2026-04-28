@@ -27,7 +27,7 @@ def test_email_service_imports() -> bool:
     """TEST 1: email_service imports with TIL."""
     test_name = "TEST 1 - Email Service Imports"
     try:
-        from apps.api.modules.email.email_service import handle_email_received
+        from archive.apps.api.modules.email.email_service import handle_email_received
         logger.info(f"✔ {test_name} PASS")
         return True
     except ImportError as e:

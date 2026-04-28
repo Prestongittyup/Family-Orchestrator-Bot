@@ -11,11 +11,22 @@ from collections import defaultdict
 
 import pytest
 
-from apps.api.auth.token_service import TokenService
-from apps.api.llm.gateway import LLMGateway
-from apps.api.realtime.event_bus import InMemoryRealtimeEventBus, RealtimeEvent
-from apps.api.services.idempotency_key_service import IdempotencyKeyService
+from archive.apps.api.core.database import SessionLocal
+from archive.apps.api.identity.repository import IdentityRepository
+from archive.apps.api.auth.token_service import TokenService
+from archive.apps.api.llm.gateway import LLMGateway
+from archive.apps.api.realtime.event_bus import InMemoryRealtimeEventBus, RealtimeEvent
+from archive.apps.api.services.idempotency_key_service import IdempotencyKeyService
 from tests.p1_verification.fixtures import MockLLMProvider, TestFixtures
+
+
+@pytest.fixture
+def identity_repo() -> IdentityRepository:
+    session = SessionLocal()
+    try:
+        yield IdentityRepository(session)
+    finally:
+        session.close()
 
 
 class TestChaosConcurrentCreation:
@@ -164,7 +175,7 @@ class TestChaosAuthFailures:
     
     def test_mixed_valid_invalid_tokens_concurrent(self, identity_repo):
         """Mix of valid/invalid tokens under concurrency."""
-        from apps.api.auth.token_service import TokenService
+        from archive.apps.api.auth.token_service import TokenService
         
         token_svc = TokenService(identity_repo)
         

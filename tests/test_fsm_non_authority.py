@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from apps.api.core.state_machine import ActionState, validate_transition
+from archive.apps.api.core.state_machine import ActionState, validate_transition
 from household_os.core.lifecycle_state import LifecycleState
 from household_os.runtime.domain_event import DomainEvent, LIFECYCLE_EVENT_TYPES
 from household_os.runtime.state_reducer import reduce_state

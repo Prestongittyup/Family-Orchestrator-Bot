@@ -7,12 +7,12 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential
-from apps.api.integration_core.google_calendar_provider import GoogleCalendarRealProvider
+from archive.apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential
+from archive.apps.api.integration_core.google_calendar_provider import GoogleCalendarRealProvider
 
 
 def _reload_module():
-    import apps.api.integration_core.google_oauth_config as cfg
+    import archive.apps.api.integration_core.google_oauth_config as cfg
     return importlib.reload(cfg)
 
 
@@ -51,7 +51,7 @@ def test_valid_env_vars_generate_oauth_url(monkeypatch):
     assert url.startswith("https://accounts.google.com/o/oauth2/auth")
     assert params["client_id"][0] == "env-client-id.apps.googleusercontent.com"
     assert params["redirect_uri"][0] == "http://127.0.0.1:8000/integrations/google-calendar/callback"
-    assert params["scope"][0] == "https://www.googleapis.com/auth/calendar.readonly"
+    assert params["scope"][0] == " ".join(cfg.GOOGLE_READONLY_SCOPES)
 
 
 def test_redirect_uri_used_exactly_as_configured(monkeypatch):
@@ -86,6 +86,8 @@ def test_token_refresh_flow(monkeypatch):
     monkeypatch.setenv("GOOGLE_REDIRECT_URI", "http://127.0.0.1:8000/integrations/google-calendar/callback")
 
     http = MagicMock()
+    event_start = (datetime.now(UTC) + timedelta(hours=2)).replace(microsecond=0)
+    event_end = event_start + timedelta(hours=1)
 
     refresh_response = MagicMock()
     refresh_response.raise_for_status = MagicMock()
@@ -119,8 +121,8 @@ def test_token_refresh_flow(monkeypatch):
                         "id": "evt-1",
                         "summary": "Refreshed Event",
                         "status": "confirmed",
-                        "start": {"dateTime": "2026-04-20T09:00:00Z"},
-                        "end": {"dateTime": "2026-04-20T10:00:00Z"},
+                        "start": {"dateTime": event_start.isoformat().replace("+00:00", "Z")},
+                        "end": {"dateTime": event_end.isoformat().replace("+00:00", "Z")},
                     }
                 ]
             }

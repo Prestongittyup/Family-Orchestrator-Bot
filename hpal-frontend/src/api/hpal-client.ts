@@ -13,10 +13,10 @@ import {
   Task,
   Event,
   CommandResult,
-  CreatePlanRequest,
 } from "../types/index";
 
-const API_BASE = process.env.REACT_APP_HPAL_API_URL || "http://localhost:8000/v1";
+const API_ROOT = ((import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "/api").replace(/\/$/, "");
+const API_BASE = API_ROOT.endsWith("/v1") ? API_ROOT : `${API_ROOT}/v1`;
 
 class HPALClient {
   private baseURL: string;

@@ -39,7 +39,7 @@ def test_til_module_imports() -> bool:
     """
     test_name = "TEST 1.1 - TIL Module Imports"
     try:
-        from apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
+        from archive.apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
         logger.info(f"✔ {test_name} PASS")
         return True
     except Exception as e:
@@ -99,7 +99,7 @@ def test_til_deterministic() -> bool:
     """
     test_name = "TEST 1.3 - TIL Deterministic Outputs"
     try:
-        from apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
+        from archive.apps.api.services.temporal_intelligence_layer import TemporalIntelligenceLayer
         
         til = TemporalIntelligenceLayer()
         
@@ -137,7 +137,7 @@ def test_contract_exists() -> bool:
     """
     test_name = "TEST 2.1 - Contract Interface Exists"
     try:
-        from apps.api.services.til_contract import TILContract
+        from archive.apps.api.services.til_contract import TILContract
         logger.info(f"✔ {test_name} PASS")
         return True
     except Exception as e:
@@ -200,7 +200,7 @@ def test_contract_interface_shape() -> bool:
     """
     test_name = "TEST 2.3 - Contract Interface Shape"
     try:
-        from apps.api.services.til_contract import TILContract
+        from archive.apps.api.services.til_contract import TILContract
         import inspect
         
         required_methods = {
@@ -236,7 +236,7 @@ def test_singleton_instance_exists() -> bool:
     """
     test_name = "TEST 3.1 - Shared Dependencies Module Exists"
     try:
-        from apps.api.services.shared_dependencies import get_til
+        from archive.apps.api.services.shared_dependencies import get_til
         logger.info(f"✔ {test_name} PASS")
         return True
     except Exception as e:
@@ -251,7 +251,7 @@ def test_singleton_returns_same_instance() -> bool:
     """
     test_name = "TEST 3.2 - Singleton Returns Same Instance"
     try:
-        from apps.api.services.shared_dependencies import get_til
+        from archive.apps.api.services.shared_dependencies import get_til
         
         instance1 = get_til()
         instance2 = get_til()
@@ -403,7 +403,7 @@ def test_system_still_runs() -> bool:
     test_name = "TEST 5.1 - System Still Runs"
     try:
         # Import the main app to ensure startup logic works
-        from apps.api import main
+        from archive.apps.api import main
         
         logger.info(f"✔ {test_name} PASS (main.py imports successfully)")
         return True

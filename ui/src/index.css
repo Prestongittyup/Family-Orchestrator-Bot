@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 /* ============================================================
    Design Tokens
    ============================================================ */
@@ -917,6 +919,400 @@ ul { list-style: none; }
   color: var(--text);
   border-color: var(--blue);
   background: #1d2f4f;
+}
+
+/* ============================================================
+   Cozi-Style Dashboard Prototype
+   ============================================================ */
+.cozi-dashboard {
+  --cozi-paper: #fff7ec;
+  --cozi-paper-2: #f6ead8;
+  --cozi-ink: #2e3340;
+  --cozi-muted: #5f6677;
+  --cozi-teal: #2c8a84;
+  --cozi-coral: #de6f5d;
+  --cozi-gold: #cda766;
+
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem;
+  padding: 1.1rem;
+  border-radius: 24px;
+  color: var(--cozi-ink);
+  font-family: 'Plus Jakarta Sans', 'Trebuchet MS', sans-serif;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(223, 168, 106, 0.25), transparent 36%),
+    radial-gradient(circle at 88% 14%, rgba(90, 156, 150, 0.2), transparent 34%),
+    linear-gradient(160deg, var(--cozi-paper) 0%, var(--cozi-paper-2) 100%);
+  border: 1px solid #ead8bf;
+  box-shadow: 0 20px 40px rgba(67, 56, 40, 0.18);
+  overflow: hidden;
+  animation: coziFadeIn 520ms ease-out;
+}
+
+.cozi-dashboard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(205, 167, 102, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(205, 167, 102, 0.06) 1px, transparent 1px);
+  background-size: 26px 26px;
+  pointer-events: none;
+}
+
+.cozi-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid #e5d3ba;
+  border-radius: 18px;
+  box-shadow: 0 10px 22px rgba(78, 70, 55, 0.14);
+  backdrop-filter: blur(3px);
+}
+
+.cozi-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.2rem;
+  background: linear-gradient(120deg, rgba(255, 250, 242, 0.96), rgba(248, 237, 217, 0.85));
+}
+
+.cozi-hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 760px;
+}
+
+.cozi-eyebrow {
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cozi-teal);
+}
+
+.cozi-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.8rem;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #273047;
+}
+
+.cozi-summary {
+  color: var(--cozi-muted);
+  max-width: 66ch;
+}
+
+.cozi-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cozi-source-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.cozi-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid #d8c8b0;
+  background: rgba(255, 255, 255, 0.75);
+  color: #495266;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.28rem 0.7rem;
+}
+
+.cozi-chip--ok {
+  background: #ddf7ef;
+  border-color: #b2e2d4;
+  color: #236963;
+}
+
+.cozi-chip--warn {
+  background: #ffedd7;
+  border-color: #f0c690;
+  color: #8f4c1f;
+}
+
+.cozi-chip--off {
+  background: #efefef;
+  border-color: #d7d7d7;
+  color: #606060;
+}
+
+.cozi-guard-note {
+  color: #5e6172;
+  font-size: 0.78rem;
+}
+
+.cozi-guard-note code {
+  font-family: 'Plus Jakarta Sans', 'Trebuchet MS', sans-serif;
+  font-size: 0.76rem;
+  background: #fff;
+  border: 1px solid #d8c9b0;
+  border-radius: 6px;
+  padding: 0.1rem 0.35rem;
+  color: #3d4461;
+}
+
+.cozi-hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.45rem;
+  min-width: 170px;
+}
+
+.cozi-refresh-btn {
+  border: 1px solid #c99062;
+  background: linear-gradient(120deg, #e49f6f, #de6f5d);
+  color: #fff;
+  border-radius: 11px;
+  padding: 0.52rem 0.95rem;
+  font-weight: 700;
+  font-size: 0.84rem;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.cozi-refresh-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 7px 16px rgba(163, 83, 68, 0.28);
+}
+
+.cozi-refresh-btn:disabled {
+  opacity: 0.72;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+}
+
+.cozi-updated-text {
+  font-size: 0.76rem;
+  color: #6a7486;
+}
+
+.cozi-error-text {
+  max-width: 26ch;
+  text-align: right;
+  color: #9a3e38;
+  font-size: 0.77rem;
+}
+
+.cozi-main-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.25fr 1.25fr 1fr;
+  gap: 1rem;
+}
+
+.cozi-card-header {
+  border-bottom: 1px solid #ebdbc5;
+  padding: 0.75rem 0.95rem;
+}
+
+.cozi-card-header h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.08rem;
+  color: #2e3852;
+}
+
+.cozi-agenda-list,
+.cozi-conflict-list,
+.cozi-member-list {
+  padding: 0.85rem 0.95rem 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.cozi-agenda-item,
+.cozi-conflict,
+.cozi-member-card {
+  background: #fffefc;
+  border: 1px solid #eadcc9;
+  border-radius: 12px;
+  padding: 0.7rem;
+}
+
+.cozi-agenda-item {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.cozi-time-pill {
+  min-width: 78px;
+  height: fit-content;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
+  color: #2b766f;
+  background: #def4ef;
+  border: 1px solid #b9e4dc;
+}
+
+.cozi-item-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #303a4f;
+}
+
+.cozi-item-sub,
+.cozi-people {
+  font-size: 0.8rem;
+  color: #667084;
+}
+
+.cozi-member-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.cozi-member-card h4 {
+  margin-bottom: 0.45rem;
+  font-size: 0.9rem;
+  color: #2e3850;
+}
+
+.cozi-member-card ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cozi-member-card li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  color: #4f586b;
+}
+
+.cozi-task-dot {
+  width: 12px;
+  height: 12px;
+  margin-top: 0.2rem;
+  border-radius: 4px;
+  border: 2px solid var(--cozi-gold);
+  background: #fff6e6;
+  flex-shrink: 0;
+}
+
+.cozi-week-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding: 0.9rem;
+}
+
+.cozi-week-column {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ecdcc6;
+  border-radius: 12px;
+  padding: 0.65rem;
+  min-height: 140px;
+}
+
+.cozi-week-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6e7688;
+  margin-bottom: 0.45rem;
+}
+
+.cozi-week-item {
+  border-left: 3px solid #7fb8b2;
+  background: #f8fffd;
+  border-radius: 0 8px 8px 0;
+  padding: 0.38rem 0.46rem;
+  margin-bottom: 0.45rem;
+}
+
+.cozi-stagger-1,
+.cozi-stagger-2,
+.cozi-stagger-3,
+.cozi-stagger-4,
+.cozi-stagger-5 {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: coziRise 420ms ease-out forwards;
+}
+
+.cozi-stagger-1 { animation-delay: 70ms; }
+.cozi-stagger-2 { animation-delay: 120ms; }
+.cozi-stagger-3 { animation-delay: 180ms; }
+.cozi-stagger-4 { animation-delay: 240ms; }
+.cozi-stagger-5 { animation-delay: 300ms; }
+
+@keyframes coziRise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes coziFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 1180px) {
+  .cozi-main-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cozi-main-grid > :last-child {
+    grid-column: 1 / -1;
+  }
+
+  .cozi-week-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 820px) {
+  .cozi-dashboard {
+    margin: 0.7rem;
+    padding: 0.75rem;
+  }
+
+  .cozi-hero {
+    flex-direction: column;
+  }
+
+  .cozi-hero-actions {
+    align-items: flex-start;
+  }
+
+  .cozi-main-grid,
+  .cozi-member-list,
+  .cozi-week-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cozi-title {
+    font-size: 1.45rem;
+  }
 }
 
 .inspector-live-grid {

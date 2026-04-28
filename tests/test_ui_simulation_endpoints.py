@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
-from apps.api.main import app
+from archive.apps.api.main import app
 
 
 def test_simulation_run_endpoint_returns_structured_payload() -> None:

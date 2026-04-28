@@ -11,9 +11,9 @@ from datetime import datetime, timedelta
 from collections import deque
 
 # Import fixed modules
-from apps.api.models.idempotency_key import IdempotencyKey
-from apps.api.services import idempotency_key_service
-from apps.api.realtime.broadcaster import broadcaster, AtomicCounter
+from archive.apps.api.models.idempotency_key import IdempotencyKey
+from archive.apps.api.services import idempotency_key_service
+from archive.apps.api.realtime.broadcaster import broadcaster, AtomicCounter
 
 
 async def verify_atomic_counter():
@@ -67,7 +67,7 @@ async def verify_idempotency_ttl():
     print("✅ Duplicate reserve: False (dedup active)")
     
     # Check expires_at in DB
-    from apps.api.core.database import SessionLocal
+    from archive.apps.api.core.database import SessionLocal
     session = SessionLocal()
     try:
         idem_record = session.query(IdempotencyKey).filter(IdempotencyKey.key == key).first()
@@ -123,7 +123,7 @@ async def verify_sse_endpoint():
     print("\n[TEST 4] SSE Endpoint Signature")
     print("=" * 60)
     
-    from apps.api.endpoints.realtime_router import stream_updates
+    from archive.apps.api.endpoints.realtime_router import stream_updates
     import inspect
     
     sig = inspect.signature(stream_updates)

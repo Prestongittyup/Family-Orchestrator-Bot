@@ -20,14 +20,14 @@ CQRS Constraint:
 
 from __future__ import annotations
 
-from apps.api.core.state_machine import ActionState, TransitionError, validate_transition
-from apps.api.observability.logging import log_error
+from archive.apps.api.core.state_machine import ActionState, TransitionError, validate_transition
+from archive.apps.api.observability.logging import log_error
 from household_os.core.lifecycle_state import (
     LifecycleState,
     assert_lifecycle_state,
     parse_lifecycle_state,
 )
-from apps.api.observability.execution_trace import trace_function
+from archive.apps.api.observability.eil.tracer import trace_function
 from household_os.runtime.domain_event import (
     DomainEvent,
     LifecycleEventState,

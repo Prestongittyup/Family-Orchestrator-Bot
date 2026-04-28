@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi.routing import APIRoute
 from fastapi.testclient import TestClient
 
-from apps.api import main
+from archive.apps.api import main
 
 
 def test_only_one_root_route_exists() -> None:

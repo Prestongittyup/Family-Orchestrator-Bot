@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from apps.api.ingestion.adapters.manual_priority import (
+from archive.apps.api.ingestion.adapters.manual_priority import (
     partition_actions_by_visibility,
     score_manual_item,
     visibility_block_for_action,

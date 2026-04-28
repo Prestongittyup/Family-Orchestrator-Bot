@@ -1,5 +1,7 @@
 const MODES = [
   { id: 'LIVE', label: 'Live Orchestration', icon: '🔴' },
+  { id: 'COZI', label: 'Cozi Desktop', icon: '📅' },
+  { id: 'PANTRY', label: 'Inventory + Email', icon: '🥫' },
   { id: 'SIMULATION', label: 'Simulation', icon: '⚗️' },
   { id: 'INSIGHTS', label: 'Insights', icon: '📊' },
 ]

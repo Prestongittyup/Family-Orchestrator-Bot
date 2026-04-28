@@ -53,8 +53,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from apps.api.observability.shag import run_shag
-from apps.api.observability.shag.models import (
+from archive.apps.api.observability.shag import run_shag
+from archive.apps.api.observability.shag.models import (
     RemediationMode,
     SHAGVerdict,
     Severity,

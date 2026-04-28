@@ -78,13 +78,13 @@ def queue_len(bus: object) -> int:
 def main() -> None:
     os.environ["EVENT_BUS_TYPE"] = "async"
 
-    import apps.api.core.event_bus as event_bus_module
+    import archive.apps.api.core.event_bus as event_bus_module
 
     event_bus_module._event_bus_instance = None
 
-    from apps.api.core.event_bus import get_event_bus
-    from apps.api.core.event_bus_async import AsyncEventBus
-    from apps.api.main import app
+    from archive.apps.api.core.event_bus import get_event_bus
+    from archive.apps.api.core.event_bus_async import AsyncEventBus
+    from archive.apps.api.main import app
 
     results: dict[str, tuple[bool, str]] = {}
 

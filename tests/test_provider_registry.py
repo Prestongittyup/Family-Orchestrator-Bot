@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from apps.api.integration_core import InMemoryOAuthCredentialStore, OAuthCredential, ProviderRegistry
-from apps.api.integration_core.providers import GmailProviderMock, GoogleCalendarProviderMock
+from archive.apps.api.integration_core import InMemoryOAuthCredentialStore, OAuthCredential, ProviderRegistry
+from archive.apps.api.integration_core.providers import GmailProviderMock, GoogleCalendarProviderMock
 
 
 def test_provider_registration() -> None:

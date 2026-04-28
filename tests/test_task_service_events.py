@@ -3,8 +3,8 @@
 from unittest.mock import MagicMock, patch, call
 from datetime import UTC, datetime
 
-from apps.api.services.task_service import update_task_metadata
-from apps.api.models.task import Task
+from archive.apps.api.services.task_service import update_task_metadata
+from archive.apps.api.models.task import Task
 
 
 def test_update_task_metadata_emits_event():

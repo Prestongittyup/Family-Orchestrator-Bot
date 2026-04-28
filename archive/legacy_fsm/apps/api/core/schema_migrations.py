@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from sqlalchemy import text
 
-from apps.api.core.database import engine
+from archive.apps.api.core.database import engine
 
 
 def ensure_event_logs_idempotency_column() -> None:

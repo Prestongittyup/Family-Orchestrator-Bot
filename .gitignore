@@ -6,3 +6,28 @@ __pycache__/
 *.sqlite3
 *.jsonl
 runtime_queue.json
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Root-level generated audit/runtime artifacts (must live under verification_reports/root_artifacts)
+*_checkpoint.json
+*_report.json
+*.report.json
+*.report.second.json
+*_results.json
+production_torture_report*.json
+sse_*_report*.json
+phase4_gate_validation*.json
+cleanup_analysis_*.json
+truth_gate_output*.log
+torture_gate_output.log
+baseline_test_output.log
+
+# Organized runtime/report artifact storage
+verification_reports/root_artifacts/
+verification_reports/repo_audit_runs/
+verification_reports/repo_audit_report.from_engine*.json
+verification_reports/repo_audit_report.from_engine*.md

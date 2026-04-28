@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from pathlib import Path
-
+from artifact_paths import artifact_read_path
 from tests.evaluation.evaluation_runner import run_full_evaluation
 
 
@@ -72,7 +71,7 @@ def test_brief_evaluation_pipeline_runs_end_to_end() -> None:
     ):
         assert key in score_deltas
 
-    artifact = Path("evaluation_results.json")
+    artifact = artifact_read_path("evaluation_results.json")
     assert artifact.exists()
 
     # --- Feedback layer assertions ---

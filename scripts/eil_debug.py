@@ -42,7 +42,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from apps.api.observability.eil import bootstrap_eil, get_storage_backend
+from archive.apps.api.observability.eil import bootstrap_eil, get_storage_backend
 
 
 # ---------------------------------------------------------------------------

@@ -4,10 +4,10 @@ import json
 from pathlib import Path
 from uuid import uuid4
 
-from apps.api.schemas.canonical_event import CanonicalEventEnvelope
-from apps.api.schemas.event import SystemEvent
-from apps.api.services.canonical_event_adapter import CanonicalEventAdapter
-from apps.api.realtime.broadcaster import HouseholdBroadcaster
+from archive.apps.api.schemas.canonical_event import CanonicalEventEnvelope
+from archive.apps.api.schemas.event import SystemEvent
+from archive.apps.api.services.canonical_event_adapter import CanonicalEventAdapter
+from archive.apps.api.realtime.broadcaster import HouseholdBroadcaster
 
 ROOT = Path(__file__).resolve().parents[1]
 APPS_API = ROOT / "apps" / "api"
@@ -63,7 +63,7 @@ def test_no_direct_sse_formatting_outside_broadcaster() -> None:
 
 
 def test_replay_routes_via_router_without_transport_branching(monkeypatch) -> None:
-    import apps.api.services.event_replay_service as replay_service
+    import archive.apps.api.services.event_replay_service as replay_service
 
     calls: list[dict[str, object]] = []
 
@@ -122,7 +122,7 @@ def test_watermark_ignores_external_and_is_monotonic() -> None:
 
 
 def test_redis_ingress_reenters_canonical_pipeline(monkeypatch) -> None:
-    from apps.api.realtime.event_bus import RedisRealtimeEventBus
+    from archive.apps.api.realtime.event_bus import RedisRealtimeEventBus
 
     class _FakePubSub:
         def listen(self):
@@ -151,7 +151,7 @@ def test_redis_ingress_reenters_canonical_pipeline(monkeypatch) -> None:
         calls.append({"envelope": envelope, "kwargs": kwargs})
         return []
 
-    import apps.api.services.canonical_event_router as router_module
+    import archive.apps.api.services.canonical_event_router as router_module
 
     monkeypatch.setattr(router_module.canonical_event_router, "route", _fake_route)
 

@@ -17,7 +17,8 @@ export const Navigation: React.FC = () => {
     { label: "Dashboard", path: "/" },
     { label: "Tasks", path: "/tasks" },
     { label: "Calendar", path: "/calendar" },
-    { label: "System", path: "/system" },
+    { label: "Pantry", path: "/pantry" },
+    { label: "Assistant", path: "/chat" },
   ];
 
   const isActive = (path: string) => location.pathname === path;

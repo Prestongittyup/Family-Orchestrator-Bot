@@ -29,7 +29,7 @@ from assistant.governance.intent_router import (
 # ---------------------------------------------------------------------------
 
 def _app() -> "TestClient":
-    from apps.api.main import create_app
+    from archive.apps.api.main import create_app
     return TestClient(create_app())
 
 

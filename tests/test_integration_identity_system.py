@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from apps.api.integration_core import IdentityService, InMemoryIdentityRepository
+from archive.apps.api.integration_core import IdentityService, InMemoryIdentityRepository
 
 
 def test_user_creation() -> None:

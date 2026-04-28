@@ -4,7 +4,7 @@ import re
 
 from fastapi.testclient import TestClient
 
-from apps.api.main import app
+from archive.apps.api.main import app
 from household_os.presentation.time_formatter import format_relative_datetime
 
 

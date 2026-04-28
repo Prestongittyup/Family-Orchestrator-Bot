@@ -5,7 +5,7 @@ from contextvars import ContextVar
 from dataclasses import dataclass
 from typing import Any
 
-from apps.api.core.state_machine import ActionState
+from archive.apps.api.core.state_machine import ActionState
 
 
 class StateMutationViolation(Exception):

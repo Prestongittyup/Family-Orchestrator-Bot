@@ -4,6 +4,7 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
+from artifact_paths import artifact_read_path, artifact_write_path
 from insights.contracts import (
     EvaluationArtifact,
     InsightBridgeResponse,
@@ -24,7 +25,7 @@ class InsightEngine:
         self.root_path = root_path or Path(__file__).resolve().parent.parent
 
     def _load_json_file(self, file_name: str) -> dict:
-        file_path = self.root_path / file_name
+        file_path = artifact_read_path(file_name)
         return json.loads(file_path.read_text(encoding="utf-8"))
 
     def load_evaluation_artifact(self) -> EvaluationArtifact:
@@ -87,6 +88,6 @@ def build_insight_response() -> InsightBridgeResponse:
 def generate_insight_report(output_path: Path | None = None) -> dict:
     engine = InsightEngine()
     report = engine.build_report()
-    target = output_path or (engine.root_path / "insight_report.json")
+    target = output_path or artifact_write_path("insight_report.json")
     target.write_text(json.dumps(report, indent=2), encoding="utf-8")
     return report

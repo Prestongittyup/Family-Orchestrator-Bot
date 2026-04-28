@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from datetime import datetime
+import re
+from datetime import datetime, timedelta
 from typing import Any
 
-from apps.assistant_core.fitness_planner import generate_fitness_plan
-from apps.assistant_core.intent_parser import parse_intent
-from apps.assistant_core.meal_planner import plan_meal
-from apps.assistant_core.planning_engine import _find_available_windows
+from archive.apps.assistant_core.fitness_planner import generate_fitness_plan
+from archive.apps.assistant_core.intent_parser import parse_intent
+from archive.apps.assistant_core.meal_planner import plan_meal
+from archive.apps.assistant_core.planning_engine import _find_available_windows
 from household_os.core.contracts import (
     CurrentStateSummary,
     GroupedApprovalPayload,
@@ -19,6 +20,52 @@ from household_os.security.trust_boundary_enforcer import enforce_import_boundar
 
 
 enforce_import_boundary("household_os.core.decision_engine")
+
+
+_MONTH_NAME_TO_INDEX = {
+    "jan": 1,
+    "january": 1,
+    "feb": 2,
+    "february": 2,
+    "mar": 3,
+    "march": 3,
+    "apr": 4,
+    "april": 4,
+    "may": 5,
+    "jun": 6,
+    "june": 6,
+    "jul": 7,
+    "july": 7,
+    "aug": 8,
+    "august": 8,
+    "sep": 9,
+    "sept": 9,
+    "september": 9,
+    "oct": 10,
+    "october": 10,
+    "nov": 11,
+    "november": 11,
+    "dec": 12,
+    "december": 12,
+}
+
+_WEEKDAY_TO_INDEX = {
+    "monday": 0,
+    "tuesday": 1,
+    "wednesday": 2,
+    "thursday": 3,
+    "friday": 4,
+    "saturday": 5,
+    "sunday": 6,
+}
+
+
+def _urgency_label_from_score(urgency_score: int) -> UrgencyLevel:
+    if urgency_score >= 85:
+        return "high"
+    if urgency_score >= 65:
+        return "medium"
+    return "low"
 
 
 class HouseholdOSDecisionEngine:
@@ -37,21 +84,10 @@ class HouseholdOSDecisionEngine:
             "HouseholdOSDecisionEngine.run",
             skip_modules={"household_os.core.decision_engine"},
         )
-        """
-        Perform unified household reasoning:
-        - Parse natural-language intent
-        - Consider calendar, meals, tasks, fitness globally
-        - Emit exactly ONE recommended next action
+        if allowed_domains is not None and len(allowed_domains) == 0:
+            raise ValueError("allowed_domains must be None or a non-empty list")
 
-        Args:
-            household_id: Household identifier
-            query: User query string
-            graph: Canonical state graph
-            request_id: Request tracking ID
-            allowed_domains: If set, only candidates from these domains are considered.
-                           If None, all domains are available (legacy behavior).
-                           If set and empty, raises ValueError.
-        """
+        # Perform unified household reasoning across calendar, meals, tasks, and fitness.
 
         # Parse intent from natural language
         intent = parse_intent(query)
@@ -84,7 +120,14 @@ class HouseholdOSDecisionEngine:
         # Meal candidate
         if can_use_meal and intent.intent_type in ("meal", "general"):
             candidates.append(
-                self._meal_candidate(query, grocery_inventory, meal_history, calendar_events, intent.priority)
+                self._meal_candidate(
+                    query,
+                    grocery_inventory,
+                    meal_history,
+                    calendar_events,
+                    reference_time,
+                    intent.priority,
+                )
             )
 
         # Fitness candidate
@@ -150,6 +193,41 @@ class HouseholdOSDecisionEngine:
         intent_priority: str,
     ) -> dict[str, Any]:
         busy_count = sum(1 for evt in calendar_events if str(evt.get("start", ""))[:10] >= reference_time[:10])
+
+        explicit_start = self._parse_explicit_requested_start(query, reference_time=reference_time)
+        if explicit_start is not None:
+            explicit_slot = self._format_slot(explicit_start)
+            explicit_end = explicit_start + timedelta(minutes=45)
+            has_conflict = self._has_calendar_conflict(
+                calendar_events=calendar_events,
+                start_dt=explicit_start,
+                end_dt=explicit_end,
+            )
+
+            urgency = 90 if any(token in query.lower() for token in ("dentist", "doctor", "appointment")) else 70
+            if intent_priority == "high":
+                urgency = min(urgency + 10, 100)
+
+            conflict_clause = (
+                "but it overlaps known calendar commitments and may require adjustment"
+                if has_conflict
+                else "because it matches the requested time and avoids known calendar conflicts"
+            )
+
+            return {
+                "domain": "calendar",
+                "urgency_score": urgency,
+                "urgency": _urgency_label_from_score(urgency),
+                "title": f"Schedule appointment for {explicit_slot}",
+                "description": f"Reserve {explicit_slot} for the requested appointment {conflict_clause}.",
+                "scheduled_for": explicit_slot,
+                "reasoning": [
+                    f"Calendar analysis shows {busy_count} near-term commitments.",
+                    f"The request explicitly included {explicit_slot}, so the engine preserved that window.",
+                    "Human approval remains required before execution.",
+                ],
+            }
+
         windows = _find_available_windows(calendar_events, self._parse_iso(reference_time))
         chosen = next(
             (w for w in windows if w[0].lower() in {"monday", "tuesday", "wednesday", "thursday", "friday"}),
@@ -163,7 +241,7 @@ class HouseholdOSDecisionEngine:
         return {
             "domain": "calendar",
             "urgency_score": urgency,
-            "urgency": "high",
+            "urgency": _urgency_label_from_score(urgency),
             "title": f"Schedule appointment for {chosen[1]}",
             "description": f"Reserve {chosen[1]} for the requested appointment because it avoids known calendar conflicts.",
             "scheduled_for": chosen[1],
@@ -180,6 +258,7 @@ class HouseholdOSDecisionEngine:
         grocery_inventory: dict[str, int],
         meal_history: list[dict[str, Any]],
         calendar_events: list[dict[str, Any]],
+        reference_time: str,
         intent_priority: str,
     ) -> dict[str, Any]:
         meal = plan_meal(
@@ -197,17 +276,22 @@ class HouseholdOSDecisionEngine:
         if intent_priority == "high":
             urgency = min(urgency + 10, 100)
 
-        description = f"Prepare {meal.recipe_name} for 18:30-19:15"
+        reference_dt = self._parse_iso(reference_time)
+        meal_start = reference_dt.replace(hour=18, minute=30, second=0, microsecond=0)
+        meal_end = meal_start + timedelta(minutes=45)
+        scheduled_for = f"{meal_start.strftime('%Y-%m-%d %H:%M')}-{meal_end.strftime('%H:%M')}"
+
+        description = f"Prepare {meal.recipe_name} for {scheduled_for}"
         if meal.grocery_additions:
             description += f" and acquire: {', '.join(meal.grocery_additions)}"
 
         return {
             "domain": "meal",
             "urgency_score": urgency,
-            "urgency": "high",
+            "urgency": _urgency_label_from_score(urgency),
             "title": f"Cook {meal.recipe_name}",
             "description": description,
-            "scheduled_for": "2026-04-19 18:30-19:15",
+            "scheduled_for": scheduled_for,
             "reasoning": [
                 f"{meal.recipe_name} balances nutrition with kitchen availability.",
                 f"Grocery gaps: {', '.join(meal.grocery_additions) if meal.grocery_additions else 'None'}",
@@ -237,7 +321,7 @@ class HouseholdOSDecisionEngine:
         return {
             "domain": "fitness",
             "urgency_score": urgency,
-            "urgency": "high",
+            "urgency": _urgency_label_from_score(urgency),
             "title": f"Start {goal} routine",
             "description": f"Use {scheduled or 'the next open morning slot'} for a repeatable {goal} session.",
             "scheduled_for": scheduled,
@@ -258,7 +342,7 @@ class HouseholdOSDecisionEngine:
         return {
             "domain": "general",
             "urgency_score": 50,
-            "urgency": "medium",
+            "urgency": _urgency_label_from_score(50),
             "title": "Review household coordination",
             "description": f"Coordinate across {len(open_tasks)} open tasks and {len(constraints)} active constraints.",
             "scheduled_for": None,
@@ -268,6 +352,158 @@ class HouseholdOSDecisionEngine:
                 "General coordination is the fallback when specific domains are unclear.",
             ],
         }
+
+    def _parse_explicit_requested_start(self, query: str, *, reference_time: str) -> datetime | None:
+        normalized = " ".join(query.strip().lower().split())
+        reference_dt = self._parse_iso(reference_time)
+        requested_date = self._extract_requested_date(normalized, reference_dt=reference_dt)
+        requested_time = self._extract_requested_time(normalized)
+
+        if requested_date is None and requested_time is None:
+            return None
+
+        if requested_date is None:
+            requested_date = reference_dt.date()
+        if requested_time is None:
+            requested_time = (9, 0)
+
+        hour, minute = requested_time
+        try:
+            return datetime(
+                requested_date.year,
+                requested_date.month,
+                requested_date.day,
+                hour,
+                minute,
+                tzinfo=reference_dt.tzinfo,
+            )
+        except ValueError:
+            return None
+
+    def _extract_requested_date(self, normalized: str, *, reference_dt: datetime):
+        numeric_date_match = re.search(
+            r"\b(?P<month>\d{1,2})[/-](?P<day>\d{1,2})(?:[/-](?P<year>\d{2,4}))?\b",
+            normalized,
+            flags=re.IGNORECASE,
+        )
+        if numeric_date_match is not None:
+            month = int(numeric_date_match.group("month"))
+            day = int(numeric_date_match.group("day"))
+            year_raw = numeric_date_match.group("year")
+            year = int(year_raw) if year_raw else reference_dt.year
+            if year < 100:
+                year += 2000
+            try:
+                return datetime(year, month, day, tzinfo=reference_dt.tzinfo).date()
+            except ValueError:
+                return None
+
+        named_date_match = re.search(
+            r"\b(?P<month_name>jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+(?P<day>\d{1,2})(?:\s*,?\s*(?P<year>\d{2,4}))?\b",
+            normalized,
+            flags=re.IGNORECASE,
+        )
+        if named_date_match is not None:
+            month_name = named_date_match.group("month_name").lower()
+            month = _MONTH_NAME_TO_INDEX.get(month_name)
+            if month is None:
+                return None
+            day = int(named_date_match.group("day"))
+            year_raw = named_date_match.group("year")
+            year = int(year_raw) if year_raw else reference_dt.year
+            if year < 100:
+                year += 2000
+            try:
+                return datetime(year, month, day, tzinfo=reference_dt.tzinfo).date()
+            except ValueError:
+                return None
+
+        if "tomorrow" in normalized:
+            return reference_dt.date() + timedelta(days=1)
+
+        if "today" in normalized or "tonight" in normalized:
+            return reference_dt.date()
+
+        for weekday_name, weekday_index in _WEEKDAY_TO_INDEX.items():
+            if re.search(rf"\b{weekday_name}\b", normalized):
+                offset = (weekday_index - reference_dt.weekday()) % 7
+                if offset == 0:
+                    offset = 7
+                return reference_dt.date() + timedelta(days=offset)
+
+        return None
+
+    def _extract_requested_time(self, normalized: str) -> tuple[int, int] | None:
+        if re.search(r"\bnoon\b", normalized):
+            return (12, 0)
+        if re.search(r"\bmidnight\b", normalized):
+            return (0, 0)
+
+        twelve_hour_match = re.search(
+            r"\b(?P<hour>\d{1,2})(?::(?P<minute>\d{2}))?\s*(?P<ampm>am|pm)\b",
+            normalized,
+            flags=re.IGNORECASE,
+        )
+        if twelve_hour_match is not None:
+            hour = int(twelve_hour_match.group("hour"))
+            minute = int(twelve_hour_match.group("minute") or 0)
+            ampm = twelve_hour_match.group("ampm").lower()
+
+            if hour < 1 or hour > 12:
+                return None
+            if ampm == "pm" and hour != 12:
+                hour += 12
+            if ampm == "am" and hour == 12:
+                hour = 0
+            return (hour, minute)
+
+        twenty_four_hour_match = re.search(
+            r"\b(?P<hour24>[01]?\d|2[0-3]):(?P<minute24>[0-5]\d)\b",
+            normalized,
+            flags=re.IGNORECASE,
+        )
+        if twenty_four_hour_match is not None:
+            return (
+                int(twenty_four_hour_match.group("hour24")),
+                int(twenty_four_hour_match.group("minute24")),
+            )
+
+        if re.search(r"\bmorning\b", normalized):
+            return (9, 0)
+        if re.search(r"\bafternoon\b", normalized) or re.search(r"\bmidday\b", normalized):
+            return (14, 0)
+        if re.search(r"\bevening\b", normalized) or re.search(r"\btonight\b", normalized):
+            return (18, 0)
+
+        return None
+
+    def _format_slot(self, start_dt: datetime) -> str:
+        end_dt = start_dt + timedelta(minutes=45)
+        return f"{start_dt.strftime('%Y-%m-%d %H:%M')}-{end_dt.strftime('%H:%M')}"
+
+    def _has_calendar_conflict(
+        self,
+        *,
+        calendar_events: list[dict[str, Any]],
+        start_dt: datetime,
+        end_dt: datetime,
+    ) -> bool:
+        for event in calendar_events:
+            start_raw = str(event.get("start", "")).strip()
+            end_raw = str(event.get("end", "")).strip()
+            if not start_raw or not end_raw:
+                continue
+
+            try:
+                event_start = self._parse_iso(start_raw)
+                event_end = self._parse_iso(end_raw)
+            except ValueError:
+                continue
+
+            if start_dt < event_end and event_start < end_dt:
+                return True
+
+        return False
 
     def _parse_iso(self, value: str) -> datetime:
         return datetime.fromisoformat(value.replace("Z", "+00:00"))

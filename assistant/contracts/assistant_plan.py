@@ -4,7 +4,7 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from apps.assistant_core.contracts import AssistantIntent, ProposedAction
+from archive.apps.assistant_core.contracts import AssistantIntent, ProposedAction
 
 
 class SnapshotCalendarEvent(BaseModel):

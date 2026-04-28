@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from apps.api.integration_core import InMemoryOAuthCredentialStore, OAuthCredential
+from archive.apps.api.integration_core import InMemoryOAuthCredentialStore, OAuthCredential
 
 
 def test_store_and_retrieve_credentials() -> None:
@@ -96,3 +96,57 @@ def test_supports_multiple_providers_per_user() -> None:
     assert calendar_loaded is not None
     assert gmail_loaded.access_token == "gmail-token"
     assert calendar_loaded.access_token == "calendar-token"
+
+
+def test_credentials_persist_when_backed_by_file(tmp_path) -> None:
+    persistence_path = tmp_path / "oauth_credentials_store.json"
+    writer = InMemoryOAuthCredentialStore(persistence_path=str(persistence_path))
+    credentials = OAuthCredential(
+        user_id="persist-user",
+        provider_name="google_calendar",
+        access_token="persist-access-token",
+        refresh_token="persist-refresh-token",
+        scopes=("calendar.readonly", "gmail.readonly"),
+        expires_at=datetime(2032, 6, 1, 12, 0, 0),
+    )
+
+    writer.save_credentials(credentials)
+
+    # Simulate restart by constructing a fresh store instance from disk.
+    reader = InMemoryOAuthCredentialStore(persistence_path=str(persistence_path))
+    loaded = reader.get_credentials(user_id="persist-user", provider_name="google_calendar")
+
+    assert loaded is not None
+    assert loaded.user_id == credentials.user_id
+    assert loaded.provider_name == credentials.provider_name
+    assert loaded.access_token == credentials.access_token
+    assert loaded.refresh_token == credentials.refresh_token
+    assert loaded.scopes == credentials.scopes
+    assert loaded.expires_at == credentials.expires_at
+
+
+def test_lookup_miss_reloads_from_disk(tmp_path) -> None:
+    persistence_path = tmp_path / "oauth_credentials_store.json"
+
+    # Stale reader starts first with empty in-memory records.
+    stale_reader = InMemoryOAuthCredentialStore(persistence_path=str(persistence_path))
+
+    writer = InMemoryOAuthCredentialStore(persistence_path=str(persistence_path))
+    credentials = OAuthCredential(
+        user_id="reload-user",
+        provider_name="google_calendar",
+        access_token="reload-access-token",
+        refresh_token="reload-refresh-token",
+        scopes=("calendar.readonly",),
+        expires_at=datetime(2032, 6, 1, 12, 0, 0),
+    )
+    writer.save_credentials(credentials)
+
+    loaded = stale_reader.get_credentials(user_id="reload-user", provider_name="google_calendar")
+
+    assert loaded is not None
+    assert loaded.user_id == credentials.user_id
+    assert loaded.provider_name == credentials.provider_name
+    assert loaded.access_token == credentials.access_token
+    assert loaded.refresh_token == credentials.refresh_token
+    assert loaded.scopes == credentials.scopes

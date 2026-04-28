@@ -19,7 +19,7 @@ LIFECYCLE_KEYS = {
     "lifecycle_state",
 }
 
-LEGACY_FORBIDDEN = {"executed", "ignored", "pending_approval"}
+LEGACY_FORBIDDEN = {"executed", "ignored"}
 LIFECYCLE_PATH_HINTS = {
     "action_lifecycle",
     "transition_log",

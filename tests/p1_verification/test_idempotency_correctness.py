@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from apps.api.services.idempotency_key_service import IdempotencyKeyService
+from archive.apps.api.services.idempotency_key_service import IdempotencyKeyService
 from tests.p1_verification.fixtures import TestFixtures
 
 

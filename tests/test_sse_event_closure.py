@@ -6,11 +6,11 @@ from pathlib import Path
 
 import pytest
 
-from apps.api.realtime.broadcaster import HouseholdBroadcaster
-from apps.api.schemas.canonical_event import CanonicalEventEnvelope
-from apps.api.schemas.event import SystemEvent
-from apps.api.services.canonical_event_adapter import CanonicalEventAdapter
-from apps.api.services.idempotency_key_service import IdempotencyKeyService
+from archive.apps.api.realtime.broadcaster import HouseholdBroadcaster
+from archive.apps.api.schemas.canonical_event import CanonicalEventEnvelope
+from archive.apps.api.schemas.event import SystemEvent
+from archive.apps.api.services.canonical_event_adapter import CanonicalEventAdapter
+from archive.apps.api.services.idempotency_key_service import IdempotencyKeyService
 from household_os.core.lifecycle_state import LifecycleState
 from household_os.runtime.domain_event import DomainEvent, LIFECYCLE_EVENT_TYPES
 

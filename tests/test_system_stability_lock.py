@@ -21,11 +21,11 @@ from typing import Any
 from fastapi.testclient import TestClient
 from sqlalchemy import text
 
-from apps.api.core.database import SessionLocal
-from apps.api.endpoints import brief_endpoint
-from apps.api.models.event_log import EventLog
-from apps.api.models.idempotency_key import IdempotencyKey
-from apps.api.models.task import Task
+from archive.apps.api.core.database import SessionLocal
+from archive.apps.api.endpoints import brief_endpoint
+from archive.apps.api.models.event_log import EventLog
+from archive.apps.api.models.idempotency_key import IdempotencyKey
+from archive.apps.api.models.task import Task
 from datetime import date as _date
 
 
@@ -189,7 +189,7 @@ def _get_db_row_counts(household_id: str) -> dict[str, int]:
 
 def _get_event_bus_handler_count() -> int:
     """Get current handler count from the event bus."""
-    from apps.api.core.event_bus import get_event_bus
+    from archive.apps.api.core.event_bus import get_event_bus
     
     bus = get_event_bus()
     if hasattr(bus, "_registry"):

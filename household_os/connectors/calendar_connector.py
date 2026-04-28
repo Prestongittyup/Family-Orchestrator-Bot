@@ -3,7 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
-from apps.api.integration_core.models.household_state import HouseholdState
+from archive.apps.api.integration_core.models.household_state import HouseholdState
 
 
 class CalendarConnector:

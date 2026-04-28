@@ -23,13 +23,13 @@ from sqlalchemy import text
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from apps.api import main
-from apps.api.core.database import Base, SessionLocal, engine
-from apps.api.core.event_bus import get_event_bus
-from apps.api.core.feature_flags import _reset_feature_flags_for_tests
-from apps.api.models.event_log import EventLog
-from apps.api.models.idempotency_key import IdempotencyKey
-from apps.api.models.task import Task
+from archive.apps.api import main
+from archive.apps.api.core.database import Base, SessionLocal, engine
+from archive.apps.api.core.event_bus import get_event_bus
+from archive.apps.api.core.feature_flags import _reset_feature_flags_for_tests
+from archive.apps.api.models.event_log import EventLog
+from archive.apps.api.models.idempotency_key import IdempotencyKey
+from archive.apps.api.models.task import Task
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -56,8 +56,8 @@ def reset_event_bus():
     Resets both the cached instance AND the module-level reference in event_registry
     to ensure consistency across the codebase.
     """
-    import apps.api.core.event_bus as event_bus_module
-    import apps.api.core.event_registry as event_registry_module
+    import archive.apps.api.core.event_bus as event_bus_module
+    import archive.apps.api.core.event_registry as event_registry_module
     
     # Clear the cached singleton
     event_bus_module._event_bus_instance = None

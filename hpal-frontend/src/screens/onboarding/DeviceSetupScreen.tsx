@@ -10,9 +10,11 @@ interface DeviceSetupScreenProps {
   deviceName?: string;
   onDeviceNameChange: (name: string) => void;
   onRequestPermissions: () => Promise<boolean>;
+  onConnectGoogleAccount: () => void;
   onComplete: () => void;
   onBack: () => void;
   canProgress: boolean;
+  isProcessing?: boolean;
   progress: number;
 }
 
@@ -20,9 +22,11 @@ export const DeviceSetupScreen: React.FC<DeviceSetupScreenProps> = ({
   deviceName = "",
   onDeviceNameChange,
   onRequestPermissions,
+  onConnectGoogleAccount,
   onComplete,
   onBack,
   canProgress,
+  isProcessing = false,
   progress,
 }) => {
   const [isRequestingPermissions, setIsRequestingPermissions] = useState(false);
@@ -51,7 +55,7 @@ export const DeviceSetupScreen: React.FC<DeviceSetupScreenProps> = ({
   };
 
   const handleComplete = () => {
-    if (canProgress) {
+    if (canProgress && !isProcessing) {
       onComplete();
     }
   };
@@ -171,19 +175,40 @@ export const DeviceSetupScreen: React.FC<DeviceSetupScreenProps> = ({
                 minimal storage space.
               </p>
             </div>
+
+            <div className={styles.permissionCard}>
+              <div className={styles.permissionHeader}>
+                <span className={styles.permissionIcon}>📆</span>
+                <div>
+                  <h4 className={styles.permissionName}>Google Calendar</h4>
+                  <p className={styles.permissionStatus}>Recommended</p>
+                </div>
+              </div>
+              <p className={styles.permissionDescription}>
+                Connect your Google account so this household can read your calendar and build smarter plans.
+              </p>
+              <button
+                className={`${styles.button} ${styles.secondary}`}
+                onClick={onConnectGoogleAccount}
+                type="button"
+                aria-label="Connect Google account"
+              >
+                Connect Google Account
+              </button>
+            </div>
           </div>
         </div>
 
         <div className={styles.actions}>
           <button
             className={`${styles.button} ${styles.primary} ${
-              !canProgress ? styles.disabled : ""
+              !canProgress || isProcessing ? styles.disabled : ""
             }`}
             onClick={handleComplete}
-            disabled={!canProgress || isRequestingPermissions}
+            disabled={!canProgress || isRequestingPermissions || isProcessing}
             aria-label="Complete onboarding"
           >
-            Complete Setup
+            {isProcessing ? "Finalizing..." : "Complete Setup"}
           </button>
           <label className={styles.skipLabel}>
             <input

@@ -3,17 +3,18 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from artifact_paths import artifact_read_path, artifact_write_path
 from policy_engine.contracts import HouseholdMemoryBody, HouseholdMemorySnapshot
 
 
 class PolicyMemoryStore:
     def __init__(self, root_path: Path | None = None) -> None:
         self.root_path = root_path or Path(__file__).resolve().parent.parent
-        self.memory_path = self.root_path / "policy_memory.json"
-        self.report_path = self.root_path / "policy_engine_report.json"
+        self.memory_path = artifact_write_path("policy_memory.json")
+        self.report_path = artifact_write_path("policy_engine_report.json")
 
     def _load_json(self, file_name: str) -> dict:
-        return json.loads((self.root_path / file_name).read_text(encoding="utf-8"))
+        return json.loads(artifact_read_path(file_name).read_text(encoding="utf-8"))
 
     def build_memory_snapshot(self, household_id: str = "household-001") -> HouseholdMemorySnapshot:
         evaluation = self._load_json("evaluation_results.json")

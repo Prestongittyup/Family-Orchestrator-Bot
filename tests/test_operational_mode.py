@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
-from apps.api.main import app
-from apps.api.endpoints import evaluation_router
+from archive.apps.api.main import app
+from archive.apps.api.endpoints import evaluation_router
 
 
 _REQUIRED_KEYS = {

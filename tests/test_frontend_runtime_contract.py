@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from apps.api.product_surface.contracts import (
+from archive.apps.api.product_surface.contracts import (
     ActionCard,
     CalendarState,
     ChatResponse,
@@ -17,7 +17,7 @@ from apps.api.product_surface.contracts import (
     UIPatch,
     XAIExplanationSummary,
 )
-from apps.api.product_surface.frontend_runtime import (
+from archive.apps.api.product_surface.frontend_runtime import (
     ActionExecutionBinder,
     ActionExecutionResult,
     FrontendRuntimeEngine,

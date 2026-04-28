@@ -23,7 +23,7 @@ from pathlib import Path
 
 import pytest
 
-from apps.api.integration_core.architecture_guard import (
+from archive.apps.api.integration_core.architecture_guard import (
     IntegrationCoreBoundaryViolation,
     assert_runtime_architecture_source,
 )
@@ -65,14 +65,14 @@ def test_services_decision_engine_is_deleted() -> None:
 # ---------------------------------------------------------------------------
 
 def test_canonical_decision_engine_importable() -> None:
-    from apps.api.integration_core.decision_engine import DecisionEngine, DecisionContext  # noqa: F401
+    from archive.apps.api.integration_core.decision_engine import DecisionEngine, DecisionContext  # noqa: F401
     assert DecisionEngine is not None
     assert DecisionContext is not None
 
 
 def test_canonical_decision_engine_process_produces_context() -> None:
-    from apps.api.integration_core.decision_engine import DecisionEngine
-    from apps.api.integration_core.models.household_state import HouseholdState
+    from archive.apps.api.integration_core.decision_engine import DecisionEngine
+    from archive.apps.api.integration_core.models.household_state import HouseholdState
 
     state = HouseholdState(
         user_id="u1",

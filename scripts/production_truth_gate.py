@@ -31,10 +31,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from apps.api.main import create_app
+from archive.apps.api.main import create_app
 
 try:
-    import apps.api.runtime.loop_tracing as _loop_tracing
+    import archive.apps.api.runtime.loop_tracing as _loop_tracing
     # Keep tracing logic active but suppress extremely verbose stdout spam during load runs.
     _loop_tracing.print = lambda *args, **kwargs: None
 except Exception:

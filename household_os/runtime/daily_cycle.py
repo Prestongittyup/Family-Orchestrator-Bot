@@ -4,7 +4,7 @@ from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from apps.api.integration_core.models.household_state import HouseholdState
+from archive.apps.api.integration_core.models.household_state import HouseholdState
 from household_os.runtime.orchestrator import (
     HouseholdOSOrchestrator,
     OrchestratorRequest,

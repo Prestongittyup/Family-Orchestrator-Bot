@@ -1493,8 +1493,10 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
 | Var | Value | Purpose |
 |-----|-------|---------|
 | `PYTHONUNBUFFERED` | 1 | Real-time log output |
-| `VITE_BACKEND_URL` | http://backend:8000 | UI→backend communication (Docker network) |
 | `VITE_API_BASE_URL` | /api | UI API prefix |
+| `VITE_PROXY_TARGET` | http://backend:8000 | UI→backend communication (Docker network) |
+
+Backend reads `.env` at startup and Docker Compose forwards the three Google OAuth variables.
 
 **Google Calendar (Optional Credentials)**
 
@@ -1506,6 +1508,13 @@ GOOGLE_REDIRECT_URI=http://127.0.0.1:8000/integrations/google-calendar/callback
 ```
 
 Calendar integration currently uses mock providers. Real OAuth requires valid credentials + network access.
+
+Quick setup:
+```bash
+cp .env.example .env
+# Edit .env and fill GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET
+docker compose up -d --build
+```
 
 ---
 

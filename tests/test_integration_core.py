@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from apps.api.integration_core import (
+from archive.apps.api.integration_core import (
     InMemoryOAuthCredentialStore,
     OAuthToken,
     ProviderRegistry,

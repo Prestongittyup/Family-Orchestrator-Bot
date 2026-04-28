@@ -10,9 +10,9 @@ from __future__ import annotations
 import pytest
 from datetime import datetime
 
-from apps.api.identity.sqlalchemy_repository import SQLAlchemyIdentityRepository
-from apps.api.identity.service import IdentityService
-from apps.api.identity.auth import (
+from archive.apps.api.identity.sqlalchemy_repository import SQLAlchemyIdentityRepository
+from archive.apps.api.identity.service import IdentityService
+from archive.apps.api.identity.auth import (
     encode_session_token,
     decode_session_token,
     validate_session_token,

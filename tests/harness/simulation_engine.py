@@ -21,8 +21,8 @@ import copy
 import hashlib
 import json
 
-from apps.api.xai.causal_mapper import CausalContext, CausalMapper
-from apps.api.xai.schema import (
+from archive.apps.api.xai.causal_mapper import CausalContext, CausalMapper
+from archive.apps.api.xai.schema import (
     EntityType as XAIEntityType,
     ExplanationSchema,
     InitiatedBy,
@@ -232,7 +232,7 @@ class HouseholdSimulationState:
 class SimulationEngine:
     """Core simulation orchestrator"""
     
-    def __init__(self, family_id: str, random_seed: int = 42):
+    def __init__(self, family_id: str = "test-family", random_seed: int = 42):
         self.family_id = family_id
         self.random_seed = random_seed
         random.seed(random_seed)
@@ -253,17 +253,31 @@ class SimulationEngine:
     def add_family_member(
         self,
         person_id: str,
-        name: str,
-        role: PersonRole,
+        name: str | None = None,
+        role: PersonRole | str = PersonRole.PARENT,
+        family_id: str | None = None,
     ) -> FamilyMember:
         """Add a family member to simulation"""
-        member = FamilyMember(person_id, name, role, self.family_id)
+        if isinstance(role, str):
+            normalized_role = role.strip().lower()
+            role = {
+                "admin": PersonRole.PARENT,
+                "parent": PersonRole.PARENT,
+                "teenager": PersonRole.TEENAGER,
+                "child": PersonRole.CHILD,
+                "caregiver": PersonRole.CAREGIVER,
+            }.get(normalized_role, PersonRole.PARENT)
+
+        resolved_name = name or person_id
+        resolved_family_id = family_id or self.family_id
+
+        member = FamilyMember(person_id, resolved_name, role, resolved_family_id)
         self.family_members[person_id] = member
         
         self._log_event({
             "type": "member_registered",
             "person_id": person_id,
-            "name": name,
+            "name": resolved_name,
             "role": role.value,
         })
         

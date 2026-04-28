@@ -16,6 +16,7 @@ interface HouseholdSetupScreenProps {
   onNext: () => void;
   onBack: () => void;
   canProgress: boolean;
+  isProcessing?: boolean;
   progress: number;
 }
 
@@ -29,6 +30,7 @@ export const HouseholdSetupScreen: React.FC<HouseholdSetupScreenProps> = ({
   onNext,
   onBack,
   canProgress,
+  isProcessing = false,
   progress,
 }) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -55,6 +57,10 @@ export const HouseholdSetupScreen: React.FC<HouseholdSetupScreenProps> = ({
   };
 
   const handleNext = () => {
+    if (isProcessing) {
+      return;
+    }
+
     if (validateInputs()) {
       onNext();
     }
@@ -175,13 +181,13 @@ export const HouseholdSetupScreen: React.FC<HouseholdSetupScreenProps> = ({
         <div className={styles.actions}>
           <button
             className={`${styles.button} ${styles.primary} ${
-              !canProgress ? styles.disabled : ""
+              !canProgress || isProcessing ? styles.disabled : ""
             }`}
             onClick={handleNext}
-            disabled={!canProgress}
+            disabled={!canProgress || isProcessing}
             aria-label="Continue to next step"
           >
-            Continue
+            {isProcessing ? "Creating..." : "Continue"}
           </button>
         </div>
       </div>

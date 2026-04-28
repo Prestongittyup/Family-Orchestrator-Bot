@@ -27,7 +27,7 @@ def test_calendar_service_imports() -> bool:
     """TEST 1: calendar_service imports with TIL."""
     test_name = "TEST 1 - Calendar Service Imports"
     try:
-        from apps.api.services.calendar_service import (
+        from archive.apps.api.services.calendar_service import (
             schedule_event,
             create_recurring_event,
         )
@@ -119,7 +119,7 @@ def test_schedule_event_runtime() -> bool:
     """TEST 5: schedule_event() executes without errors."""
     test_name = "TEST 5 - schedule_event() Runtime"
     try:
-        from apps.api.services.calendar_service import schedule_event
+        from archive.apps.api.services.calendar_service import schedule_event
 
         # Call schedule_event with test data
         event = schedule_event(
@@ -153,7 +153,7 @@ def test_recurring_event_runtime() -> bool:
     """TEST 6: create_recurring_event() executes without errors."""
     test_name = "TEST 6 - create_recurring_event() Runtime"
     try:
-        from apps.api.services.calendar_service import create_recurring_event
+        from archive.apps.api.services.calendar_service import create_recurring_event
 
         # Call create_recurring_event with test data
         event = create_recurring_event(
@@ -188,7 +188,7 @@ def test_shadow_mode_behavior_neutral() -> bool:
     """TEST 7: TIL observations don't affect event creation."""
     test_name = "TEST 7 - Shadow Mode Behavior Neutral"
     try:
-        from apps.api.services.calendar_service import schedule_event
+        from archive.apps.api.services.calendar_service import schedule_event
 
         # Create event with explicit start_time (should be used if provided)
         explicit_time = "2026-04-15T10:00:00"

@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from apps.api.integration_core.models.household_state import HouseholdState
-from apps.assistant_core.contracts import AssistantResponse, ConflictRecord
-from apps.assistant_core.intent_parser import parse_intent
-from apps.assistant_core.planning_engine import (
+from archive.apps.api.integration_core.models.household_state import HouseholdState
+from archive.apps.assistant_core.contracts import AssistantResponse, ConflictRecord
+from archive.apps.assistant_core.intent_parser import parse_intent
+from archive.apps.assistant_core.planning_engine import (
     AssistantPlanningEngine,
     _build_appointment_plan,
     _build_fitness_plan,
@@ -186,7 +186,11 @@ class AssistantRuntimeEngine:
             existing_domains.add("appointment")
 
         if "meal" in selected_domains and "meal" not in existing_domains:
-            plan, conflicts, _alternatives, actions, reasoning = _build_meal_plan(intent, repeat_window_days)
+            plan, conflicts, _alternatives, actions, reasoning = _build_meal_plan(
+                intent,
+                repeat_window_days,
+                reference_time,
+            )
             proposal = _domain_proposal("meal", plan, proposal_id=f"{request_id}-meal")
             proposals.append(proposal)
             merged_conflicts.extend(_as_merged_conflict(conflict, proposal.proposal_id) for conflict in conflicts)

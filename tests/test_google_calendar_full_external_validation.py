@@ -9,21 +9,21 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from apps.api.integration_core.architecture_guard import FORBIDDEN_IMPORT_PREFIXES
-from apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential
-from apps.api.integration_core.event_windowing import OrchestrationView
-from apps.api.integration_core.google_calendar_provider import GoogleCalendarProviderReal
-from apps.api.integration_core.google_oauth_config import (
+from archive.apps.api.integration_core.architecture_guard import FORBIDDEN_IMPORT_PREFIXES
+from archive.apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential
+from archive.apps.api.integration_core.event_windowing import OrchestrationView
+from archive.apps.api.integration_core.google_calendar_provider import GoogleCalendarProviderReal
+from archive.apps.api.integration_core.google_oauth_config import (
     GoogleOAuthClientConfig,
     OAuthStateStore,
     build_authorization_url,
     exchange_code_for_tokens,
 )
-from apps.api.integration_core.identity_service import IdentityService
-from apps.api.integration_core.normalization import normalize_provider_events
-from apps.api.integration_core.orchestrator import IntegrationOrchestrator
-from apps.api.integration_core.registry import ProviderRegistry
-from apps.api.integration_core.repository import InMemoryIdentityRepository
+from archive.apps.api.integration_core.identity_service import IdentityService
+from archive.apps.api.integration_core.normalization import normalize_provider_events
+from archive.apps.api.integration_core.orchestrator import IntegrationOrchestrator
+from archive.apps.api.integration_core.registry import ProviderRegistry
+from archive.apps.api.integration_core.repository import InMemoryIdentityRepository
 
 
 def _mock_google_http(event_items: list[dict[str, Any]]) -> MagicMock:

@@ -91,7 +91,7 @@ jobs:
 In Azure Portal → Static Web Apps → Configuration → Application Settings:
 
 ```
-VITE_API_BASE_URL=https://hpal-backend.azurewebsites.net/api
+VITE_API_BASE_URL=https://hpal-backend.azurewebsites.net
 ```
 
 #### Deploy
@@ -229,7 +229,7 @@ git push azure main
 az webapp config appsettings set \
   --name hpal-frontend \
   --resource-group rg-hpal \
-  --settings VITE_API_BASE_URL="https://hpal-backend.azurewebsites.net/api"
+  --settings VITE_API_BASE_URL="https://hpal-backend.azurewebsites.net"
 ```
 
 ---
@@ -251,7 +251,7 @@ az webapp config appsettings set \
 
 3. **Environment Variables**
    - Go to Site Settings → Build & Deploy → Environment
-   - Add `VITE_API_BASE_URL=https://hpal-backend.example.com/api`
+  - Add `VITE_API_BASE_URL=https://hpal-backend.example.com`
 
 4. **Deploy**
    - Push to main branch
@@ -281,7 +281,7 @@ Follow prompts to connect GitHub account and configure project.
 
 ```bash
 # .env
-VITE_API_BASE_URL=http://localhost:8000/api
+VITE_API_BASE_URL=http://localhost:8000
 ```
 
 ### Runtime Environment (Docker / Container Apps)
@@ -290,7 +290,7 @@ Use environment variables passed at container startup:
 
 ```bash
 docker run \
-  -e VITE_API_BASE_URL=https://hpal-backend.example.com/api \
+  -e VITE_API_BASE_URL=https://hpal-backend.example.com \
   -p 80:80 \
   hpal-frontend:latest
 ```
@@ -300,7 +300,7 @@ docker run \
 Via Application Settings in Azure Portal:
 
 ```
-VITE_API_BASE_URL = https://hpal-backend.azurewebsites.net/api
+VITE_API_BASE_URL = https://hpal-backend.azurewebsites.net
 ```
 
 ---
@@ -496,10 +496,10 @@ Check `.env` or environment variables:
 
 ```bash
 # Local
-VITE_API_BASE_URL=http://localhost:8000/api
+VITE_API_BASE_URL=http://localhost:8000
 
 # Production
-VITE_API_BASE_URL=https://hpal-backend.azurewebsites.net/api
+VITE_API_BASE_URL=https://hpal-backend.azurewebsites.net
 ```
 
 ### CORS Errors

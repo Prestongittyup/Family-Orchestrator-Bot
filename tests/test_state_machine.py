@@ -14,7 +14,7 @@ Tests validate:
 import pytest
 from datetime import UTC, datetime, timedelta
 
-from apps.api.core.state_machine import (
+from archive.apps.api.core.state_machine import (
     ActionState,
     StateMachine,
     StateTransitionEvent,

@@ -4,8 +4,8 @@ import subprocess
 
 from fastapi.testclient import TestClient
 
-from apps.api import main
-from apps.api.endpoints import evaluation_router
+from archive.apps.api import main
+from archive.apps.api.endpoints import evaluation_router
 
 
 def test_evaluation_results_artifact_endpoint_serves_json() -> None:

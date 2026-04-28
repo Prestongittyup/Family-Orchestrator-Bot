@@ -22,15 +22,15 @@ from datetime import datetime
 
 import pytest
 
-from apps.api.xai.causal_mapper import CausalContext, CausalMapper
-from apps.api.xai.schema import (
+from archive.apps.api.xai.causal_mapper import CausalContext, CausalMapper
+from archive.apps.api.xai.schema import (
     EntityType,
     ExplanationSchema,
     InitiatedBy,
     ReasonCode,
 )
-from apps.api.xai.templates import TemplateEngine
-from apps.api.xai.validation import XAIValidator
+from archive.apps.api.xai.templates import TemplateEngine
+from archive.apps.api.xai.validation import XAIValidator
 
 
 # ---------------------------------------------------------------------------

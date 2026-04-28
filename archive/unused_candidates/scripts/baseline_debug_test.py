@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from apps.api.main import create_app
+from archive.apps.api.main import create_app
 
 HOST = "127.0.0.1"
 BASELINE_DURATION_SECONDS = 300  # 5 minutes

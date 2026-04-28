@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from apps.api.integration_core.architecture_guard import (
+from archive.apps.api.integration_core.architecture_guard import (
     IntegrationCoreBoundaryViolation,
     assert_allowed_import,
     guarded_import,

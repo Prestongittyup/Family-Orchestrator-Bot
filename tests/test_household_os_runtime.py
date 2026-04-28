@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from apps.assistant_core.planning_engine import _fallback_household_state
+from archive.apps.assistant_core.planning_engine import _fallback_household_state
 from household_os.core.decision_engine import HouseholdOSDecisionEngine
 from household_os.core.household_state_graph import HouseholdStateGraphStore
 from household_os.core.lifecycle_state import LifecycleState

@@ -49,6 +49,40 @@ export class PushNotificationManager {
   private permissionCache: NotificationPermissionState | null = null;
   private subscriptionCache: PushSubscription | null = null;
 
+  private isLocalOrDevRuntime(): boolean {
+    return import.meta.env.DEV || window.location.hostname === "localhost";
+  }
+
+  private async resolveServiceWorkerRegistration(): Promise<ServiceWorkerRegistration | null> {
+    if (!("serviceWorker" in navigator)) {
+      return null;
+    }
+
+    const existing = await navigator.serviceWorker.getRegistration();
+    if (existing) {
+      return existing;
+    }
+
+    if (this.isLocalOrDevRuntime()) {
+      console.warn("Service worker registration is disabled in local/dev mode for reload stability.");
+      return null;
+    }
+
+    try {
+      const registration = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
+      const ready = await Promise.race([
+        navigator.serviceWorker.ready,
+        new Promise<null>((resolve) => {
+          window.setTimeout(() => resolve(null), 4000);
+        }),
+      ]);
+      return ready ?? registration;
+    } catch (err) {
+      console.error("Failed to register service worker for push notifications:", err);
+      return null;
+    }
+  }
+
   async requestPermission(
     householdId: string,
     userId: string
@@ -94,8 +128,11 @@ export class PushNotificationManager {
         return false;
       }
 
-      // Get service worker registration
-      const registration = await navigator.serviceWorker.ready;
+      const registration = await this.resolveServiceWorkerRegistration();
+      if (!registration) {
+        console.warn("Push subscription skipped because no active service worker registration is available.");
+        return false;
+      }
 
       // Get or create push subscription
       let subscription = await registration.pushManager.getSubscription();
@@ -198,7 +235,10 @@ export class PushNotificationManager {
    */
   async unsubscribe(): Promise<boolean> {
     try {
-      const registration = await navigator.serviceWorker.ready;
+      const registration = await this.resolveServiceWorkerRegistration();
+      if (!registration) {
+        return false;
+      }
       const subscription = await registration.pushManager.getSubscription();
 
       if (subscription) {
@@ -220,7 +260,10 @@ export class PushNotificationManager {
    */
   async isSubscribed(): Promise<boolean> {
     try {
-      const registration = await navigator.serviceWorker.ready;
+      const registration = await this.resolveServiceWorkerRegistration();
+      if (!registration) {
+        return false;
+      }
       const subscription = await registration.pushManager.getSubscription();
       return !!subscription;
     } catch (err) {

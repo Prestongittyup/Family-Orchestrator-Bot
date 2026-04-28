@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from apps.api.integration_core.decision_engine import DecisionEngine
-from apps.api.integration_core.models.household_state import CalendarEvent, HouseholdState
-from apps.api.integration_core.orchestrator import Orchestrator
+from archive.apps.api.integration_core.decision_engine import DecisionEngine
+from archive.apps.api.integration_core.models.household_state import CalendarEvent, HouseholdState
+from archive.apps.api.integration_core.orchestrator import Orchestrator
 
 
 class _MockStateBuilder:

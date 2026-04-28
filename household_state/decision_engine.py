@@ -4,10 +4,10 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
 
-from apps.assistant_core.intent_parser import parse_intent
-from apps.assistant_core.fitness_planner import generate_fitness_plan
-from apps.assistant_core.meal_planner import plan_meal
-from apps.assistant_core.planning_engine import _find_available_windows
+from archive.apps.assistant_core.intent_parser import parse_intent
+from archive.apps.assistant_core.fitness_planner import generate_fitness_plan
+from archive.apps.assistant_core.meal_planner import plan_meal
+from archive.apps.assistant_core.planning_engine import _find_available_windows
 from household_state.contracts import (
     ApprovalGroup,
     HouseholdCurrentStateSummary,

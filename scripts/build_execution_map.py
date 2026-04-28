@@ -9,14 +9,14 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from apps.api.observability.eil import (
+from archive.apps.api.observability.eil import (
     bootstrap_eil,
     build_execution_map,
     build_module_heatmap,
     get_storage_backend,
     render_execution_map_markdown,
 )
-from apps.api.observability.eil.storage import JSONLStorageBackend
+from archive.apps.api.observability.eil.storage import JSONLStorageBackend
 
 
 TRACE_DIR = ROOT / "data" / "execution_traces"

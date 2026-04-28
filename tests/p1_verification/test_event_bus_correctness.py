@@ -9,7 +9,7 @@ from collections import defaultdict
 
 import pytest
 
-from apps.api.realtime.event_bus import InMemoryRealtimeEventBus, RealtimeEvent
+from archive.apps.api.realtime.event_bus import InMemoryRealtimeEventBus, RealtimeEvent
 from tests.p1_verification.fixtures import EventCapture, TestFixtures
 
 

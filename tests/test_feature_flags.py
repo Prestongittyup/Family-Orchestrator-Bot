@@ -16,13 +16,13 @@ import os
 
 import pytest
 
-from apps.api.integration_core.feature_flags import (
+from archive.apps.api.integration_core.feature_flags import (
     INTEGRATION_CORE_INGESTION_ENABLED,
     flag_default,
     is_enabled,
 )
-from apps.api.integration_core.normalization import ExternalEvent
-from apps.api.integration_core.os1_bridge import _IdempotencyStore, ingest_external_events
+from archive.apps.api.integration_core.normalization import ExternalEvent
+from archive.apps.api.integration_core.os1_bridge import _IdempotencyStore, ingest_external_events
 
 
 # ---------------------------------------------------------------------------

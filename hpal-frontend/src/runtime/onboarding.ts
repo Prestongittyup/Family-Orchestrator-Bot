@@ -87,7 +87,6 @@ export class OnboardingFlow {
     }
   }
 
-  private _fakeState: OnboardingState = {
   private listeners: Set<(state: OnboardingState) => void> = new Set();
 
   /**

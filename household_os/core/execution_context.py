@@ -7,7 +7,7 @@ from typing import Any, Optional
 
 @dataclass(frozen=True)
 class ActorContext:
-    actor_type: str  # user | assistant | system_worker | scheduler
+    actor_type: str  # api_user | user | assistant | system_worker | scheduler
     actor_id: str
     household_id: str
     auth_scope: str
@@ -25,9 +25,7 @@ class ExecutionContext:
 
     def _canonical_actor_type(self) -> str:
         raw = str(self.actor_type or "").strip().lower()
-        if raw == "api_user":
-            return "user"
-        if raw in {"user", "assistant", "system_worker", "scheduler"}:
+        if raw in {"api_user", "user", "assistant", "system_worker", "scheduler"}:
             return raw
         raise ValueError(f"Unknown actor_type: {self.actor_type!r}")
 

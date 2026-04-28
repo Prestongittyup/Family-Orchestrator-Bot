@@ -4,12 +4,12 @@ from datetime import UTC, datetime, timedelta
 
 from fastapi.testclient import TestClient
 
-from apps.api import main
-from apps.api.endpoints import brief_endpoint
-from apps.api.integration_core.brief_builder import BriefBuilder
-from apps.api.integration_core.decision_engine import DecisionEngine
-from apps.api.integration_core.models.household_state import CalendarEvent, HouseholdState
-from apps.api.integration_core.orchestrator import Orchestrator
+from archive.apps.api import main
+from archive.apps.api.endpoints import brief_endpoint
+from archive.apps.api.integration_core.brief_builder import BriefBuilder
+from archive.apps.api.integration_core.decision_engine import DecisionEngine
+from archive.apps.api.integration_core.models.household_state import CalendarEvent, HouseholdState
+from archive.apps.api.integration_core.orchestrator import Orchestrator
 
 
 class _MockStateBuilder:

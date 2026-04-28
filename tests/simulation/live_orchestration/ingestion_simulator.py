@@ -5,10 +5,10 @@ from typing import Any
 
 from fastapi.testclient import TestClient
 
-from apps.api import main
-from apps.api.endpoints import brief_endpoint
-from apps.api.endpoints import integrations_router as ir
-from apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential
+from archive.apps.api import main
+from archive.apps.api.endpoints import brief_endpoint
+from archive.apps.api.endpoints import integrations_router as ir
+from archive.apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential
 
 
 @dataclass

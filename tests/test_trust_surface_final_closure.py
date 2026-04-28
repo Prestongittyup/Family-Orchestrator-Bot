@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from apps.api.core.state_machine import ActionState, StateMachine
+from archive.apps.api.core.state_machine import ActionState, StateMachine
 from household_os.core.decision_engine import HouseholdOSDecisionEngine
 from household_os.core.lifecycle_state import LifecycleState
 from household_os.core.household_state_graph import HouseholdStateGraphStore

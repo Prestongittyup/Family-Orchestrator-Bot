@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
-from apps.api.integration_core.credentials import InMemoryOAuthCredentialStore
-from apps.api.integration_core.google_calendar_provider import GoogleCalendarRealProvider
-from apps.api.integration_core.orchestrator import Orchestrator
-from apps.api.integration_core.state_builder import StateBuilder
+from archive.apps.api.integration_core.credentials import InMemoryOAuthCredentialStore
+from archive.apps.api.integration_core.google_calendar_provider import GoogleCalendarRealProvider
+from archive.apps.api.integration_core.orchestrator import Orchestrator
+from archive.apps.api.integration_core.state_builder import StateBuilder
 
 
 def _clear_overrides(app) -> None:
@@ -17,8 +17,8 @@ def test_missing_google_oauth_config_does_not_crash_system(monkeypatch):
     monkeypatch.delenv("GOOGLE_CLIENT_SECRET", raising=False)
     monkeypatch.delenv("GOOGLE_REDIRECT_URI", raising=False)
 
-    from apps.api import main
-    from apps.api.endpoints import integrations_router as ir
+    from archive.apps.api import main
+    from archive.apps.api.endpoints import integrations_router as ir
 
     store = InMemoryOAuthCredentialStore()
     main.app.dependency_overrides[ir.get_credential_store] = lambda: store

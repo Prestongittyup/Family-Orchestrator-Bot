@@ -28,7 +28,7 @@ from dataclasses import FrozenInstanceError
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from apps.api.conversation_orchestration.schema import (
+from archive.apps.api.conversation_orchestration.schema import (
     COLResponse,
     ConversationMessage,
     ConversationSession,
@@ -37,23 +37,23 @@ from apps.api.conversation_orchestration.schema import (
     SessionState,
     ExecutionHandoff,
 )
-from apps.api.conversation_orchestration.intent_refinement import (
+from archive.apps.api.conversation_orchestration.intent_refinement import (
     IntentRefinementEngine,
     REQUIRED_FIELDS_BY_INTENT,
     _human_field_name,
 )
-from apps.api.conversation_orchestration.state_machine import (
+from archive.apps.api.conversation_orchestration.state_machine import (
     ConversationStateMachine,
     StateTransitionError,
 )
-from apps.api.conversation_orchestration.pipeline import (
+from archive.apps.api.conversation_orchestration.pipeline import (
     ConversationOrchestrator,
     _action_plan_to_dict,
     _build_action_summary,
 )
-from apps.api.intent_contract.schema import IntentType
-from apps.api.intent_contract.validator import EntityStore
-from apps.api.policy_engine.schema import PolicyDecision
+from archive.apps.api.intent_contract.schema import IntentType
+from archive.apps.api.intent_contract.validator import EntityStore
+from archive.apps.api.policy_engine.schema import PolicyDecision
 
 
 # ---------------------------------------------------------------------------

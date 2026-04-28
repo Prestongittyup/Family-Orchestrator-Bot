@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import pytest
 
-from apps.api.llm.gateway import LLMGateway
+from archive.apps.api.llm.gateway import LLMGateway
 from tests.p1_verification.fixtures import MockLLMProvider, TestFixtures
 
 

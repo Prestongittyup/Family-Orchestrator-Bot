@@ -7,11 +7,11 @@ from unittest.mock import MagicMock
 import pytest
 from fastapi.testclient import TestClient
 
-from apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential
-from apps.api.integration_core.google_oauth_config import GoogleOAuthClientConfig
-from apps.api.integration_core.google_calendar_provider import GoogleCalendarRealProvider
-from apps.api.integration_core.orchestrator import Orchestrator
-from apps.api.integration_core.state_builder import StateBuilder
+from archive.apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential
+from archive.apps.api.integration_core.google_oauth_config import GoogleOAuthClientConfig, OAuthStateStore
+from archive.apps.api.integration_core.google_calendar_provider import GoogleCalendarRealProvider
+from archive.apps.api.integration_core.orchestrator import Orchestrator
+from archive.apps.api.integration_core.state_builder import StateBuilder
 
 
 def _mock_google_http(*, event_items: list[dict] | None = None) -> MagicMock:
@@ -52,8 +52,8 @@ def _mock_google_http(*, event_items: list[dict] | None = None) -> MagicMock:
 
 
 def _build_client(http_client: MagicMock, credential_store: InMemoryOAuthCredentialStore | None = None):
-    from apps.api import main
-    from apps.api.endpoints import integrations_router as ir
+    from archive.apps.api import main
+    from archive.apps.api.endpoints import integrations_router as ir
 
     cfg = GoogleOAuthClientConfig(
         client_id="test-client-id",
@@ -61,10 +61,12 @@ def _build_client(http_client: MagicMock, credential_store: InMemoryOAuthCredent
         redirect_uri="http://localhost:8000/integrations/google-calendar/callback",
     )
     store = credential_store or InMemoryOAuthCredentialStore()
+    state_store = OAuthStateStore()
 
     main.app.dependency_overrides[ir.get_oauth_config] = lambda: cfg
     main.app.dependency_overrides[ir.get_credential_store] = lambda: store
     main.app.dependency_overrides[ir.get_http_client] = lambda: http_client
+    main.app.dependency_overrides[ir.get_oauth_state_store] = lambda: state_store
 
     client = TestClient(main.app, raise_server_exceptions=True, follow_redirects=False)
     return client, main.app, store
@@ -82,6 +84,10 @@ def _google_event(event_id: str, start: str) -> dict:
         "start": {"dateTime": start},
         "end": {"dateTime": start},
     }
+
+
+def _future_iso(hours_from_now: int) -> str:
+    return (datetime.now(UTC) + timedelta(hours=hours_from_now)).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 def test_google_oauth_url_generation():
@@ -117,7 +123,8 @@ def test_oauth_callback_stores_credentials():
             params={"code": "auth-code-123", "state": state, "user_id": "dev-user-2"},
         )
         assert callback.status_code == 302
-        assert callback.headers["location"].startswith("/?status=integration_successful")
+        callback_params = urllib.parse.parse_qs(urllib.parse.urlparse(callback.headers["location"]).query)
+        assert callback_params.get("status", [""])[0] == "integration_successful"
 
         creds = store.get_credentials(user_id="dev-user-2", provider_name="google_calendar")
         assert creds is not None
@@ -128,9 +135,11 @@ def test_oauth_callback_stores_credentials():
 
 
 def test_provider_fetch_with_mock_credentials():
+    event_1_start = _future_iso(2)
+    event_2_start = _future_iso(3)
     events = [
-        _google_event("evt-1", "2026-04-20T09:00:00Z"),
-        _google_event("evt-2", "2026-04-20T10:00:00Z"),
+        _google_event("evt-1", event_1_start),
+        _google_event("evt-2", event_2_start),
     ]
     http = _mock_google_http(event_items=events)
     store = InMemoryOAuthCredentialStore()
@@ -148,14 +157,16 @@ def test_provider_fetch_with_mock_credentials():
 
     assert len(rows) == 2
     assert rows[0]["event_id"] == "evt-1"
-    assert rows[0]["timestamp"] == "2026-04-20T09:00:00Z"
+    assert rows[0]["timestamp"] == event_1_start
     assert rows[1]["event_id"] == "evt-2"
 
 
 def test_end_to_end_calendar_ingestion_flow():
+    event_a_start = _future_iso(4)
+    event_b_start = _future_iso(5)
     events = [
-        _google_event("evt-a", "2026-04-21T08:00:00Z"),
-        _google_event("evt-b", "2026-04-21T09:00:00Z"),
+        _google_event("evt-a", event_a_start),
+        _google_event("evt-b", event_b_start),
     ]
     http = _mock_google_http(event_items=events)
     store = InMemoryOAuthCredentialStore()
@@ -312,8 +323,8 @@ def test_provider_refreshes_expired_access_token_before_google_calls(monkeypatch
                         "id": "evt-refreshed",
                         "summary": "Refreshed Event",
                         "status": "confirmed",
-                        "start": {"dateTime": "2026-04-20T09:00:00Z"},
-                        "end": {"dateTime": "2026-04-20T10:00:00Z"},
+                        "start": {"dateTime": _future_iso(6)},
+                        "end": {"dateTime": _future_iso(7)},
                     }
                 ]
             }

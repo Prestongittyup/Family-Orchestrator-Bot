@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
-from apps.api.main import app
-from apps.api.integration_core.models.household_state import CalendarEvent
-from apps.assistant_core.planning_engine import _fallback_household_state
+from archive.apps.api.main import app
+from archive.apps.api.integration_core.models.household_state import CalendarEvent
+from archive.apps.assistant_core.planning_engine import _fallback_household_state
 from assistant.runtime.assistant_runtime import AssistantRuntimeEngine
 
 

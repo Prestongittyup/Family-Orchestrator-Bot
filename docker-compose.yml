@@ -9,15 +9,21 @@ services:
       - .:/app
     environment:
       - PYTHONUNBUFFERED=1
+      - DATABASE_URL=sqlite:////tmp/family_orchestration.db
+      - SQLITE_JOURNAL_MODE=DELETE
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
+      - GOOGLE_REDIRECT_URI=${GOOGLE_REDIRECT_URI:-http://127.0.0.1:8000/integrations/google-calendar/callback}
+      - GOOGLE_OAUTH_SUCCESS_REDIRECT_BASE_URL=${GOOGLE_OAUTH_SUCCESS_REDIRECT_BASE_URL:-http://127.0.0.1:5173}
 
   ui:
     build:
-      context: ./ui
-      dockerfile: Dockerfile.ui
+      context: ./hpal-frontend
+      dockerfile: Dockerfile
     ports:
       - "5173:5173"
     depends_on:
       - backend
     environment:
-      - VITE_BACKEND_URL=http://backend:8000
       - VITE_API_BASE_URL=/api
+      - VITE_PROXY_TARGET=http://backend:8000

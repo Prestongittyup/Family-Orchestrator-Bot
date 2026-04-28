@@ -5,10 +5,10 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from apps.api.main import app
-from apps.assistant_core.intent_parser import parse_intent
-from apps.assistant_core.meal_planner import plan_meal
-from apps.assistant_core.planning_engine import AssistantPlanningEngine, _fallback_household_state
+from archive.apps.api.main import app
+from archive.apps.assistant_core.intent_parser import parse_intent
+from archive.apps.assistant_core.meal_planner import plan_meal
+from archive.apps.assistant_core.planning_engine import AssistantPlanningEngine, _fallback_household_state
 
 
 def test_intent_parsing_variants() -> None:

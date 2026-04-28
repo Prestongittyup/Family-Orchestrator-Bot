@@ -40,6 +40,18 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
     icon: "📅",
     ariaLabel: "Family calendar",
   },
+  {
+    label: "Inbox",
+    path: "/inbox",
+    icon: "📥",
+    ariaLabel: "Email inbox debrief",
+  },
+  {
+    label: "Inventory",
+    path: "/pantry",
+    icon: "🥫",
+    ariaLabel: "Household inventory",
+  },
 ];
 
 /**

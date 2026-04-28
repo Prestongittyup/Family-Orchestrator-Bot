@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from apps.api.integration_core.models.household_state import HouseholdState
-from apps.assistant_core.contracts import AssistantResponse
+from archive.apps.api.integration_core.models.household_state import HouseholdState
+from archive.apps.assistant_core.contracts import AssistantResponse
 from assistant.contracts.assistant_plan import AssistantPlan as RuntimeAssistantPlan
 from assistant.daily_loop.contracts import DailyPlan
 from assistant.daily_loop.day_builder import DayBuilder

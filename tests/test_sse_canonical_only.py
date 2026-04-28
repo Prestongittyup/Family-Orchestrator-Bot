@@ -8,9 +8,9 @@ from unittest.mock import MagicMock, patch, ANY
 from datetime import UTC, datetime
 import pytest
 
-from apps.api.realtime.broadcaster import HouseholdBroadcaster
-from apps.api.schemas.canonical_event import CanonicalEventEnvelope
-from apps.api.schemas.event import SystemEvent
+from archive.apps.api.realtime.broadcaster import HouseholdBroadcaster
+from archive.apps.api.schemas.canonical_event import CanonicalEventEnvelope
+from archive.apps.api.schemas.event import SystemEvent
 
 
 class TestSSECanonicalOnly:

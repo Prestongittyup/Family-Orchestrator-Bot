@@ -548,6 +548,79 @@
 				"$pytest"
 			],
 			"group": "test"
+		},
+		{
+			"label": "pytest-targeted-multi-fix",
+			"type": "shell",
+			"command": "c:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/.venv/Scripts/python.exe",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_email_action_summary.py",
+				"tests/test_ingestion_events_runtime.py",
+				"tests/test_ui_bootstrap_router.py",
+				"-q"
+			],
+			"group": "test"
+		},
+		{
+			"label": "frontend-type-check-after-fixes",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"hpal-frontend",
+				"run",
+				"type-check"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-targeted-multi-fix-rerun",
+			"type": "shell",
+			"command": "c:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/.venv/Scripts/python.exe",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_email_action_summary.py",
+				"tests/test_ingestion_events_runtime.py",
+				"tests/test_ui_bootstrap_router.py",
+				"-q"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-decision-chat-intent-fixes",
+			"type": "shell",
+			"command": "c:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/.venv/Scripts/python.exe",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_intent_resolver.py",
+				"tests/test_chat_events_runtime.py",
+				"tests/test_household_os.py",
+				"tests/test_assistant_core.py",
+				"tests/test_assistant_runtime.py",
+				"tests/test_household_os_runtime.py",
+				"-q"
+			],
+			"group": "test"
+		},
+		{
+			"label": "pytest-targeted-intelligence-fixes",
+			"type": "shell",
+			"command": "c:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/.venv/Scripts/python.exe",
+			"args": [
+				"-m",
+				"pytest",
+				"tests/test_intent_resolver.py",
+				"tests/test_chat_events_runtime.py",
+				"tests/test_household_os.py",
+				"tests/test_assistant_core.py",
+				"tests/test_assistant_runtime.py",
+				"-q"
+			],
+			"group": "test"
 		}
 	]
 }

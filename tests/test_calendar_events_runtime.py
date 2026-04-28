@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pytest
 
-from apps.api.schemas.event import SystemEvent
-from apps.api.services import calendar_service
+from archive.apps.api.schemas.event import SystemEvent
+from archive.apps.api.services import calendar_service
 
 
 class _CaptureRouter:

@@ -6,7 +6,7 @@ Demonstrates cross-domain reasoning, single-action guarantee, and reasoning trac
 import json
 from fastapi.testclient import TestClient
 
-from apps.api.main import app
+from archive.apps.api.main import app
 
 
 def test_sample_household_os_outputs():

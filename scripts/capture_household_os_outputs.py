@@ -16,7 +16,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from fastapi.testclient import TestClient
-from apps.api.main import app
+from archive.apps.api.main import app
 
 client = TestClient(app)
 

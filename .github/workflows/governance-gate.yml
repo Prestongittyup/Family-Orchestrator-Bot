@@ -27,4 +27,4 @@ jobs:
 
       - name: Run hard freeze and governance gates
         run: |
-          pytest -q tests/test_hard_freeze_regression.py tests/test_governance_gates.py
+          pytest -q tests/test_hard_freeze_regression.py tests/test_governance_gates.py tests/test_layer_redundancy_guard.py tests/test_ui_canonical_wiring_guard.py

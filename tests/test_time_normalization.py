@@ -17,7 +17,7 @@ from __future__ import annotations
 from datetime import datetime, date
 import pytest
 
-from apps.api.ingestion.adapters.time_normalizer import (
+from archive.apps.api.ingestion.adapters.time_normalizer import (
     normalize_time_input,
     get_time_block_from_iso,
     list_time_aliases,

@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from artifact_paths import artifact_write_path
 from tests.evaluation.brief_runner import run_scenario
 from tests.evaluation.feedback_engine import (
     extract_failure_patterns,
@@ -70,7 +71,7 @@ def compare_results(current: dict[str, Any], previous: dict[str, Any]) -> dict[s
 
 
 def run_full_evaluation() -> dict[str, Any]:
-    output_path = Path("evaluation_results.json")
+    output_path = artifact_write_path("evaluation_results.json")
     previous_payload: dict[str, Any] = {}
     if output_path.exists():
         previous_payload = json.loads(output_path.read_text(encoding="utf-8"))

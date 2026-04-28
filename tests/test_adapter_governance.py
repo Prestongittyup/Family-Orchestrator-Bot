@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from apps.api.ingestion.adapters.adapter_governance import (
+from archive.apps.api.ingestion.adapters.adapter_governance import (
     ALLOWED_ADAPTER_BEHAVIORS,
     FORBIDDEN_ADAPTER_BEHAVIORS,
     validate_adapter_output_contract,

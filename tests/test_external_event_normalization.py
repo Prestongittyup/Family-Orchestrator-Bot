@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from apps.api.integration_core.normalization import normalize_provider_event, normalize_provider_events
+from archive.apps.api.integration_core.normalization import normalize_provider_event, normalize_provider_events
 
 
 def test_deterministic_event_id_generation() -> None:

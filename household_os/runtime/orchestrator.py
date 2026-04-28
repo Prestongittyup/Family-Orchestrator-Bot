@@ -9,11 +9,11 @@ from typing import Any
 from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 
-from apps.api.integration_core.models.household_state import HouseholdState
-from apps.assistant_core.planning_engine import _request_id
+from archive.apps.api.integration_core.models.household_state import HouseholdState
+from archive.apps.assistant_core.planning_engine import _request_id
 from assistant.governance.intent_router import IntentRouter, RoutingDecision, RoutingCase
 from assistant.state.life_state_model import LifeStateModel
-from apps.api.observability.execution_trace import trace_function
+from archive.apps.api.observability.eil.tracer import trace_function
 from household_os.core.contracts import HouseholdOSRunResponse
 from household_os.core.decision_engine import HouseholdOSDecisionEngine
 from household_os.core.execution_context import ExecutionContext
@@ -133,6 +133,7 @@ class HouseholdOSOrchestrator:
                 fitness_goal=request.fitness_goal,
                 actor=actor,
                 now=request.now,
+                allow_low_confidence_clarification=request.action_type == RequestActionType.RUN,
             )
 
         if request.action_type == RequestActionType.APPROVE:
@@ -232,6 +233,7 @@ class HouseholdOSOrchestrator:
         fitness_goal: str | None,
         actor: ActorIdentity,
         now: str | datetime | None,
+        allow_low_confidence_clarification: bool = True,
     ) -> RuntimeTickResult:
 
         graph = self._prepare_graph(
@@ -300,7 +302,7 @@ class HouseholdOSOrchestrator:
             routing = IntentRouter.route_message(user_input, life_state=life_state)
 
             # Case C — low confidence: block execution, return clarification
-            if routing.routing_case == RoutingCase.LOW_CONFIDENCE:
+            if allow_low_confidence_clarification and routing.routing_case == RoutingCase.LOW_CONFIDENCE:
                 self.state_store.save_graph(graph)
                 self.life_state_model.update_after_run(
                     household_id=household_id,
@@ -318,6 +320,9 @@ class HouseholdOSOrchestrator:
                 )
 
         allowed_domains = routing.allowed_domains if routing else None
+        if routing and routing.routing_case == RoutingCase.LOW_CONFIDENCE and not allow_low_confidence_clarification:
+            # Legacy execution mode must always emit a single deterministic action.
+            allowed_domains = None
 
         response = self.decision_engine.run(
             household_id=household_id,
