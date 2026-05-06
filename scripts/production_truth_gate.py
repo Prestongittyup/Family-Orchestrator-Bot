@@ -31,14 +31,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from archive.apps.api.main import create_app
-
-try:
-    import archive.apps.api.runtime.loop_tracing as _loop_tracing
-    # Keep tracing logic active but suppress extremely verbose stdout spam during load runs.
-    _loop_tracing.print = lambda *args, **kwargs: None
-except Exception:
-    pass
+from app.main import create_app
 
 HOST = "127.0.0.1"
 SEED = 42
@@ -73,7 +66,7 @@ def _wait_ready(port: int, timeout: float = 20.0) -> bool:
     deadline = time.time() + timeout
     while time.time() < deadline:
         try:
-            urllib.request.urlopen(f"http://{HOST}:{port}/health", timeout=2).close()
+            urllib.request.urlopen(f"http://{HOST}:{port}/healthz", timeout=2).close()
             return True
         except Exception:
             time.sleep(0.1)
@@ -195,13 +188,9 @@ async def main() -> dict[str, Any]:
     all_endpoints = _extract_registered_endpoints()
     all_paths = {e["path"] for e in all_endpoints}
 
-    # Verified public endpoints (no auth, safe GET, no side-effects)
-    # EXCLUDED: boot-status, boot-probe — call asyncio.run() inside running event loop (cross-loop violation)
-    # EXCLUDED: runtime-metrics — calls multiple subsystem snapshots, higher cost
-    # EXCLUDED: /v1/system/health — calls run_boot_probe() which spawns unbounded threads via asyncio.run()
-    #           causing OS thread handle exhaustion under sustained concurrency (THREAD_LEAK_VIA_BOOT_PROBE)
+    # Verified public endpoint contract (single, no fallback)
     candidate_public = [
-        "/health",   # Pure liveness probe: returns {"status":"ok"}, no side-effects, no diagnostics
+        "/healthz",   # Canonical readiness/liveness contract
     ]
     verified_endpoints = [ep for ep in candidate_public if ep in all_paths]
 

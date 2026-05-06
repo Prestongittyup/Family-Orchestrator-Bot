@@ -41,6 +41,12 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
     ariaLabel: "Family calendar",
   },
   {
+    label: "Analytics",
+    path: "/analytics",
+    icon: "📈",
+    ariaLabel: "LLM analytics dashboard",
+  },
+  {
     label: "Inbox",
     path: "/inbox",
     icon: "📥",

@@ -50,7 +50,7 @@ def _proposal_description(
 
 
 def calendar_module(household_id: str) -> ModuleOutput:
-    now = datetime.utcnow()
+    now = datetime.now(UTC).replace(tzinfo=None)
     today = now.date()
     horizon = now + timedelta(days=7)
 

@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from household_os.runtime.orchestrator import HouseholdOSOrchestrator
@@ -187,4 +187,4 @@ class OrchestrationAdapter:
         return f"cmd-{digest[:16]}"
 
     def _now_iso(self) -> str:
-        return datetime.utcnow().isoformat() + "Z"
+        return datetime.now(UTC).isoformat().replace("+00:00", "Z")

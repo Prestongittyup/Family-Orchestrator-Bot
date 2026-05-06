@@ -1,0 +1,8 @@
+{
+  "run_id": "concurrent_moderate_network",
+  "generated_at": "2026-04-29T19:19:54.871096",
+  "mutation_count": 9,
+  "explanation_count": 9,
+  "missing_count": 0,
+  "pass": true
+}

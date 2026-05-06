@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from archive.apps.api.main import create_app
+from app.main import create_app
 
 
 def extract_registered_endpoints() -> list[dict[str, str]]:
@@ -45,7 +45,7 @@ def validate_harness() -> dict:
     simple_paths = {r['path'] for r in registered}
 
     # Step 2: Extract harness endpoints
-    harness_endpoints = ["/health", "/v1/system/health", "/v1/auth/identity"]
+    harness_endpoints = ["/healthz"]
     
     # Step 3: Validate each harness endpoint
     endpoint_analysis = {
@@ -72,17 +72,7 @@ def validate_harness() -> dict:
     # Step 5: Determine corrected endpoints
     corrected_endpoints = [ep for ep in harness_endpoints if ep in endpoint_analysis["valid"]]
     
-    # Add additional safe public endpoints if needed
-    additional_safe_endpoints = [
-        "/v1/system/boot-status",
-        "/v1/system/boot-probe",
-        "/v1/system/runtime-metrics",
-    ]
-    
-    for ep in additional_safe_endpoints:
-        if any(path.endswith(ep) or path == ep for path in simple_paths):
-            if ep not in corrected_endpoints:
-                corrected_endpoints.append(ep)
+    # Single-contract policy: no additional health aliases are accepted.
 
     # Step 6: Determine harness status
     if len(endpoint_analysis["invalid"]) == 0:

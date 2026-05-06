@@ -25,6 +25,15 @@ class ExecutionContext:
 
     def _canonical_actor_type(self) -> str:
         raw = str(self.actor_type or "").strip().lower()
+        if raw == "api_user":
+            # Persist canonical actor taxonomy in runtime event metadata.
+            return "user"
+        if raw in {"api_user", "user", "assistant", "system_worker", "scheduler"}:
+            return raw
+        raise ValueError(f"Unknown actor_type: {self.actor_type!r}")
+
+    def _propagated_actor_type(self) -> str:
+        raw = str(self.actor_type or "").strip().lower()
         if raw in {"api_user", "user", "assistant", "system_worker", "scheduler"}:
             return raw
         raise ValueError(f"Unknown actor_type: {self.actor_type!r}")
@@ -41,27 +50,30 @@ class ExecutionContext:
         )
 
     def to_fsm_context(self) -> dict[str, Any]:
-        actor_ctx = self.to_actor_context()
+        actor_type = self._propagated_actor_type()
+        auth_scope = "system" if actor_type in {"system_worker", "scheduler"} else "household"
         return {
-            "actor_type": actor_ctx.actor_type,
+            "actor_type": actor_type,
             "user_id": self.user_id,
-            "household_id": actor_ctx.household_id,
-            "auth_scope": actor_ctx.auth_scope,
+            "household_id": self.household_id,
+            "auth_scope": auth_scope,
         }
 
     def to_event_metadata(self) -> dict[str, Any]:
-        actor_ctx = self.to_actor_context()
+        actor_type = self._propagated_actor_type()
+        actor_id = str(self.user_id or "system")
+        auth_scope = "system" if actor_type in {"system_worker", "scheduler"} else "household"
         return {
-            "actor_type": actor_ctx.actor_type,
+            "actor_type": actor_type,
             "user_id": self.user_id,
-            "subject_id": actor_ctx.actor_id,
-            "household_id": actor_ctx.household_id,
-            "auth_scope": actor_ctx.auth_scope,
+            "subject_id": actor_id,
+            "household_id": self.household_id,
+            "auth_scope": auth_scope,
             "actor_context": {
-                "actor_type": actor_ctx.actor_type,
-                "actor_id": actor_ctx.actor_id,
-                "household_id": actor_ctx.household_id,
-                "auth_scope": actor_ctx.auth_scope,
+                "actor_type": actor_type,
+                "actor_id": actor_id,
+                "household_id": self.household_id,
+                "auth_scope": auth_scope,
             },
             "request_id": self.request_id,
             "initiated_at": self.initiated_at.isoformat(),

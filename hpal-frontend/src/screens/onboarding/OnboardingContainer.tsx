@@ -13,6 +13,8 @@ import { pushNotificationManager } from "../../runtime/pushNotifications";
 import { buildApiUrl, fetchWithApiFallback } from "../../api/network";
 import type { OnboardingState } from "../../runtime/onboarding";
 
+const SHADOW_INTEGRATION_ENDPOINTS_ENABLED = false;
+
 const makeIdempotencyKey = (scope: string): string => {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
     return `${scope}-${crypto.randomUUID()}`;
@@ -200,6 +202,11 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
   };
 
   const handleConnectGoogleAccount = () => {
+    if (!SHADOW_INTEGRATION_ENDPOINTS_ENABLED) {
+      setUiError("Google connect is disabled in canonical mode.");
+      return;
+    }
+
     const userId = localStorage.getItem("hpal-user-id");
     if (!userId) {
       setUiError("Complete household creation first so we can link the right Google account.");
@@ -213,6 +220,7 @@ export const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
       return_base: returnBase,
       household_id: householdId,
     }).toString();
+    // TODO: REMOVE_SHADOW_ENDPOINT
     window.location.href = buildApiUrl(`/integrations/google-calendar/connect/${encodedUser}?${query}`);
   };
 

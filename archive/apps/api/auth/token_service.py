@@ -75,6 +75,13 @@ class TokenService:
         device_id: str,
         role: Literal["ADMIN", "ADULT", "CHILD", "VIEW_ONLY"],
     ) -> TokenPair:
+        self._ensure_identity_records(
+            household_id=household_id,
+            user_id=user_id,
+            device_id=device_id,
+            role=role,
+        )
+
         now = datetime.now(timezone.utc)
         access_exp = now + timedelta(minutes=self._access_minutes)
         refresh_exp = now + timedelta(days=self._refresh_days)
@@ -270,11 +277,63 @@ class TokenService:
         )
         self._cache_valid_claims(token_hash, claims)
 
+    def _ensure_identity_records(
+        self,
+        *,
+        household_id: str,
+        user_id: str,
+        device_id: str,
+        role: str,
+    ) -> None:
+        repo = self._get_repository()
+
+        household = repo.get_household(household_id)
+        if household is None:
+            try:
+                repo.create_household(
+                    household_id=household_id,
+                    name=f"Household {household_id[-8:]}",
+                    timezone="UTC",
+                )
+            except Exception:
+                if repo.get_household(household_id) is None:
+                    raise
+
+        user = repo.get_user(user_id)
+        if user is None:
+            try:
+                repo.create_user(
+                    user_id=user_id,
+                    household_id=household_id,
+                    name=f"User {user_id[-8:]}",
+                    role=role,
+                )
+            except Exception:
+                user = repo.get_user(user_id)
+                if user is None:
+                    raise
+
+        device = repo.get_device(device_id)
+        if device is None:
+            try:
+                repo.create_device(
+                    device_id=device_id,
+                    user_id=user_id,
+                    household_id=household_id,
+                    device_name=f"Device {device_id[-8:]}",
+                    platform="unknown",
+                    user_agent="token-service",
+                )
+            except Exception:
+                device = repo.get_device(device_id)
+                if device is None:
+                    raise
+
     def _is_persisted_and_valid(self, token_hash: str) -> bool:
         row = self._get_repository().get_session_token(token_hash)
         if row is None or row.is_valid is False:
             return False
-        return row.expires_at >= datetime.utcnow()
+        return row.expires_at >= datetime.now(timezone.utc).replace(tzinfo=None)
 
     def _get_repository(self) -> IdentityRepository:
         if self._repo is not None:

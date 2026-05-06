@@ -75,7 +75,7 @@ class AuthorizationGate:
             raise PermissionError("Actor identity is not verified")
 
         if actor.actor_type in {ActorType.USER, ActorType.API_USER, ActorType.ASSISTANT} and not actor.subject_id:
-            raise PermissionError("Verified actor is missing subject_id")
+            raise PermissionError("Permission denied: verified actor is missing subject_id")
 
         return actor
 

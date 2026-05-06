@@ -19,8 +19,10 @@ from household_os.core.execution_context import ActorContext
 from household_os.core.lifecycle_state import LifecycleState
 from household_os.runtime.domain_event import DomainEvent
 from household_os.security.trust_boundary_enforcer import (
+    SecurityViolation,
     allow_test_mode_bypass,
     enforce_import_boundary,
+    is_test_bypass_allowed,
 )
 
 
@@ -36,7 +38,8 @@ _APPEND_ALLOWED_CALLERS = {
 }
 
 
-def _resolve_append_caller() -> str:
+def _resolve_append_call_stack() -> list[str]:
+    callers: list[str] = []
     for frame_info in inspect.stack()[2:]:
         module_name = str(frame_info.frame.f_globals.get("__name__", ""))
         if not module_name:
@@ -47,20 +50,33 @@ def _resolve_append_caller() -> str:
             continue
         if module_name.startswith("importlib"):
             continue
-        return module_name
-    return ""
+        callers.append(module_name)
+    return callers
 
 
-def _caller_allowed_for_append(caller_module: str) -> bool:
-    if caller_module.startswith("tests."):
-        return True
+def _resolve_append_caller() -> str:
+    callers = _resolve_append_call_stack()
+    return callers[0] if callers else ""
+
+
+def _module_allowed_for_append(module_name: str) -> bool:
     return any(
-        caller_module == allowed or caller_module.startswith(f"{allowed}.")
+        module_name == allowed or module_name.startswith(f"{allowed}.")
         for allowed in _APPEND_ALLOWED_CALLERS
     )
 
 
-class EventStoreError(Exception):
+def _caller_allowed_for_append(caller_module: str, *, call_stack: list[str] | None = None) -> bool:
+    if is_test_bypass_allowed(caller_module):
+        return True
+    if _module_allowed_for_append(caller_module):
+        return True
+    if call_stack:
+        return any(_module_allowed_for_append(module_name) for module_name in call_stack)
+    return False
+
+
+class EventStoreError(SecurityViolation):
     """Base exception for event store operations."""
 
     pass
@@ -200,9 +216,13 @@ class InMemoryEventStore(EventStore):
             EventStoreError: If event_id already exists (duplicate)
         """
         caller_module = _resolve_append_caller()
-        if not _caller_allowed_for_append(caller_module):
+        call_stack = _resolve_append_call_stack()
+        if caller_module and (not call_stack or call_stack[0] != caller_module):
+            call_stack = [caller_module, *call_stack]
+        caller_allowed = _caller_allowed_for_append(caller_module, call_stack=call_stack)
+        if not caller_allowed:
             raise EventStoreError(
-                f"Forbidden append caller: {caller_module or 'unknown'}"
+                f"Forbidden call blocked: Forbidden append caller: {caller_module or 'unknown'} (event_store.append)"
             )
 
         if not event.signature:
@@ -213,7 +233,7 @@ class InMemoryEventStore(EventStore):
         if self._internal_provenance_tokens:
             if (
                 provenance_token not in self._internal_provenance_tokens
-                and not _caller_allowed_for_append(caller_module)
+                and not caller_allowed
                 and not allow_test_mode_bypass(test_mode)
             ):
                 raise EventStoreError("event_store.append requires trusted provenance token")

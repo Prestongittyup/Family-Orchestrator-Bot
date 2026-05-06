@@ -185,7 +185,7 @@ def update_task_metadata(task_id: str, priority: str, category: str | None = Non
 
         try:
             router.emit(
-                SystemEvent.task_updated(
+                SystemEvent.task_metadata_updated(
                     household_id=task.household_id,
                     timestamp=datetime.now(UTC),
                     source="task_service",
@@ -196,7 +196,7 @@ def update_task_metadata(task_id: str, priority: str, category: str | None = Non
             router.emit(
                 SystemEvent(
                     household_id=task.household_id,
-                    type="task_updated",
+                    type="task_metadata_updated",
                     timestamp=datetime.now(UTC),
                     source="task_service",
                     payload=task_metadata_updated_payload,

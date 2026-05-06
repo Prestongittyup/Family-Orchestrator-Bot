@@ -12,9 +12,13 @@ Produces:
 
 import json
 from dataclasses import asdict
-from datetime import datetime
-from typing import Dict, List, Any, Optional
 from pathlib import Path
+from datetime import UTC, datetime
+from typing import Any, Dict, List, Optional
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 class ReportGenerator:
@@ -40,7 +44,7 @@ class ReportGenerator:
         report = {
             "run_id": run_result.run_id,
             "scenario_name": run_result.scenario_name,
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": _utcnow().isoformat(),
             "event_count": len(run_result.event_log),
             "events": run_result.event_log,
         }
@@ -68,7 +72,7 @@ class ReportGenerator:
         report = {
             "run_id": run_result.run_id,
             "scenario_name": run_result.scenario_name,
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": _utcnow().isoformat(),
             "failure_summary": failure_summary,
             "execution_stats": run_result.execution_stats,
             "success_rate": (
@@ -103,7 +107,7 @@ class ReportGenerator:
         report = {
             "run_id": run_result.run_id,
             "scenario_name": run_result.scenario_name,
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": _utcnow().isoformat(),
             "summary": run_result.violation_summary,
             "violations": violations_data,
             "pass": run_result.success,
@@ -129,7 +133,7 @@ class ReportGenerator:
             filename = "state_hash_comparison.json"
         
         report = {
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": _utcnow().isoformat(),
             "convergence_analysis": {
                 "scenario": convergence_results.get("scenario_name"),
                 "total_replays": convergence_results.get("replay_count"),
@@ -175,7 +179,7 @@ class ReportGenerator:
             })
         
         report = {
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": _utcnow().isoformat(),
             "summary": summary or {},
             "test_matrix": matrix_results or {},
             "run_results": runs_data,
@@ -212,7 +216,7 @@ class ReportGenerator:
         lines.append("=" * 80)
         lines.append("HPAL SYSTEM VALIDATION TEST REPORT")
         lines.append("=" * 80)
-        lines.append(f"\nGenerated: {datetime.utcnow().isoformat()}")
+        lines.append(f"\nGenerated: {_utcnow().isoformat()}")
         lines.append(f"Total Runs: {len(run_results)}")
         
         if summary:
@@ -279,7 +283,7 @@ class ReportGenerator:
 
         report = {
             "run_id": run_id,
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": _utcnow().isoformat(),
             "explanation_count": len(explanations),
             "explanations": [
                 {
@@ -335,7 +339,7 @@ class ReportGenerator:
 
         report = {
             "run_id": run_id,
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": _utcnow().isoformat(),
             "duplicate_count": len(duplicates),
             "duplicates": duplicates,
             "pass": len(duplicates) == 0,
@@ -371,7 +375,7 @@ class ReportGenerator:
 
         report = {
             "run_id": run_id,
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": _utcnow().isoformat(),
             "mutation_count": mutation_count,
             "explanation_count": explanation_count,
             "missing_count": missing_count,
@@ -414,7 +418,7 @@ class ReportGenerator:
 
         report = {
             "run_id": run_id,
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": _utcnow().isoformat(),
             "run1_explanation_count": len(explanations_run1),
             "run2_explanation_count": len(explanations_run2),
             "added_ids": added_ids,
@@ -465,7 +469,7 @@ class ReportGenerator:
                 classifications["fail_undefined"].append(classification)
         
         report = {
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": _utcnow().isoformat(),
             "classifications": classifications,
             "summary": {
                 "total_scenarios": len(run_results),

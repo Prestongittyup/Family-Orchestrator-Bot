@@ -23,7 +23,7 @@ def _derive_system_event_registry() -> frozenset[str]:
         source = event_schema_path.read_text(encoding="utf-8")
         event_types.update(re.findall(r"type\s*=\s*['\"]([^'\"]+)['\"]", source))
 
-    domain_event_path = Path(__file__).resolve().parents[3] / "household_os" / "runtime" / "domain_event.py"
+    domain_event_path = Path(__file__).resolve().parents[4] / "household_os" / "runtime" / "domain_event.py"
     if domain_event_path.exists():
         source = domain_event_path.read_text(encoding="utf-8")
         event_types.update(re.findall(r"\"[A-Z_]+\"\s*:\s*\"([^\"]+)\"", source))

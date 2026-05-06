@@ -10,16 +10,16 @@ Simulates realistic household scenarios with:
 """
 
 import asyncio
-import random
-import uuid
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
-from collections import defaultdict
 import copy
 import hashlib
 import json
+import random
+import uuid
+from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import UTC, datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from archive.apps.api.xai.causal_mapper import CausalContext, CausalMapper
 from archive.apps.api.xai.schema import (
@@ -27,6 +27,10 @@ from archive.apps.api.xai.schema import (
     ExplanationSchema,
     InitiatedBy,
 )
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 class CommandType(Enum):
@@ -55,7 +59,7 @@ class SimulatedCommand:
     command_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     command_type: CommandType = CommandType.CREATE_PLAN
     issued_by: str = ""  # person_id
-    issued_at: datetime = field(default_factory=datetime.utcnow)
+    issued_at: datetime = field(default_factory=_utcnow)
     target_entity_id: Optional[str] = None  # plan_id, task_id, etc.
     target_entity_type: str = ""  # "plan", "task", "event"
     payload: Dict[str, Any] = field(default_factory=dict)
@@ -75,8 +79,8 @@ class SimulatedEntity:
     entity_type: str = ""  # "plan", "task", "event"
     family_id: str = ""
     created_by: str = ""
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=_utcnow)
+    updated_at: datetime = field(default_factory=_utcnow)
     version: int = 1
     watermark_epoch: int = 0
     deleted: bool = False
@@ -151,7 +155,7 @@ class HouseholdSimulationState:
         self.xai_explanations: List[ExplanationSchema] = []  # one per successful mutation
         self.xai_contexts: List[CausalContext] = []  # parallel causal contexts
         self.watermark_epoch: int = 0
-        self.created_at = datetime.utcnow()
+        self.created_at = _utcnow()
         self.quarantine_mode: bool = False  # If True, system is in fail-safe mode
         self.quarantine_reason: Optional[str] = None
     
@@ -159,7 +163,7 @@ class HouseholdSimulationState:
         """Add entity to state"""
         self.entities[entity.entity_id] = copy.deepcopy(entity)
         self.state_mutations.append({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": _utcnow().isoformat(),
             "type": "entity_created",
             "entity_id": entity.entity_id,
             "entity_type": entity.entity_type,
@@ -172,11 +176,11 @@ class HouseholdSimulationState:
         
         entity = self.entities[entity_id]
         entity.attributes.update(updates)
-        entity.updated_at = datetime.utcnow()
+        entity.updated_at = _utcnow()
         entity.version += 1
         
         self.state_mutations.append({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": _utcnow().isoformat(),
             "type": "entity_updated",
             "entity_id": entity_id,
             "entity_type": entity.entity_type,
@@ -205,24 +209,22 @@ class HouseholdSimulationState:
         return self.idempotency_cache.get(idempotency_key)
     
     def state_hash(self) -> str:
-        """Compute deterministic hash of state for convergence verification"""
+        """Compute deterministic hash of semantic state for convergence verification."""
         state_dict = {
-            "family_id": self.family_id,
             "entity_count": len(self.entities),
             "entities": sorted([
                 {
-                    "id": eid,
                     "type": e.entity_type,
                     "version": e.version,
                     "attrs_hash": hashlib.md5(
                         json.dumps(e.attributes, sort_keys=True, default=str).encode()
                     ).hexdigest(),
                 }
-                for eid, e in self.entities.items()
+                for _, e in self.entities.items()
                 if not e.deleted
-            ], key=lambda x: x["id"]),
+            ], key=lambda x: (x["type"], x["attrs_hash"], x["version"])),
             "watermark_epoch": self.watermark_epoch,
-            "task_execution_counts": dict(self.task_execution_count),
+            "task_execution_count_distribution": sorted(self.task_execution_count.values()),
             "quarantine_mode": self.quarantine_mode,
         }
         state_json = json.dumps(state_dict, sort_keys=True, default=str)
@@ -285,7 +287,7 @@ class SimulationEngine:
     
     def _log_event(self, event: Dict[str, Any]) -> None:
         """Log simulation event"""
-        event["timestamp"] = datetime.utcnow().isoformat()
+        event["timestamp"] = _utcnow().isoformat()
         self.event_log.append(event)
 
     # ------------------------------------------------------------------
@@ -403,7 +405,7 @@ class SimulationEngine:
             self.state.record_idempotent_result(command.idempotency_key, result)
             
             command.succeeded = True
-            command.last_execution_time = datetime.utcnow()
+            command.last_execution_time = _utcnow()
             self.execution_stats["successful_commands"] += 1
             
             self._log_event({
@@ -460,7 +462,6 @@ class SimulationEngine:
                 },
             )
             self.state.add_entity(entity)
-            self.state.increment_task_execution(entity.entity_id)
             command.target_entity_id = entity.entity_id
             self._generate_explanation(
                 command, entity.entity_id, "task",
@@ -498,7 +499,7 @@ class SimulationEngine:
                 created_by=command.issued_by,
                 attributes={
                     "title": command.payload.get("title", "Unnamed Event"),
-                    "start_time": datetime.utcnow().isoformat(),
+                    "start_time": _utcnow().isoformat(),
                 },
             )
             self.state.add_entity(entity)
@@ -529,12 +530,12 @@ class SimulationEngine:
             "name": scenario_name,
         })
         
-        start_time = datetime.utcnow()
+        start_time = _utcnow()
         timeout = timedelta(seconds=max_duration_seconds)
         
         async def execute_with_timeout():
             async for command in scenario_generator():
-                elapsed = datetime.utcnow() - start_time
+                elapsed = _utcnow() - start_time
                 if elapsed > timeout:
                     self._log_event({
                         "type": "scenario_timeout",
@@ -552,7 +553,7 @@ class SimulationEngine:
                 "type": "scenario_timeout_error",
             })
         
-        end_time = datetime.utcnow()
+        end_time = _utcnow()
         duration = (end_time - start_time).total_seconds()
         
         results = {

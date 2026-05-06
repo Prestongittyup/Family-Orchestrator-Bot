@@ -7,7 +7,7 @@ Run this after deployment to verify all three fixes are working correctly.
 import asyncio
 import time
 import threading
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from collections import deque
 
 # Import fixed modules
@@ -72,7 +72,7 @@ async def verify_idempotency_ttl():
     try:
         idem_record = session.query(IdempotencyKey).filter(IdempotencyKey.key == key).first()
         assert idem_record is not None, "❌ FAILED: Key not found in DB"
-        assert idem_record.expires_at > datetime.utcnow(), "❌ FAILED: Key should not be expired yet"
+        assert idem_record.expires_at > datetime.now(UTC), "❌ FAILED: Key should not be expired yet"
         print(f"✅ Key expires_at: {idem_record.expires_at}")
         
         # Manual cleanup test

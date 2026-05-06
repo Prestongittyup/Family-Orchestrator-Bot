@@ -1,0 +1,267 @@
+{
+  "household_id": "chaos-day-358a35b3",
+  "scenario_date": "2026-05-06",
+  "phase0": {
+    "baseline_snapshot": {
+      "decisions": [],
+      "actions": [],
+      "calendar": [],
+      "summary": "Digest today: 0 decisions, 0 actions, 0 events. Change-set v0 with no recorded updates; latest change n/a.",
+      "decision_count": 0,
+      "action_count": 0,
+      "clarity_score": "high"
+    },
+    "expected_capacity": {
+      "max_decisions_before_overload": 3,
+      "max_actions_visible": 5,
+      "desired_signal_to_noise_ratio": "high"
+    }
+  },
+  "phase1": {
+    "input_set_size": 25,
+    "input_categories": {
+      "schedule": 7,
+      "obligation": 6,
+      "conflict": 2,
+      "multi_member": 3,
+      "noise": 3,
+      "ambiguous": 4
+    },
+    "decision_count": 18,
+    "unnecessary_decisions": 11,
+    "missed_decisions": 2,
+    "conflicts_detected": 5,
+    "conflicts_missed": 0,
+    "suppression_rate": 0.12,
+    "merge_rate": 0.08,
+    "lane_divergence_cases": []
+  },
+  "phase2": {
+    "executed_inputs": 25,
+    "promotion_accuracy": 0.92
+  },
+  "phase3": {
+    "total_inputs": 25,
+    "decisions_generated": 18,
+    "necessary_decisions": 7,
+    "unnecessary_decisions": 11,
+    "missed_decisions": 2,
+    "max_decisions_visible": 18,
+    "max_actions_visible": 6,
+    "decision_pressure_pass": false
+  },
+  "phase4": {
+    "noise_inputs": 3,
+    "noise_promoted": 0,
+    "false_positives": 0,
+    "missed_important_items": 2,
+    "signal_to_noise_ratio": "high",
+    "signal_to_noise_pass": true
+  },
+  "phase5": {
+    "first_action_obvious": true,
+    "cognitive_load": "low",
+    "requires_thinking": true,
+    "decision_priority_clear": true
+  },
+  "phase6": {
+    "conflicts_detected": 5,
+    "conflicts_missed": 0,
+    "decisions_generated_for_conflicts": 5
+  },
+  "phase7": {
+    "replay_matches_live": true,
+    "drift_reasons": {
+      "structural": [],
+      "integrity": [],
+      "causal": []
+    }
+  },
+  "phase8": {
+    "system_behavior_under_load_before": "Baseline home view was stable with decision_count=0 and action_count=0.",
+    "system_behavior_under_load_after": "After 25 inputs, max_decisions_visible=18, max_actions_visible=6, overload_points=22.",
+    "decision_quality_change": "needs_tuning",
+    "signal_noise_improvement": "strong",
+    "user_clarity_improvement": "unclear",
+    "lane_collapse_active": true,
+    "lane_divergence_cases": [],
+    "missed_decision_root_cause_counts": {
+      "UPM_missing": 0,
+      "routing_error": 0,
+      "suppression_overreach": 0,
+      "conflict_under_eval": 2
+    },
+    "missed_decision_root_causes": [
+      "conflict_under_eval",
+      "conflict_under_eval"
+    ]
+  },
+  "phase9": {
+    "reduces_decision_fatigue": false,
+    "prioritizes_correctly_under_load": true,
+    "would_real_household_trust_it_daily": false
+  },
+  "phase10": {
+    "input_density_tested": 25,
+    "promotion_accuracy": "92.00%",
+    "decision_quality": {
+      "decisions_generated": 18,
+      "necessary_decisions": 7,
+      "unnecessary_decisions": 11,
+      "missed_decisions": 2
+    },
+    "overload_points": [
+      {
+        "input_id": 4,
+        "input": "Dentist appointment tomorrow at 3pm",
+        "decision_count": 4,
+        "action_count": 0
+      },
+      {
+        "input_id": 5,
+        "input": "Teacher conference rescheduled to Friday morning",
+        "decision_count": 5,
+        "action_count": 0
+      },
+      {
+        "input_id": 6,
+        "input": "Bring snacks for Friday practice",
+        "decision_count": 6,
+        "action_count": 1
+      },
+      {
+        "input_id": 7,
+        "input": "Pay $15 picture fee by Friday",
+        "decision_count": 7,
+        "action_count": 2
+      },
+      {
+        "input_id": 8,
+        "input": "Sign permission slip before Monday",
+        "decision_count": 8,
+        "action_count": 3
+      },
+      {
+        "input_id": 9,
+        "input": "Buy ingredients for class project",
+        "decision_count": 8,
+        "action_count": 4
+      },
+      {
+        "input_id": 10,
+        "input": "New meeting scheduled at 3pm",
+        "decision_count": 9,
+        "action_count": 4
+      },
+      {
+        "input_id": 11,
+        "input": "Practice overlaps with dinner time",
+        "decision_count": 10,
+        "action_count": 4
+      },
+      {
+        "input_id": 12,
+        "input": "Practice moved to 6pm",
+        "decision_count": 11,
+        "action_count": 4
+      },
+      {
+        "input_id": 13,
+        "input": "Work meeting at 6pm",
+        "decision_count": 12,
+        "action_count": 4
+      },
+      {
+        "input_id": 14,
+        "input": "Dinner reservation at 6:30",
+        "decision_count": 13,
+        "action_count": 4
+      },
+      {
+        "input_id": 15,
+        "input": "Weekly newsletter update",
+        "decision_count": 13,
+        "action_count": 4
+      },
+      {
+        "input_id": 16,
+        "input": "Check out our new features!",
+        "decision_count": 13,
+        "action_count": 4
+      },
+      {
+        "input_id": 17,
+        "input": "Reminder: app update available",
+        "decision_count": 13,
+        "action_count": 4
+      },
+      {
+        "input_id": 18,
+        "input": "Team dinner after game",
+        "decision_count": 14,
+        "action_count": 4
+      },
+      {
+        "input_id": 19,
+        "input": "Something changed for tomorrow",
+        "decision_count": 14,
+        "action_count": 4
+      },
+      {
+        "input_id": 20,
+        "input": "Coach said schedule might shift",
+        "decision_count": 14,
+        "action_count": 4
+      },
+      {
+        "input_id": 21,
+        "input": "Bus running 20 minutes late today",
+        "decision_count": 15,
+        "action_count": 4
+      },
+      {
+        "input_id": 22,
+        "input": "PTA bake sale donations due Thursday",
+        "decision_count": 16,
+        "action_count": 5
+      },
+      {
+        "input_id": 23,
+        "input": "Grandma can do pickup at 3pm",
+        "decision_count": 17,
+        "action_count": 5
+      },
+      {
+        "input_id": 24,
+        "input": "Rain expected; practice may move indoors",
+        "decision_count": 18,
+        "action_count": 5
+      },
+      {
+        "input_id": 25,
+        "input": "Field trip form still missing signature",
+        "decision_count": 18,
+        "action_count": 6
+      }
+    ],
+    "failure_cases": [
+      {
+        "input_id": 19,
+        "input": "Something changed for tomorrow",
+        "category": "ambiguous",
+        "interpretation": "ambiguity",
+        "promotion_result": "merged_existing"
+      },
+      {
+        "input_id": 20,
+        "input": "Coach said schedule might shift",
+        "category": "ambiguous",
+        "interpretation": "ambiguity",
+        "promotion_result": "merged_existing"
+      }
+    ],
+    "missed_critical_cases": [],
+    "confidence_level": "high",
+    "ready_for_real_ingestion": false
+  }
+}

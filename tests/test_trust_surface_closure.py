@@ -16,6 +16,12 @@ from household_os.runtime.event_store import InMemoryEventStore
 from household_os.runtime.orchestrator import HouseholdOSOrchestrator, OrchestratorRequest
 from household_os.security.trust_boundary_enforcer import SecurityViolation
 
+_existing_pytestmark = globals().get("pytestmark", [])
+if not isinstance(_existing_pytestmark, list):
+    _existing_pytestmark = [_existing_pytestmark]
+pytestmark = [*_existing_pytestmark, pytest.mark.ci_gate]
+
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -37,6 +43,19 @@ SENSITIVE_CALL_PATTERNS = {
     "append",
     "transition_to",
     "run",
+}
+
+SENSITIVE_OWNER_HINTS = {
+    "state_store",
+    "graph_store",
+    "event_store",
+    "state_machine",
+    "fsm",
+    "action_pipeline",
+    "decision_engine",
+    "os_state_store",
+    "self._graph_store",
+    "self._decision_engine",
 }
 
 AUTHORIZED_INTERNAL_SURFACE = {
@@ -111,6 +130,27 @@ def _collect_calls(node: ast.AST) -> list[str]:
     return calls
 
 
+def _is_sensitive_call(call: str) -> bool:
+    parts = call.split(".")
+    attr = parts[-1]
+    if attr not in SENSITIVE_CALL_PATTERNS:
+        return False
+
+    # Generic names require ownership hints to avoid false positives
+    # (for example list.append, subprocess.run).
+    if attr in {"append", "run"}:
+        owner = ".".join(parts[:-1]).lower()
+        return any(hint in owner for hint in SENSITIVE_OWNER_HINTS)
+
+    return True
+
+
+def _is_service_like_class_name(class_name: str) -> bool:
+    lower_name = class_name.lower()
+    tokens = ("adapter", "service", "cycle", "scheduler")
+    return any(lower_name == token or lower_name.endswith(token) for token in tokens)
+
+
 def _scan_module(path: Path) -> tuple[ModuleAnalysis, list[EntryPointAnalysis]]:
     source = path.read_text(encoding="utf-8")
     tree = ast.parse(source, filename=str(path))
@@ -131,9 +171,7 @@ def _scan_module(path: Path) -> tuple[ModuleAnalysis, list[EntryPointAnalysis]]:
                     module_analysis.direct_sensitive_imports.append(alias.name)
 
     all_calls = _collect_calls(tree)
-    module_analysis.sensitive_calls = [
-        call for call in all_calls if call.split(".")[-1] in SENSITIVE_CALL_PATTERNS
-    ]
+    module_analysis.sensitive_calls = [call for call in all_calls if _is_sensitive_call(call)]
 
     candidates: list[tuple[str, str, ast.AST, str]] = []
 
@@ -147,17 +185,17 @@ def _scan_module(path: Path) -> tuple[ModuleAnalysis, list[EntryPointAnalysis]]:
                 candidates.append((module, node.name, node, "cli_script"))
 
         if isinstance(node, ast.ClassDef):
-            lower_name = node.name.lower()
-            is_service_like = any(token in lower_name for token in ("adapter", "service", "cycle", "scheduler"))
+            is_service_like = _is_service_like_class_name(node.name)
             for item in node.body:
                 if not isinstance(item, ast.FunctionDef):
                     continue
                 if item.name.startswith("_"):
                     continue
                 if is_service_like:
-                    if "adapter" in lower_name:
+                    lower_name = node.name.lower()
+                    if lower_name.endswith("adapter"):
                         etype = "adapter"
-                    elif "cycle" in lower_name or "scheduler" in lower_name:
+                    elif lower_name.endswith("cycle") or lower_name.endswith("scheduler"):
                         etype = "scheduler_job"
                     else:
                         etype = "service_module"
@@ -168,7 +206,7 @@ def _scan_module(path: Path) -> tuple[ModuleAnalysis, list[EntryPointAnalysis]]:
     for mod_name, qualname, node, entry_type in candidates:
         calls = _collect_calls(node)
         has_handle_request = any(call.endswith("handle_request") for call in calls)
-        sensitive_direct = [call for call in calls if call.split(".")[-1] in SENSITIVE_CALL_PATTERNS]
+        sensitive_direct = [call for call in calls if _is_sensitive_call(call)]
         touches_sensitive_runtime = bool(sensitive_direct) or module_has_sensitive_imports
 
         if has_handle_request:
@@ -259,6 +297,8 @@ def runtime_guard():
     return {"active": True}
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_static_trust_surface_closure_report():
     modules: list[ModuleAnalysis] = []
     entries: list[EntryPointAnalysis] = []
@@ -283,12 +323,16 @@ def test_static_trust_surface_closure_report():
     )
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_negative_direct_pipeline_call_must_fail(runtime_guard):
     pipeline = ActionPipeline()
     with pytest.raises(SecurityViolation, match="blocked|provenance|unauthorized"):
         pipeline.execute_approved_actions(graph={"household_id": "h1", "action_lifecycle": {"actions": {}}}, now="2026-04-22T08:00:00Z")
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_negative_direct_event_store_append_must_fail(runtime_guard):
     store = InMemoryEventStore()
     event = DomainEvent.create(
@@ -301,18 +345,24 @@ def test_negative_direct_event_store_append_must_fail(runtime_guard):
         store.append(event, provenance_token=object(), test_mode=True)
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_negative_direct_state_store_save_must_fail(tmp_path: Path, runtime_guard):
     store = HouseholdStateGraphStore(graph_path=tmp_path / "state.json")
     with pytest.raises(SecurityViolation, match="blocked|provenance|unauthorized"):
         store.save_graph({"household_id": "h1", "action_lifecycle": {"actions": {}, "transition_log": []}})
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_negative_fsm_transition_outside_orchestrator_must_fail(runtime_guard):
     fsm = StateMachine(action_id="a1")
     with pytest.raises(SecurityViolation, match="blocked|provenance|unauthorized"):
         fsm.transition_to(ActionState.PENDING_APPROVAL, reason="external")
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_authorized_path_via_handle_request_is_allowed(tmp_path: Path, runtime_guard):
     store = HouseholdStateGraphStore(graph_path=tmp_path / "auth.json")
     store.verify_household_owner = lambda hid, uid: True

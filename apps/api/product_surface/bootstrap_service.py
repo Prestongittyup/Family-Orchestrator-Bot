@@ -293,9 +293,22 @@ class UIBootstrapService:
         def _pick_float(*values: object, default: float = 0.0) -> float:
             for value in values:
                 try:
-                    return float(value)
+                    return float(str(value))
                 except (TypeError, ValueError):
                     continue
+            return default
+
+        def _pick_bool(*values: object, default: bool = False) -> bool:
+            for value in values:
+                if value is None:
+                    continue
+                if isinstance(value, bool):
+                    return value
+                text = str(value).strip().lower()
+                if text in {"1", "true", "yes", "on"}:
+                    return True
+                if text in {"0", "false", "no", "off"}:
+                    return False
             return default
 
         def _dict_rows(value: object) -> list[dict[str, Any]]:
@@ -304,6 +317,7 @@ class UIBootstrapService:
             return [row for row in value if isinstance(row, dict)]
 
         action_items = _dict_rows(parsed_fields.get("action_items") or received_fields.get("action_items"))
+        actions = _dict_rows(parsed_fields.get("actions") or received_fields.get("actions"))
         calendar_candidates = _dict_rows(
             parsed_fields.get("calendar_candidates") or received_fields.get("calendar_candidates")
         )
@@ -311,7 +325,14 @@ class UIBootstrapService:
             parsed_fields.get("informational_items") or received_fields.get("informational_items")
         )
 
-        summary = _pick(parsed_fields.get("summary"), received_fields.get("summary"), default="Email analysis is ready.")
+        summary = _pick(
+            parsed_fields.get("state_summary"),
+            received_fields.get("state_summary"),
+            parsed_fields.get("summary"),
+            received_fields.get("summary"),
+            default="Email analysis is ready.",
+        )
+        reason = _pick(parsed_fields.get("reason"), received_fields.get("reason"), default="")
         body = _pick(received_fields.get("body"), parsed_fields.get("body"), default="")
         if len(body) > 320:
             body_excerpt = f"{body[:317].rstrip()}..."
@@ -334,15 +355,23 @@ class UIBootstrapService:
             "provider": _pick(parsed_fields.get("provider"), received_fields.get("provider"), default="generic"),
             "received_at": _pick(parsed_fields.get("received_at"), received_fields.get("received_at"), default=""),
             "summary": summary,
+            "state_summary": summary,
+            "reason": reason,
             "importance_score": _pick_float(parsed_fields.get("importance_score"), received_fields.get("importance_score")),
             "importance_bucket": _pick(
                 parsed_fields.get("importance_bucket"),
                 received_fields.get("importance_bucket"),
                 default="medium",
             ).lower(),
+            "rule_score": int(_pick_float(parsed_fields.get("rule_score"), received_fields.get("rule_score"))),
+            "base_score": int(_pick_float(parsed_fields.get("base_score"), received_fields.get("base_score"))),
             "junk_score": _pick_float(parsed_fields.get("junk_score"), received_fields.get("junk_score")),
             "triage_decision": triage_decision,
             "is_junk": is_junk,
+            "needs_attention": _pick_bool(
+                parsed_fields.get("needs_attention"),
+                received_fields.get("needs_attention"),
+            ),
             "processing_status": _pick_optional(
                 parsed_fields.get("processing_status"),
                 received_fields.get("processing_status"),
@@ -350,6 +379,14 @@ class UIBootstrapService:
             "task_id": _pick_optional(parsed_fields.get("task_id"), received_fields.get("task_id")),
             "task_title": _pick_optional(parsed_fields.get("task_title"), received_fields.get("task_title")),
             "priority": _pick_optional(parsed_fields.get("priority"), received_fields.get("priority")),
+            "called_llm": _pick_bool(parsed_fields.get("called_llm"), received_fields.get("called_llm")),
+            "thread_id": _pick_optional(parsed_fields.get("thread_id"), received_fields.get("thread_id")),
+            "latest_message_id": _pick_optional(
+                parsed_fields.get("latest_message_id"),
+                received_fields.get("latest_message_id"),
+            ),
+            "thread_length": int(_pick_float(parsed_fields.get("thread_length"), received_fields.get("thread_length"), default=0.0)),
+            "actions": actions,
             "calendar_event_id": _pick_optional(
                 parsed_fields.get("calendar_event_id"),
                 received_fields.get("calendar_event_id"),
@@ -461,7 +498,7 @@ class UIBootstrapService:
                 continue
             seen_email_ids.add(normalized_email_id)
 
-            summary = str(fields.get("summary") or "").strip()
+            summary = str(fields.get("state_summary") or fields.get("summary") or "").strip()
             if not summary:
                 if action_items or calendar_candidates:
                     summary = "New email analysis is ready."
@@ -470,12 +507,18 @@ class UIBootstrapService:
 
             calendar_event_id = str(fields.get("calendar_event_id") or "").strip()
 
+            priority = str(fields.get("priority") or fields.get("priority_label") or "").strip().lower()
+            if priority not in {"high", "medium", "low"}:
+                priority = "medium"
+
             summaries.append(
                 {
                     "email_id": email_id,
                     "subject": str(fields.get("subject") or "Email update"),
                     "summary": summary,
                     "importance_bucket": str(fields.get("importance_bucket") or "medium").lower(),
+                    "priority": priority,
+                    "needs_attention": bool(fields.get("needs_attention") or False),
                     "action_item_count": len(action_items),
                     "calendar_candidate_count": len(calendar_candidates),
                     "calendar_event_id": calendar_event_id,
@@ -485,7 +528,39 @@ class UIBootstrapService:
             if len(summaries) >= limit:
                 break
 
-        return summaries
+        high_rows: list[dict[str, Any]] = []
+        medium_rows: list[dict[str, Any]] = []
+        low_rows: list[dict[str, Any]] = []
+
+        for row in summaries:
+            priority = str(row.get("priority") or "").strip().lower()
+            bucket = str(row.get("importance_bucket") or "").strip().lower()
+            if priority == "high" or bucket in {"critical", "high"}:
+                high_rows.append(row)
+            elif priority == "low" or bucket == "low":
+                low_rows.append(row)
+            else:
+                medium_rows.append(row)
+
+        capped_medium = medium_rows[:10]
+        shaped = [*high_rows, *capped_medium]
+        if low_rows:
+            shaped.append(
+                {
+                    "email_id": "email-rollup-low",
+                    "subject": "More updates",
+                    "summary": f"{len(low_rows)} low-priority updates hidden.",
+                    "importance_bucket": "low",
+                    "priority": "low",
+                    "needs_attention": False,
+                    "action_item_count": 0,
+                    "calendar_candidate_count": 0,
+                    "calendar_event_id": "",
+                    "rollup": True,
+                }
+            )
+
+        return shaped[:limit]
 
     @staticmethod
     def _safe_load_integration_events(
@@ -642,6 +717,18 @@ class UIBootstrapService:
         for row in email_summary_rows:
             email_id = str(row.get("email_id") or "").strip()
             if not email_id:
+                continue
+
+            if bool(row.get("rollup")):
+                notifications.append(
+                    Notification(
+                        notification_id="notif:email_summary:rollup_low",
+                        title="Email: More updates",
+                        message=str(row.get("summary") or "Low-priority email updates are available.").strip(),
+                        level="info",
+                        related_entity="email-rollup-low",
+                    )
+                )
                 continue
 
             bucket = str(row.get("importance_bucket") or "medium").lower()

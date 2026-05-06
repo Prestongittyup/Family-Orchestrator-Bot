@@ -1,3 +1,6 @@
+# ARCHIVE MODULE - NOT PART OF ACTIVE RUNTIME
+# DO NOT IMPORT INTO app/
+
 from __future__ import annotations
 
 import hashlib
@@ -5,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import traceback
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -17,7 +21,6 @@ if "PYTEST_CURRENT_TEST" not in os.environ:
     load_environment()
 
 from archive.apps.api.core.database import Base, DATABASE_URL, engine
-from archive.apps.api.core.asgi_admission import AdmissionGateASGI
 from archive.apps.api.core.auth_middleware import install_auth_middleware
 from archive.apps.api.core.backpressure_middleware import install_request_backpressure_middleware
 from archive.apps.api.core.idempotency_middleware import install_idempotency_middleware
@@ -42,11 +45,9 @@ from policy_engine.policy_router import router as policy_router
 from archive.apps.api.schemas.event import SystemEvent
 from archive.apps.api.services.canonical_event_adapter import CanonicalEventAdapter
 from archive.apps.api.services.canonical_event_router import canonical_event_router
-from archive.apps.api.observability.health import router as health_router
 from archive.apps.api.observability.logging import log_error
 from archive.apps.api.observability.metrics import metrics
 from archive.apps.api.observability.safety import router as safety_router
-from archive.apps.api.endpoints.system_router import router as system_router
 from archive.apps.api.core.boot_diagnostics import assert_boot_invariants
 from archive.apps.api.runtime.loop_tracing import trace_loop_context
 from archive.apps.api.observability.eil.tracer import trace_function
@@ -94,7 +95,60 @@ def create_app() -> FastAPI:
     may call app.include_router().  main.py exposes app = create_app()
     for uvicorn and tests alike so there is exactly one assembly path.
     """
-    _app = FastAPI(title="Family Orchestration Bot API", debug=True)
+    @asynccontextmanager
+    async def lifespan(_app: FastAPI):
+        trace_loop_context("main.on_startup")
+        # Import ALL models so their tables are registered with Base.metadata
+        # CRITICAL: Database tables are only created if the model class is imported
+        try:
+            import archive.apps.api.xai.db_model  # noqa: F401
+            import archive.apps.api.models.identity  # noqa: F401
+            import archive.apps.api.models.idempotency_key  # noqa: F401
+            import archive.apps.api.models.task  # noqa: F401
+            import archive.apps.api.models.event_log  # noqa: F401
+
+            boot_port = os.getenv("PORT") or os.getenv("UVICORN_PORT") or "unknown"
+            print(f"[BOOT] pid={os.getpid()}")
+            print(f"[BOOT] cwd={Path.cwd()}")
+            print(f"[BOOT] requested_port={boot_port}")
+            print(f"[BOOT] env_config_hash={_boot_config_hash()}")
+            print(f"[BOOT] db_url={_sanitize_db_url(DATABASE_URL)}")
+            print(f"[BOOT] active_routers={json.dumps(_active_router_list(_app), sort_keys=True)}")
+
+            print("[STARTUP] Importing all models...")
+
+            # Create tables
+            print("[STARTUP] Creating database tables...")
+            Base.metadata.create_all(bind=engine)
+            print("[STARTUP] [OK] Database tables created")
+
+            # Start event-loop lag guard background task.
+            from archive.apps.api.runtime.event_loop_guard import event_loop_guard
+            await event_loop_guard.start()
+            print("[STARTUP] [OK] Event loop guard started")
+
+            # Run hard boot assertions. Any violation aborts startup.
+            print("[STARTUP] Running boot invariants...")
+            diags = assert_boot_invariants()
+
+            print(f"[STARTUP] [OK] Boot invariants satisfied: {json.dumps(diags.to_dict(), sort_keys=True)}")
+        except Exception as exc:
+            error_msg = f"[STARTUP] CRITICAL FAILURE: {str(exc)}"
+            print(error_msg)
+            traceback.print_exc()
+            raise
+
+        try:
+            yield
+        finally:
+            try:
+                trace_loop_context("main.on_shutdown")
+            except RuntimeError:
+                pass
+            from archive.apps.api.runtime.event_loop_guard import event_loop_guard
+            event_loop_guard.stop()
+
+    _app = FastAPI(title="Family Orchestration Bot API", debug=True, lifespan=lifespan)
 
     _app.add_middleware(
         CORSMiddleware,
@@ -126,7 +180,6 @@ def create_app() -> FastAPI:
     # ---------------------------------------------------------------
     # Router registration — all routes wired in one place
     # ---------------------------------------------------------------
-    _app.include_router(system_router)
     _app.include_router(assistant_runtime_router, prefix="/assistant", tags=["assistant-runtime"])
     _app.include_router(identity_router)
     _app.include_router(brief_router)
@@ -145,64 +198,7 @@ def create_app() -> FastAPI:
     _app.include_router(hpal_router)
     _app.include_router(xai_router)
     _app.include_router(calendar_router)
-    _app.include_router(health_router)
     _app.include_router(safety_router)
-
-    # ---------------------------------------------------------------
-    # Lifecycle
-    # ---------------------------------------------------------------
-    @_app.on_event("startup")
-    async def on_startup() -> None:
-        trace_loop_context("main.on_startup")
-        # Import ALL models so their tables are registered with Base.metadata
-        # CRITICAL: Database tables are only created if the model class is imported
-        try:
-            import archive.apps.api.xai.db_model  # noqa: F401
-            import archive.apps.api.models.identity  # noqa: F401
-            import archive.apps.api.models.idempotency_key  # noqa: F401
-            import archive.apps.api.models.task  # noqa: F401
-            import archive.apps.api.models.event_log  # noqa: F401
-
-            boot_port = os.getenv("PORT") or os.getenv("UVICORN_PORT") or "unknown"
-            print(f"[BOOT] pid={os.getpid()}")
-            print(f"[BOOT] cwd={Path.cwd()}")
-            print(f"[BOOT] requested_port={boot_port}")
-            print(f"[BOOT] env_config_hash={_boot_config_hash()}")
-            print(f"[BOOT] db_url={_sanitize_db_url(DATABASE_URL)}")
-            print(f"[BOOT] active_routers={json.dumps(_active_router_list(_app), sort_keys=True)}")
-            
-            print("[STARTUP] Importing all models...")
-            
-            # Create tables
-            print("[STARTUP] Creating database tables...")
-            Base.metadata.create_all(bind=engine)
-            print("[STARTUP] [OK] Database tables created")
-
-            # Start event-loop lag guard background task.
-            from archive.apps.api.runtime.event_loop_guard import event_loop_guard
-            await event_loop_guard.start()
-            print("[STARTUP] [OK] Event loop guard started")
-
-            # Run hard boot assertions. Any violation aborts startup.
-            print("[STARTUP] Running boot invariants...")
-            diags = assert_boot_invariants()
-            
-            print(f"[STARTUP] [OK] Boot invariants satisfied: {json.dumps(diags.to_dict(), sort_keys=True)}")
-        except Exception as exc:
-            error_msg = f"[STARTUP] CRITICAL FAILURE: {str(exc)}"
-            print(error_msg)
-            traceback.print_exc()
-            raise
-
-    @_app.on_event("shutdown")
-    def on_shutdown() -> None:
-        loop = None
-        try:
-            trace_loop_context("main.on_shutdown")
-        except RuntimeError:
-            loop = None
-        from archive.apps.api.runtime.event_loop_guard import event_loop_guard
-        event_loop_guard.stop()
 
     # ---------------------------------------------------------------
     # Core event ingest (non-integration pipeline)
@@ -228,22 +224,13 @@ def create_app() -> FastAPI:
 # ---------------------------------------------------------------------------
 # Module-level singleton — consumed by uvicorn and test clients
 # ---------------------------------------------------------------------------
-_fastapi_app = create_app()
-app = AdmissionGateASGI(_fastapi_app)
+
+def _disabled_archive_app(*_args: object, **_kwargs: object) -> None:
+    raise RuntimeError("Archive runtime is disabled. Use app.main:app")
+
+
+app = _disabled_archive_app
 
 if __name__ == "__main__":
-    import uvicorn
-    # limit_concurrency caps OS-level accepted connections per worker before
-    # they reach the ASGI app, providing a front-door rejection layer that
-    # supplements the in-app backpressure middleware.
-    # timeout_keep_alive=2 releases idle connections quickly under load.
-    uvicorn.run(
-        "apps.api.main:app",
-        host="0.0.0.0",
-        port=8000,
-        workers=2,
-        limit_concurrency=50,
-        timeout_keep_alive=0,
-        log_level="debug",
-        access_log=True,
-    )
+    raise RuntimeError("Archive runtime is deprecated. Use app.main:app")
+

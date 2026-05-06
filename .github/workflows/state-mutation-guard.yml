@@ -17,6 +17,14 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Enforce runtime contract guard
+        run: |
+          python scripts/contract_guard.py
+
+      - name: Enforce architecture layer guard
+        run: |
+          python scripts/architecture_layer_guard.py
+
       - name: Run lifecycle state mutation guard
         run: |
           python ci/state_mutation_guard.py apps/

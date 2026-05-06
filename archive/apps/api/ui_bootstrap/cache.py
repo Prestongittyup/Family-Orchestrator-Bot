@@ -4,10 +4,14 @@ UI Bootstrap cache keyed by family_id + projection_version.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from threading import RLock
 
 from archive.apps.api.ui_bootstrap.models import UIBootstrapResponse
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 @dataclass(frozen=True)
@@ -33,7 +37,7 @@ class UIBootstrapCache:
 
     def set(self, key: str, response: UIBootstrapResponse) -> None:
         with self._lock:
-            self._entries[key] = CacheEntry(key=key, response=response, stored_at=datetime.utcnow())
+            self._entries[key] = CacheEntry(key=key, response=response, stored_at=_utcnow())
 
     def invalidate_family(self, family_id: str) -> None:
         with self._lock:

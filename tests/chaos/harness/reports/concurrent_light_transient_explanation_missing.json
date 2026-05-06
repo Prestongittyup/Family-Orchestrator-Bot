@@ -1,0 +1,8 @@
+{
+  "run_id": "concurrent_light_transient",
+  "generated_at": "2026-04-29T19:19:54.863216",
+  "mutation_count": 9,
+  "explanation_count": 9,
+  "missing_count": 0,
+  "pass": true
+}

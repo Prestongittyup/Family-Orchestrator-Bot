@@ -1,0 +1,10 @@
+{
+  "baseline_findings": "Baseline behavior was structurally sound but product loop-fragile: /home lacked strong digest semantics, no minimal household message ingestion primitive existed, and private intent to household artifact promotion was not explicit in the event model.",
+  "implemented_changes": "Added canonical household message ingestion endpoint and runtime handling; introduced rule-based classification and promotion; expanded replay projector for new ingestion/promotion events; applied digest overlay in /home while preserving root contract keys; added targeted loop/replay tests.",
+  "event_types_added": "household_message_ingested, household_item_promoted",
+  "ingestion_pipeline": "POST /ingest/message -> command_type=household.message.ingest -> runtime normalization/classification -> household_message_ingested event persisted -> promotion routing to action/schedule/decision/ignore -> canonical downstream events -> replay projection slices updated.",
+  "promotion_logic": "schedule->calendar creation payload; todo->task payload; action->decision or action based on classifier resolution; fyi->ignored. All promoted artifacts carry source_message_id traceability.",
+  "product_loop_status": "ALIGNED. Command->event->replay->read cycle is active for household message flows, and /home reflects persisted/replayed state after decision/action changes.",
+  "remaining_gaps": "Classifier is intentionally minimal/rule-based and may still require phrase tuning for ambiguous language; no full external ingestion integrations are enabled in this pass by design; digest framing is improved but can be deepened with richer temporal salience windows.",
+  "next_blockers": "1) Stabilize ambiguous classification fixtures and add adversarial phrase tests. 2) Add broader end-to-end product-loop tests that include mixed member_id streams. 3) Add explicit telemetry counters for ingestion->promotion outcomes for production observability."
+}

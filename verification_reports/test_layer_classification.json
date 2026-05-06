@@ -1,0 +1,3438 @@
+{
+  "unit": [
+    {
+      "file": "tests/p1_verification/test_auth_lifecycle.py",
+      "tests": [
+        "TestAuthTokenRefresh::test_invalid_refresh_token_rejected",
+        "TestAuthTokenRevocation::test_revoke_all_user_tokens",
+        "TestAuthTokenRevocation::test_revoke_single_token",
+        "TestAuthTokenValidation::test_expired_token_rejected",
+        "TestAuthTokenValidation::test_tampered_token_rejected"
+      ],
+      "reason": "Heuristic markers: LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/p1_verification/test_e2e_integration.py",
+      "tests": [
+        "TestE2EAuthenticatedRequest::test_invalid_token_rejected_early"
+      ],
+      "reason": "Pure/low-coupling coverage by heuristic; no external-system heavy markers detected."
+    },
+    {
+      "file": "tests/test_actor_context_propagation.py",
+      "tests": [
+        "test_invalid_actor_type_still_rejected"
+      ],
+      "reason": "Heuristic markers: CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_actor_type_enforcement.py",
+      "tests": [
+        "test_fsm_blocks_assistant_transition_directly"
+      ],
+      "reason": "Heuristic markers: CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_boundary_enforcement.py",
+      "tests": [
+        "test_boundary_rejects_invalid_type",
+        "test_non_api_boundaries_reject_legacy"
+      ],
+      "reason": "Heuristic markers: LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_col.py",
+      "tests": [
+        "TestSchemaImmutability::test_conversation_message_is_frozen",
+        "TestSchemaImmutability::test_partial_intent_is_frozen"
+      ],
+      "reason": "Pure/low-coupling coverage by heuristic; no external-system heavy markers detected."
+    },
+    {
+      "file": "tests/test_cqrs_lifecycle_invariants.py",
+      "tests": [
+        "test_api_never_exposes_raw_enum",
+        "test_reducer_is_pure_function"
+      ],
+      "reason": "Heuristic markers: LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_event_sourcing.py",
+      "tests": [
+        "TestCommandHandler::test_command_on_empty_events_fails",
+        "TestCommandHandler::test_command_on_terminal_state_fails",
+        "TestCommandHandler::test_commit_command_requires_approved_state",
+        "TestDomainEvent::test_event_immutability",
+        "TestInMemoryEventStore::test_aggregate_not_found_error",
+        "TestInMemoryEventStore::test_prevents_duplicate_event_ids",
+        "TestLifecycleMigrationLayer::test_divergence_detection_raises_error",
+        "TestStateReducer::test_empty_events_raises_error",
+        "TestStateReducer::test_invalid_first_event_raises_error",
+        "TestStateReducer::test_invalid_transition_raises_error",
+        "TestStateReducer::test_terminal_states_cannot_transition",
+        "test_invalid_state_rejected"
+      ],
+      "reason": "Pure/low-coupling coverage by heuristic; no external-system heavy markers detected."
+    },
+    {
+      "file": "tests/test_fsm_immutability_enforcement.py",
+      "tests": [
+        "test_persistence_guard_rejects_state_rewrite_without_matching_transition",
+        "test_reducer_uses_fsm_transition_rules"
+      ],
+      "reason": "Heuristic markers: CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_google_calendar_oauth.py",
+      "tests": [
+        "TestExchangeCodeForTokens::test_raises_on_http_error"
+      ],
+      "reason": "Pure/low-coupling coverage by heuristic; no external-system heavy markers detected."
+    },
+    {
+      "file": "tests/test_household_simulation.py",
+      "tests": [
+        "test_byzantine_resilience",
+        "test_consistency_assurance",
+        "test_family_isolation",
+        "test_matrix_coverage",
+        "test_network_chaos_resilience",
+        "test_no_lost_updates",
+        "test_stable_convergence",
+        "test_task_idempotency",
+        "test_transient_failure_recovery",
+        "test_valid_states_only"
+      ],
+      "reason": "Heuristic markers: LEGACY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_integration_core.py",
+      "tests": [
+        "test_mock_token_not_allowed_when_not_in_test_mode"
+      ],
+      "reason": "Pure/low-coupling coverage by heuristic; no external-system heavy markers detected."
+    },
+    {
+      "file": "tests/test_intent_contract.py",
+      "tests": [
+        "TestSchemaImmutability::test_complete_task_intent_is_frozen",
+        "TestSchemaImmutability::test_create_event_intent_is_frozen",
+        "TestSchemaImmutability::test_create_task_intent_is_frozen"
+      ],
+      "reason": "Pure/low-coupling coverage by heuristic; no external-system heavy markers detected."
+    },
+    {
+      "file": "tests/test_lifecycle_contract_boundary.py",
+      "tests": [
+        "test_fsm_rejects_presentation_label"
+      ],
+      "reason": "Pure/low-coupling coverage by heuristic; no external-system heavy markers detected."
+    },
+    {
+      "file": "tests/test_policy_guardrails.py",
+      "tests": [
+        "TestPolicyConfig::test_config_is_immutable",
+        "TestSchemaImmutability::test_policy_input_is_frozen",
+        "TestSchemaImmutability::test_policy_result_is_frozen",
+        "TestSchemaImmutability::test_policy_rule_is_frozen"
+      ],
+      "reason": "Heuristic markers: CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_security_verification_harness.py",
+      "tests": [
+        "TestBoundarySecurityEdgeCases::test_fsm_terminal_states_cannot_be_transitioned_out_of",
+        "TestInvariant5FSMGuardAlwaysEnforced::test_invariant_fsm_allows_api_user_with_context",
+        "TestInvariant5FSMGuardAlwaysEnforced::test_invariant_fsm_blocks_approval_skip_when_requires_approval",
+        "TestInvariant5FSMGuardAlwaysEnforced::test_invariant_fsm_blocks_assistant_in_proposed_to_approved",
+        "TestInvariant5FSMGuardAlwaysEnforced::test_invariant_fsm_blocks_assistant_with_context",
+        "TestInvariant5FSMGuardAlwaysEnforced::test_invariant_fsm_blocks_assistant_without_context"
+      ],
+      "reason": "Heuristic markers: CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_single_pipeline_enforcement.py",
+      "tests": [
+        "test_endpoint_uses_only_orchestrator",
+        "test_no_pipeline_symbols_outside_integration_core"
+      ],
+      "reason": "Pure/low-coupling coverage by heuristic; no external-system heavy markers detected."
+    },
+    {
+      "file": "tests/test_state_machine.py",
+      "tests": [
+        "TestStateMachine::test_invalid_transition_raises",
+        "TestTransitionValidation::test_assistant_cannot_approve",
+        "TestTransitionValidation::test_invalid_transition_raises",
+        "TestTransitionValidation::test_noop_transition_raises",
+        "TestTransitionValidation::test_skipping_approval_not_allowed"
+      ],
+      "reason": "Pure/low-coupling coverage by heuristic; no external-system heavy markers detected."
+    },
+    {
+      "file": "tests/test_trust_boundary_enforcement.py",
+      "tests": [
+        "test_adapter_importing_state_store_directly_must_fail",
+        "test_direct_action_pipeline_call_must_fail",
+        "test_external_module_importing_fsm_must_fail",
+        "test_fsm_transition_outside_orchestrator_must_fail",
+        "test_router_importing_action_pipeline_directly_must_fail",
+        "test_state_store_load_outside_orchestrator_must_fail"
+      ],
+      "reason": "Heuristic markers: LEGACY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_trust_surface_closure.py",
+      "tests": [
+        "test_negative_direct_pipeline_call_must_fail",
+        "test_negative_direct_state_store_save_must_fail",
+        "test_negative_fsm_transition_outside_orchestrator_must_fail"
+      ],
+      "reason": "Heuristic markers: CONCURRENCY_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_unified_trust_boundary.py",
+      "tests": [
+        "test_direct_pipeline_execution_attempt_must_fail",
+        "test_missing_actor_identity_must_not_default",
+        "test_reject_without_authorization_gate_must_fail"
+      ],
+      "reason": "Heuristic markers: LEGACY. Classified conservatively by highest-risk indicators."
+    }
+  ],
+  "integration": [
+    {
+      "file": "tests/conftest.py",
+      "tests": [
+        "test_client"
+      ],
+      "reason": "Heuristic markers: DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_col.py",
+      "tests": [
+        "TestConversationStateMachine::test_invalid_transition_raises_error",
+        "TestSchemaImmutability::test_col_response_is_frozen",
+        "TestSchemaImmutability::test_conversation_session_is_frozen"
+      ],
+      "reason": "Heuristic markers: DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_event_store_invariants.py",
+      "tests": [
+        "test_duplicate_event_id_rejected",
+        "test_forbidden_append_caller_is_blocked"
+      ],
+      "reason": "Heuristic markers: DB_HEAVY, LEGACY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_household_os.py",
+      "tests": [
+        "test_household_os_rejects_empty_allowed_domains"
+      ],
+      "reason": "Heuristic markers: LEGACY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_household_os_runtime.py",
+      "tests": [
+        "test_direct_state_mutation_is_blocked"
+      ],
+      "reason": "Heuristic markers: LEGACY, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_integration_architecture_guard.py",
+      "tests": [
+        "test_forbidden_imports_fail_at_runtime_guard"
+      ],
+      "reason": "Heuristic markers: LEGACY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_unified_trust_boundary.py",
+      "tests": [
+        "test_case_variant_actor_types_must_fail_hard",
+        "test_direct_state_read_cross_household_must_fail",
+        "test_system_worker_spoof_attempt_must_fail_without_verified_proof"
+      ],
+      "reason": "Heuristic markers: LEGACY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_xai_layer.py",
+      "tests": [
+        "test_template_engine_no_unexpected_placeholders"
+      ],
+      "reason": "Heuristic markers: LEGACY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    }
+  ],
+  "system": [
+    {
+      "file": "tests/architecture/test_dependency_graph.py",
+      "tests": [
+        "test_dependency_graph_is_valid"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/architecture/test_fetch_boundary.py",
+      "tests": [
+        "test_only_state_builder_handles_fetch",
+        "test_orchestrator_does_not_fetch",
+        "test_orchestrator_is_pure_coordinator"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/architecture/test_single_fetch_source.py",
+      "tests": [
+        "test_only_state_builder_has_fetch_events"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/decision/test_decision_engine.py",
+      "tests": [
+        "test_conflicts_detected",
+        "test_decision_engine_is_deterministic",
+        "test_events_are_ranked_by_time",
+        "test_state_not_mutated"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/p1_verification/test_auth_lifecycle.py",
+      "tests": [
+        "TestAuthHouseholdScopeBinding::test_cross_household_token_misuse_rejected",
+        "TestAuthHouseholdScopeBinding::test_token_claims_match_issuance",
+        "TestAuthTokenIssuance::test_access_token_shorter_expiry",
+        "TestAuthTokenIssuance::test_token_pair_structure",
+        "TestAuthTokenRefresh::test_refresh_token_extends_expiry",
+        "TestAuthTokenRevocation::test_revoke_device_tokens",
+        "TestAuthTokenValidation::test_valid_token_accepted"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/p1_verification/test_e2e_integration.py",
+      "tests": [
+        "TestE2EAuthenticatedRequest::test_full_request_with_valid_token",
+        "TestE2EEventEmission::test_write_failure_no_event",
+        "TestE2EIntentResolutionToWrite::test_llm_timeout_fallback_still_writes",
+        "TestE2EIntentResolutionToWrite::test_valid_intent_triggers_write"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/p1_verification/test_event_bus_correctness.py",
+      "tests": [
+        "TestEventBusMultiSubscriber::test_all_subscribers_receive_events",
+        "TestEventBusMultiSubscriber::test_late_subscriber_only_receives_future_events",
+        "TestEventBusNoLeakage::test_events_isolated_by_household",
+        "TestEventBusNoLeakage::test_subscriber_receives_only_subscribed_events",
+        "TestEventBusOrdering::test_multiple_events_same_watermark_consistent"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/p1_verification/test_idempotency_correctness.py",
+      "tests": [
+        "TestIdempotencyReplayAfterFailure::test_2xx_response_records_completion",
+        "TestIdempotencyReplayAfterFailure::test_5xx_response_releases_key_safely",
+        "TestIdempotencyReservation::test_different_households_different_namespace",
+        "TestIdempotencyReservation::test_duplicate_reservation_rejected",
+        "TestIdempotencyReservation::test_first_reservation_succeeds",
+        "TestIdempotencyReservation::test_release_allows_reuse"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/p1_verification/test_llm_gateway_failures.py",
+      "tests": [
+        "TestLLMGatewayBudget::test_normal_prompt_accepted",
+        "TestLLMGatewayBudget::test_normal_prompt_returns_llm_route_under_non_limited_conditions",
+        "TestLLMGatewayBudget::test_oversized_prompt_rejected",
+        "TestLLMGatewayCombinedFailures::test_timeout_doesnt_trigger_rate_limit",
+        "TestLLMGatewayFallbackPath::test_fallback_response_safe_for_pipeline",
+        "TestLLMGatewayFallbackPath::test_fallback_returns_valid_response",
+        "TestLLMGatewayRateLimit::test_rate_limit_enforced",
+        "TestLLMGatewayRateLimit::test_rate_limit_per_household",
+        "TestLLMGatewayStructuredOutput::test_confidence_score_bounds",
+        "TestLLMGatewayStructuredOutput::test_invalid_intent_type_rejected",
+        "TestLLMGatewayStructuredOutput::test_valid_intent_names_accepted",
+        "TestLLMGatewayTimeout::test_timeout_doesnt_crash_pipeline",
+        "TestLLMGatewayTimeout::test_timeout_returns_fallback_response"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_actor_context_propagation.py",
+      "tests": [
+        "test_actor_type_is_mapped_from_api_user_to_user",
+        "test_system_worker_context_propagates_auth_scope_system"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_actor_type_enforcement.py",
+      "tests": [
+        "test_actor_type_propagates_api_to_approve_actions",
+        "test_assistant_cannot_approve",
+        "test_household_ownership_enforced",
+        "test_system_worker_allowed_fsm_transition"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_adapter_governance.py",
+      "tests": [
+        "test_governance_behavior_lists_are_frozen_and_explicit",
+        "test_validate_adapter_output_contract_accepts_minimal_valid_brief",
+        "test_validate_adapter_output_contract_rejects_forbidden_behavior_keys_softly",
+        "test_validate_adapter_output_contract_reports_structural_drift_softly"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_architecture_suite.py",
+      "tests": [
+        "test_action_pipeline_direct_invocation_guard_only_orchestrator",
+        "test_archive_guard_runtime_modules_have_no_archive_imports",
+        "test_command_guard_has_single_command_post_entrypoint",
+        "test_command_guard_only_allowlisted_api_modules_use_command_runtime",
+        "test_event_log_repository_import_guard_only_allowlisted_modules",
+        "test_llm_guard_runtime_modules_only_use_gateway",
+        "test_sensitive_state_write_guard_single_entrypoint",
+        "test_state_guard_no_file_based_runtime_state_authority"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_asgi_admission.py",
+      "tests": [
+        "test_identity_bootstrap_paths_are_bypassed",
+        "test_identity_bootstrap_paths_are_bypassed_with_api_prefix_and_slash",
+        "test_non_bootstrap_identity_paths_are_not_bypassed",
+        "test_non_oauth_paths_are_not_bypassed",
+        "test_oauth_critical_paths_are_bypassed",
+        "test_oauth_paths_are_bypassed_with_api_prefix_and_slash"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_assistant_core.py",
+      "tests": [
+        "test_deterministic_output",
+        "test_intent_parsing_variants",
+        "test_meal_repetition_prevention",
+        "test_module_isolation_from_read_only_layers",
+        "test_scheduling_conflict_detection"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_assistant_runtime.py",
+      "tests": [
+        "test_runtime_detects_cross_domain_conflicts",
+        "test_runtime_merges_multiple_domains",
+        "test_runtime_output_is_deterministic",
+        "test_state_snapshot_is_read_only"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_auth_realtime_guards.py",
+      "tests": [
+        "test_non_realtime_routes_ignore_query_session_token",
+        "test_realtime_query_token_extraction_is_supported",
+        "test_realtime_stream_rejects_missing_auth"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_auth_router.py",
+      "tests": [
+        "test_refresh_token_uses_request_scoped_token_service"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_backpressure_middleware.py",
+      "tests": [
+        "test_api_prefixed_paths_are_normalized_for_classification",
+        "test_identity_paths_are_classified_short",
+        "test_non_identity_paths_keep_existing_classification"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_boundary_enforcement.py",
+      "tests": [
+        "test_api_rejects_invalid_state",
+        "test_boundary_parses_valid_state",
+        "test_non_api_boundaries_accept_valid"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_brief_builder.py",
+      "tests": [
+        "test_brief_includes_decision_when_available",
+        "test_brief_matches_state_projection"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_brief_evaluation.py",
+      "tests": [
+        "test_brief_evaluation_pipeline_runs_end_to_end"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_brief_renderer_v1.py",
+      "tests": [
+        "test_renderer_groups_actions_by_morning_afternoon_evening",
+        "test_renderer_markdown_format_supported",
+        "test_renderer_output_is_deterministic_for_same_input"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_calendar_events_runtime.py",
+      "tests": [
+        "test_persist_calendar_event_success_emits_system_event"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_chat_events_runtime.py",
+      "tests": [
+        "test_extract_signal_count_parses_action_and_calendar_counts",
+        "test_process_message_complete_task_executes_direct_capability",
+        "test_process_message_create_task_executes_direct_capability",
+        "test_process_message_inbox_prompt_returns_contextual_intelligence",
+        "test_process_message_schedule_event_executes_direct_capability",
+        "test_process_message_sync_inbox_executes_direct_capability"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_col.py",
+      "tests": [
+        "TestConversationMessageFactories::test_from_assistant_sets_role",
+        "TestConversationMessageFactories::test_from_system_sets_role",
+        "TestConversationMessageFactories::test_from_user_sets_role",
+        "TestConversationMessageFactories::test_messages_have_unique_ids",
+        "TestConversationOrchestrator::test_blocked_session_does_not_accept_messages",
+        "TestConversationOrchestrator::test_col_response_to_dict_format",
+        "TestConversationOrchestrator::test_complete_create_task_single_turn",
+        "TestConversationOrchestrator::test_complete_task_single_turn_allows_execution",
+        "TestConversationOrchestrator::test_confirmation_in_wrong_state_returns_error",
+        "TestConversationOrchestrator::test_delete_event_cancellation_flow",
+        "TestConversationOrchestrator::test_delete_event_confirmation_flow",
+        "TestConversationOrchestrator::test_delete_event_requires_confirmation",
+        "TestConversationOrchestrator::test_idle_to_collecting_on_first_message",
+        "TestConversationOrchestrator::test_missing_field_triggers_clarification",
+        "TestConversationOrchestrator::test_multi_turn_intent_refinement",
+        "TestConversationOrchestrator::test_reset_session_returns_to_idle",
+        "TestConversationOrchestrator::test_response_always_has_assistant_message",
+        "TestConversationOrchestrator::test_response_always_has_session_id",
+        "TestConversationOrchestrator::test_session_messages_accumulate",
+        "TestConversationOrchestrator::test_session_state_preserved_across_turns",
+        "TestConversationSession::test_add_message_preserves_immutability",
+        "TestConversationSession::test_new_session_is_idle",
+        "TestConversationSession::test_with_updates_creates_new_instance",
+        "TestConversationStateMachine::test_awaiting_to_executing_on_confirm",
+        "TestConversationStateMachine::test_awaiting_to_idle_on_cancel",
+        "TestConversationStateMachine::test_can_accept_message_in_clarifying",
+        "TestConversationStateMachine::test_can_accept_message_in_collecting",
+        "TestConversationStateMachine::test_can_accept_message_in_idle",
+        "TestConversationStateMachine::test_cannot_accept_message_in_blocked",
+        "TestConversationStateMachine::test_cannot_accept_message_in_executing",
+        "TestConversationStateMachine::test_clarifying_to_collecting_on_message",
+        "TestConversationStateMachine::test_collecting_to_clarifying_on_incomplete",
+        "TestConversationStateMachine::test_collecting_to_ready_on_complete",
+        "TestConversationStateMachine::test_executing_to_idle_on_handoff_complete",
+        "TestConversationStateMachine::test_idle_to_collecting_on_message",
+        "TestConversationStateMachine::test_ready_to_awaiting_on_confirm",
+        "TestConversationStateMachine::test_ready_to_blocked_on_block",
+        "TestConversationStateMachine::test_ready_to_executing_on_allow",
+        "TestConversationStateMachine::test_transition_from_fields_complete",
+        "TestConversationStateMachine::test_transition_from_fields_incomplete",
+        "TestConversationStateMachine::test_transition_from_policy_allow",
+        "TestConversationStateMachine::test_transition_from_policy_block",
+        "TestConversationStateMachine::test_transition_from_policy_confirm",
+        "TestHelperFunctions::test_complete_task_required_fields",
+        "TestHelperFunctions::test_create_event_required_fields",
+        "TestHelperFunctions::test_create_task_required_fields",
+        "TestHelperFunctions::test_next_action_enum_values",
+        "TestHelperFunctions::test_required_fields_by_intent_completeness",
+        "TestHelperFunctions::test_reschedule_task_required_fields",
+        "TestHelperFunctions::test_session_state_enum_values",
+        "TestIntentRefinementEngine::test_clarification_prompt_for_ambiguous_field",
+        "TestIntentRefinementEngine::test_clarification_prompt_for_missing_task_id",
+        "TestIntentRefinementEngine::test_contradiction_marks_field_ambiguous",
+        "TestIntentRefinementEngine::test_human_field_name_mappings",
+        "TestIntentRefinementEngine::test_initialize_from_complete_task_message",
+        "TestIntentRefinementEngine::test_initialize_from_create_task_message",
+        "TestIntentRefinementEngine::test_merge_preserves_existing_fields",
+        "TestIntentRefinementEngine::test_missing_fields_computed_correctly",
+        "TestIntentRefinementEngine::test_multi_turn_merge_adds_new_fields",
+        "TestIntentRefinementEngine::test_multi_turn_merge_increments_turn_count",
+        "TestIntentRefinementEngine::test_required_fields_for_complete_task",
+        "TestIntentRefinementEngine::test_required_fields_for_create_task",
+        "TestIntentRefinementEngine::test_required_fields_for_none_intent",
+        "TestIntentRefinementEngine::test_required_fields_for_reschedule_task",
+        "TestIntentRefinementEngine::test_required_fields_map_covers_all_intent_types",
+        "TestPartialIntent::test_complete_when_all_fields_present_and_confident",
+        "TestPartialIntent::test_has_ambiguity",
+        "TestPartialIntent::test_no_ambiguity",
+        "TestPartialIntent::test_not_complete_when_ambiguous_fields",
+        "TestPartialIntent::test_not_complete_when_confidence_low",
+        "TestPartialIntent::test_not_complete_when_intent_type_none",
+        "TestPartialIntent::test_not_complete_when_missing_fields",
+        "TestPartialIntent::test_with_updates_creates_new_instance",
+        "TestSafetyRules::test_action_plan_dict_has_required_keys",
+        "TestSafetyRules::test_blocked_state_produces_no_action_plan",
+        "TestSafetyRules::test_multiple_turns_never_lose_session_id",
+        "TestSafetyRules::test_never_fabricates_missing_fields",
+        "TestSafetyRules::test_no_free_form_reasoning_in_assistant_message",
+        "TestSafetyRules::test_response_has_structured_next_action_enum",
+        "TestSafetyRules::test_response_has_structured_state_enum"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_cqrs_lifecycle_invariants.py",
+      "tests": [
+        "test_allowed_transitions_is_sole_rule_source",
+        "test_api_uses_lifecycle_presentation_mapper",
+        "test_cqrs_write_read_integration",
+        "test_fsm_is_sole_mutation_authority",
+        "test_fsm_transition_to_enforces_validation",
+        "test_no_normalize_state_mutations",
+        "test_only_transition_to_mutates_state_in_fsm",
+        "test_presentation_mapper_is_read_only",
+        "test_reducer_event_mapping_not_decision_logic",
+        "test_reducer_validates_using_fsm_rules",
+        "test_validate_transition_is_authoritative"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_daily_loop_engine.py",
+      "tests": [
+        "test_daily_loop_consumes_runtime_plan_output",
+        "test_daily_loop_generation_is_read_only",
+        "test_daily_loop_output_is_deterministic",
+        "test_daily_loop_places_meals_and_workouts"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_decision_engine.py",
+      "tests": [
+        "test_nearer_event_prioritized",
+        "test_no_state_mutation",
+        "test_process_returns_expected_shape"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_decision_engine_integration.py",
+      "tests": [
+        "test_decision_engine_prioritization"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_email_action_summary.py",
+      "tests": [
+        "test_email_action_summary_applies_llm_refinement_when_available",
+        "test_email_action_summary_classifies_promotional_mail_as_junk",
+        "test_email_action_summary_does_not_apply_sensitive_sender_bonus_to_junk_domains",
+        "test_email_action_summary_does_not_force_informational_when_actions_exist",
+        "test_email_action_summary_extracts_prioritized_actions_and_calendar_candidates",
+        "test_email_action_summary_ignores_quoted_lines_for_action_extraction",
+        "test_email_action_summary_is_deterministic_for_identical_input",
+        "test_email_action_summary_marks_non_action_updates_as_informational"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_email_priority_llm.py",
+      "tests": [
+        "test_email_priority_llm_disabled_skips_remote_call",
+        "test_email_priority_llm_enabled_requires_credentials"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_env_bootstrap.py",
+      "tests": [
+        "test_get_missing_google_oauth_env_vars_reports_missing_keys"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_event_adapter.py",
+      "tests": [
+        "TestDeterministicMapping::test_batch_adapter_is_deterministic",
+        "TestMultiProviderConsistency::test_batch_preserves_order",
+        "TestMultiProviderConsistency::test_different_providers_produce_distinct_sources",
+        "TestMultiProviderConsistency::test_each_provider_event_independent"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_event_replay_integrity.py",
+      "tests": [
+        "test_replay_returns_enum"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_event_sourcing.py",
+      "tests": [
+        "TestCommandHandler::test_commit_command_from_approved",
+        "TestCommandHandler::test_reject_command_from_proposed",
+        "TestDomainEvent::test_event_hashability",
+        "TestDomainEvent::test_event_with_explicit_timestamp",
+        "TestFullLifecycleWorkflows::test_full_workflow_proposed_to_committed",
+        "TestFullLifecycleWorkflows::test_full_workflow_rejection",
+        "TestFullLifecycleWorkflows::test_migration_mode_consistency_throughout_workflow",
+        "TestInMemoryEventStore::test_append_and_retrieve",
+        "TestInMemoryEventStore::test_append_only_guarantees",
+        "TestInMemoryEventStore::test_get_all_aggregates",
+        "TestInMemoryEventStore::test_get_events_since",
+        "TestInMemoryEventStore::test_multiple_aggregates",
+        "TestLifecycleMigrationLayer::test_consistency_check_divergent_states",
+        "TestLifecycleMigrationLayer::test_consistency_check_matching_states",
+        "TestLifecycleMigrationLayer::test_migration_stats_tracking",
+        "TestStateReducer::test_compute_snapshot",
+        "TestStateReducer::test_deterministic_state_reduction",
+        "TestStateReducer::test_get_valid_next_events",
+        "TestStateReducer::test_is_terminal_state",
+        "TestStateReducer::test_linear_workflow_proposed_to_committed",
+        "TestStateReducer::test_proposed_to_failed",
+        "TestStateReducer::test_proposed_to_rejected",
+        "TestStateReducer::test_single_proposed_event",
+        "test_event_replay_returns_enum",
+        "test_reducer_always_returns_enum"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_event_store_invariants.py",
+      "tests": [
+        "test_invalid_replay_access_denied_for_user_actor"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_event_windowing.py",
+      "tests": [
+        "test_filter_drops_events_beyond_ninety_days_future",
+        "test_filter_drops_events_older_than_twenty_four_hours_past",
+        "test_filter_preserves_ongoing_events",
+        "test_long_term_window_returns_at_most_ninety_days",
+        "test_mid_term_window_returns_at_most_thirty_days",
+        "test_retention_pruning_removes_stale_events",
+        "test_short_term_window_returns_at_most_seven_days"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_external_event_normalization.py",
+      "tests": [
+        "test_deterministic_event_id_generation",
+        "test_normalization_consistency_across_providers"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_feature_flags.py",
+      "tests": [
+        "TestFeatureFlagDefaults::test_flag_default_registered_as_false",
+        "TestFeatureFlagDefaults::test_flag_default_unknown_returns_false",
+        "TestFeatureFlagDefaults::test_ingestion_flag_defaults_to_false",
+        "TestFeatureFlagDefaults::test_unknown_flag_defaults_to_false",
+        "TestFeatureFlagTruthyValues::test_falsy_env_keeps_flag_disabled",
+        "TestFeatureFlagTruthyValues::test_missing_env_var_is_safe",
+        "TestFeatureFlagTruthyValues::test_truthy_env_enables_flag",
+        "TestIngestionDisabled::test_each_result_has_disabled_status",
+        "TestIngestionDisabled::test_empty_batch_disabled_is_safe",
+        "TestIngestionDisabled::test_event_ids_present_in_disabled_results",
+        "TestIngestionDisabled::test_ingested_count_is_zero_when_disabled",
+        "TestIngestionDisabled::test_os1_not_called_when_disabled",
+        "TestIngestionDisabled::test_top_level_status_is_disabled",
+        "TestIngestionDisabled::test_total_events_still_reported_when_disabled",
+        "TestIngestionEnabled::test_flag_evaluated_at_call_time",
+        "TestIngestionEnabled::test_ingested_count_matches_events_when_enabled",
+        "TestIngestionEnabled::test_no_disabled_status_in_results_when_enabled",
+        "TestIngestionEnabled::test_os1_called_for_each_event_when_enabled",
+        "TestIngestionEnabled::test_top_level_status_key_absent_when_enabled"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_frontend_runtime_contract.py",
+      "tests": [
+        "test_deterministic_patch_replay",
+        "test_failure_recovery_uses_backend_snapshot_authority",
+        "test_snapshot_reconstruction_equivalence"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_fsm_immutability_enforcement.py",
+      "tests": [
+        "test_graph_store_parse_is_read_through_only",
+        "test_normalize_state_is_single_authority"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_full_suite_integrity.py",
+      "tests": [
+        "test_full_suite_passes"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_google_calendar_integration_surface.py",
+      "tests": [
+        "test_google_oauth_url_generation",
+        "test_oauth_callback_stores_credentials",
+        "test_orchestrator_builds_household_state_from_credential_store",
+        "test_orchestrator_household_state_has_raw_events_in_debug_meta",
+        "test_provider_fetch_with_mock_credentials",
+        "test_provider_refreshes_expired_access_token_before_google_calls",
+        "test_provider_returns_empty_dataset_when_expired_and_refresh_token_missing"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, FLAKY_RISK, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_google_calendar_oauth.py",
+      "tests": [
+        "TestArchitectureGuard::test_integrations_router_no_os2_imports",
+        "TestArchitectureGuard::test_is_configured_false_when_empty",
+        "TestArchitectureGuard::test_is_configured_true_when_all_set",
+        "TestArchitectureGuard::test_oauth_config_module_no_forbidden_imports",
+        "TestBuildAuthorizationUrl::test_no_write_scopes_in_url",
+        "TestBuildAuthorizationUrl::test_same_state_produces_identical_url",
+        "TestBuildAuthorizationUrl::test_url_contains_client_id",
+        "TestBuildAuthorizationUrl::test_url_contains_readonly_scope",
+        "TestBuildAuthorizationUrl::test_url_encodes_state",
+        "TestBuildAuthorizationUrl::test_url_has_response_type_code",
+        "TestBuildAuthorizationUrl::test_url_includes_redirect_uri",
+        "TestBuildAuthorizationUrl::test_url_requests_include_granted_scopes",
+        "TestBuildAuthorizationUrl::test_url_requests_offline_access",
+        "TestBuildAuthorizationUrl::test_url_starts_with_google_auth_url",
+        "TestCallbackHappyPath::test_callback_preserves_existing_refresh_token_when_omitted",
+        "TestCallbackHappyPath::test_callback_returns_200",
+        "TestCallbackHappyPath::test_callback_returns_success_html",
+        "TestCallbackHappyPath::test_callback_state_consumed_after_use",
+        "TestCallbackHappyPath::test_callback_stores_credentials",
+        "TestCallbackHappyPath::test_callback_stores_refresh_token",
+        "TestCallbackHappyPath::test_callback_stores_user_id_correctly",
+        "TestConnectEndpoint::test_callback_redirect_preserves_origin_and_household_id",
+        "TestConnectEndpoint::test_connect_different_users_produce_different_state_tokens",
+        "TestConnectEndpoint::test_connect_redirects_to_google",
+        "TestConnectEndpoint::test_connect_returns_302",
+        "TestConnectEndpoint::test_connect_unconfigured_returns_structured_400",
+        "TestConnectEndpoint::test_connect_url_contains_user_bound_state",
+        "TestConnectEndpoint::test_connect_url_has_readonly_scope",
+        "TestConnectionStatusEndpoint::test_mismatch_error_message",
+        "TestConnectionStatusEndpoint::test_no_credentials_stored_on_mismatch",
+        "TestDeterminism::test_callback_response_html_is_stable",
+        "TestDeterminism::test_two_complete_flows_store_same_credentials",
+        "TestExchangeCodeForTokens::test_http_error_includes_google_error_details",
+        "TestExchangeCodeForTokens::test_posts_to_google_token_url",
+        "TestExchangeCodeForTokens::test_returns_access_token",
+        "TestExchangeCodeForTokens::test_returns_refresh_token",
+        "TestOAuthStateStore::test_clear_removes_all_tokens",
+        "TestOAuthStateStore::test_generate_state_returns_string",
+        "TestOAuthStateStore::test_generated_state_stored",
+        "TestOAuthStateStore::test_multiple_users_independent_tokens",
+        "TestOAuthStateStore::test_processed_state_outcome_persists_across_store_restart",
+        "TestOAuthStateStore::test_state_mismatch_returns_false",
+        "TestOAuthStateStore::test_unknown_state_returns_false",
+        "TestOAuthStateStore::test_validate_and_consume_removes_token",
+        "TestOAuthStateStore::test_validate_and_consume_returns_true_for_correct_pair",
+        "TestOAuthStateStore::test_validate_and_consume_single_use",
+        "TestRefreshAccessToken::test_refresh_returns_access_token",
+        "TestStateMismatch::test_fabricated_state_rejected",
+        "TestStateMismatch::test_wrong_user_id_rejected"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_google_oauth_env_config.py",
+      "tests": [
+        "test_token_refresh_flow"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_google_oauth_missing_config_safe_boot.py",
+      "tests": [
+        "test_orchestrator_continues_running_when_google_oauth_not_configured",
+        "test_provider_fetch_returns_empty_and_disabled_when_oauth_not_configured"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_governance_gates.py",
+      "tests": [
+        "test_docs_markdown_is_pruned_to_canonical_set",
+        "test_gitignore_has_secret_and_artifact_guardrails",
+        "test_governance_workflow_targets_existing_gate_tests",
+        "test_root_markdown_is_pruned_to_canonical_set"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_hard_freeze_regression.py",
+      "tests": [
+        "test_no_generated_runtime_artifacts_in_repo_root"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_household_os.py",
+      "tests": [
+        "test_household_os_deterministic_output",
+        "test_household_os_maps_relative_daypart_to_requested_slot",
+        "test_household_os_meal_schedule_uses_reference_date",
+        "test_household_os_preserves_explicit_requested_appointment_time",
+        "test_household_os_preserves_explicit_requested_time_without_year"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_household_os_runtime.py",
+      "tests": [
+        "test_action_lifecycle_flow",
+        "test_trigger_detection"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_household_simulation.py",
+      "tests": [
+        "HouseholdSimulationTestSuite::test_deterministic_replay_convergence",
+        "HouseholdSimulationTestSuite::test_no_duplicate_task_execution",
+        "HouseholdSimulationTestSuite::test_resilience_to_transient_failures",
+        "test_deterministic_replay"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_household_state.py",
+      "tests": [
+        "test_debug_and_brief_share_same_event_data",
+        "test_debug_brief_7d_key_matches_brief_projection",
+        "test_disabled_oauth_health_surfaces_action",
+        "test_disabled_oauth_returns_valid_household_state",
+        "test_disabled_oauth_state_serialises_cleanly",
+        "test_event_beyond_30d_appears_only_in_90d",
+        "test_event_beyond_7d_appears_only_in_30d_and_90d",
+        "test_event_in_range_appears_in_all_windows",
+        "test_household_state_brief_projection_contains_integration_health",
+        "test_household_state_canonical_fields_are_source_of_truth",
+        "test_stale_event_excluded_from_all_windows",
+        "test_state_builder_applies_windowing"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_household_state_manager.py",
+      "tests": [
+        "test_conflict_detection_across_domains",
+        "test_state_convergence_after_multiple_queries"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_identity_events_runtime.py",
+      "tests": [
+        "test_create_session_token_retries_on_sqlite_lock",
+        "test_create_user_failure_emits_user_creation_failed",
+        "test_create_user_success_emits_user_created"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_identity_layer.py",
+      "tests": [
+        "TestDeviceSwitching::test_device_registration_consistency",
+        "TestDeviceSwitching::test_last_seen_tracking",
+        "TestHouseholdIsolation::test_devices_isolated_between_users",
+        "TestHouseholdIsolation::test_users_isolated_between_households",
+        "TestMultiUserHouseholdIntegrity::test_multi_user_household_membership",
+        "TestMultiUserHouseholdIntegrity::test_role_based_permissions",
+        "TestPersistenceDeterminism::test_encode_decode_determinism",
+        "TestPersistenceDeterminism::test_household_creation_persistence",
+        "TestPersistenceDeterminism::test_user_creation_persistence",
+        "TestSessionRehydration::test_session_rehydration_from_token",
+        "TestSessionRehydration::test_session_token_encodes_claims",
+        "TestSessionRehydration::test_token_refresh_preserves_identity",
+        "TestTokenExpiration::test_expired_token_rejected"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY, DB_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_ingestion_events_runtime.py",
+      "tests": [
+        "test_resolve_household_id_for_email_falls_back_to_source_mapping",
+        "test_resolve_household_id_for_email_prefers_explicit_household_id",
+        "test_resolve_household_id_for_email_uses_recipient_identity_lookup"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_insight_bridge.py",
+      "tests": [
+        "test_deterministic_output_structure",
+        "test_isolation_guarantee"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_integration_architecture_guard.py",
+      "tests": [
+        "test_allowed_import_passes_runtime_guard",
+        "test_forbidden_prefix_check_is_deterministic"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_integration_core.py",
+      "tests": [
+        "test_default_provider_registry_has_gmail_and_google_calendar",
+        "test_placeholder_provider_status_is_deterministic_and_no_network",
+        "test_provider_registry_supports_dependency_injection",
+        "test_user_identity_model_is_strongly_typed"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_integration_identity_system.py",
+      "tests": [
+        "test_household_membership_assignment",
+        "test_lookup_by_user_id_and_household_id",
+        "test_user_creation"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_intelligence_analytics_dls.py",
+      "tests": [
+        "test_classify_system_mode_thresholds",
+        "test_compute_dls_applies_false_positive_penalty",
+        "test_compute_dls_matches_spec",
+        "test_dashboard_metrics_include_required_tradeoff_fields"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_intelligence_routing_resilience.py",
+      "tests": [
+        "test_decide_keeps_rules_sufficient_when_ai_not_needed_even_if_tier_lookup_fails",
+        "test_decide_returns_rule_only_when_limit_check_fails",
+        "test_decide_returns_rule_only_when_tier_resolution_fails_for_ai_path"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_intent_confidence_router.py",
+      "tests": [
+        "TestAPIEndpointContract::test_clarification_response_shape",
+        "TestAPIEndpointContract::test_high_confidence_response_has_routing_case",
+        "TestAPIEndpointContract::test_high_confidence_response_has_secondary_suggestions",
+        "TestAPIEndpointContract::test_low_confidence_returns_clarification",
+        "TestConfidenceBands::test_ambiguity_flag_clear_on_strong_single_intent",
+        "TestConfidenceBands::test_ambiguity_flag_set_on_low_confidence",
+        "TestConfidenceBands::test_confidence_bounds_always_valid",
+        "TestConfidenceBands::test_high_confidence_explicit_fitness",
+        "TestConfidenceBands::test_low_confidence_no_keywords",
+        "TestGuaranteesPreserved::test_daily_focus_still_blocked_from_fitness",
+        "TestGuaranteesPreserved::test_fitness_still_blocked_from_calendar",
+        "TestGuaranteesPreserved::test_low_confidence_never_executes",
+        "TestGuaranteesPreserved::test_medical_still_blocked_from_meal",
+        "TestGuaranteesPreserved::test_medium_confidence_max_2_domains",
+        "TestIntentClassificationShape::test_allowed_domains_property",
+        "TestIntentClassificationShape::test_has_all_scores_dict",
+        "TestIntentClassificationShape::test_has_ambiguity_flag",
+        "TestIntentClassificationShape::test_has_confidence_float",
+        "TestIntentClassificationShape::test_has_primary_intent",
+        "TestIntentClassificationShape::test_has_secondary_intents_list",
+        "TestIntentClassificationShape::test_is_high_confidence_property",
+        "TestIntentClassificationShape::test_is_low_confidence_on_no_match",
+        "TestIntentClassificationShape::test_returns_intent_classification",
+        "TestIntentRouterCases::test_high_confidence_no_clarification",
+        "TestIntentRouterCases::test_high_confidence_routing_case",
+        "TestIntentRouterCases::test_high_confidence_should_execute",
+        "TestIntentRouterCases::test_high_confidence_single_domain",
+        "TestIntentRouterCases::test_is_multi_intent_with_secondaries",
+        "TestIntentRouterCases::test_is_not_multi_intent_without_secondaries",
+        "TestIntentRouterCases::test_low_confidence_clarification_is_question",
+        "TestIntentRouterCases::test_low_confidence_clarification_no_jargon",
+        "TestIntentRouterCases::test_low_confidence_empty_domains",
+        "TestIntentRouterCases::test_low_confidence_has_clarification_text",
+        "TestIntentRouterCases::test_low_confidence_routing_case",
+        "TestIntentRouterCases::test_low_confidence_should_not_execute",
+        "TestIntentRouterCases::test_medium_confidence_no_clarification",
+        "TestIntentRouterCases::test_medium_confidence_routing_case",
+        "TestIntentRouterCases::test_medium_confidence_should_execute",
+        "TestIntentRouterCases::test_medium_confidence_top2_domains",
+        "TestRouteMessage::test_ambiguous_produces_clarification",
+        "TestRouteMessage::test_daily_focus_executes",
+        "TestRouteMessage::test_explicit_fitness_high_confidence",
+        "TestRouteMessage::test_explicit_medical_high_confidence",
+        "TestSecondarySuggestions::test_build_returns_list",
+        "TestSecondarySuggestions::test_multi_intent_life_together_scenario",
+        "TestSecondarySuggestions::test_no_cross_domain_in_suggestions",
+        "TestSecondarySuggestions::test_one_suggestion_per_intent",
+        "TestSecondarySuggestions::test_suggestions_are_not_mixed_into_primary_action",
+        "TestSecondarySuggestions::test_suggestions_are_secondary_suggestion_instances",
+        "TestSecondarySuggestions::test_suggestions_have_required_fields"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_intent_contract.py",
+      "tests": [
+        "TestActionPlannerGeneration::test_planner_creates_action_for_complete_task",
+        "TestActionPlannerGeneration::test_planner_creates_action_for_create_event",
+        "TestActionPlannerGeneration::test_planner_creates_action_for_create_plan",
+        "TestActionPlannerGeneration::test_planner_creates_action_for_create_task",
+        "TestActionPlannerGeneration::test_planner_creates_action_for_delete_event",
+        "TestActionPlannerGeneration::test_planner_creates_action_for_recompute_plan",
+        "TestActionPlannerGeneration::test_planner_creates_action_for_reschedule_task",
+        "TestActionPlannerGeneration::test_planner_creates_action_for_update_plan",
+        "TestActionPlannerIdempotency::test_action_plan_has_generated_timestamp",
+        "TestActionPlannerIdempotency::test_action_sequence_numbers_are_correct",
+        "TestActionPlannerIdempotency::test_different_intent_types_different_keys",
+        "TestActionPlannerIdempotency::test_different_intents_different_idempotency_keys",
+        "TestActionPlannerIdempotency::test_idempotency_key_is_deterministic",
+        "TestActionPlannerIdempotency::test_same_intent_same_idempotency_key",
+        "TestClassifierDeterminism::test_classifier_confidence_score_is_bounded",
+        "TestClassifierDeterminism::test_classifier_extracts_event_id",
+        "TestClassifierDeterminism::test_classifier_extracts_plan_id",
+        "TestClassifierDeterminism::test_classifier_extracts_task_id",
+        "TestClassifierDeterminism::test_classifier_extracts_task_name",
+        "TestClassifierDeterminism::test_classifier_low_confidence_unknown_input",
+        "TestClassifierDeterminism::test_classifier_recognizes_complete_task",
+        "TestClassifierDeterminism::test_classifier_recognizes_create_event",
+        "TestClassifierDeterminism::test_classifier_recognizes_create_plan",
+        "TestClassifierDeterminism::test_classifier_recognizes_create_task",
+        "TestClassifierDeterminism::test_classifier_recognizes_delete_event",
+        "TestClassifierDeterminism::test_classifier_same_input_same_output",
+        "TestIntegrationPipeline::test_full_pipeline_complete_task",
+        "TestIntegrationPipeline::test_full_pipeline_create_task",
+        "TestIntegrationPipeline::test_full_pipeline_deterministic",
+        "TestIntegrationPipeline::test_full_pipeline_fails_on_unknown_task",
+        "TestIntegrationPipeline::test_pipeline_create_event",
+        "TestIntegrationPipeline::test_pipeline_with_optional_fields",
+        "TestValidatorEntityReferences::test_validator_accepts_existing_event",
+        "TestValidatorEntityReferences::test_validator_accepts_existing_plan",
+        "TestValidatorEntityReferences::test_validator_accepts_existing_task",
+        "TestValidatorEntityReferences::test_validator_checks_plan_id_optional_reference",
+        "TestValidatorEntityReferences::test_validator_rejects_nonexistent_event",
+        "TestValidatorEntityReferences::test_validator_rejects_nonexistent_task",
+        "TestValidatorRequiredFields::test_validator_accepts_valid_create_event_with_optional_fields",
+        "TestValidatorRequiredFields::test_validator_accepts_valid_create_task",
+        "TestValidatorRequiredFields::test_validator_rejects_end_time_before_start_time",
+        "TestValidatorRequiredFields::test_validator_rejects_invalid_datetime",
+        "TestValidatorRequiredFields::test_validator_rejects_low_confidence",
+        "TestValidatorRequiredFields::test_validator_rejects_missing_task_id_for_complete",
+        "TestValidatorRequiredFields::test_validator_rejects_missing_task_name"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_intent_lock.py",
+      "tests": [
+        "TestActionSpaceFiltering::test_daily_focus_intent_allows_general_domain",
+        "TestActionSpaceFiltering::test_fitness_intent_allows_fitness_domain",
+        "TestActionSpaceFiltering::test_fitness_intent_blocks_other_domains",
+        "TestActionSpaceFiltering::test_meal_intent_allows_meal_domain",
+        "TestActionSpaceFiltering::test_medical_intent_allows_calendar_domain",
+        "TestActionSpaceFiltering::test_scheduling_intent_allows_calendar_domain",
+        "TestCandidateFiltering::test_filter_calendar_candidates_from_medical_intent",
+        "TestCandidateFiltering::test_filter_fitness_candidates_from_fitness_intent",
+        "TestCandidateFiltering::test_filter_meal_candidates_from_meal_intent",
+        "TestCandidateFiltering::test_no_cross_domain_leakage_daily_focus_to_calendar",
+        "TestCandidateFiltering::test_no_cross_domain_leakage_daily_focus_to_fitness",
+        "TestCandidateFiltering::test_no_cross_domain_leakage_daily_focus_to_meal",
+        "TestCandidateFiltering::test_no_cross_domain_leakage_fitness_to_calendar",
+        "TestCandidateFiltering::test_no_cross_domain_leakage_fitness_to_meal",
+        "TestCandidateFiltering::test_no_cross_domain_leakage_meal_to_fitness",
+        "TestConfidenceScoring::test_confidence_bounds",
+        "TestConfidenceScoring::test_explicit_intent_high_confidence",
+        "TestConfidenceScoring::test_no_match_low_confidence",
+        "TestFallbackBehavior::test_fallback_has_valid_reasoning",
+        "TestFallbackBehavior::test_fallback_is_general_domain",
+        "TestFallbackBehavior::test_fallback_recommendation_is_safe",
+        "TestFallbackBehavior::test_fallback_recommendation_structure",
+        "TestHardGuarantees::test_daily_focus_cannot_produce_domain_specific_action",
+        "TestHardGuarantees::test_fitness_prompt_cannot_produce_appointment",
+        "TestHardGuarantees::test_fitness_prompt_cannot_produce_meal",
+        "TestHardGuarantees::test_meal_prompt_cannot_produce_appointment",
+        "TestHardGuarantees::test_meal_prompt_cannot_produce_workout",
+        "TestHardGuarantees::test_medical_prompt_cannot_produce_workout",
+        "TestIntegrationScenarios::test_realistic_daily_focus_scenario",
+        "TestIntegrationScenarios::test_realistic_fitness_scenario",
+        "TestIntegrationScenarios::test_realistic_meal_scenario",
+        "TestIntegrationScenarios::test_realistic_medical_scenario",
+        "TestIntentClassification::test_case_insensitive_classification",
+        "TestIntentClassification::test_daily_focus_detection_explicit",
+        "TestIntentClassification::test_daily_focus_detection_organizing",
+        "TestIntentClassification::test_daily_focus_detection_priorities",
+        "TestIntentClassification::test_fitness_detection_exercise",
+        "TestIntentClassification::test_fitness_detection_explicit",
+        "TestIntentClassification::test_fitness_detection_workout",
+        "TestIntentClassification::test_meal_detection_explicit",
+        "TestIntentClassification::test_meal_detection_grocery",
+        "TestIntentClassification::test_medical_detection_dentist",
+        "TestIntentClassification::test_medical_detection_doctor",
+        "TestIntentClassification::test_scheduling_detection_explicit"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_intent_resolver.py",
+      "tests": [
+        "test_coerce_intent_type_accepts_enum_name",
+        "test_coerce_intent_type_accepts_enum_value",
+        "test_coerce_intent_type_unknown_value_returns_none"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_invariance_enforcement.py",
+      "tests": [
+        "test_no_direct_realtimeevent_outside_broadcaster",
+        "test_no_direct_sse_formatting_outside_broadcaster",
+        "test_no_to_sse_anywhere_in_runtime_paths",
+        "test_no_transport_flags_in_repository",
+        "test_router_has_no_conditional_sse_logic"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_layer_redundancy_guard.py",
+      "tests": [
+        "test_canonical_layer_directories_exist",
+        "test_integration_core_canonical_files_not_duplicated_in_other_integration_core_folders",
+        "test_integration_core_facade_is_thin_reexport_only"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_lifecycle_contract_boundary.py",
+      "tests": [
+        "test_api_layer_uses_mapper_for_lifecycle_output",
+        "test_presentation_mapper_contract"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_lifecycle_surface_consistency_guard.py",
+      "tests": [
+        "test_no_legacy_lifecycle_literals_in_runtime_code"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_llm_gateway_runtime_hardening.py",
+      "tests": [
+        "test_generate_text_cache_hit_skips_provider_and_usage",
+        "test_generate_text_does_not_retry_invalid_json_responses",
+        "test_generate_text_inflight_deduplicates_parallel_calls",
+        "test_generate_text_retries_transient_failures_with_bounded_backoff",
+        "test_generate_text_survives_cache_read_write_failures",
+        "test_generate_text_uses_fallback_once_and_records_usage_once"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, FLAKY_RISK, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_manual_priority_adapter.py",
+      "tests": [
+        "test_keyword_scoring_rules_are_correct",
+        "test_low_priority_actions_filtered_to_unscheduled_by_threshold",
+        "test_score_is_deterministic_for_same_input",
+        "test_time_adjustments_are_applied",
+        "test_visibility_block_default_unscheduled_for_missing_time",
+        "test_visibility_filter_is_deterministic_for_same_input"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_no_direct_broadcaster_bypass.py",
+      "tests": [
+        "test_no_direct_broadcaster_bypass"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_no_legacy_lifecycle_strings.py",
+      "tests": [
+        "test_no_legacy_lifecycle_strings_in_python_files"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_no_raw_lifecycle_strings.py",
+      "tests": [
+        "test_no_raw_lifecycle_strings"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_oauth_credential_store.py",
+      "tests": [
+        "test_delete_credentials"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_operational_mode.py",
+      "tests": [
+        "test_operational_api_contract_validity"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_outlook_calendar_provider.py",
+      "tests": [
+        "test_outlook_provider_fetches_events_from_primary_and_shared_calendars",
+        "test_outlook_provider_returns_disabled_when_not_connected"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_pantry_router.py",
+      "tests": [
+        "test_adjust_inventory_refreshes_projection_watermark",
+        "test_cook_recipe_decrements_inventory_and_records_history",
+        "test_receipt_ingestion_detects_and_applies_text_items"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_policy_engine.py",
+      "tests": [
+        "test_isolation_guarantee",
+        "test_itinerary_structure_integrity",
+        "test_memory_determinism",
+        "test_non_execution_guarantee",
+        "test_policy_generation_validity"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_policy_guardrails.py",
+      "tests": [
+        "TestActionPlanIntegration::test_evaluate_action_plan_directly",
+        "TestActionPlanIntegration::test_evaluate_multi_action_plan",
+        "TestActionPlanIntegration::test_extract_entity_ids_from_action_plan",
+        "TestActionPlanIntegration::test_scope_estimation",
+        "TestDefaultRules::test_all_allow_rules",
+        "TestDefaultRules::test_all_require_confirmation_rules",
+        "TestDefaultRules::test_reason_codes_are_informative",
+        "TestDefaultRules::test_safe_by_default_philosophy",
+        "TestEdgeCases::test_evaluator_with_blocking_config",
+        "TestEdgeCases::test_multiple_evaluators_independent",
+        "TestEdgeCases::test_policy_input_with_multiple_entity_ids",
+        "TestEdgeCases::test_policy_input_with_no_entity_ids",
+        "TestEdgeCases::test_policy_input_with_plan_id",
+        "TestEdgeCases::test_result_message_is_non_empty",
+        "TestPolicyConfig::test_config_allows_customization",
+        "TestPolicyConfig::test_default_config_is_safe",
+        "TestPolicyConfig::test_evaluator_respects_config",
+        "TestPolicyDecision::test_all_decisions_are_defined",
+        "TestPolicyDecision::test_allow_decision_properties",
+        "TestPolicyDecision::test_block_decision_properties",
+        "TestPolicyDecision::test_decision_string_representation",
+        "TestPolicyDecision::test_require_confirmation_decision_properties",
+        "TestPolicyEvaluator::test_complete_task_is_allowed",
+        "TestPolicyEvaluator::test_create_task_is_allowed",
+        "TestPolicyEvaluator::test_delete_event_requires_confirmation",
+        "TestPolicyEvaluator::test_evaluation_is_deterministic",
+        "TestPolicyEvaluator::test_evaluator_accepts_custom_config",
+        "TestPolicyEvaluator::test_evaluator_initializes_with_defaults",
+        "TestPolicyEvaluator::test_result_has_rule_name",
+        "TestPolicyEvaluator::test_unknown_intent_uses_default_decision",
+        "TestRuleDefinitions::test_all_intent_types_have_rules",
+        "TestRuleDefinitions::test_create_task_rule_exists",
+        "TestRuleDefinitions::test_delete_event_rule_confirms",
+        "TestRuleDefinitions::test_recompute_plan_rule_confirms",
+        "TestRuleDefinitions::test_rule_has_message",
+        "TestRuleDefinitions::test_rule_has_reason_code",
+        "TestRuleDefinitions::test_rule_priorities_are_set",
+        "TestRuleDefinitions::test_rule_summary_groups_by_decision"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_provider_email_adapter.py",
+      "tests": [
+        "test_provider_name_normalization_aliases",
+        "test_unknown_provider_uses_generic_parser"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_provider_registry.py",
+      "tests": [
+        "test_mock_fetch_events_returns_deterministic_data",
+        "test_provider_registration",
+        "test_provider_retrieval"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_recommendation_builder.py",
+      "tests": [
+        "test_no_vague_language",
+        "test_recommendation_contains_time",
+        "test_recommendation_is_actionable"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_recommendation_humanization.py",
+      "tests": [
+        "test_relative_time_formatting"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_root_ui_routing.py",
+      "tests": [
+        "test_only_one_root_route_exists",
+        "test_root_renders_integration_control_panel"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_security_verification_harness.py",
+      "tests": [
+        "TestBoundarySecurityEdgeCases::test_empty_action_ids_does_not_bypass_auth",
+        "TestBoundarySecurityEdgeCases::test_execution_context_from_api_request_carries_correct_fields",
+        "TestBoundarySecurityEdgeCases::test_execution_context_system_context_actor_is_system_worker",
+        "TestBoundarySecurityEdgeCases::test_unknown_actor_type_is_rejected",
+        "TestInvariant1ActorContextPropagation::test_invariant_actor_context_propagation",
+        "TestInvariant1ActorContextPropagation::test_invariant_context_not_silently_dropped_on_retry",
+        "TestInvariant2AssistantCannotApprove::test_invariant_assistant_blocked_at_api_layer",
+        "TestInvariant2AssistantCannotApprove::test_invariant_assistant_blocked_at_fsm_layer",
+        "TestInvariant2AssistantCannotApprove::test_invariant_assistant_blocked_at_orchestrator_layer",
+        "TestInvariant2AssistantCannotApprove::test_invariant_assistant_blocked_via_execution_context",
+        "TestInvariant3CrossHouseholdIsolation::test_invariant_cross_household_access_blocked",
+        "TestInvariant3CrossHouseholdIsolation::test_invariant_cross_household_via_orchestrator_direct",
+        "TestInvariant3CrossHouseholdIsolation::test_invariant_system_worker_bypasses_household_check_for_tick",
+        "TestInvariant4NoSilentDefaultEscalation::test_invariant_missing_actor_type_does_not_approve",
+        "TestInvariant4NoSilentDefaultEscalation::test_invariant_missing_actor_type_never_becomes_assistant",
+        "TestInvariant6EventReplayAuthorizationBypass::test_invariant_replay_proposed_to_approved_skipping_required_guard",
+        "TestInvariant6EventReplayAuthorizationBypass::test_invariant_replay_with_injected_assistant_approval_fails_or_rejects",
+        "TestInvariant7AuditMetadataCompleteness::test_invariant_events_actor_type_not_unknown_for_identified_caller",
+        "TestInvariant7AuditMetadataCompleteness::test_invariant_events_contain_actor_type",
+        "TestInvariant7AuditMetadataCompleteness::test_invariant_system_worker_events_marked_correctly"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY, CONCURRENCY_HEAVY, DB_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_single_pipeline_enforcement.py",
+      "tests": [
+        "test_brief_endpoint_calls_orchestrator_only",
+        "test_canonical_decision_engine_importable",
+        "test_canonical_decision_engine_process_produces_context",
+        "test_no_apps_source_imports_orchestrator_lite",
+        "test_no_new_orchestrator_or_duplicate_decision_engine_classes",
+        "test_no_source_imports_deleted_symbol",
+        "test_only_integration_core_decision_engine_exists",
+        "test_only_integration_core_orchestrator_exists",
+        "test_only_state_builder_calls_fetch_events",
+        "test_only_state_builder_imports_providers_module",
+        "test_services_decision_engine_is_deleted",
+        "test_synthesis_engine_module_is_deleted",
+        "test_worker_module_is_deleted"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_sse_canonical_only.py",
+      "tests": [
+        "TestSSECanonicalOnly::test_canonical_event_envelope_passes",
+        "TestSSECanonicalOnly::test_domain_event_rejected",
+        "TestSSECanonicalOnly::test_logging_includes_event_type_and_origin",
+        "TestSSECanonicalOnly::test_null_event_rejected",
+        "TestSSECanonicalOnly::test_origin_module_detection",
+        "TestSSECanonicalOnly::test_raw_dict_rejected",
+        "TestSSECanonicalOnly::test_reject_integer_event",
+        "TestSSECanonicalOnly::test_reject_string_event",
+        "TestSSECanonicalOnly::test_validation_called_in_publish_async",
+        "TestSSECanonicalOnly::test_validation_called_in_publish_sync",
+        "TestSSECanonicalRejectionMessage::test_rejection_message_includes_origin",
+        "TestSSECanonicalRejectionMessage::test_rejection_message_mentions_allowed_type",
+        "TestSSECanonicalRejectionMessage::test_rejection_message_shows_received_type"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_sse_event_closure.py",
+      "tests": [
+        "test_idempotency_preservation_duplicate_events_deduped",
+        "test_no_direct_canonical_envelope_instantiation_in_business_services",
+        "test_no_direct_sse_construction_runtime_paths",
+        "test_replay_has_no_transport_branching_or_direct_sse_calls",
+        "test_watermark_ordering_shuffled_input_rejects_stale"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_state_builder_multi_provider.py",
+      "tests": [
+        "test_state_builder_aggregates_connected_calendar_providers",
+        "test_state_builder_keeps_google_fallback_when_no_provider_credentials"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_state_machine.py",
+      "tests": [
+        "TestEdgeCases::test_multiple_retries",
+        "TestEdgeCases::test_transition_reason_stored",
+        "TestErrorClassification::test_all_retryable_errors_defined",
+        "TestErrorClassification::test_authorization_denied_is_not_retryable",
+        "TestErrorClassification::test_database_connection_error_is_retryable",
+        "TestErrorClassification::test_network_timeout_is_retryable",
+        "TestErrorClassification::test_unknown_error_defaults_to_non_retryable",
+        "TestErrorClassification::test_validation_error_is_not_retryable",
+        "TestRetryPolicy::test_can_retry_on_failed_state",
+        "TestRetryPolicy::test_cannot_retry_after_max_retries",
+        "TestRetryPolicy::test_max_retries_constant",
+        "TestRetryPolicy::test_retry_delay_exponential_backoff",
+        "TestRetryPolicy::test_retry_transition_increments_count",
+        "TestStateMachine::test_initial_state_is_proposed",
+        "TestStateMachine::test_multiple_transitions",
+        "TestStateMachine::test_transition_changes_state",
+        "TestStateMachine::test_transition_event_has_metadata",
+        "TestStateTransitionEvent::test_event_has_timestamp",
+        "TestStateTransitionEvent::test_event_to_dict",
+        "TestTerminalStates::test_committed_is_terminal",
+        "TestTerminalStates::test_failed_is_terminal_after_max_retries",
+        "TestTerminalStates::test_failed_not_terminal_if_can_retry",
+        "TestTerminalStates::test_rejected_is_terminal",
+        "TestTimeouts::test_approved_has_3600s_timeout",
+        "TestTimeouts::test_committed_has_no_timeout",
+        "TestTimeouts::test_get_timeout_seconds",
+        "TestTimeouts::test_has_timed_out_false_before_timeout",
+        "TestTimeouts::test_has_timed_out_true_after_timeout",
+        "TestTimeouts::test_pending_approval_has_1800s_timeout",
+        "TestTimeouts::test_proposed_has_600s_timeout",
+        "TestTransitionRules::test_approved_to_committed_allowed",
+        "TestTransitionRules::test_approved_to_failed_allowed",
+        "TestTransitionRules::test_approved_to_pending_approval_denied",
+        "TestTransitionRules::test_committed_is_terminal",
+        "TestTransitionRules::test_failed_to_proposed_allowed",
+        "TestTransitionRules::test_pending_approval_to_approved_allowed",
+        "TestTransitionRules::test_pending_approval_to_proposed_denied",
+        "TestTransitionRules::test_pending_approval_to_rejected_allowed",
+        "TestTransitionRules::test_proposed_to_approved_allowed",
+        "TestTransitionRules::test_proposed_to_failed_allowed",
+        "TestTransitionRules::test_proposed_to_pending_approval_allowed",
+        "TestTransitionRules::test_proposed_to_rejected_allowed",
+        "TestTransitionRules::test_rejected_is_terminal",
+        "TestTransitionValidation::test_valid_transition_passes"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, FLAKY_RISK, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_static_silent_mutations.py",
+      "tests": [
+        "test_no_silent_mutations"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_system_stability_lock.py",
+      "tests": [
+        "test_system_stability_lock"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_task_service_events.py",
+      "tests": [
+        "test_update_task_metadata_nonexistent_task_no_event"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_time_normalization.py",
+      "tests": [
+        "TestAliasListing::test_list_aliases_contains_after_lunch",
+        "TestAliasListing::test_list_aliases_contains_afternoon",
+        "TestAliasListing::test_list_aliases_contains_evening",
+        "TestAliasListing::test_list_aliases_contains_morning",
+        "TestAliasListing::test_list_aliases_contains_tonight",
+        "TestAliasListing::test_list_aliases_count",
+        "TestAliasListing::test_list_aliases_deterministic",
+        "TestDeterminism::test_alias_deterministic",
+        "TestDeterminism::test_case_variants_deterministic",
+        "TestDeterminism::test_hhmm_deterministic",
+        "TestDeterminism::test_morning_deterministic",
+        "TestEdgeCases::test_hhmm_with_non_numeric_characters",
+        "TestEdgeCases::test_malformed_hhmm_no_colon",
+        "TestEdgeCases::test_partial_alias",
+        "TestEdgeCases::test_unicode_whitespace",
+        "TestEdgeCases::test_unknown_text_alias",
+        "TestIntegrationWithManualItems::test_normalize_multiple_items_deterministic",
+        "TestIntegrationWithManualItems::test_normalize_scheduled_action_with_alias",
+        "TestIntegrationWithManualItems::test_normalize_scheduled_action_with_block",
+        "TestIntegrationWithManualItems::test_normalize_scheduled_action_with_hhmm",
+        "TestReferenceDateHandling::test_different_date_afternoon",
+        "TestReferenceDateHandling::test_different_date_morning",
+        "TestReferenceDateHandling::test_hhmm_different_dates",
+        "TestReverseLookup::test_reverse_lookup_after_lunch",
+        "TestReverseLookup::test_reverse_lookup_afternoon",
+        "TestReverseLookup::test_reverse_lookup_empty_string",
+        "TestReverseLookup::test_reverse_lookup_evening",
+        "TestReverseLookup::test_reverse_lookup_invalid_datetime",
+        "TestReverseLookup::test_reverse_lookup_morning",
+        "TestReverseLookup::test_reverse_lookup_non_standard",
+        "TestReverseLookup::test_reverse_lookup_none_input",
+        "TestReverseLookup::test_reverse_lookup_tonight",
+        "TestTimeAliases::test_after_lunch_alias",
+        "TestTimeAliases::test_after_lunch_case_insensitive",
+        "TestTimeAliases::test_after_lunch_mixed_case",
+        "TestTimeAliases::test_after_lunch_with_spaces",
+        "TestTimeAliases::test_tonight_alias",
+        "TestTimeAliases::test_tonight_with_spaces",
+        "TestTimeBlockDefaults::test_afternoon_default",
+        "TestTimeBlockDefaults::test_evening_default",
+        "TestTimeBlockDefaults::test_morning_case_insensitive",
+        "TestTimeBlockDefaults::test_morning_default",
+        "TestTimeBlockDefaults::test_morning_mixed_case",
+        "TestTimeBlockDefaults::test_morning_with_spaces",
+        "TestTimeNormalizerBasics::test_empty_string_input",
+        "TestTimeNormalizerBasics::test_hhmm_format_end_of_day",
+        "TestTimeNormalizerBasics::test_hhmm_format_midnight",
+        "TestTimeNormalizerBasics::test_hhmm_format_standard",
+        "TestTimeNormalizerBasics::test_hhmm_format_with_spaces",
+        "TestTimeNormalizerBasics::test_hhmm_invalid_hour",
+        "TestTimeNormalizerBasics::test_hhmm_invalid_minute",
+        "TestTimeNormalizerBasics::test_hhmm_negative_values",
+        "TestTimeNormalizerBasics::test_none_input",
+        "TestTimeNormalizerBasics::test_whitespace_only_input"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_trust_boundary_enforcement.py",
+      "tests": [
+        "test_orchestrator_handle_request_approve_must_pass",
+        "test_orchestrator_handle_request_reject_must_pass",
+        "test_scheduler_authorized_execution_requires_valid_token"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_trust_surface_closure.py",
+      "tests": [
+        "test_authorized_path_via_handle_request_is_allowed",
+        "test_static_trust_surface_closure_report"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, LEGACY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_trust_surface_final_closure.py",
+      "tests": [
+        "test_runtime_authorized_orchestrator_path_is_allowed",
+        "test_trust_surface_final_closure_report"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_ui_bootstrap_router.py",
+      "tests": [
+        "test_bootstrap_includes_calendar_db_events_when_projection_empty",
+        "test_bootstrap_includes_integration_events_when_user_is_connected",
+        "test_email_detail_endpoint_returns_404_when_email_not_found",
+        "test_no_internal_leakage_validation",
+        "test_patch_replay_consistency",
+        "test_resolve_recipe_url_falls_back_to_search_for_invalid_candidate",
+        "test_resolve_recipe_url_falls_back_when_health_check_fails"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_ui_canonical_wiring_guard.py",
+      "tests": [
+        "test_cozi_dashboard_exists",
+        "test_cozi_fetches_brief_with_contract_validation",
+        "test_cozi_fetches_operational_context",
+        "test_synthetic_overlay_is_explicitly_opt_in"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_unified_trust_boundary.py",
+      "tests": [
+        "test_legacy_execution_bypass_must_fail_without_explicit_authorization",
+        "test_run_legacy_path_must_be_gated_or_fail",
+        "test_today_cross_household_access_must_fail_without_authorization"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_xai_harness_integration.py",
+      "tests": [
+        "test_all_xai_invariants_pass_no_failures",
+        "test_conflicting_updates_explanation_completeness",
+        "test_replay_determinism_task_idempotency",
+        "test_task_idempotency_explanation_completeness"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_xai_layer.py",
+      "tests": [
+        "test_all_reason_codes_have_templates",
+        "test_causal_mapper_determinism",
+        "test_composite_validation_passes_clean_run",
+        "test_event_linked_to_plan",
+        "test_explanation_id_is_stable_across_instances",
+        "test_manual_override_gets_user_override_code",
+        "test_mapper_known_command_types",
+        "test_mapper_unknown_command_type_returns_fallback",
+        "test_no_internal_ids_in_explanation_text",
+        "test_plan_conflict_revision_gets_event_time_conflict_code",
+        "test_plan_merged_gets_plan_optimized_code",
+        "test_plan_recompute_with_trigger_source_gets_system_recompute_code",
+        "test_task_blocked_status",
+        "test_task_completed_status",
+        "test_task_created_by_system",
+        "test_template_engine_determinism",
+        "test_validation_completeness_detects_missing",
+        "test_validation_completeness_passes_when_all_covered",
+        "test_validation_downstream_coverage_passes_when_all_covered",
+        "test_validation_downstream_coverage_warns_on_missing",
+        "test_validation_duplicate_detected",
+        "test_validation_family_isolation_detects_leakage",
+        "test_validation_family_isolation_passes",
+        "test_validation_no_duplicates_passes_for_unique",
+        "test_validation_replay_determinism_passes"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, LEGACY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    }
+  ],
+  "chaos": [
+    {
+      "file": "tests/p1_verification/test_chaos_concurrency.py",
+      "tests": [
+        "TestChaosAuthFailures::test_mixed_valid_invalid_tokens_concurrent",
+        "TestChaosConcurrentCreation::test_100_concurrent_task_creates_result_in_1",
+        "TestChaosConcurrentCreation::test_concurrent_creates_different_items_all_succeed",
+        "TestChaosCrossHouseholdIsolation::test_concurrent_writes_different_households_isolated",
+        "TestChaosCrossHouseholdIsolation::test_event_emission_no_cross_household_leakage",
+        "TestChaosEventOrdering::test_events_ordered_under_concurrent_publishes",
+        "TestChaosLLMFailures::test_llm_timeouts_concurrent_dont_crash",
+        "TestChaosLLMFailures::test_rate_limit_under_concurrent_requests",
+        "TestChaosRetryStorms::test_retry_storm_deduplicated"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/p1_verification/test_e2e_integration.py",
+      "tests": [
+        "TestE2EEndToEndNominal::test_nominal_request_flow",
+        "TestE2EEventEmission::test_write_emits_event"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/p1_verification/test_event_bus_correctness.py",
+      "tests": [
+        "TestEventBusOrdering::test_events_ordered_by_watermark",
+        "TestEventBusPayloadIntegrity::test_complex_payload_preserved",
+        "TestEventBusPayloadIntegrity::test_empty_payload_handled",
+        "TestEventBusReconnect::test_events_queued_during_reconnect_not_lost",
+        "TestEventBusReconnect::test_subscriber_reconnect_receives_subsequent_events"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/p1_verification/test_idempotency_correctness.py",
+      "tests": [
+        "TestIdempotencyNoDuplicateWrites::test_concurrent_task_creations_deduplicated",
+        "TestIdempotencyUnderConcurrency::test_concurrent_different_keys_all_succeed",
+        "TestIdempotencyUnderConcurrency::test_parallel_identical_requests_single_winner"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_action_event_contracts.py",
+      "tests": [
+        "test_action_event_contract_invariants"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_actor_context_propagation.py",
+      "tests": [
+        "test_event_metadata_contains_actor_context_payload",
+        "test_reducer_normalizes_legacy_unknown_actor_type"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_actor_type_enforcement.py",
+      "tests": [
+        "test_api_user_can_approve_action"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_assistant_core.py",
+      "tests": [
+        "test_approval_gate_is_inert"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_assistant_runtime.py",
+      "tests": [
+        "test_runtime_does_not_execute_without_approval"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_assistant_runtime_router.py",
+      "tests": [
+        "test_approval_executes_action",
+        "test_run_endpoint_returns_action",
+        "test_today_view_returns_state"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_auth_realtime_guards.py",
+      "tests": [
+        "test_session_validate_not_rejected_as_duplicate"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_auth_router.py",
+      "tests": [
+        "test_oauth_stub_creates_missing_household_before_registering_user",
+        "test_oauth_stub_recovers_from_duplicate_email_integrity_error",
+        "test_oauth_stub_uses_request_scoped_services"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY, FLAKY_RISK, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_behavior_feedback.py",
+      "tests": [
+        "test_ignored_actions_reduce_priority",
+        "test_preferred_time_is_reused",
+        "test_rejection_affects_future_recommendations"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_brief_builder.py",
+      "tests": [
+        "test_brief_uses_state_only"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_brief_renderer_v1.py",
+      "tests": [
+        "test_brief_endpoint_render_human_non_breaking",
+        "test_renderer_hides_internal_ids_and_is_readable"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_calendar_events_runtime.py",
+      "tests": [
+        "test_persist_calendar_event_failure_emits_failure_event"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_chat_events_runtime.py",
+      "tests": [
+        "test_action_ids_confirm_executes_orchestrator_approval",
+        "test_failure_emits_chat_message_failed",
+        "test_success_emits_chat_message_sent"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_cqrs_lifecycle_invariants.py",
+      "tests": [
+        "test_hydration_view_is_non_persisted",
+        "test_loaders_do_not_mutate_lifecycle_fields",
+        "test_write_and_read_models_are_separate"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_daily_loop_engine.py",
+      "tests": [
+        "test_daily_get_endpoint_does_not_persist",
+        "test_daily_loop_has_no_overlapping_time_blocks",
+        "test_daily_loop_preserves_buffer_time",
+        "test_daily_regenerate_endpoint_persists"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_email_priority_llm.py",
+      "tests": [
+        "test_email_priority_llm_applies_valid_high_confidence_refinement",
+        "test_email_priority_llm_middle_band_requires_ambiguity",
+        "test_email_priority_llm_respects_per_minute_budget",
+        "test_email_priority_llm_skips_low_score_cases",
+        "test_email_priority_llm_uses_thread_cache_key"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_email_service_actions.py",
+      "tests": [
+        "test_handle_email_received_ignores_junk_emails",
+        "test_handle_email_received_informational_without_attention_skips_task",
+        "test_handle_email_received_uses_action_item_title_and_importance_priority"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_env_bootstrap.py",
+      "tests": [
+        "test_load_environment_populates_google_oauth_env_from_dotenv"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_evaluation_endpoints.py",
+      "tests": [
+        "test_evaluation_results_artifact_endpoint_serves_json",
+        "test_evaluation_run_endpoint_returns_expected_contract"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_event_adapter.py",
+      "tests": [
+        "TestDeterministicMapping::test_deep_copy_input_produces_identical_output",
+        "TestDeterministicMapping::test_payload_with_unsorted_keys_normalised",
+        "TestDeterministicMapping::test_same_event_produces_identical_output",
+        "TestFieldPreservation::test_event_id_preserved_in_data",
+        "TestFieldPreservation::test_event_type_mapped_to_type_field",
+        "TestFieldPreservation::test_payload_content_preserved",
+        "TestFieldPreservation::test_source_metadata_contains_provider_name",
+        "TestFieldPreservation::test_timestamp_preserved_at_top_level",
+        "TestFieldPreservation::test_user_id_preserved_in_data",
+        "TestMultiProviderConsistency::test_same_provider_multiple_events_all_deterministic"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_event_mutation_stress.py",
+      "tests": [
+        "test_stability_metrics_are_computed_correctly",
+        "test_stress_runner_emits_all_chaos_scenarios"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_event_replay_integrity.py",
+      "tests": [
+        "test_replay_rejects_legacy_event"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_event_sourcing.py",
+      "tests": [
+        "TestCommandHandler::test_approve_command_from_proposed",
+        "TestCommandHandler::test_fail_command",
+        "TestDomainEvent::test_event_creation",
+        "test_historical_replay_strict"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, LEGACY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_event_store_invariants.py",
+      "tests": [
+        "test_state_reduction_fails_for_unknown_actor_type"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_external_event_normalization.py",
+      "tests": [
+        "test_event_id_stability_for_recurring_series",
+        "test_mixed_single_and_recurring_event_sets",
+        "test_no_duplicate_events_from_recurring_series",
+        "test_recurring_event_collapse_deduplication"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_frontend_runtime_contract.py",
+      "tests": [
+        "test_action_execution_idempotency",
+        "test_chat_session_consistency_under_retry"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_fsm_immutability_enforcement.py",
+      "tests": [
+        "test_legacy_manager_parse_is_read_through_only",
+        "test_no_in_place_lifecycle_rewrites_in_persistence_modules"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_fsm_non_authority.py",
+      "tests": [
+        "test_fsm_does_not_override_state"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_google_calendar_full_external_validation.py",
+      "tests": [
+        "test_google_calendar_full_external_validation"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_google_calendar_integration_surface.py",
+      "tests": [
+        "test_end_to_end_calendar_ingestion_flow"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_google_calendar_oauth.py",
+      "tests": [
+        "TestCallbackHappyPath::test_callback_accepts_signed_state_when_pending_store_is_cleared",
+        "TestConnectionStatusEndpoint::test_status_returns_connected_with_metadata",
+        "TestConnectionStatusEndpoint::test_status_returns_not_connected_when_missing_credentials",
+        "TestExchangeCodeForTokens::test_posts_correct_payload",
+        "TestGoogleEmailSyncEndpoint::test_sync_ingests_gmail_messages_with_household_override",
+        "TestGoogleEmailSyncEndpoint::test_sync_requires_connected_google_credentials",
+        "TestGoogleEmailSyncEndpoint::test_sync_returns_reconnect_hint_when_gmail_scope_missing",
+        "TestOAuthStateStore::test_state_persists_across_store_restart_when_path_configured",
+        "TestRefreshAccessToken::test_refresh_posts_correct_payload"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, LEGACY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_google_oauth_env_config.py",
+      "tests": [
+        "test_client_id_injected_from_environment_only",
+        "test_missing_env_vars_report_soft_configuration_status",
+        "test_redirect_uri_used_exactly_as_configured",
+        "test_valid_env_vars_generate_oauth_url"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_google_oauth_missing_config_safe_boot.py",
+      "tests": [
+        "test_missing_google_oauth_config_does_not_crash_system"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_household_os.py",
+      "tests": [
+        "test_household_os_approval_recording",
+        "test_household_os_cross_domain_reasoning",
+        "test_household_os_no_module_leakage",
+        "test_household_os_single_action_output",
+        "test_household_os_state_graph_consistency"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_household_os_runtime.py",
+      "tests": [
+        "test_daily_cycle",
+        "test_orchestrator_tick"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_household_simulation.py",
+      "tests": [
+        "HouseholdSimulationTestSuite::test_convergence_to_stable_state",
+        "HouseholdSimulationTestSuite::test_full_matrix_execution",
+        "HouseholdSimulationTestSuite::test_no_cross_family_leakage",
+        "HouseholdSimulationTestSuite::test_no_lost_updates",
+        "HouseholdSimulationTestSuite::test_no_phantom_states",
+        "HouseholdSimulationTestSuite::test_no_silent_inconsistencies",
+        "HouseholdSimulationTestSuite::test_resilience_to_byzantine_failures",
+        "HouseholdSimulationTestSuite::test_resilience_to_network_chaos"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_household_state_manager.py",
+      "tests": [
+        "test_no_module_leakage_in_response",
+        "test_single_action_output_guarantee"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_identity_layer.py",
+      "tests": [
+        "TestMultiUserHouseholdIntegrity::test_bootstrap_resolves_to_any_user_in_household"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_ingestion_events_runtime.py",
+      "tests": [
+        "test_invalid_email_emits_email_parse_failed",
+        "test_junk_email_is_ignored_before_routing",
+        "test_valid_email_emits_email_parsed"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, LEGACY, DB_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_ingestion_router.py",
+      "tests": [
+        "test_ingest_email_route_delegates_to_service",
+        "test_ingest_email_route_maps_ingestion_error",
+        "test_ingest_provider_email_batch_route_returns_row_statuses",
+        "test_ingest_provider_email_route_parses_and_delegates",
+        "test_ingest_webhook_route_delegates_to_service"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_insight_bridge.py",
+      "tests": [
+        "test_artifact_parsing_integrity",
+        "test_pattern_detection"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_integration_core.py",
+      "tests": [
+        "test_credential_store_uses_encryption_ready_cipher_interface",
+        "test_mock_token_supported_in_test_mode"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_intent_contract.py",
+      "tests": [
+        "TestActionPlannerGeneration::test_planner_returns_none_for_unknown_intent"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_invariance_enforcement.py",
+      "tests": [
+        "test_redis_ingress_reenters_canonical_pipeline",
+        "test_replay_routes_via_router_without_transport_branching",
+        "test_single_emission_path_runtime_contract",
+        "test_watermark_ignores_external_and_is_monotonic"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_life_state_model.py",
+      "tests": [
+        "test_intent_lock_still_prevents_cross_domain_leakage",
+        "test_life_state_never_changes_primary_intent_classification",
+        "test_persistence_updates_after_run_and_approval",
+        "test_routing_preference_shifts_under_high_workload",
+        "test_stress_index_rises_with_overlapping_events",
+        "test_workload_score_increases_with_dense_calendar_state"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_lifecycle_integrity_invariants.py",
+      "tests": [
+        "test_db_roundtrip_state",
+        "test_fsm_never_overrides_reducer"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_live_orchestration_simulation.py",
+      "tests": [
+        "test_live_orchestration_assertions_are_computed",
+        "test_live_orchestration_simulation_is_deterministic_for_same_seed"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_llm_gateway_runtime_hardening.py",
+      "tests": [
+        "test_generate_text_inflight_burst_keeps_single_provider_execution"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_migration_cleanliness.py",
+      "tests": [
+        "test_all_persisted_states_are_canonical",
+        "test_no_legacy_state_strings_present"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_no_legacy_lifecycle_strings.py",
+      "tests": [
+        "test_no_legacy_lifecycle_strings_in_fixtures_and_data"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_oauth_credential_store.py",
+      "tests": [
+        "test_credentials_persist_when_backed_by_file",
+        "test_lookup_miss_reloads_from_disk",
+        "test_overwrite_credentials",
+        "test_store_and_retrieve_credentials",
+        "test_supports_multiple_providers_per_user"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_operational_mode.py",
+      "tests": [
+        "test_operational_brief_executes_real_pipeline",
+        "test_operational_output_structure_is_deterministic",
+        "test_operational_pipeline_isolation_from_simulation_and_evaluation"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_output_governor.py",
+      "tests": [
+        "test_daily_focus_api_response_uses_governed_fallback",
+        "test_daily_focus_never_returns_booking_meal_or_fitness_actions",
+        "test_fallback_always_returns_schedule_review_recommendation",
+        "test_no_banned_system_phrases_appear_in_output"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, DB_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_p0_torture.py",
+      "tests": [
+        "TestBufferOverflow::test_old_watermark_triggers_resync",
+        "TestChaosMix::test_30_second_chaos",
+        "TestConcurrentWriteStorm::test_50_parallel_writes",
+        "TestIdempotencyTTL::test_concurrent_retries_at_boundary",
+        "TestIdempotencyTTL::test_ttl_boundary_exact",
+        "TestReconnectTortureLoop::test_quick_reconnect_flood",
+        "TestReconnectTortureLoop::test_reconnect_500_iterations",
+        "TestReplayLiveOverlap::test_replay_during_concurrent_writes",
+        "test_suite_summary"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY, FLAKY_RISK, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_pantry_router.py",
+      "tests": [
+        "test_adjust_inventory_supports_units_and_decimal_quantities",
+        "test_adjust_inventory_updates_counts"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_persistence_roundtrip_integrity.py",
+      "tests": [
+        "test_state_round_trip"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_provider_email_adapter.py",
+      "tests": [
+        "test_google_payload_parser_converts_html_body_to_plain_text",
+        "test_google_payload_parser_supports_gmail_message_shape",
+        "test_outlook_payload_parser_supports_graph_message_shape",
+        "test_yahoo_payload_parser_supports_header_style_shape"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_recommendation_humanization.py",
+      "tests": [
+        "test_humanized_language",
+        "test_no_raw_timestamps"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_sample_household_os_outputs.py",
+      "tests": [
+        "test_sample_household_os_outputs"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_security_verification_harness.py",
+      "tests": [
+        "TestInvariant6EventReplayAuthorizationBypass::test_invariant_replay_of_valid_stream_succeeds",
+        "TestInvariant7AuditMetadataCompleteness::test_invariant_execution_context_metadata_wired_to_events"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, LEGACY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_sse_canonical_only.py",
+      "tests": [
+        "TestSSECanonicalOnly::test_only_canonical_envelope_passes",
+        "TestSSECanonicalOnly::test_system_event_rejected_if_not_canonical_envelope"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_sse_event_closure.py",
+      "tests": [
+        "test_registry_enforcement_hard_reject_unknown_event_type",
+        "test_replay_determinism_same_input_identical_stream",
+        "test_schema_parity_domain_to_canonical_to_sse_lossless_subset"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY, FLAKY_RISK, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_task_service_events.py",
+      "tests": [
+        "test_update_task_metadata_emits_event",
+        "test_update_task_metadata_no_change_still_emits"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_time_normalization.py",
+      "tests": [
+        "TestEdgeCases::test_malformed_hhmm_multiple_colons"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_trust_boundary_enforcement.py",
+      "tests": [
+        "test_event_store_append_from_external_module_must_fail",
+        "test_forged_actor_event_replay_must_fail",
+        "test_replay_from_unauthorized_module_context_must_fail",
+        "test_unsigned_event_replay_must_fail"
+      ],
+      "reason": "Heuristic markers: CONCURRENCY_HEAVY, SSE_HEAVY, DB_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_trust_surface_closure.py",
+      "tests": [
+        "test_negative_direct_event_store_append_must_fail"
+      ],
+      "reason": "Heuristic markers: DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_trust_surface_final_closure.py",
+      "tests": [
+        "test_runtime_enforcement_requires_orchestrator_provenance"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_ui_bootstrap_router.py",
+      "tests": [
+        "test_bootstrap_excludes_junk_email_notifications",
+        "test_bootstrap_includes_email_summary_notifications",
+        "test_bootstrap_includes_email_summary_notifications_from_email_received",
+        "test_bootstrap_includes_pantry_and_weekly_recipe_suggestions",
+        "test_bootstrap_includes_runtime_graph_events_and_tasks",
+        "test_bootstrap_refreshes_cached_state_when_email_summary_changes",
+        "test_bootstrap_rolls_up_low_priority_email_notifications",
+        "test_chat_response_structure_validation",
+        "test_email_detail_endpoint_returns_combined_email_view",
+        "test_snapshot_determinism"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY, DB_HEAVY, LEGACY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_ui_simulation_endpoints.py",
+      "tests": [
+        "test_simulation_run_endpoint_returns_structured_payload",
+        "test_simulation_stream_and_results_endpoints"
+      ],
+      "reason": "Heuristic markers: LEGACY, SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_unified_trust_boundary.py",
+      "tests": [
+        "test_forged_actor_type_event_replay_must_fail",
+        "test_mismatched_signature_event_replay_must_fail",
+        "test_unsigned_event_replay_must_fail"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, CONCURRENCY_HEAVY. Classified conservatively by highest-risk indicators."
+    },
+    {
+      "file": "tests/test_xai_harness_integration.py",
+      "tests": [
+        "test_concurrent_plan_creation_explanation_completeness",
+        "test_full_matrix_report",
+        "test_no_cross_family_explanation_leakage",
+        "test_no_duplicate_explanations_concurrent_plan_creation",
+        "test_no_duplicate_explanations_task_idempotency",
+        "test_replay_determinism_concurrent_plan_creation"
+      ],
+      "reason": "Heuristic markers: SSE_HEAVY, DB_HEAVY, CONCURRENCY_HEAVY, FLAKY_RISK. Classified conservatively by highest-risk indicators."
+    }
+  ],
+  "legacy_candidates": [
+    {
+      "file": "tests/p1_verification/test_auth_lifecycle.py",
+      "tests": [
+        "TestAuthHouseholdScopeBinding::test_cross_household_token_misuse_rejected",
+        "TestAuthHouseholdScopeBinding::test_token_claims_match_issuance",
+        "TestAuthTokenIssuance::test_access_token_shorter_expiry",
+        "TestAuthTokenIssuance::test_token_pair_structure",
+        "TestAuthTokenRefresh::test_refresh_token_extends_expiry",
+        "TestAuthTokenRevocation::test_revoke_all_user_tokens",
+        "TestAuthTokenRevocation::test_revoke_device_tokens",
+        "TestAuthTokenRevocation::test_revoke_single_token",
+        "TestAuthTokenValidation::test_expired_token_rejected",
+        "TestAuthTokenValidation::test_tampered_token_rejected",
+        "TestAuthTokenValidation::test_valid_token_accepted"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/p1_verification/test_chaos_concurrency.py",
+      "tests": [
+        "TestChaosAuthFailures::test_mixed_valid_invalid_tokens_concurrent",
+        "TestChaosConcurrentCreation::test_100_concurrent_task_creates_result_in_1",
+        "TestChaosConcurrentCreation::test_concurrent_creates_different_items_all_succeed",
+        "TestChaosCrossHouseholdIsolation::test_concurrent_writes_different_households_isolated",
+        "TestChaosCrossHouseholdIsolation::test_event_emission_no_cross_household_leakage",
+        "TestChaosEventOrdering::test_events_ordered_under_concurrent_publishes",
+        "TestChaosLLMFailures::test_llm_timeouts_concurrent_dont_crash",
+        "TestChaosLLMFailures::test_rate_limit_under_concurrent_requests",
+        "TestChaosRetryStorms::test_retry_storm_deduplicated"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/p1_verification/test_e2e_integration.py",
+      "tests": [
+        "TestE2EAuthenticatedRequest::test_full_request_with_valid_token",
+        "TestE2EEndToEndNominal::test_nominal_request_flow",
+        "TestE2EEventEmission::test_write_emits_event",
+        "TestE2EIntentResolutionToWrite::test_llm_timeout_fallback_still_writes",
+        "TestE2EIntentResolutionToWrite::test_valid_intent_triggers_write"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/p1_verification/test_event_bus_correctness.py",
+      "tests": [
+        "TestEventBusMultiSubscriber::test_all_subscribers_receive_events",
+        "TestEventBusNoLeakage::test_events_isolated_by_household",
+        "TestEventBusOrdering::test_events_ordered_by_watermark",
+        "TestEventBusOrdering::test_multiple_events_same_watermark_consistent",
+        "TestEventBusPayloadIntegrity::test_complex_payload_preserved",
+        "TestEventBusPayloadIntegrity::test_empty_payload_handled"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/p1_verification/test_idempotency_correctness.py",
+      "tests": [
+        "TestIdempotencyNoDuplicateWrites::test_concurrent_task_creations_deduplicated"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/p1_verification/test_llm_gateway_failures.py",
+      "tests": [
+        "TestLLMGatewayBudget::test_normal_prompt_accepted",
+        "TestLLMGatewayBudget::test_normal_prompt_returns_llm_route_under_non_limited_conditions",
+        "TestLLMGatewayBudget::test_oversized_prompt_rejected",
+        "TestLLMGatewayCombinedFailures::test_timeout_doesnt_trigger_rate_limit",
+        "TestLLMGatewayFallbackPath::test_fallback_response_safe_for_pipeline",
+        "TestLLMGatewayFallbackPath::test_fallback_returns_valid_response",
+        "TestLLMGatewayRateLimit::test_rate_limit_enforced",
+        "TestLLMGatewayRateLimit::test_rate_limit_per_household",
+        "TestLLMGatewayStructuredOutput::test_confidence_score_bounds",
+        "TestLLMGatewayStructuredOutput::test_invalid_intent_type_rejected",
+        "TestLLMGatewayStructuredOutput::test_valid_intent_names_accepted",
+        "TestLLMGatewayTimeout::test_timeout_doesnt_crash_pipeline",
+        "TestLLMGatewayTimeout::test_timeout_returns_fallback_response"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_actor_context_propagation.py",
+      "tests": [
+        "test_actor_type_is_mapped_from_api_user_to_user",
+        "test_event_metadata_contains_actor_context_payload",
+        "test_reducer_normalizes_legacy_unknown_actor_type"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_actor_type_enforcement.py",
+      "tests": [
+        "test_actor_type_propagates_api_to_approve_actions",
+        "test_api_user_can_approve_action",
+        "test_assistant_cannot_approve",
+        "test_household_ownership_enforced"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_architecture_suite.py",
+      "tests": [
+        "test_action_pipeline_direct_invocation_guard_only_orchestrator"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_assistant_core.py",
+      "tests": [
+        "test_approval_gate_is_inert",
+        "test_deterministic_output",
+        "test_scheduling_conflict_detection"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_assistant_runtime.py",
+      "tests": [
+        "test_runtime_detects_cross_domain_conflicts",
+        "test_runtime_does_not_execute_without_approval",
+        "test_runtime_merges_multiple_domains",
+        "test_runtime_output_is_deterministic",
+        "test_state_snapshot_is_read_only"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_assistant_runtime_router.py",
+      "tests": [
+        "test_approval_executes_action",
+        "test_run_endpoint_returns_action",
+        "test_today_view_returns_state"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_auth_realtime_guards.py",
+      "tests": [
+        "test_realtime_query_token_extraction_is_supported",
+        "test_realtime_stream_rejects_missing_auth"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_auth_router.py",
+      "tests": [
+        "test_oauth_stub_creates_missing_household_before_registering_user",
+        "test_oauth_stub_recovers_from_duplicate_email_integrity_error",
+        "test_oauth_stub_uses_request_scoped_services"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_behavior_feedback.py",
+      "tests": [
+        "test_ignored_actions_reduce_priority",
+        "test_preferred_time_is_reused",
+        "test_rejection_affects_future_recommendations"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_boundary_enforcement.py",
+      "tests": [
+        "test_non_api_boundaries_reject_legacy"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_brief_renderer_v1.py",
+      "tests": [
+        "test_brief_endpoint_render_human_non_breaking",
+        "test_renderer_groups_actions_by_morning_afternoon_evening",
+        "test_renderer_hides_internal_ids_and_is_readable",
+        "test_renderer_markdown_format_supported",
+        "test_renderer_output_is_deterministic_for_same_input"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_calendar_events_runtime.py",
+      "tests": [
+        "test_persist_calendar_event_failure_emits_failure_event",
+        "test_persist_calendar_event_success_emits_system_event"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_chat_events_runtime.py",
+      "tests": [
+        "test_process_message_create_task_executes_direct_capability",
+        "test_process_message_schedule_event_executes_direct_capability"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_cqrs_lifecycle_invariants.py",
+      "tests": [
+        "test_allowed_transitions_is_sole_rule_source",
+        "test_hydration_view_is_non_persisted",
+        "test_loaders_do_not_mutate_lifecycle_fields",
+        "test_no_normalize_state_mutations",
+        "test_presentation_mapper_is_read_only",
+        "test_reducer_event_mapping_not_decision_logic",
+        "test_reducer_is_pure_function",
+        "test_reducer_validates_using_fsm_rules",
+        "test_validate_transition_is_authoritative",
+        "test_write_and_read_models_are_separate"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_daily_loop_engine.py",
+      "tests": [
+        "test_daily_loop_consumes_runtime_plan_output",
+        "test_daily_loop_generation_is_read_only",
+        "test_daily_loop_has_no_overlapping_time_blocks",
+        "test_daily_loop_output_is_deterministic",
+        "test_daily_loop_places_meals_and_workouts",
+        "test_daily_loop_preserves_buffer_time"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_decision_engine_integration.py",
+      "tests": [
+        "test_decision_engine_prioritization"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_email_service_actions.py",
+      "tests": [
+        "test_handle_email_received_ignores_junk_emails",
+        "test_handle_email_received_informational_without_attention_skips_task",
+        "test_handle_email_received_uses_action_item_title_and_importance_priority"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_env_bootstrap.py",
+      "tests": [
+        "test_get_missing_google_oauth_env_vars_reports_missing_keys",
+        "test_load_environment_populates_google_oauth_env_from_dotenv"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_event_replay_integrity.py",
+      "tests": [
+        "test_replay_rejects_legacy_event"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_event_sourcing.py",
+      "tests": [
+        "test_historical_replay_strict"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_event_store_invariants.py",
+      "tests": [
+        "test_forbidden_append_caller_is_blocked",
+        "test_invalid_replay_access_denied_for_user_actor"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_fsm_immutability_enforcement.py",
+      "tests": [
+        "test_graph_store_parse_is_read_through_only",
+        "test_legacy_manager_parse_is_read_through_only",
+        "test_no_in_place_lifecycle_rewrites_in_persistence_modules"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_google_calendar_full_external_validation.py",
+      "tests": [
+        "test_google_calendar_full_external_validation"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_google_calendar_integration_surface.py",
+      "tests": [
+        "test_end_to_end_calendar_ingestion_flow",
+        "test_orchestrator_builds_household_state_from_credential_store",
+        "test_orchestrator_household_state_has_raw_events_in_debug_meta"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_google_calendar_oauth.py",
+      "tests": [
+        "TestConnectEndpoint::test_callback_redirect_preserves_origin_and_household_id",
+        "TestConnectEndpoint::test_connect_unconfigured_returns_structured_400",
+        "TestExchangeCodeForTokens::test_posts_to_google_token_url",
+        "TestGoogleEmailSyncEndpoint::test_sync_ingests_gmail_messages_with_household_override",
+        "TestGoogleEmailSyncEndpoint::test_sync_requires_connected_google_credentials",
+        "TestGoogleEmailSyncEndpoint::test_sync_returns_reconnect_hint_when_gmail_scope_missing",
+        "TestOAuthStateStore::test_processed_state_outcome_persists_across_store_restart",
+        "TestOAuthStateStore::test_state_persists_across_store_restart_when_path_configured"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_google_oauth_missing_config_safe_boot.py",
+      "tests": [
+        "test_missing_google_oauth_config_does_not_crash_system",
+        "test_orchestrator_continues_running_when_google_oauth_not_configured"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_household_os.py",
+      "tests": [
+        "test_household_os_approval_recording",
+        "test_household_os_cross_domain_reasoning",
+        "test_household_os_deterministic_output",
+        "test_household_os_maps_relative_daypart_to_requested_slot",
+        "test_household_os_meal_schedule_uses_reference_date",
+        "test_household_os_no_module_leakage",
+        "test_household_os_preserves_explicit_requested_appointment_time",
+        "test_household_os_preserves_explicit_requested_time_without_year",
+        "test_household_os_rejects_empty_allowed_domains",
+        "test_household_os_single_action_output",
+        "test_household_os_state_graph_consistency"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_household_os_runtime.py",
+      "tests": [
+        "test_action_lifecycle_flow",
+        "test_daily_cycle",
+        "test_direct_state_mutation_is_blocked",
+        "test_orchestrator_tick",
+        "test_trigger_detection"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_household_simulation.py",
+      "tests": [
+        "HouseholdSimulationTestSuite::test_convergence_to_stable_state",
+        "HouseholdSimulationTestSuite::test_deterministic_replay_convergence",
+        "HouseholdSimulationTestSuite::test_full_matrix_execution",
+        "HouseholdSimulationTestSuite::test_no_cross_family_leakage",
+        "HouseholdSimulationTestSuite::test_no_duplicate_task_execution",
+        "HouseholdSimulationTestSuite::test_no_lost_updates",
+        "HouseholdSimulationTestSuite::test_no_phantom_states",
+        "HouseholdSimulationTestSuite::test_no_silent_inconsistencies",
+        "HouseholdSimulationTestSuite::test_resilience_to_byzantine_failures",
+        "HouseholdSimulationTestSuite::test_resilience_to_network_chaos",
+        "HouseholdSimulationTestSuite::test_resilience_to_transient_failures",
+        "test_byzantine_resilience",
+        "test_consistency_assurance",
+        "test_deterministic_replay",
+        "test_family_isolation",
+        "test_matrix_coverage",
+        "test_network_chaos_resilience",
+        "test_no_lost_updates",
+        "test_stable_convergence",
+        "test_task_idempotency",
+        "test_transient_failure_recovery",
+        "test_valid_states_only"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_household_state.py",
+      "tests": [
+        "test_debug_and_brief_share_same_event_data",
+        "test_debug_brief_7d_key_matches_brief_projection",
+        "test_disabled_oauth_health_surfaces_action",
+        "test_disabled_oauth_returns_valid_household_state",
+        "test_disabled_oauth_state_serialises_cleanly",
+        "test_event_beyond_30d_appears_only_in_90d",
+        "test_event_beyond_7d_appears_only_in_30d_and_90d",
+        "test_event_in_range_appears_in_all_windows",
+        "test_household_state_brief_projection_contains_integration_health",
+        "test_household_state_canonical_fields_are_source_of_truth",
+        "test_stale_event_excluded_from_all_windows",
+        "test_state_builder_applies_windowing"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_household_state_manager.py",
+      "tests": [
+        "test_conflict_detection_across_domains",
+        "test_no_module_leakage_in_response",
+        "test_single_action_output_guarantee",
+        "test_state_convergence_after_multiple_queries"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_identity_events_runtime.py",
+      "tests": [
+        "test_create_session_token_retries_on_sqlite_lock",
+        "test_create_user_failure_emits_user_creation_failed",
+        "test_create_user_success_emits_user_created"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_identity_layer.py",
+      "tests": [
+        "TestDeviceSwitching::test_device_registration_consistency",
+        "TestDeviceSwitching::test_last_seen_tracking",
+        "TestHouseholdIsolation::test_devices_isolated_between_users",
+        "TestHouseholdIsolation::test_users_isolated_between_households",
+        "TestMultiUserHouseholdIntegrity::test_bootstrap_resolves_to_any_user_in_household",
+        "TestMultiUserHouseholdIntegrity::test_multi_user_household_membership",
+        "TestPersistenceDeterminism::test_encode_decode_determinism",
+        "TestPersistenceDeterminism::test_household_creation_persistence",
+        "TestPersistenceDeterminism::test_user_creation_persistence",
+        "TestSessionRehydration::test_session_rehydration_from_token",
+        "TestSessionRehydration::test_session_token_encodes_claims",
+        "TestSessionRehydration::test_token_refresh_preserves_identity",
+        "TestTokenExpiration::test_expired_token_rejected"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_ingestion_events_runtime.py",
+      "tests": [
+        "test_junk_email_is_ignored_before_routing",
+        "test_resolve_household_id_for_email_falls_back_to_source_mapping",
+        "test_resolve_household_id_for_email_prefers_explicit_household_id",
+        "test_resolve_household_id_for_email_uses_recipient_identity_lookup",
+        "test_valid_email_emits_email_parsed"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_ingestion_router.py",
+      "tests": [
+        "test_ingest_email_route_delegates_to_service",
+        "test_ingest_provider_email_batch_route_returns_row_statuses",
+        "test_ingest_provider_email_route_parses_and_delegates"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_integration_architecture_guard.py",
+      "tests": [
+        "test_forbidden_imports_fail_at_runtime_guard"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_integration_core.py",
+      "tests": [
+        "test_placeholder_provider_status_is_deterministic_and_no_network",
+        "test_provider_registry_supports_dependency_injection",
+        "test_user_identity_model_is_strongly_typed"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_integration_identity_system.py",
+      "tests": [
+        "test_household_membership_assignment",
+        "test_lookup_by_user_id_and_household_id",
+        "test_user_creation"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_intent_contract.py",
+      "tests": [
+        "TestValidatorEntityReferences::test_validator_accepts_existing_event",
+        "TestValidatorEntityReferences::test_validator_accepts_existing_plan",
+        "TestValidatorEntityReferences::test_validator_accepts_existing_task",
+        "TestValidatorEntityReferences::test_validator_checks_plan_id_optional_reference",
+        "TestValidatorEntityReferences::test_validator_rejects_nonexistent_event",
+        "TestValidatorEntityReferences::test_validator_rejects_nonexistent_task",
+        "TestValidatorRequiredFields::test_validator_accepts_valid_create_event_with_optional_fields",
+        "TestValidatorRequiredFields::test_validator_rejects_end_time_before_start_time",
+        "TestValidatorRequiredFields::test_validator_rejects_invalid_datetime",
+        "TestValidatorRequiredFields::test_validator_rejects_low_confidence",
+        "TestValidatorRequiredFields::test_validator_rejects_missing_task_id_for_complete",
+        "TestValidatorRequiredFields::test_validator_rejects_missing_task_name"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_invariance_enforcement.py",
+      "tests": [
+        "test_redis_ingress_reenters_canonical_pipeline",
+        "test_replay_routes_via_router_without_transport_branching",
+        "test_single_emission_path_runtime_contract",
+        "test_watermark_ignores_external_and_is_monotonic"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_layer_redundancy_guard.py",
+      "tests": [
+        "test_integration_core_facade_is_thin_reexport_only"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_life_state_model.py",
+      "tests": [
+        "test_persistence_updates_after_run_and_approval",
+        "test_stress_index_rises_with_overlapping_events",
+        "test_workload_score_increases_with_dense_calendar_state"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_lifecycle_integrity_invariants.py",
+      "tests": [
+        "test_db_roundtrip_state"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_lifecycle_surface_consistency_guard.py",
+      "tests": [
+        "test_no_legacy_lifecycle_literals_in_runtime_code"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_live_orchestration_simulation.py",
+      "tests": [
+        "test_live_orchestration_assertions_are_computed",
+        "test_live_orchestration_simulation_is_deterministic_for_same_seed"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_migration_cleanliness.py",
+      "tests": [
+        "test_no_legacy_state_strings_present"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_no_legacy_lifecycle_strings.py",
+      "tests": [
+        "test_no_legacy_lifecycle_strings_in_fixtures_and_data",
+        "test_no_legacy_lifecycle_strings_in_python_files"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_no_raw_lifecycle_strings.py",
+      "tests": [
+        "test_no_raw_lifecycle_strings"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_operational_mode.py",
+      "tests": [
+        "test_operational_api_contract_validity",
+        "test_operational_brief_executes_real_pipeline",
+        "test_operational_output_structure_is_deterministic",
+        "test_operational_pipeline_isolation_from_simulation_and_evaluation"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_output_governor.py",
+      "tests": [
+        "test_daily_focus_api_response_uses_governed_fallback"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_p0_torture.py",
+      "tests": [
+        "TestBufferOverflow::test_old_watermark_triggers_resync",
+        "TestChaosMix::test_30_second_chaos",
+        "TestConcurrentWriteStorm::test_50_parallel_writes",
+        "TestIdempotencyTTL::test_concurrent_retries_at_boundary",
+        "TestIdempotencyTTL::test_ttl_boundary_exact",
+        "TestReconnectTortureLoop::test_quick_reconnect_flood",
+        "TestReconnectTortureLoop::test_reconnect_500_iterations",
+        "TestReplayLiveOverlap::test_replay_during_concurrent_writes",
+        "test_suite_summary"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_persistence_roundtrip_integrity.py",
+      "tests": [
+        "test_state_round_trip"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_recommendation_humanization.py",
+      "tests": [
+        "test_humanized_language",
+        "test_no_raw_timestamps"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_sample_household_os_outputs.py",
+      "tests": [
+        "test_sample_household_os_outputs"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_security_verification_harness.py",
+      "tests": [
+        "TestBoundarySecurityEdgeCases::test_empty_action_ids_does_not_bypass_auth",
+        "TestBoundarySecurityEdgeCases::test_execution_context_from_api_request_carries_correct_fields",
+        "TestBoundarySecurityEdgeCases::test_execution_context_system_context_actor_is_system_worker",
+        "TestBoundarySecurityEdgeCases::test_unknown_actor_type_is_rejected",
+        "TestInvariant1ActorContextPropagation::test_invariant_actor_context_propagation",
+        "TestInvariant1ActorContextPropagation::test_invariant_context_not_silently_dropped_on_retry",
+        "TestInvariant2AssistantCannotApprove::test_invariant_assistant_blocked_at_api_layer",
+        "TestInvariant2AssistantCannotApprove::test_invariant_assistant_blocked_at_orchestrator_layer",
+        "TestInvariant2AssistantCannotApprove::test_invariant_assistant_blocked_via_execution_context",
+        "TestInvariant3CrossHouseholdIsolation::test_invariant_cross_household_access_blocked",
+        "TestInvariant3CrossHouseholdIsolation::test_invariant_cross_household_via_orchestrator_direct",
+        "TestInvariant3CrossHouseholdIsolation::test_invariant_system_worker_bypasses_household_check_for_tick",
+        "TestInvariant4NoSilentDefaultEscalation::test_invariant_missing_actor_type_does_not_approve",
+        "TestInvariant4NoSilentDefaultEscalation::test_invariant_missing_actor_type_never_becomes_assistant",
+        "TestInvariant7AuditMetadataCompleteness::test_invariant_events_actor_type_not_unknown_for_identified_caller",
+        "TestInvariant7AuditMetadataCompleteness::test_invariant_events_contain_actor_type",
+        "TestInvariant7AuditMetadataCompleteness::test_invariant_execution_context_metadata_wired_to_events",
+        "TestInvariant7AuditMetadataCompleteness::test_invariant_system_worker_events_marked_correctly"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_single_pipeline_enforcement.py",
+      "tests": [
+        "test_canonical_decision_engine_importable",
+        "test_canonical_decision_engine_process_produces_context"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_sse_canonical_only.py",
+      "tests": [
+        "TestSSECanonicalOnly::test_only_canonical_envelope_passes",
+        "TestSSECanonicalOnly::test_system_event_rejected_if_not_canonical_envelope"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_sse_event_closure.py",
+      "tests": [
+        "test_registry_enforcement_hard_reject_unknown_event_type",
+        "test_replay_determinism_same_input_identical_stream",
+        "test_schema_parity_domain_to_canonical_to_sse_lossless_subset"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_system_stability_lock.py",
+      "tests": [
+        "test_system_stability_lock"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_task_service_events.py",
+      "tests": [
+        "test_update_task_metadata_emits_event",
+        "test_update_task_metadata_no_change_still_emits"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_trust_boundary_enforcement.py",
+      "tests": [
+        "test_adapter_importing_state_store_directly_must_fail",
+        "test_direct_action_pipeline_call_must_fail",
+        "test_orchestrator_handle_request_approve_must_pass",
+        "test_orchestrator_handle_request_reject_must_pass",
+        "test_router_importing_action_pipeline_directly_must_fail",
+        "test_scheduler_authorized_execution_requires_valid_token"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_trust_surface_closure.py",
+      "tests": [
+        "test_authorized_path_via_handle_request_is_allowed",
+        "test_negative_direct_pipeline_call_must_fail",
+        "test_negative_direct_state_store_save_must_fail"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_trust_surface_final_closure.py",
+      "tests": [
+        "test_runtime_authorized_orchestrator_path_is_allowed",
+        "test_runtime_enforcement_requires_orchestrator_provenance"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_ui_bootstrap_router.py",
+      "tests": [
+        "test_bootstrap_excludes_junk_email_notifications",
+        "test_bootstrap_includes_calendar_db_events_when_projection_empty",
+        "test_bootstrap_includes_email_summary_notifications",
+        "test_bootstrap_includes_email_summary_notifications_from_email_received",
+        "test_bootstrap_includes_integration_events_when_user_is_connected",
+        "test_bootstrap_includes_pantry_and_weekly_recipe_suggestions",
+        "test_bootstrap_includes_runtime_graph_events_and_tasks",
+        "test_bootstrap_refreshes_cached_state_when_email_summary_changes",
+        "test_bootstrap_rolls_up_low_priority_email_notifications",
+        "test_email_detail_endpoint_returns_404_when_email_not_found",
+        "test_email_detail_endpoint_returns_combined_email_view"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_ui_canonical_wiring_guard.py",
+      "tests": [
+        "test_cozi_fetches_brief_with_contract_validation",
+        "test_cozi_fetches_operational_context"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_ui_simulation_endpoints.py",
+      "tests": [
+        "test_simulation_run_endpoint_returns_structured_payload",
+        "test_simulation_stream_and_results_endpoints"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_unified_trust_boundary.py",
+      "tests": [
+        "test_case_variant_actor_types_must_fail_hard",
+        "test_direct_pipeline_execution_attempt_must_fail",
+        "test_direct_state_read_cross_household_must_fail",
+        "test_legacy_execution_bypass_must_fail_without_explicit_authorization",
+        "test_missing_actor_identity_must_not_default",
+        "test_reject_without_authorization_gate_must_fail",
+        "test_run_legacy_path_must_be_gated_or_fail",
+        "test_system_worker_spoof_attempt_must_fail_without_verified_proof",
+        "test_today_cross_household_access_must_fail_without_authorization"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    },
+    {
+      "file": "tests/test_xai_layer.py",
+      "tests": [
+        "test_all_reason_codes_have_templates",
+        "test_template_engine_determinism",
+        "test_template_engine_no_unexpected_placeholders"
+      ],
+      "reason": "References legacy/archive/compatibility patterns; candidate for post-classification review."
+    }
+  ],
+  "redundant_candidates": [
+    {
+      "file": "tests/test_insight_bridge.py",
+      "tests": [
+        "test_isolation_guarantee"
+      ],
+      "reason": "Exact duplicate test name appears in multiple files; possible overlapping coverage."
+    },
+    {
+      "file": "tests/test_policy_engine.py",
+      "tests": [
+        "test_isolation_guarantee"
+      ],
+      "reason": "Exact duplicate test name appears in multiple files; possible overlapping coverage."
+    },
+    {
+      "file": "tests/test_trust_boundary_enforcement.py",
+      "tests": [
+        "test_unsigned_event_replay_must_fail"
+      ],
+      "reason": "Exact duplicate test name appears in multiple files; possible overlapping coverage."
+    },
+    {
+      "file": "tests/test_unified_trust_boundary.py",
+      "tests": [
+        "test_unsigned_event_replay_must_fail"
+      ],
+      "reason": "Exact duplicate test name appears in multiple files; possible overlapping coverage."
+    }
+  ],
+  "flaky_risk": [
+    {
+      "file": "tests/p1_verification/test_auth_lifecycle.py",
+      "tests": [
+        "TestAuthTokenIssuance::test_access_token_shorter_expiry",
+        "TestAuthTokenIssuance::test_token_pair_structure"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/p1_verification/test_chaos_concurrency.py",
+      "tests": [
+        "TestChaosLLMFailures::test_llm_timeouts_concurrent_dont_crash",
+        "TestChaosRetryStorms::test_retry_storm_deduplicated"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/p1_verification/test_e2e_integration.py",
+      "tests": [
+        "TestE2EIntentResolutionToWrite::test_llm_timeout_fallback_still_writes"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/p1_verification/test_idempotency_correctness.py",
+      "tests": [
+        "TestIdempotencyReplayAfterFailure::test_5xx_response_releases_key_safely",
+        "TestIdempotencyReservation::test_release_allows_reuse"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/p1_verification/test_llm_gateway_failures.py",
+      "tests": [
+        "TestLLMGatewayCombinedFailures::test_timeout_doesnt_trigger_rate_limit",
+        "TestLLMGatewayFallbackPath::test_fallback_response_safe_for_pipeline",
+        "TestLLMGatewayFallbackPath::test_fallback_returns_valid_response",
+        "TestLLMGatewayTimeout::test_timeout_doesnt_crash_pipeline",
+        "TestLLMGatewayTimeout::test_timeout_returns_fallback_response"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_auth_router.py",
+      "tests": [
+        "test_oauth_stub_creates_missing_household_before_registering_user",
+        "test_oauth_stub_recovers_from_duplicate_email_integrity_error",
+        "test_oauth_stub_uses_request_scoped_services",
+        "test_refresh_token_uses_request_scoped_token_service"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_event_replay_integrity.py",
+      "tests": [
+        "test_replay_rejects_legacy_event"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_event_sourcing.py",
+      "tests": [
+        "test_historical_replay_strict"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_frontend_runtime_contract.py",
+      "tests": [
+        "test_chat_session_consistency_under_retry"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_google_calendar_integration_surface.py",
+      "tests": [
+        "test_orchestrator_builds_household_state_from_credential_store",
+        "test_orchestrator_household_state_has_raw_events_in_debug_meta",
+        "test_provider_refreshes_expired_access_token_before_google_calls",
+        "test_provider_returns_empty_dataset_when_expired_and_refresh_token_missing"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_google_calendar_oauth.py",
+      "tests": [
+        "TestConnectionStatusEndpoint::test_status_returns_connected_with_metadata",
+        "TestGoogleEmailSyncEndpoint::test_sync_ingests_gmail_messages_with_household_override",
+        "TestGoogleEmailSyncEndpoint::test_sync_returns_reconnect_hint_when_gmail_scope_missing"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_google_oauth_env_config.py",
+      "tests": [
+        "test_token_refresh_flow"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_household_state.py",
+      "tests": [
+        "test_stale_event_excluded_from_all_windows",
+        "test_state_builder_applies_windowing"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_identity_events_runtime.py",
+      "tests": [
+        "test_create_session_token_retries_on_sqlite_lock"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_identity_layer.py",
+      "tests": [
+        "TestDeviceSwitching::test_last_seen_tracking",
+        "TestTokenExpiration::test_expired_token_rejected"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_ingestion_events_runtime.py",
+      "tests": [
+        "test_junk_email_is_ignored_before_routing",
+        "test_valid_email_emits_email_parsed"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_intelligence_analytics_dls.py",
+      "tests": [
+        "test_dashboard_metrics_include_required_tradeoff_fields"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_intelligence_routing_resilience.py",
+      "tests": [
+        "test_decide_returns_rule_only_when_limit_check_fails"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_llm_gateway_runtime_hardening.py",
+      "tests": [
+        "test_generate_text_does_not_retry_invalid_json_responses",
+        "test_generate_text_inflight_burst_keeps_single_provider_execution",
+        "test_generate_text_inflight_deduplicates_parallel_calls",
+        "test_generate_text_retries_transient_failures_with_bounded_backoff"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_p0_torture.py",
+      "tests": [
+        "TestBufferOverflow::test_old_watermark_triggers_resync",
+        "TestChaosMix::test_30_second_chaos",
+        "TestConcurrentWriteStorm::test_50_parallel_writes",
+        "TestIdempotencyTTL::test_concurrent_retries_at_boundary",
+        "TestIdempotencyTTL::test_ttl_boundary_exact",
+        "TestReconnectTortureLoop::test_quick_reconnect_flood",
+        "TestReconnectTortureLoop::test_reconnect_500_iterations",
+        "TestReplayLiveOverlap::test_replay_during_concurrent_writes",
+        "test_suite_summary"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_security_verification_harness.py",
+      "tests": [
+        "TestInvariant1ActorContextPropagation::test_invariant_context_not_silently_dropped_on_retry"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_sse_canonical_only.py",
+      "tests": [
+        "TestSSECanonicalOnly::test_only_canonical_envelope_passes"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_sse_event_closure.py",
+      "tests": [
+        "test_registry_enforcement_hard_reject_unknown_event_type",
+        "test_schema_parity_domain_to_canonical_to_sse_lossless_subset"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_state_machine.py",
+      "tests": [
+        "TestEdgeCases::test_multiple_retries",
+        "TestErrorClassification::test_all_retryable_errors_defined",
+        "TestErrorClassification::test_authorization_denied_is_not_retryable",
+        "TestErrorClassification::test_database_connection_error_is_retryable",
+        "TestErrorClassification::test_network_timeout_is_retryable",
+        "TestErrorClassification::test_unknown_error_defaults_to_non_retryable",
+        "TestErrorClassification::test_validation_error_is_not_retryable",
+        "TestRetryPolicy::test_can_retry_on_failed_state",
+        "TestRetryPolicy::test_cannot_retry_after_max_retries",
+        "TestRetryPolicy::test_max_retries_constant",
+        "TestRetryPolicy::test_retry_delay_exponential_backoff",
+        "TestRetryPolicy::test_retry_transition_increments_count",
+        "TestStateMachine::test_initial_state_is_proposed",
+        "TestTerminalStates::test_failed_is_terminal_after_max_retries",
+        "TestTerminalStates::test_failed_not_terminal_if_can_retry",
+        "TestTimeouts::test_approved_has_3600s_timeout",
+        "TestTimeouts::test_committed_has_no_timeout",
+        "TestTimeouts::test_get_timeout_seconds",
+        "TestTimeouts::test_has_timed_out_false_before_timeout",
+        "TestTimeouts::test_has_timed_out_true_after_timeout",
+        "TestTimeouts::test_pending_approval_has_1800s_timeout",
+        "TestTimeouts::test_proposed_has_600s_timeout",
+        "TestTransitionRules::test_failed_to_proposed_allowed"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_system_stability_lock.py",
+      "tests": [
+        "test_system_stability_lock"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    },
+    {
+      "file": "tests/test_xai_harness_integration.py",
+      "tests": [
+        "test_no_duplicate_explanations_task_idempotency"
+      ],
+      "reason": "Timing/retry/event-loop markers detected; potential nondeterminism risk."
+    }
+  ]
+}

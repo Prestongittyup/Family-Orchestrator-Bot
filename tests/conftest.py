@@ -23,7 +23,7 @@ from sqlalchemy import text
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from archive.apps.api import main
+import app.main as main
 from archive.apps.api.core.database import Base, SessionLocal, engine
 from archive.apps.api.core.event_bus import get_event_bus
 from archive.apps.api.core.feature_flags import _reset_feature_flags_for_tests
@@ -129,3 +129,4 @@ def test_client() -> TestClient:
     """
     with TestClient(main.app) as client:
         yield client
+

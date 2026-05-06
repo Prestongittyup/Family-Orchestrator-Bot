@@ -128,7 +128,7 @@ class IntentValidator:
         # Convert extracted fields to schema
         try:
             validated = schema_class(**classification.extracted_fields.data)
-            validated_dict = validated.dict()
+            validated_dict = validated.model_dump()
         except PydanticValidationError as e:
             return ValidationError_(
                 intent_type=classification.intent_type,

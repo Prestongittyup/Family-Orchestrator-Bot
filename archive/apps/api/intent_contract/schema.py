@@ -17,7 +17,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, field_validator
 
 
 # ---------------------------------------------------------------------------
@@ -63,15 +63,16 @@ class CreateTaskIntent(BaseModel):
     due_time: Optional[datetime] = Field(None, description="Optional due time")
     plan_id: Optional[str] = Field(None, description="Optional parent plan ID")
 
-    class Config:
-        frozen = True
-        schema_extra = {
+    model_config = ConfigDict(
+        frozen=True,
+        json_schema_extra={
             "example": {
                 "task_name": "Prepare dinner",
                 "due_time": "2026-04-20T18:00:00",
                 "plan_id": "plan-abc123",
             }
-        }
+        },
+    )
 
 
 class CompleteTaskIntent(BaseModel):
@@ -84,9 +85,10 @@ class CompleteTaskIntent(BaseModel):
 
     task_id: str = Field(..., min_length=1, max_length=256)
 
-    class Config:
-        frozen = True
-        schema_extra = {"example": {"task_id": "task-xyz789"}}
+    model_config = ConfigDict(
+        frozen=True,
+        json_schema_extra={"example": {"task_id": "task-xyz789"}},
+    )
 
 
 class RescheduleTaskIntent(BaseModel):
@@ -103,15 +105,16 @@ class RescheduleTaskIntent(BaseModel):
     new_time: datetime = Field(...)
     reason: Optional[str] = Field(None, max_length=512)
 
-    class Config:
-        frozen = True
-        schema_extra = {
+    model_config = ConfigDict(
+        frozen=True,
+        json_schema_extra={
             "example": {
                 "task_id": "task-xyz789",
                 "new_time": "2026-04-20T19:30:00",
                 "reason": "event_conflict",
             }
-        }
+        },
+    )
 
 
 class CreateEventIntent(BaseModel):
@@ -130,21 +133,24 @@ class CreateEventIntent(BaseModel):
     end_time: Optional[datetime] = Field(None)
     description: Optional[str] = Field(None, max_length=1024)
 
-    @validator("end_time")
-    def end_after_start(cls, v, values):
-        if v is not None and "start_time" in values and v <= values["start_time"]:
+    @field_validator("end_time")
+    @classmethod
+    def end_after_start(cls, v: Optional[datetime], info: ValidationInfo) -> Optional[datetime]:
+        start_time = info.data.get("start_time")
+        if v is not None and start_time is not None and v <= start_time:
             raise ValueError("end_time must be after start_time")
         return v
 
-    class Config:
-        frozen = True
-        schema_extra = {
+    model_config = ConfigDict(
+        frozen=True,
+        json_schema_extra={
             "example": {
                 "event_name": "School pickup",
                 "start_time": "2026-04-20T15:00:00",
                 "end_time": "2026-04-20T15:30:00",
             }
-        }
+        },
+    )
 
 
 class UpdateEventIntent(BaseModel):
@@ -165,22 +171,24 @@ class UpdateEventIntent(BaseModel):
     end_time: Optional[datetime] = Field(None)
     description: Optional[str] = Field(None, max_length=1024)
 
-    @validator("end_time")
-    def end_after_start(cls, v, values):
-        start_time = values.get("start_time")
+    @field_validator("end_time")
+    @classmethod
+    def end_after_start(cls, v: Optional[datetime], info: ValidationInfo) -> Optional[datetime]:
+        start_time = info.data.get("start_time")
         if v is not None and start_time is not None and v <= start_time:
             raise ValueError("end_time must be after start_time")
         return v
 
-    class Config:
-        frozen = True
-        schema_extra = {
+    model_config = ConfigDict(
+        frozen=True,
+        json_schema_extra={
             "example": {
                 "event_id": "event-abc123",
                 "event_name": "Updated event name",
                 "start_time": "2026-04-20T15:30:00",
             }
-        }
+        },
+    )
 
 
 class DeleteEventIntent(BaseModel):
@@ -195,14 +203,15 @@ class DeleteEventIntent(BaseModel):
     event_id: str = Field(..., min_length=1, max_length=256)
     reason: Optional[str] = Field(None, max_length=512)
 
-    class Config:
-        frozen = True
-        schema_extra = {
+    model_config = ConfigDict(
+        frozen=True,
+        json_schema_extra={
             "example": {
                 "event_id": "event-abc123",
                 "reason": "cancelled_by_user",
             }
-        }
+        },
+    )
 
 
 class CreatePlanIntent(BaseModel):
@@ -221,22 +230,24 @@ class CreatePlanIntent(BaseModel):
     start_date: Optional[datetime] = Field(None)
     end_date: Optional[datetime] = Field(None)
 
-    @validator("end_date")
-    def end_after_start(cls, v, values):
-        start_date = values.get("start_date")
+    @field_validator("end_date")
+    @classmethod
+    def end_after_start(cls, v: Optional[datetime], info: ValidationInfo) -> Optional[datetime]:
+        start_date = info.data.get("start_date")
         if v is not None and start_date is not None and v <= start_date:
             raise ValueError("end_date must be after start_date")
         return v
 
-    class Config:
-        frozen = True
-        schema_extra = {
+    model_config = ConfigDict(
+        frozen=True,
+        json_schema_extra={
             "example": {
                 "plan_name": "Weekend activities",
                 "start_date": "2026-04-25T00:00:00",
                 "end_date": "2026-04-26T23:59:59",
             }
-        }
+        },
+    )
 
 
 class UpdatePlanIntent(BaseModel):
@@ -257,21 +268,23 @@ class UpdatePlanIntent(BaseModel):
     start_date: Optional[datetime] = Field(None)
     end_date: Optional[datetime] = Field(None)
 
-    @validator("end_date")
-    def end_after_start(cls, v, values):
-        start_date = values.get("start_date")
+    @field_validator("end_date")
+    @classmethod
+    def end_after_start(cls, v: Optional[datetime], info: ValidationInfo) -> Optional[datetime]:
+        start_date = info.data.get("start_date")
         if v is not None and start_date is not None and v <= start_date:
             raise ValueError("end_date must be after start_date")
         return v
 
-    class Config:
-        frozen = True
-        schema_extra = {
+    model_config = ConfigDict(
+        frozen=True,
+        json_schema_extra={
             "example": {
                 "plan_id": "plan-abc123",
                 "plan_name": "Updated plan name",
             }
-        }
+        },
+    )
 
 
 class RecomputePlanIntent(BaseModel):
@@ -286,14 +299,15 @@ class RecomputePlanIntent(BaseModel):
     plan_id: str = Field(..., min_length=1, max_length=256)
     reason: Optional[str] = Field(None, max_length=512)
 
-    class Config:
-        frozen = True
-        schema_extra = {
+    model_config = ConfigDict(
+        frozen=True,
+        json_schema_extra={
             "example": {
                 "plan_id": "plan-abc123",
                 "reason": "schedule_changed",
             }
-        }
+        },
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -334,8 +348,8 @@ class ExtractedFields(BaseModel):
     def set(self, key: str, value):
         self.data[key] = value
 
-    class Config:
-        schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "data": {
                     "task_name": "Buy groceries",
@@ -343,3 +357,4 @@ class ExtractedFields(BaseModel):
                 }
             }
         }
+    )

@@ -178,9 +178,6 @@ def validate_auth_middleware() -> tuple[BootStatus, str | None]:
         required_public = {
             "/v1/identity/household/create",
             "/v1/identity/bootstrap",
-            "/v1/system/boot-status",
-            "/v1/system/boot-probe",
-            "/v1/system/health",
         }
         missing_public = sorted(required_public - _PUBLIC_PATHS)
         if missing_public:
@@ -221,7 +218,7 @@ def validate_sse_internal_probe() -> tuple[BootStatus, str | None]:
     """Lightweight SSE probe by opening an internal subscription and reading one frame."""
 
     async def _probe() -> str:
-        probe_household = f"boot-probe-{uuid.uuid4().hex[:8]}"
+        probe_household = f"internal-sse-probe-{uuid.uuid4().hex[:8]}"
         stream = broadcaster.subscribe(probe_household, last_watermark=None)
         try:
             chunk = await asyncio.wait_for(stream.__anext__(), timeout=1.5)

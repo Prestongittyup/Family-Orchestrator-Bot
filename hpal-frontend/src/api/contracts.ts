@@ -176,6 +176,37 @@ export interface UIBootstrapState {
   identity_context?: UIIdentityContext;
 }
 
+export type HomePriority = "high" | "medium" | "low";
+
+export interface HomeDecisionItem {
+  id: string;
+  type: string;
+  priority: HomePriority;
+  question: string;
+  options: string[];
+}
+
+export interface HomeActionItem {
+  id: string;
+  title: string;
+  source: string;
+  priority: HomePriority;
+}
+
+export interface HomeCalendarItem {
+  id: string;
+  title: string;
+  start: string;
+  end: string;
+}
+
+export interface HomeV0Contract {
+  needs_decision: HomeDecisionItem[];
+  actions: HomeActionItem[];
+  calendar: HomeCalendarItem[];
+  summary: string;
+}
+
 export interface UIPatch {
   entity_type: "task" | "plan" | "event" | "family" | "notification";
   entity_id: string;
@@ -243,4 +274,33 @@ export interface CalendarEventRecord {
   priority: number;
   metadata: Record<string, unknown>;
   created_at: string;
+}
+
+export type IntelligenceSystemMode = "LLM_CORE" | "HYBRID" | "RULE_ONLY";
+
+export interface DLSAnalyticsSnapshot {
+  avg_dls: number;
+  positive_lift_ratio: number;
+  negative_lift_ratio: number;
+  llm_cost_per_email: number;
+  rule_only_cost: number;
+  llm_usage_percentage: number;
+  total_emails_processed: number;
+  rolling_avg_dls: number;
+  rolling_cost_per_email: number;
+  lift_to_cost: number;
+  efficiency_score: number;
+  action_discovery_rate: number;
+  system_mode: IntelligenceSystemMode;
+  alerts: string[];
+}
+
+export interface DLSRealtimeEvent {
+  timestamp: string;
+  avg_dls: number;
+  cost_per_hour: number;
+  llm_calls_per_minute: number;
+  system_mode: IntelligenceSystemMode;
+  efficiency_score: number;
+  alerts: string[];
 }

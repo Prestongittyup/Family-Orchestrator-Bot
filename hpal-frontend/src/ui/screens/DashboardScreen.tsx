@@ -10,6 +10,11 @@ import {
   writeDismissedEmailMap,
   type DismissedEmailMap,
 } from "../utils/emailDismissals";
+import {
+  interpretHomeUxSurfaceContract,
+  type HomePriorityCard,
+  type HomeUxSurfaceModel,
+} from "../contracts/homeUxSurfaceContract";
 import { SyncStatusPill } from "../components/SyncStatusPill";
 
 const deriveGreeting = (): string => {
@@ -217,6 +222,21 @@ const deriveDashboardDismissTag = (notification: Notification): string => {
   return "general";
 };
 
+const formatDecisionBlockingLabel = (count: number): string => {
+  if (count <= 0) {
+    return "No decisions blocking you";
+  }
+
+  return `${count} decision${count === 1 ? "" : "s"} blocking your day`;
+};
+
+const decisionQueueIndexLabel = (index: number): string => {
+  if (index <= 0) {
+    return "Now";
+  }
+  return `Next ${index}`;
+};
+
 export const DashboardScreen: React.FC = () => {
   const navigate = useNavigate();
   const initialize = useRuntimeStore((state) => state.initialize);
@@ -240,6 +260,31 @@ export const DashboardScreen: React.FC = () => {
     readInboxSyncStatus(),
   );
   const [dismissedEmailMap, setDismissedEmailMap] = React.useState<DismissedEmailMap>(() => readDismissedEmailMap());
+  const [homeUxSurface, setHomeUxSurface] = React.useState<HomeUxSurfaceModel | null>(null);
+  const [homePriorityLoading, setHomePriorityLoading] = React.useState(false);
+  const [homePriorityError, setHomePriorityError] = React.useState<string | null>(null);
+  const [homePriorityExpanded, setHomePriorityExpanded] = React.useState(false);
+  const [activeDecisionId, setActiveDecisionId] = React.useState<string | null>(null);
+  const [decisionMutationInFlightId, setDecisionMutationInFlightId] = React.useState<string | null>(null);
+  const [decisionFeedbackMessage, setDecisionFeedbackMessage] = React.useState<string | null>(null);
+
+  const detailIdentity: RequestIdentityContext | undefined = React.useMemo(() => {
+    if (!activeHousehold || !activeUser || !deviceContext || !sessionToken) {
+      return undefined;
+    }
+
+    return {
+      household_id: activeHousehold.household_id,
+      user_id: activeUser.user_id,
+      device_id: deviceContext.device_id,
+      session_token: sessionToken,
+    };
+  }, [
+    activeHousehold?.household_id,
+    activeUser?.user_id,
+    deviceContext?.device_id,
+    sessionToken,
+  ]);
 
   React.useEffect(() => {
     writeDismissedEmailMap(dismissedEmailMap);
@@ -277,6 +322,46 @@ export const DashboardScreen: React.FC = () => {
       window.removeEventListener(EMAIL_SYNC_STATUS_EVENT, onSyncStatus as EventListener);
     };
   }, []);
+
+  React.useEffect(() => {
+    const householdId = (runtimeState?.snapshot.family.family_id || "").trim();
+    if (!householdId) {
+      setHomeUxSurface(null);
+      setHomePriorityError(null);
+      setHomePriorityLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    setHomePriorityLoading(true);
+    setHomePriorityError(null);
+
+    void productSurfaceClient.fetchHomeV0(householdId, detailIdentity)
+      .then((homeContract) => {
+        if (cancelled) {
+          return;
+        }
+        setHomeUxSurface(interpretHomeUxSurfaceContract(homeContract));
+        setHomePriorityExpanded(false);
+      })
+      .catch(() => {
+        if (cancelled) {
+          return;
+        }
+        setHomeUxSurface(null);
+        setHomePriorityError("Unable to load Home focus right now.");
+      })
+      .finally(() => {
+        if (cancelled) {
+          return;
+        }
+        setHomePriorityLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [detailIdentity, runtimeState?.snapshot.family.family_id]);
 
   if (!runtimeState) {
     if (isLoading) {
@@ -338,6 +423,97 @@ export const DashboardScreen: React.FC = () => {
       ? "Review your latest alerts to stay ahead of schedule changes."
       : "Everything looks calm right now. Great job keeping things on track.";
 
+  const orderedHomeCards = homeUxSurface?.ordered_cards ?? [];
+  const decisionCards = orderedHomeCards.filter((card) => card.kind === "decision");
+  const actionCards = orderedHomeCards.filter((card) => card.kind === "action");
+  const calendarCards = orderedHomeCards.filter((card) => card.kind === "calendar");
+
+  const pendingDecisionCards = decisionCards;
+
+  const activeDecisionCard =
+    pendingDecisionCards.find((card) => card.source_id === activeDecisionId)
+    || pendingDecisionCards[0]
+    || null;
+
+  const hasBlockingDecisions = pendingDecisionCards.length > 0;
+  const decisionBlockingLabel = formatDecisionBlockingLabel(pendingDecisionCards.length);
+  const topCalendarCard = calendarCards[0] ?? null;
+  const decisionSignature = decisionCards.map((card) => card.source_id).join("|");
+
+  React.useEffect(() => {
+    setActiveDecisionId(null);
+    setDecisionFeedbackMessage(null);
+    setHomePriorityExpanded(false);
+  }, [decisionSignature]);
+
+  React.useEffect(() => {
+    if (!activeDecisionCard) {
+      setActiveDecisionId(null);
+      return;
+    }
+
+    if (activeDecisionId !== activeDecisionCard.source_id) {
+      setActiveDecisionId(activeDecisionCard.source_id);
+    }
+  }, [activeDecisionCard, activeDecisionId]);
+
+  React.useEffect(() => {
+    if (!hasBlockingDecisions) {
+      setHomePriorityExpanded(true);
+    }
+  }, [hasBlockingDecisions]);
+
+  const onResolveDecisionOption = React.useCallback(
+    async (card: HomePriorityCard, option: string) => {
+      const householdId = (runtimeState.snapshot.family.family_id || "").trim();
+      if (!householdId) {
+        setHomePriorityError("Unable to resolve decision: missing household context.");
+        return;
+      }
+
+      if (decisionMutationInFlightId === card.source_id) {
+        return;
+      }
+
+      setDecisionMutationInFlightId(card.source_id);
+      setDecisionFeedbackMessage(null);
+      setHomePriorityError(null);
+
+      try {
+        const normalizedOption = option.trim().toLowerCase();
+        let feedbackPrefix = "Decision recorded";
+
+        if (/\b(ignore|dismiss|skip)\b/.test(normalizedOption)) {
+          await productSurfaceClient.ignoreDecision(householdId, card.source_id, detailIdentity);
+          feedbackPrefix = "Decision ignored";
+        } else if (/\b(defer|later|tomorrow|next\s+week)\b/.test(normalizedOption)) {
+          const deferDate = new Date();
+          deferDate.setDate(deferDate.getDate() + 1);
+          const deferToDate = deferDate.toISOString().slice(0, 10);
+          await productSurfaceClient.deferDecision(
+            householdId,
+            card.source_id,
+            deferToDate,
+            detailIdentity,
+          );
+          feedbackPrefix = `Decision deferred to ${deferToDate}`;
+        } else {
+          await productSurfaceClient.completeDecision(householdId, card.source_id, detailIdentity);
+          feedbackPrefix = "Decision completed";
+        }
+
+        const refreshedHome = await productSurfaceClient.fetchHomeV0(householdId, detailIdentity);
+        setHomeUxSurface(interpretHomeUxSurfaceContract(refreshedHome));
+        setDecisionFeedbackMessage(`${feedbackPrefix}: ${option}`);
+      } catch {
+        setHomePriorityError("Unable to persist decision right now.");
+      } finally {
+        setDecisionMutationInFlightId(null);
+      }
+    },
+    [decisionMutationInFlightId, detailIdentity, runtimeState.snapshot.family.family_id],
+  );
+
   const onOpenAlerts = () => {
     const target = document.getElementById("dashboard-recent-alerts");
     if (!target) {
@@ -345,16 +521,6 @@ export const DashboardScreen: React.FC = () => {
     }
     target.scrollIntoView({ behavior: "smooth", block: "start" });
   };
-
-  const detailIdentity: RequestIdentityContext | undefined =
-    activeHousehold && activeUser && deviceContext && sessionToken
-      ? {
-          household_id: activeHousehold.household_id,
-          user_id: activeUser.user_id,
-          device_id: deviceContext.device_id,
-          session_token: sessionToken,
-        }
-      : undefined;
 
   const onToggleEmailDetail = async (emailId: string) => {
     if (!emailId) {
@@ -594,7 +760,7 @@ export const DashboardScreen: React.FC = () => {
     : "Not yet";
 
   return (
-    <section className="screen-panel dashboard-panel">
+    <section className={`screen-panel dashboard-panel ${hasBlockingDecisions ? "decision-priority-active" : ""}`}>
       <header className="dashboard-hero">
         <div className="dashboard-hero-main">
           <p className="dashboard-eyebrow">{prettyHouseholdName(runtimeState.snapshot.family.family_id)}</p>
@@ -613,7 +779,7 @@ export const DashboardScreen: React.FC = () => {
 
       {error ? <p className="error-text">{error}</p> : null}
 
-      <div className="metric-grid dashboard-metric-grid">
+      <div className={`metric-grid dashboard-metric-grid ${hasBlockingDecisions ? "dashboard-secondary-muted" : ""}`}>
         <button type="button" className="metric-card dashboard-metric-card dashboard-metric-button" onClick={() => navigate("/tasks")}>
           <p className="metric-kicker">Tasks</p>
           <h3>Needs attention</h3>
@@ -641,7 +807,7 @@ export const DashboardScreen: React.FC = () => {
         </button>
       </div>
 
-      <section className="dashboard-section">
+      <section className={`dashboard-section ${hasBlockingDecisions ? "dashboard-secondary-muted" : ""}`}>
         <div className="dashboard-section-header">
           <h3>Progress Snapshot</h3>
           <span className="dashboard-highlight">{completionRate}% complete</span>
@@ -666,12 +832,172 @@ export const DashboardScreen: React.FC = () => {
         </div>
       </section>
 
-      <section className="dashboard-section dashboard-next-step">
+      <section className={`dashboard-section dashboard-next-step ${hasBlockingDecisions ? "dashboard-secondary-muted" : ""}`}>
         <h3>Next Best Step</h3>
         <p>{nextBestStep}</p>
       </section>
 
-      <section className="dashboard-section" id="dashboard-email-debriefing">
+      <section className="dashboard-section dashboard-home-focus" id="dashboard-home-focus">
+        <div className="dashboard-section-header">
+          <h3>{hasBlockingDecisions ? "Decision Gate" : "Home Focus"}</h3>
+          <span className="dashboard-highlight">{decisionBlockingLabel}</span>
+        </div>
+
+        {homePriorityLoading ? (
+          <p className="empty-text">Building decision-first flow...</p>
+        ) : null}
+
+        {!homePriorityLoading && homePriorityError ? (
+          <p className="error-text">{homePriorityError}</p>
+        ) : null}
+
+        {!homePriorityLoading && !homePriorityError && homeUxSurface ? (
+          <>
+            <div className="home-focus-hero" aria-live="polite">
+              <p className="home-focus-eyebrow">
+                {hasBlockingDecisions ? "Decisions first" : "Ready to execute"}
+              </p>
+              <h4>{hasBlockingDecisions ? "This needs your decision" : "No decisions blocking you"}</h4>
+              <p>
+                {hasBlockingDecisions
+                  ? "Pick what should happen. We can't proceed until this is decided."
+                  : "No decisions are blocking your day. Move straight into execution."}
+              </p>
+              <p className="task-meta">
+                {hasBlockingDecisions
+                  ? `${decisionBlockingLabel}. ${actionCards.length} action${actionCards.length === 1 ? "" : "s"} up next.`
+                  : "No decisions blocking you. You're clear to execute."}
+              </p>
+              {decisionFeedbackMessage ? (
+                <p className="task-meta home-decision-feedback">{decisionFeedbackMessage}</p>
+              ) : null}
+            </div>
+
+            {pendingDecisionCards.length === 0 ? (
+              <p className="empty-text">All decisions in this view are handled. Continue with actions below.</p>
+            ) : (
+              <ul className="list-panel dashboard-list-panel home-priority-list home-decision-list">
+                {pendingDecisionCards.map((card, index) => {
+                  const isExpanded = activeDecisionCard?.card_id === card.card_id;
+                  const options = card.decision_options && card.decision_options.length > 0
+                    ? card.decision_options
+                    : ["Confirm this decision"];
+
+                  return (
+                    <li
+                      key={card.card_id}
+                      className={`home-priority-card home-decision-card ${isExpanded ? "home-decision-card-expanded" : "home-decision-card-collapsed"}`}
+                    >
+                      <div className="dashboard-list-title-row">
+                        <strong>{index === 0 ? "This needs your decision" : "Decision queued next"}</strong>
+                        <span className="level-pill home-priority-tier-pill home-decision-queue-pill">
+                          {decisionQueueIndexLabel(index)}
+                        </span>
+                      </div>
+                      <p className="home-decision-question">{card.title}</p>
+                      {isExpanded ? (
+                        <div className="home-decision-options" key={card.card_id}>
+                          {options.map((option, optionIndex) => (
+                            <button
+                              key={`${card.card_id}:option:${optionIndex}`}
+                              type="button"
+                              className={`dashboard-detail-button home-decision-option-button ${optionIndex === 0 ? "home-decision-option-recommended" : ""}`}
+                              onClick={() => onResolveDecisionOption(card, option)}
+                              disabled={decisionMutationInFlightId === card.source_id}
+                            >
+                              <span>{option}</span>
+                              {optionIndex === 0 ? (
+                                <span className="home-decision-recommendation">Recommended - Best fit</span>
+                              ) : null}
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="task-meta">Pick what should happen, then continue.</p>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+
+            <div className={`home-up-next ${hasBlockingDecisions ? "home-up-next-collapsed" : ""}`}>
+              <div className="dashboard-section-header home-up-next-header">
+                <h4>{hasBlockingDecisions ? "Up next" : "Actions"}</h4>
+                <span className="dashboard-highlight">
+                  {actionCards.length} action{actionCards.length === 1 ? "" : "s"}
+                </span>
+              </div>
+
+              {actionCards.length > 0 ? (
+                <>
+                  {hasBlockingDecisions ? (
+                    <button
+                      type="button"
+                      className="dashboard-detail-button"
+                      onClick={() => setHomePriorityExpanded((current) => !current)}
+                    >
+                      {homePriorityExpanded
+                        ? "Hide up next actions"
+                        : `Show ${Math.min(actionCards.length, 3)} up next action(s)`}
+                    </button>
+                  ) : null}
+
+                  {(homePriorityExpanded || !hasBlockingDecisions) ? (
+                    <ul className="list-panel dashboard-list-panel home-priority-list collapsed">
+                      {actionCards.map((card, index) => (
+                        <li
+                          key={card.card_id}
+                          className={`home-priority-card ${!hasBlockingDecisions && index === 0 ? "home-action-primary-card" : ""}`}
+                        >
+                          <div className="dashboard-list-title-row">
+                            <strong>{card.title}</strong>
+                            {!hasBlockingDecisions && index === 0 ? (
+                              <span className="level-pill home-priority-tier-pill home-action-primary-pill">
+                                Start now
+                              </span>
+                            ) : null}
+                          </div>
+                          <p>{card.detail}</p>
+                          <div className="dashboard-list-controls">
+                            <button
+                              type="button"
+                              className={`dashboard-detail-button ${!hasBlockingDecisions && index === 0 ? "home-action-primary-button" : ""}`}
+                              onClick={() => navigate(card.cta_route)}
+                            >
+                              {!hasBlockingDecisions && index === 0 ? "Do this next" : card.cta_label}
+                            </button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="task-meta">
+                      Actions are intentionally collapsed while decisions are unresolved.
+                    </p>
+                  )}
+                </>
+              ) : (
+                <p className="empty-text">No actions queued right now.</p>
+              )}
+            </div>
+
+            <div className={`home-calendar-strip ${hasBlockingDecisions ? "home-calendar-strip-minimal" : ""}`}>
+              <p className="home-calendar-strip-label">Calendar context</p>
+              {topCalendarCard ? (
+                <p>
+                  {topCalendarCard.title} ({topCalendarCard.detail})
+                  {calendarCards.length > 1 ? ` - +${calendarCards.length - 1} more` : ""}
+                </p>
+              ) : (
+                <p>No schedule pressure right now.</p>
+              )}
+            </div>
+          </>
+        ) : null}
+      </section>
+
+      <section className={`dashboard-section ${hasBlockingDecisions ? "dashboard-secondary-muted" : ""}`} id="dashboard-email-debriefing">
         <div className="dashboard-section-header">
           <h3>Email Debriefing</h3>
           <span className="dashboard-highlight">{prioritizedEmailDebriefItems.length} item(s)</span>
@@ -837,7 +1163,7 @@ export const DashboardScreen: React.FC = () => {
         )}
       </section>
 
-      <section className="dashboard-section" id="dashboard-recent-alerts">
+      <section className={`dashboard-section ${hasBlockingDecisions ? "dashboard-secondary-muted" : ""}`} id="dashboard-recent-alerts">
         <div className="dashboard-section-header">
           <h3>Recent Alerts</h3>
         </div>

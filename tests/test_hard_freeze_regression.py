@@ -1,7 +1,14 @@
 from __future__ import annotations
+import pytest
 
 import fnmatch
 from pathlib import Path
+
+_existing_pytestmark = globals().get("pytestmark", [])
+if not isinstance(_existing_pytestmark, list):
+    _existing_pytestmark = [_existing_pytestmark]
+pytestmark = [*_existing_pytestmark, pytest.mark.ci_gate]
+
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +37,7 @@ def _is_blocked_root_artifact(file_name: str) -> bool:
     )
 
 
+@pytest.mark.integration
 def test_no_generated_runtime_artifacts_in_repo_root() -> None:
     offenders = sorted(
         path.name

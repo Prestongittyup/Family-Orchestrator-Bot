@@ -20,11 +20,15 @@ Design:
 """
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import os
+import threading
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+
+from app.services.llm_gateway.gateway import LLMGateway, LLMGatewayRequest
 
 logger = logging.getLogger(__name__)
 
@@ -128,31 +132,12 @@ class OpenAIProvider(LLMProvider):
     def resolve_intent(
         self, *, message: str, context_snapshot: dict, household_id: str
     ) -> LLMIntentResponse:
-        try:
-            import openai  # local import – only required if provider is openai
-        except ImportError:
-            logger.warning("openai package not installed; falling back")
-            return _fallback_response("openai_not_installed")
-
-        client = openai.OpenAI(api_key=self._api_key, timeout=self._timeout)
-        system_content = _SYSTEM_PROMPT + json.dumps(context_snapshot, default=str)[:2000]
-
-        try:
-            completion = client.chat.completions.create(
-                model=self._model,
-                messages=[
-                    {"role": "system", "content": system_content},
-                    {"role": "user", "content": message},
-                ],
-                response_format={"type": "json_object"},
-                max_tokens=400,
-                temperature=0.0,
-            )
-            raw = completion.choices[0].message.content or ""
-            return _parse_llm_json(raw, "openai")
-        except Exception as exc:
-            logger.warning("OpenAI call failed: %s", exc)
-            return _fallback_response(f"openai_error: {exc}")
+        return _resolve_via_gateway(
+            message=message,
+            context_snapshot=context_snapshot,
+            household_id=household_id,
+            route_label="openai",
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -170,36 +155,12 @@ class AzureOpenAIProvider(LLMProvider):
     def resolve_intent(
         self, *, message: str, context_snapshot: dict, household_id: str
     ) -> LLMIntentResponse:
-        try:
-            import openai  # azure uses openai SDK
-        except ImportError:
-            logger.warning("openai package not installed; falling back")
-            return _fallback_response("openai_not_installed")
-
-        client = openai.AzureOpenAI(
-            api_key=self._api_key,
-            azure_endpoint=self._endpoint,
-            api_version="2024-02-01",
-            timeout=self._timeout,
+        return _resolve_via_gateway(
+            message=message,
+            context_snapshot=context_snapshot,
+            household_id=household_id,
+            route_label="azure_openai",
         )
-        system_content = _SYSTEM_PROMPT + json.dumps(context_snapshot, default=str)[:2000]
-
-        try:
-            completion = client.chat.completions.create(
-                model=self._deployment,
-                messages=[
-                    {"role": "system", "content": system_content},
-                    {"role": "user", "content": message},
-                ],
-                response_format={"type": "json_object"},
-                max_tokens=400,
-                temperature=0.0,
-            )
-            raw = completion.choices[0].message.content or ""
-            return _parse_llm_json(raw, "azure_openai")
-        except Exception as exc:
-            logger.warning("Azure OpenAI call failed: %s", exc)
-            return _fallback_response(f"azure_error: {exc}")
 
 
 # ---------------------------------------------------------------------------
@@ -293,3 +254,71 @@ def _fallback_response(reason: str) -> LLMIntentResponse:
         resolved_by="fallback",
         raw_response=reason,
     )
+
+
+def _resolve_via_gateway(
+    *,
+    message: str,
+    context_snapshot: dict,
+    household_id: str,
+    route_label: str,
+) -> LLMIntentResponse:
+    gateway = LLMGateway.from_default_providers()
+    prompt = (
+        _SYSTEM_PROMPT
+        + json.dumps(context_snapshot, default=str)[:2000]
+        + "\nUser message:\n"
+        + message
+        + "\nReturn ONLY JSON with keys: intent_type, confidence, clarification_request, extracted."
+    )
+    request = LLMGatewayRequest(
+        prompt=prompt,
+        user_id=household_id,
+        cache_key=f"intent:{route_label}:{household_id}:{hash(message)}",
+        response_mime_type="application/json",
+        max_output_tokens=400,
+    )
+
+    try:
+        result = _run_async(gateway.generate_text(request))
+    except Exception as exc:
+        logger.warning("Gateway LLM call failed (%s): %s", route_label, exc)
+        return _fallback_response(f"{route_label}_gateway_error: {exc}")
+
+    if isinstance(result.parsed_json, dict):
+        return LLMIntentResponse(
+            intent_type=result.parsed_json.get("intent_type"),
+            confidence=float(result.parsed_json.get("confidence", 0.0) or 0.0),
+            clarification_request=result.parsed_json.get("clarification_request"),
+            extracted=dict(result.parsed_json.get("extracted") or {}),
+            resolved_by=route_label,
+            raw_response=result.raw_text or "",
+        )
+
+    if not result.raw_text:
+        return _fallback_response(result.error or f"{route_label}_empty_response")
+    return _parse_llm_json(result.raw_text, route_label)
+
+
+def _run_async(coro):
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        return asyncio.run(coro)
+
+    # Keep compatibility for sync callers already running inside an event loop.
+    result: dict[str, object] = {}
+    error: list[BaseException] = []
+
+    def _runner() -> None:
+        try:
+            result["value"] = asyncio.run(coro)
+        except BaseException as exc:  # pragma: no cover - defensive bridge
+            error.append(exc)
+
+    worker = threading.Thread(target=_runner, daemon=True)
+    worker.start()
+    worker.join()
+    if error:
+        raise error[0]
+    return result.get("value")

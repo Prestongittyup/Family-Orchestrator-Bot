@@ -1,0 +1,24 @@
+{
+  "borderline_event_rate": 0.12,
+  "compression_suppression_reasons": {
+    "collapsed_into_low_priority_decision": 1
+  },
+  "conflict_events": 11,
+  "conflicts_missed": 0,
+  "decision_count": 24,
+  "dedup_suppression_reasons": {},
+  "false_negative_suppressions": 0,
+  "high_conf_actionable_missed": 0,
+  "missed_decisions": 1,
+  "other_suppression_reasons": {},
+  "priority_distribution": {
+    "critical": 9,
+    "high": 10,
+    "low": 2,
+    "medium": 1,
+    "noise": 3
+  },
+  "threshold_suppression_reasons": {},
+  "unnecessary_decisions": 4,
+  "valid_noise_suppressions": 0
+}

@@ -1,3 +1,6 @@
+# ARCHIVE MODULE - NOT PART OF ACTIVE RUNTIME
+# DO NOT IMPORT INTO app/
+
 from __future__ import annotations
 
 from collections.abc import Awaitable, Callable
@@ -73,3 +76,4 @@ def install_idempotency_middleware(app: Any) -> None:
             idempotency_key_service.release(scoped_key)
 
         return response
+

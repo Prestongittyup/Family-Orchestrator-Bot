@@ -439,7 +439,7 @@ Connect repo and point build command to `npm run build`, output to `dist/`.
 Check `VITE_API_BASE_URL` in `.env` and verify HPAL is running:
 
 ```bash
-curl http://localhost:8000/api/health
+curl http://localhost:8000/healthz
 ```
 
 ### State doesn't update

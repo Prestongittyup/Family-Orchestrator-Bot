@@ -5,7 +5,7 @@ from typing import Any
 
 from fastapi.testclient import TestClient
 
-from archive.apps.api import main
+import app.main as main
 from archive.apps.api.endpoints import brief_endpoint
 from archive.apps.api.endpoints import integrations_router as ir
 from archive.apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential
@@ -113,3 +113,4 @@ def run_scenario(scenario: HouseholdScenario) -> dict[str, Any]:
         "scenario_id": scenario.scenario_id,
         "brief_output": payload,
     }
+

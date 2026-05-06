@@ -320,9 +320,10 @@ class RuntimeStressHarness:
         deadline = time.time() + timeout_seconds
         last_error = ""
         while time.time() < deadline:
-            status, payload, latency, retried = self._json_request("GET", "/v1/system/boot-probe", retries=1)
-            self._record_obs(RequestObservation("boot_probe", latency, status, status == 200, retried, time.time()))
-            if status == 200 and isinstance(payload, dict) and payload.get("overall") == "ok":
+            status, payload, latency, retried = self._json_request("GET", "/healthz", retries=1)
+            ok = status == 200 and isinstance(payload, dict) and payload == {"status": "ok"}
+            self._record_obs(RequestObservation("healthz", latency, status, ok, retried, time.time()))
+            if ok:
                 return payload
             last_error = f"status={status} payload={payload}"
             time.sleep(1.0)
@@ -336,7 +337,7 @@ class RuntimeStressHarness:
                 sys.executable,
                 "-m",
                 "uvicorn",
-                "apps.api.main:app",
+                "app.main:app",
                 "--host",
                 HOST,
                 "--port",
@@ -606,11 +607,11 @@ class RuntimeStressHarness:
         while not self._stop_event.is_set():
             sample_t = time.time() - soak_start
 
-            status, probe, probe_latency, probe_retried = self._json_request(
-                "GET", "/v1/system/boot-probe", retries=1
+            status, health_payload, probe_latency, probe_retried = self._json_request(
+                "GET", "/healthz", retries=1
             )
-            ok_probe = status == 200 and isinstance(probe, dict)
-            self._record_obs(RequestObservation("probe_sample", probe_latency, status, ok_probe, probe_retried, time.time()))
+            ok_health = status == 200 and isinstance(health_payload, dict) and health_payload == {"status": "ok"}
+            self._record_obs(RequestObservation("healthz_sample", probe_latency, status, ok_health, probe_retried, time.time()))
 
             m_status, metrics_body, metrics_latency, metrics_retried = self._json_request("GET", "/metrics", retries=1)
             ok_metrics = m_status == 200 and isinstance(metrics_body, dict)
@@ -627,10 +628,6 @@ class RuntimeStressHarness:
             pool_size = None
             checked_out = None
             replay_queue_depth = 0.0
-            if ok_probe and isinstance(probe, dict):
-                parsed_pool = _parse_pool_status(probe.get("pool_status"))
-                pool_size = parsed_pool.get("pool_size")
-                checked_out = parsed_pool.get("checked_out")
 
             if ok_metrics and isinstance(metrics_body, dict):
                 gauges = metrics_body.get("gauges", {})
@@ -755,19 +752,12 @@ class RuntimeStressHarness:
         def _db_hammer() -> None:
             nonlocal max_checked_out, pool_size_seen, db_errors
             while not db_stop.is_set():
-                status, probe, latency, retried = self._json_request("GET", "/v1/system/boot-probe", retries=1, timeout=4)
-                ok = status == 200 and isinstance(probe, dict)
-                self._record_obs(RequestObservation("db_saturation_probe", latency, status, ok, retried, time.time()))
+                status, payload, latency, retried = self._json_request("GET", "/healthz", retries=1, timeout=4)
+                ok = status == 200 and isinstance(payload, dict) and payload == {"status": "ok"}
+                self._record_obs(RequestObservation("db_saturation_healthz", latency, status, ok, retried, time.time()))
                 if not ok:
                     db_errors += 1
-                    continue
-                parsed = _parse_pool_status(probe.get("pool_status") if isinstance(probe, dict) else None)
-                checked = parsed.get("checked_out")
-                psize = parsed.get("pool_size")
-                if isinstance(checked, int):
-                    max_checked_out = max(max_checked_out, checked)
-                if isinstance(psize, int):
-                    pool_size_seen = max(pool_size_seen, psize)
+                continue
 
         db_threads = [threading.Thread(target=_db_hammer, daemon=True) for _ in range(120)]
         for t in db_threads:
@@ -972,9 +962,9 @@ class RuntimeStressHarness:
             saturation = self._run_saturation_tests(saturation_seconds)
 
             # Post checks
-            h_status, h_payload, h_latency, h_retried = self._json_request("GET", "/v1/system/health", retries=1)
-            health_ok = h_status == 200 and isinstance(h_payload, dict) and h_payload.get("status") == "healthy"
-            self._record_obs(RequestObservation("post_health", h_latency, h_status, health_ok, h_retried, time.time()))
+            h_status, h_payload, h_latency, h_retried = self._json_request("GET", "/healthz", retries=1)
+            health_ok = h_status == 200 and isinstance(h_payload, dict) and h_payload == {"status": "ok"}
+            self._record_obs(RequestObservation("post_healthz", h_latency, h_status, health_ok, h_retried, time.time()))
 
             return self._build_report(
                 observations=observations,

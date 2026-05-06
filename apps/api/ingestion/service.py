@@ -270,6 +270,11 @@ def ingest_email(
     received_at: str,  # ISO-8601 timestamp
     provider: str = "generic",
     household_id: str | None = None,
+    thread_id: str | None = None,
+    latest_message_id: str | None = None,
+    thread_messages: list[Any] | None = None,
+    to_me: bool | None = None,
+    cc_me: bool | None = None,
 ) -> dict[str, Any]:
     """
     Ingest email message.
@@ -304,6 +309,11 @@ def ingest_email(
         "received_at": received_at,
         "provider": provider,
         "household_id": household_id,
+        "thread_id": thread_id,
+        "latest_message_id": latest_message_id or email_id,
+        "thread_messages": list(thread_messages or []),
+        "to_me": to_me,
+        "cc_me": cc_me,
     }
 
     email = None
@@ -327,6 +337,11 @@ def ingest_email(
             body=email.body,
             received_at=email.received_at,
             provider=email.provider,
+            thread_id=email.thread_id,
+            latest_message_id=email.latest_message_id,
+            thread_messages=email.thread_messages,
+            to_me=email.to_me,
+            cc_me=email.cc_me,
         )
         os1_event["household_id"] = resolved_household_id
 
@@ -336,53 +351,86 @@ def ingest_email(
             body=str(email.body),
             received_at=email.received_at,
             recipient=str(email.recipient),
+            to_me=email.to_me,
+            cc_me=email.cc_me,
+            thread_id=email.thread_id,
+            latest_message_id=email.latest_message_id,
+            thread_messages=list(email.thread_messages or []),
         )
-        summary_text = str(analysis.get("summary") or "").strip() or "Email analysis is ready."
+        summary_text = str(analysis.get("state_summary") or analysis.get("summary") or "").strip() or "Email analysis is ready."
+        reason = str(analysis.get("reason") or "").strip() or "Rule-based triage."
         importance_score = float(analysis.get("importance_score") or 0.0)
         importance_bucket = str(analysis.get("importance_bucket") or "medium").strip().lower() or "medium"
-        priority_label = str(analysis.get("priority_label") or "").strip().lower()
+        priority_label = str(analysis.get("priority") or analysis.get("priority_label") or "").strip().lower()
         if priority_label == "":
             priority_label = _priority_from_importance_bucket(importance_bucket)
         rule_score = int(analysis.get("rule_score") or 0)
+        base_score = int(analysis.get("base_score") or 0)
         action_items = list(analysis.get("action_items") or [])
+        actions = list(analysis.get("actions") or [])
         calendar_candidates = list(analysis.get("calendar_candidates") or [])
         informational_items = list(analysis.get("informational_items") or [])
         junk_score = float(analysis.get("junk_score") or 0.0)
         is_junk = bool(analysis.get("is_junk") or False)
+        needs_attention = bool(analysis.get("needs_attention") or False)
+        called_llm = bool(analysis.get("called_llm") or False)
+        thread_id_value = str(analysis.get("thread_id") or email.thread_id or "").strip() or None
+        latest_message_id_value = str(analysis.get("latest_message_id") or email.latest_message_id or email.email_id).strip()
+        thread_length_value = int(analysis.get("thread_length") or len(list(email.thread_messages or [])) or 1)
         triage_decision = str(analysis.get("triage_decision") or "task").strip().lower() or "task"
         if triage_decision == "junk":
             is_junk = True
+            needs_attention = False
 
         analysis = {
             **analysis,
             "summary": summary_text,
+            "state_summary": summary_text,
+            "reason": reason,
             "importance_score": importance_score,
             "importance_bucket": importance_bucket,
             "priority_label": priority_label,
+            "priority": priority_label,
             "rule_score": rule_score,
+            "base_score": base_score,
             "action_items": action_items,
+            "actions": actions,
             "calendar_candidates": calendar_candidates,
             "informational_items": informational_items,
             "junk_score": junk_score,
             "is_junk": is_junk,
+            "needs_attention": needs_attention,
             "triage_decision": triage_decision,
+            "called_llm": called_llm,
+            "thread_id": thread_id_value,
+            "latest_message_id": latest_message_id_value,
+            "thread_length": thread_length_value,
         }
 
         email_payload = os1_event.setdefault("payload", {})
         email_payload["recipient"] = str(email.recipient)
         email_payload["received_at"] = email.received_at.isoformat()
         email_payload["summary"] = summary_text
+        email_payload["state_summary"] = summary_text
+        email_payload["reason"] = reason
         email_payload["importance_score"] = importance_score
         email_payload["importance_bucket"] = importance_bucket
         email_payload["priority_label"] = priority_label
+        email_payload["priority"] = priority_label
         email_payload["rule_score"] = rule_score
-        email_payload["priority"] = _priority_from_importance_bucket(importance_bucket)
+        email_payload["base_score"] = base_score
+        email_payload["needs_attention"] = needs_attention
+        email_payload["actions"] = actions
         email_payload["action_items"] = action_items
         email_payload["calendar_candidates"] = calendar_candidates
         email_payload["informational_items"] = informational_items
         email_payload["junk_score"] = junk_score
         email_payload["is_junk"] = is_junk
         email_payload["triage_decision"] = triage_decision
+        email_payload["called_llm"] = called_llm
+        email_payload["thread_id"] = thread_id_value
+        email_payload["latest_message_id"] = latest_message_id_value
+        email_payload["thread_length"] = thread_length_value
 
         household_id_for_events = str(os1_event["household_id"])
         flags = resolve_feature_flags(household_id=str(os1_event["household_id"]))
@@ -502,16 +550,26 @@ def ingest_email(
                     "subject": str(email.subject),
                     "provider": str(email.provider),
                     "summary": summary_text,
+                    "state_summary": summary_text,
+                    "reason": reason,
                     "importance_score": importance_score,
                     "importance_bucket": importance_bucket,
                     "priority_label": priority_label,
+                    "priority": priority_label,
                     "rule_score": rule_score,
+                    "base_score": base_score,
+                    "needs_attention": needs_attention,
+                    "actions": actions,
                     "action_items": action_items,
                     "calendar_candidates": calendar_candidates,
                     "informational_items": informational_items,
                     "junk_score": junk_score,
                     "is_junk": is_junk,
                     "triage_decision": triage_decision,
+                    "called_llm": called_llm,
+                    "thread_id": thread_id_value,
+                    "latest_message_id": latest_message_id_value,
+                    "thread_length": thread_length_value,
                     **processing_fields,
                 },
             )

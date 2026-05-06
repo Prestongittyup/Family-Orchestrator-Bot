@@ -1,3 +1,6 @@
+# ARCHIVE MODULE - NOT PART OF ACTIVE RUNTIME
+# DO NOT IMPORT INTO app/
+
 from __future__ import annotations
 
 from typing import Any

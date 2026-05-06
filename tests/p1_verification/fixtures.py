@@ -19,6 +19,8 @@ from archive.apps.api.services.idempotency_key_service import IdempotencyKeyServ
 @dataclass
 class TestHousehold:
     """Test household identity."""
+    __test__ = False
+
     household_id: str
     user_id: str
     device_id: str

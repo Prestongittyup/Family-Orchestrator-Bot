@@ -16,12 +16,16 @@ Design constraints
 """
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlalchemy import DateTime, Index, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from archive.apps.api.core.database import Base
+
+
+def _utcnow() -> datetime:
+  return datetime.now(UTC).replace(tzinfo=None)
 
 
 class ExplanationRecord(Base):
@@ -71,7 +75,7 @@ class ExplanationRecord(Base):
     # Timestamps
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     inserted_at: Mapped[datetime] = mapped_column(
-        DateTime, nullable=False, default=datetime.utcnow
+      DateTime, nullable=False, default=_utcnow
     )
 
     __table_args__ = (

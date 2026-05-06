@@ -17,10 +17,17 @@ from household_os.runtime.event_store import InMemoryEventStore
 from household_os.runtime.orchestrator import HouseholdOSOrchestrator, OrchestratorRequest, RequestActionType
 from household_os.security.trust_boundary_enforcer import SecurityViolation
 from household_os.security.trust_surface_registry import (
+
     ALLOWED_IMPORTERS_BY_MODULE,
     AUTHORIZED_ENTRYPOINTS,
     FORBIDDEN_DIRECT_SURFACES,
 )
+
+_existing_pytestmark = globals().get("pytestmark", [])
+if not isinstance(_existing_pytestmark, list):
+    _existing_pytestmark = [_existing_pytestmark]
+pytestmark = [*_existing_pytestmark, pytest.mark.ci_gate]
+
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -240,6 +247,8 @@ def _assert_orchestrator_provenance() -> None:
         (HouseholdOSDecisionEngine, "run"),
     ],
 )
+@pytest.mark.system
+@pytest.mark.legacy
 def test_runtime_enforcement_requires_orchestrator_provenance(monkeypatch: pytest.MonkeyPatch, owner: type, method_name: str) -> None:
     original = getattr(owner, method_name)
 
@@ -292,6 +301,8 @@ def test_runtime_enforcement_requires_orchestrator_provenance(monkeypatch: pytes
             )
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_runtime_authorized_orchestrator_path_is_allowed(monkeypatch: pytest.MonkeyPatch) -> None:
     original = InMemoryEventStore.append
 
@@ -314,6 +325,8 @@ def test_runtime_authorized_orchestrator_path_is_allowed(monkeypatch: pytest.Mon
     assert result is not None
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_trust_surface_final_closure_report() -> None:
     resolved, remaining, call_graph = _scan_static_surfaces()
     remaining_direct = [f for f in remaining if f.kind == "DIRECT_MUTATION_SURFACE"]

@@ -1,7 +1,14 @@
 from __future__ import annotations
+import pytest
 
 import ast
 from pathlib import Path
+
+_existing_pytestmark = globals().get("pytestmark", [])
+if not isinstance(_existing_pytestmark, list):
+    _existing_pytestmark = [_existing_pytestmark]
+pytestmark = [*_existing_pytestmark, pytest.mark.ci_gate]
+
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,6 +39,7 @@ def _is_direct_broadcaster_import(path: Path, source: str) -> bool:
     return False
 
 
+@pytest.mark.integration
 def test_no_direct_broadcaster_bypass() -> None:
     """
     Enforce architectural boundary:

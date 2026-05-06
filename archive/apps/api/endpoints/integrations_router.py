@@ -1,3 +1,6 @@
+# ARCHIVE MODULE - NOT PART OF ACTIVE RUNTIME
+# DO NOT IMPORT INTO app/
+
 """
 integrations_router.py
 -----------------------
@@ -773,6 +776,7 @@ def sync_google_email(
     processed_count = 0
     ignored_count = 0
     failed_count = 0
+    seen_thread_ids: set[str] = set()
 
     for row in message_rows:
         message_id = ""
@@ -809,6 +813,45 @@ def sync_google_email(
         if not isinstance(raw_message, dict):
             raw_message = {}
 
+        thread_id = str(raw_message.get("threadId") or raw_message.get("thread_id") or "").strip()
+        if thread_id and thread_id in seen_thread_ids:
+            ignored_count += 1
+            results.append(
+                {
+                    "message_id": message_id,
+                    "status": "ignored",
+                    "result": {
+                        "status": "thread_superseded",
+                        "event_id": "",
+                    },
+                }
+            )
+            continue
+        if thread_id:
+            seen_thread_ids.add(thread_id)
+
+        thread_messages: list[str] = []
+        if thread_id:
+            thread_response = resolved_http_client.get(
+                f"{GMAIL_API_BASE_URL}/users/me/threads/{urllib.parse.quote(thread_id, safe='')}",
+                headers=headers,
+                params={"format": "metadata"},
+            )
+            try:
+                thread_response.raise_for_status()
+                thread_payload = thread_response.json()
+                if isinstance(thread_payload, dict):
+                    messages = thread_payload.get("messages")
+                    if isinstance(messages, list):
+                        for message in messages[-3:]:
+                            if not isinstance(message, dict):
+                                continue
+                            snippet = str(message.get("snippet") or "").strip()
+                            if snippet:
+                                thread_messages.append(snippet)
+            except Exception:
+                thread_messages = []
+
         parsed = adapter.parse_message(raw_message)
         received_at = str(parsed.received_at or "").strip() or datetime.now(UTC).isoformat().replace("+00:00", "Z")
         subject = str(parsed.subject or "").strip() or "Email update"
@@ -816,6 +859,7 @@ def sync_google_email(
         recipient = str(parsed.recipient or "").strip()
         body = str(parsed.body or "").strip() or str(raw_message.get("snippet") or "")
         email_id_value = str(parsed.email_id or "").strip() or message_id
+        latest_message_id = str(parsed.latest_message_id or email_id_value).strip() or email_id_value
 
         try:
             ingest_result = ingest_email(
@@ -827,6 +871,11 @@ def sync_google_email(
                 received_at=received_at,
                 provider="gmail",
                 household_id=normalized_household_id,
+                thread_id=thread_id or parsed.thread_id,
+                latest_message_id=latest_message_id,
+                thread_messages=thread_messages or list(parsed.thread_messages or []),
+                to_me=parsed.to_me,
+                cc_me=parsed.cc_me,
             )
             ingest_status = str(ingest_result.get("status") or "success").strip().lower() or "success"
             result_status = "processed"
@@ -930,3 +979,4 @@ def debug_google_calendar(
     }
     _last_debug_snapshot[user_id] = response
     return response
+

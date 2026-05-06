@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from archive.apps.api.integration_core.models.household_state import HouseholdState
 from household_os.runtime.orchestrator import (
     HouseholdOSOrchestrator,
     OrchestratorRequest,
@@ -29,7 +29,7 @@ class HouseholdDailyCycle:
         self,
         *,
         household_id: str,
-        state: HouseholdState | None = None,
+        state: Any | None = None,
         fitness_goal: str | None = None,
         now: str | datetime | None = None,
     ) -> DailyCycleTickResult:
@@ -63,7 +63,7 @@ class HouseholdDailyCycle:
         self,
         *,
         household_id: str,
-        state: HouseholdState | None = None,
+        state: Any | None = None,
         fitness_goal: str | None = None,
         now: str | datetime | None = None,
     ) -> DailyCycleTickResult:

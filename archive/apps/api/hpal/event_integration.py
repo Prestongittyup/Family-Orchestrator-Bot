@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import hashlib
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from archive.apps.api.hpal.contracts import CreateEventRequest, EventModel, LinkEventPlanRequest
@@ -72,4 +72,4 @@ class EventIntegrationLayer:
         return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
     def now_iso(self) -> str:
-        return datetime.utcnow().isoformat() + "Z"
+        return datetime.now(UTC).isoformat().replace("+00:00", "Z")

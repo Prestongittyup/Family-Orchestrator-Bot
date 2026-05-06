@@ -20,10 +20,14 @@ from enum import Enum
 import inspect
 from typing import Any, Literal
 
-from household_os.security.trust_boundary_enforcer import SecurityViolation, enforce_import_boundary
+from household_os.security.trust_boundary_enforcer import (
+    SecurityViolation,
+    enforce_import_boundary,
+    is_test_bypass_allowed,
+)
 
 
-enforce_import_boundary("apps.api.core.state_machine")
+enforce_import_boundary("archive.apps.api.core.state_machine")
 
 ALLOWED_FSM_CALLERS = {
     "household_os.runtime.action_pipeline",
@@ -38,7 +42,7 @@ def _resolve_fsm_caller_module() -> str:
         module_name = str(frame_info.frame.f_globals.get("__name__", ""))
         if not module_name:
             continue
-        if module_name == "apps.api.core.state_machine":
+        if module_name == "archive.apps.api.core.state_machine":
             continue
         if module_name.startswith("importlib"):
             continue
@@ -48,7 +52,7 @@ def _resolve_fsm_caller_module() -> str:
 
 def _enforce_fsm_caller() -> None:
     caller = _resolve_fsm_caller_module()
-    if caller.startswith("tests."):
+    if is_test_bypass_allowed(caller):
         return
     if any(caller == allowed or caller.startswith(f"{allowed}.") for allowed in ALLOWED_FSM_CALLERS):
         return

@@ -19,14 +19,36 @@ FORBIDDEN_CALLS = {
 }
 
 
-class SecurityViolation(RuntimeError):
+class SecurityViolation(PermissionError):
     """Raised when code crosses an unauthorized trust boundary."""
+
+
+_STRICT_TEST_ENFORCEMENT_PREFIXES = (
+    "tests.test_trust_boundary_enforcement",
+    "tests.test_trust_surface_closure",
+    "tests.test_trust_surface_final_closure",
+    "tests.test_unified_trust_boundary",
+    "tests.legacy.test_trust_boundary_enforcement",
+    "tests.legacy.test_trust_surface_closure",
+    "tests.legacy.test_trust_surface_final_closure",
+    "tests.legacy.test_unified_trust_boundary",
+)
+
+
+def is_test_bypass_allowed(module_name: str) -> bool:
+    if not module_name.startswith("tests."):
+        return False
+    return not any(
+        module_name == prefix or module_name.startswith(f"{prefix}.")
+        for prefix in _STRICT_TEST_ENFORCEMENT_PREFIXES
+    )
 
 
 _REPLAY_ALLOWED_CALLERS = {
     "household_os.runtime.orchestrator",
     "household_os.runtime.state_reducer",
     "household_os.runtime.lifecycle_migration",
+    "household_os.runtime.tracing",
 }
 
 
@@ -76,9 +98,17 @@ def _is_observability_wrapper(module_name: str, function_name: str) -> bool:
 def _iter_effective_stack(skip_modules: set[str] | None = None) -> list[tuple[str, str]]:
     ignored = {
         "household_os.security.trust_boundary_enforcer",
+        "household_os.runtime.tracing",
         "importlib",
         "importlib._bootstrap",
         "importlib._bootstrap_external",
+        "threading",
+        "concurrent",
+        "concurrent.futures",
+        "asyncio",
+        "anyio",
+        "starlette",
+        "fastapi",
     }
     if skip_modules:
         ignored.update(skip_modules)
@@ -120,7 +150,7 @@ def enforce_call_origin(module_name: str, function_name: str, caller_frame: insp
         return
 
     caller = stack[0][0]
-    if caller.startswith("tests."):
+    if is_test_bypass_allowed(caller):
         return
     raise SecurityViolation(f"Forbidden call blocked: {target} from {caller}")
 
@@ -131,7 +161,7 @@ def enforce_trust_boundary(fn_name: str, caller_module: str) -> None:
         return
     if _is_allowed(caller_module, INTERNAL_ALLOWED_CALLERS):
         return
-    if caller_module.startswith("tests."):
+    if is_test_bypass_allowed(caller_module):
         return
 
     # Full-stack validation prevents wrapper/test frames from causing false denials
@@ -140,8 +170,12 @@ def enforce_trust_boundary(fn_name: str, caller_module: str) -> None:
     if any(_is_allowed(mod, INTERNAL_ALLOWED_CALLERS) for mod, _ in stack):
         return
 
+    suffix = ""
+    if fn_name.startswith("ActionPipeline."):
+        suffix = " Direct pipeline execution is forbidden"
+
     raise SecurityViolation(
-        f"Forbidden call blocked: {fn_name} from {caller_module or 'unknown'}"
+        f"Forbidden call blocked: {fn_name} from {caller_module or 'unknown'}{suffix}"
     )
 
 
@@ -188,7 +222,7 @@ def validate_replay_call(
         raise SecurityViolation(f"Replay access denied for actor_type: {raw_actor_type}")
 
     resolved = caller_module or _first_external_module(skip_modules=skip_modules)
-    if resolved.startswith("tests."):
+    if is_test_bypass_allowed(resolved):
         return
     if _is_allowed(resolved, _REPLAY_ALLOWED_CALLERS):
         return

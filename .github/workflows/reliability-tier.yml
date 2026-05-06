@@ -1,0 +1,50 @@
+name: reliability-tier
+
+on:
+  schedule:
+    - cron: '0 5 * * 1'
+  workflow_dispatch:
+
+jobs:
+  reliability:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Enforce runtime contract guard
+        run: |
+          python scripts/contract_guard.py
+
+      - name: Enforce architecture layer guard
+        run: |
+          python scripts/architecture_layer_guard.py
+
+      - name: Enforce architecture validator (blocking)
+        run: |
+          python scripts/ci/architecture_validator.py
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest pytest-timeout
+
+      - name: Run reliability tier (scheduled/manual)
+        run: |
+          mkdir -p test_reports
+          pytest -m "reliability" -q --junitxml=test_reports/reliability-tier-junit.xml
+
+      - name: Upload reliability tier report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reliability-tier-junit
+          path: test_reports/reliability-tier-junit.xml
+          if-no-files-found: warn

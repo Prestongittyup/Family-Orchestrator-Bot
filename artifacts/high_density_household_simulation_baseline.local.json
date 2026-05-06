@@ -1,0 +1,16 @@
+{
+  "baseline_snapshot": {
+    "decisions": [],
+    "actions": [],
+    "calendar": [],
+    "summary": "Digest today: 0 decisions, 0 actions, 0 events. Change-set v0 with no recorded updates; latest change n/a.",
+    "decision_count": 0,
+    "action_count": 0,
+    "clarity_score": "high"
+  },
+  "expected_capacity": {
+    "max_decisions_before_overload": 3,
+    "max_actions_visible": 5,
+    "desired_signal_to_noise_ratio": "high"
+  }
+}

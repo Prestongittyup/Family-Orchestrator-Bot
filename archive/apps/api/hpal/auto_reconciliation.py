@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 
 from archive.apps.api.hpal.orchestration_adapter import OrchestrationAdapter
 
@@ -73,7 +73,7 @@ class AutoReconciliationHook:
             "plan_id": plan_id,
             "trigger": trigger,
             "reason": reason,
-            "recorded_at": datetime.utcnow().isoformat() + "Z",
+            "recorded_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         }
         self.adapter.save_hpal_state(family_id=family_id, graph=graph)
         return ReconciliationResult(status="accepted", reason=trigger)

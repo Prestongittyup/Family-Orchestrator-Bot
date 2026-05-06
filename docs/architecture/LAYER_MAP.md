@@ -1,98 +1,199 @@
-# Family Orchestration Bot Layer Map
+# Layer Map v2
 
-This repository currently uses 7 operational layers, plus one compatibility facade.
+## Authority
 
-## Purpose
+RFC-001 is the immutable architecture source of truth for this repository.
 
-The system turns family and household intent into deterministic, policy-checked actions.
-It keeps user-facing conversation flow separate from intent validation, policy decisions,
-integration state assembly, and runtime execution.
+- Root contract: docs/architecture/RFC-001.md
+- If this document conflicts with RFC-001, RFC-001 prevails.
+- This document is architecture documentation only and does not introduce runtime behavior beyond RFC-001.
 
-## Layer Count
+## Canonical Layer Map v2
 
-- Operational layers: 7
-- Compatibility facade: 1 (not counted as an operational layer)
+### 1. API & Product Surface Layer
 
-## Canonical Layers
+Path:
 
-1. API and Product Surface
-- Folders:
-  - apps/api/endpoints
-  - apps/assistant_core
-- Role:
-  - HTTP entrypoints and API contracts
-  - request routing and response shaping
+- app
+- app/main.py
+- app/schemas/*
+- app/api/*
+- apps/api/endpoints
+- apps/assistant_core
 
-2. Conversation Orchestration Layer (COL)
-- Folder:
-  - apps/api/conversation_orchestration
-- Role:
-  - multi-turn conversation state
-  - clarification loops and pipeline progression
-  - structured handoff generation
+Responsibilities:
 
-3. Intent Contract Layer (ICL)
-- Folder:
-  - apps/api/intent_contract
-- Role:
-  - intent classification
-  - schema validation
-  - deterministic action planning
+- HTTP entrypoints
+- request/response shaping
+- input validation (shape only)
+- streaming interfaces
 
-4. Policy and Safety Layer
-- Folder:
-  - apps/api/policy_engine
-- Role:
-  - allow/confirm/block policy evaluation
-  - safety, compliance, and action gating
+Forbidden:
 
-5. Integration Core Layer
-- Folder:
-  - apps/api/integration_core
-- Role:
-  - provider state assembly and event windowing
-  - orchestration of integration data into household state
-  - canonical integration decision engine for this boundary
+- execution decisions
+- policy evaluation
+- event mutation
+- orchestration logic
 
-6. Execution Runtime Layer
-- Folders:
-  - household_os/core
-  - household_os/runtime
-  - apps/api/hpal
-  - apps/api/services
-- Role:
-  - domain action execution
-  - lifecycle transitions
-  - runtime orchestration and service coordination
+### 2. Conversation Orchestration Layer (COL)
 
-7. Cross-Cutting Governance and Observability
-- Folders:
-  - apps/api/core
-  - apps/api/observability
-  - ci
-  - tests
-  - scripts
-- Role:
-  - architectural boundary enforcement
-  - lifecycle mutation safety
-  - telemetry, diagnostics, and regression guards
+Path:
 
-## Compatibility Facade (Intentional, Not Business Logic)
+- apps/api/conversation_orchestration
 
-- Folder:
-  - integration_core
-- Role:
-  - thin re-export shim for import compatibility
-- Rule:
-  - keep facade files as one-line re-exports only
-  - no business logic in facade package
+Responsibilities:
 
-## Redundancy Policy
+- multi-turn conversation state
+- clarification loops
+- intent refinement across turns
+- pipeline progression signals
 
-To avoid accidental duplication:
+Forbidden:
 
-- Canonical integration pipeline logic lives under apps/api/integration_core.
-- Compatibility facade under integration_core must stay logic-free.
-- New orchestrator or decision-engine implementations must be introduced only within the
-  bounded context that owns them, with explicit naming and tests.
-- CI gates should fail on accidental duplicate pipeline implementations.
+- execution logic
+- policy evaluation
+- state mutation
+- event emission
+
+### 3. Intent Contract Layer (ICL)
+
+Path:
+
+- apps/api/intent_contract
+
+Responsibilities:
+
+- intent classification
+- schema validation
+- deterministic intent decomposition
+- structured action planning
+
+Forbidden:
+
+- execution
+- policy decisions
+- runtime state changes
+
+### 4. Policy & Safety Layer
+
+Path:
+
+- app/services/policy_engine
+- app/services/risk_engine
+- app/services/rules_engine
+- household_os/security/*
+
+Responsibilities:
+
+- allow / block / confirm decisions
+- safety and compliance evaluation
+- execution gating decisions
+
+Forbidden:
+
+- execution
+- workflow orchestration
+- event emission
+
+### 5. Integration Core Layer
+
+Path:
+
+- app/adapters/*
+- app/services/llm_gateway
+- app/services/provider_sync
+- app/services/integration_core
+
+Responsibilities:
+
+- external system normalization
+- provider event ingestion
+- event windowing and formatting
+
+Forbidden:
+
+- triggering execution
+- modifying event log directly
+- overriding policy decisions
+
+### 6. Execution Runtime Layer (Single Mutation Surface)
+
+Path:
+
+- household_os/runtime
+- app/services/execution_gateway
+- app/services/saga
+- app/services/commands
+- app/services/events
+- app/services/runtime
+- app/services/agents
+
+Responsibilities:
+
+- command execution
+- saga orchestration
+- event emission ordering
+- idempotency handling
+- compensation logic
+- concurrency control
+
+Hard rule:
+
+- ONLY layer allowed to mutate state or emit canonical events.
+- Execution Gateway is the single canonical mutation surface and belongs to Layer 6 only.
+
+Forbidden:
+
+- policy decisions
+- intent classification
+- API response shaping logic
+
+### 7. Cross-Cutting Governance Layer
+
+Path:
+
+- app/services
+- app/services/cache
+- app/services/evaluation
+- app/services/intent_resolution
+- app/services/routing
+- app/services/usage
+- app/services/observability
+- tests/*
+- scripts/*
+- ci/*
+
+Responsibilities:
+
+- architecture validation
+- drift detection
+- replay validation
+- contract enforcement
+- observability
+
+Forbidden:
+
+- runtime execution influence
+- state mutation
+- business logic
+
+IMPORTANT:
+
+- Tests are enforcement tools, not an architectural layer.
+
+## Execution Authority Rule
+
+Only the Execution Runtime Layer (Layer 6) may:
+
+- mutate system state
+- emit canonical events
+- execute sagas
+- perform side effects
+
+All other layers are strictly non-mutating.
+
+## RFC-001 Runtime Flow Alignment
+
+All write-capable runtime behavior must follow the canonical RFC-001 flow:
+
+User Request -> Command Validation -> Execution Gateway -> Rules Engine -> LLM Advisory (optional) -> Risk Engine -> Decision (auto/approve/block) -> Saga Execution -> Event Commit -> Projection Update -> Response

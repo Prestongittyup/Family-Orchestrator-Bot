@@ -94,7 +94,8 @@ class LLMGateway:
                 extracted={},
             )
 
-        if not self._can_call_within_rate_limit(household_id):
+        reservation = self._try_reserve_rate_limit_slot(household_id)
+        if reservation is None:
             return LLMIntentResponse(
                 intent_type=None,
                 confidence=0.0,
@@ -133,6 +134,7 @@ class LLMGateway:
         thread.join(timeout=self._hard_timeout_seconds)
 
         if thread.is_alive():
+            self._release_rate_limit_slot(household_id, reservation)
             timeout_route = "fallback" if self._timeout_fallback_enabled else "blocked"
             return LLMIntentResponse(
                 intent_type=None,
@@ -143,6 +145,7 @@ class LLMGateway:
                 extracted={},
             )
         if err is not None or result is None:
+            self._release_rate_limit_slot(household_id, reservation)
             return LLMIntentResponse(
                 intent_type=None,
                 confidence=0.0,
@@ -152,28 +155,29 @@ class LLMGateway:
                 extracted={},
             )
 
-        self._record_rate_limit_call(household_id)
-
         validated = self._validate_structured_response(result)
         return validated
 
-    def _can_call_within_rate_limit(self, household_id: str) -> bool:
+    def _try_reserve_rate_limit_slot(self, household_id: str) -> float | None:
         now = time.time()
         cutoff = now - 60.0
         with self._rate_lock:
             window = self._rate_windows[household_id].timestamps
             while window and window[0] < cutoff:
                 window.popleft()
-            return len(window) < self._max_requests_per_minute
-
-    def _record_rate_limit_call(self, household_id: str) -> None:
-        now = time.time()
-        cutoff = now - 60.0
-        with self._rate_lock:
-            window = self._rate_windows[household_id].timestamps
-            while window and window[0] < cutoff:
-                window.popleft()
+            if len(window) >= self._max_requests_per_minute:
+                return None
             window.append(now)
+            return now
+
+    def _release_rate_limit_slot(self, household_id: str, reservation: float) -> None:
+        with self._rate_lock:
+            window = self._rate_windows[household_id].timestamps
+            try:
+                window.remove(reservation)
+            except ValueError:
+                # Reservation may have already rolled out of the active window.
+                pass
 
     def _extract_actor_context(self, *, context_snapshot: dict) -> dict:
         actor_context = context_snapshot.get("actor_context")

@@ -10,11 +10,15 @@ from __future__ import annotations
 import json
 import hashlib
 import base64
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Literal
 
 from archive.apps.api.identity.contracts import SessionClaims, IdentityContext
 from archive.apps.api.identity.repository import IdentityRepository
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 def encode_session_token(
@@ -22,6 +26,7 @@ def encode_session_token(
     user_id: str,
     device_id: str,
     user_role: Literal["ADMIN", "ADULT", "CHILD", "VIEW_ONLY"],
+    token_created_at: str | None = None,
 ) -> str:
     """
     Create a deterministic session token by encoding claims.
@@ -29,7 +34,19 @@ def encode_session_token(
     Token is JSON + base64 encoded and signed. Same input always produces same output.
     Format: base64({household_id}.{user_id}.{device_id}.{role}.{timestamp_hash})
     """
-    now = datetime.utcnow()
+    if token_created_at is None:
+        # Preserve deterministic behavior for direct encoding tests and replay scenarios.
+        deterministic_seed = json.dumps(
+            {
+                "household_id": household_id,
+                "user_id": user_id,
+                "device_id": device_id,
+                "user_role": user_role,
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        token_created_at = f"det:{hashlib.sha256(deterministic_seed.encode('utf-8')).hexdigest()[:16]}"
     
     # Create claims dict
     claims = {
@@ -37,7 +54,7 @@ def encode_session_token(
         "user_id": user_id,
         "device_id": device_id,
         "user_role": user_role,
-        "token_created_at": now.isoformat(),
+        "token_created_at": token_created_at,
     }
     
     # JSON + base64 encode
@@ -79,7 +96,7 @@ def create_session_claims(
     user_role: Literal["ADMIN", "ADULT", "CHILD", "VIEW_ONLY"],
 ) -> SessionClaims:
     """Create SessionClaims object for persistence."""
-    now = datetime.utcnow()
+    now = _utcnow()
     expires_at = now + timedelta(days=30)  # 30-day token lifetime
     
     return SessionClaims(
@@ -168,7 +185,7 @@ def validate_session_token(
         return (False, None)
     
     # Check expiration
-    if stored_token.expires_at < datetime.utcnow():
+    if stored_token.expires_at < _utcnow():
         repository.invalidate_session_token(token_hash)
         return (False, None)
     
@@ -218,7 +235,13 @@ def issue_session_token(
     Returns the encoded token string.
     """
     # Create token
-    token = encode_session_token(household_id, user_id, device_id, user_role)
+    token = encode_session_token(
+        household_id,
+        user_id,
+        device_id,
+        user_role,
+        token_created_at=_utcnow().isoformat(),
+    )
     
     # Hash for persistent storage
     token_hash = hashlib.sha256(token.encode("utf-8")).hexdigest()

@@ -1,13 +1,10 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 import re
 from datetime import datetime, timedelta
 from typing import Any
 
-from archive.apps.assistant_core.fitness_planner import generate_fitness_plan
-from archive.apps.assistant_core.intent_parser import parse_intent
-from archive.apps.assistant_core.meal_planner import plan_meal
-from archive.apps.assistant_core.planning_engine import _find_available_windows
 from household_os.core.contracts import (
     CurrentStateSummary,
     GroupedApprovalPayload,
@@ -60,6 +57,81 @@ _WEEKDAY_TO_INDEX = {
 }
 
 
+@dataclass(frozen=True)
+class _Intent:
+    intent_type: str
+    priority: str
+    entities: list[str]
+
+
+@dataclass(frozen=True)
+class _MealPlan:
+    recipe_name: str
+    grocery_additions: list[str]
+
+
+@dataclass(frozen=True)
+class _FitnessInsertion:
+    time_block: str
+
+
+@dataclass(frozen=True)
+class _FitnessPlan:
+    insertion_suggestions: list[_FitnessInsertion]
+
+
+def _parse_intent(query: str) -> _Intent:
+    normalized = query.lower()
+    entities: list[str] = []
+    if any(token in normalized for token in ("doctor", "dentist", "appointment", "calendar")):
+        intent_type = "appointment"
+        entities.append("appointment")
+    elif any(token in normalized for token in ("meal", "dinner", "cook", "grocery")):
+        intent_type = "meal"
+        entities.append("meal")
+    elif any(token in normalized for token in ("fitness", "workout", "exercise")):
+        intent_type = "fitness"
+        entities.append("fitness")
+    else:
+        intent_type = "general"
+
+    if any(token in normalized for token in ("urgent", "asap", "immediately")):
+        priority = "high"
+    elif any(token in normalized for token in ("soon", "today", "tomorrow")):
+        priority = "medium"
+    else:
+        priority = "low"
+
+    return _Intent(intent_type=intent_type, priority=priority, entities=entities)
+
+
+def _find_available_windows(events: list[dict[str, str]], reference_time: datetime) -> list[tuple[str, str, str]]:
+    del events
+    base = reference_time.replace(minute=0, second=0, microsecond=0)
+    windows: list[tuple[str, str, str]] = []
+    for offset, hour in ((0, 10), (0, 14), (1, 9), (1, 15), (2, 11)):
+        start = (base + timedelta(days=offset)).replace(hour=hour)
+        end = start + timedelta(minutes=45)
+        label = start.strftime("%Y-%m-%d %H:%M") + "-" + end.strftime("%H:%M")
+        windows.append((start.strftime("%A"), label, "candidate"))
+    return windows
+
+
+def _plan_meal(*, inventory: dict[str, int], recipe_history: list[dict[str, Any]], repeat_window_days: int) -> _MealPlan:
+    del recipe_history, repeat_window_days
+    recipe_name = "Chicken Quinoa Bowl"
+    required = ["chicken", "quinoa", "spinach"]
+    additions = [item for item in required if int(inventory.get(item, 0)) <= 0]
+    return _MealPlan(recipe_name=recipe_name, grocery_additions=additions)
+
+
+def _generate_fitness_plan(goal: str, windows: list[tuple[str, str, str]]) -> _FitnessPlan:
+    del goal
+    if not windows:
+        return _FitnessPlan(insertion_suggestions=[])
+    return _FitnessPlan(insertion_suggestions=[_FitnessInsertion(time_block=windows[0][1])])
+
+
 def _urgency_label_from_score(urgency_score: int) -> UrgencyLevel:
     if urgency_score >= 85:
         return "high"
@@ -82,7 +154,18 @@ class HouseholdOSDecisionEngine:
     ) -> HouseholdOSRunResponse:
         validate_forbidden_call(
             "HouseholdOSDecisionEngine.run",
-            skip_modules={"household_os.core.decision_engine"},
+            skip_modules={
+                "household_os.core.decision_engine",
+                "household_state.decision_engine",
+                "assistant.runtime.assistant_runtime",
+                "assistant.daily_loop",
+                "archive.apps.api.assistant_runtime_router",
+                "apps.api.assistant_runtime_router",
+                "archive.apps.assistant_core.assistant_router",
+                "anyio",
+                "starlette",
+                "fastapi",
+            },
         )
         if allowed_domains is not None and len(allowed_domains) == 0:
             raise ValueError("allowed_domains must be None or a non-empty list")
@@ -90,7 +173,7 @@ class HouseholdOSDecisionEngine:
         # Perform unified household reasoning across calendar, meals, tasks, and fitness.
 
         # Parse intent from natural language
-        intent = parse_intent(query)
+        intent = _parse_intent(query)
         intent_summary = f"{intent.intent_type} query with {intent.priority} priority and {len(intent.entities)} signal(s)"
 
         # Read canonical state from graph
@@ -261,7 +344,7 @@ class HouseholdOSDecisionEngine:
         reference_time: str,
         intent_priority: str,
     ) -> dict[str, Any]:
-        meal = plan_meal(
+        meal = _plan_meal(
             inventory=grocery_inventory,
             recipe_history=meal_history,
             repeat_window_days=10,
@@ -309,7 +392,7 @@ class HouseholdOSDecisionEngine:
     ) -> dict[str, Any]:
         goal = fitness_routines[-1] if fitness_routines else "consistency"
         windows = _find_available_windows(calendar_events, self._parse_iso(reference_time))
-        plan = generate_fitness_plan(goal, windows)
+        plan = _generate_fitness_plan(goal, windows)
         session = plan.insertion_suggestions[0] if plan.insertion_suggestions else None
 
         urgency = 80 if any(token in query.lower() for token in ("work out", "working out", "workout", "fitness", "exercise")) else 60

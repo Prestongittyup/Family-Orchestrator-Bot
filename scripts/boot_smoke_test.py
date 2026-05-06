@@ -47,7 +47,7 @@ class RunResult:
     classification: str
     reason: str
     passed: bool
-    boot_probe: dict[str, Any] | None
+    healthz_status: dict[str, Any] | None
     checks: list[CheckResult]
 
 
@@ -127,7 +127,7 @@ class BootSmokeHarness:
         env = os.environ.copy()
         env["PORT"] = str(self.port)
         return subprocess.Popen(
-            [sys.executable, "-m", "uvicorn", "apps.api.main:app", "--host", HOST, "--port", str(self.port)],
+            [sys.executable, "-m", "uvicorn", "app.main:app", "--host", HOST, "--port", str(self.port)],
             cwd=str(BASE_DIR),
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
@@ -139,8 +139,8 @@ class BootSmokeHarness:
         last_error = ""
         while time.time() < deadline:
             try:
-                status, body = self._json_request("GET", "/v1/system/boot-probe")
-                if status == 200 and isinstance(body, dict):
+                status, body = self._json_request("GET", "/healthz")
+                if status == 200 and isinstance(body, dict) and body == {"status": "ok"}:
                     return body
                 last_error = f"status={status} body={body}"
             except Exception as exc:
@@ -318,27 +318,24 @@ class BootSmokeHarness:
     def execute_single_run(self) -> RunResult:
         results: list[CheckResult] = []
         server: subprocess.Popen[str] | None = None
-        boot_probe: dict[str, Any] | None = None
+        healthz_status: dict[str, Any] | None = None
 
         try:
             self._kill_listeners_on_ports([8000, 8010, self.port])
             time.sleep(0.6)
 
             server = self._start_server()
-            boot_probe = self._wait_ready()
+            healthz_status = self._wait_ready()
             self._add_result(results, "boot_server_ready", True, 200, "server ready")
 
-            required_probe_keys = [
-                "database",
-                "identity_repo",
-                "household_repo",
-                "auth_middleware",
-                "broadcaster",
-                "repository_fresh_transaction",
-                "sse_internal_probe",
-            ]
-            key_ok = all(str(boot_probe.get(k)) == "ok" for k in required_probe_keys)
-            self._add_result(results, "state_boot_probe_components", key_ok, 200, json.dumps(boot_probe, sort_keys=True))
+            health_contract_ok = healthz_status == {"status": "ok"}
+            self._add_result(
+                results,
+                "state_healthz_contract",
+                health_contract_ok,
+                200,
+                json.dumps(healthz_status, sort_keys=True),
+            )
 
             founder_email = f"boot-smoke-{uuid.uuid4().hex[:8]}@example.com"
             create_body = {
@@ -481,7 +478,7 @@ class BootSmokeHarness:
             classification=classification,
             reason=reason,
             passed=passed,
-            boot_probe=boot_probe,
+            healthz_status=healthz_status,
             checks=results,
         )
 
@@ -546,7 +543,7 @@ def main() -> int:
                 "classification": r.classification,
                 "reason": r.reason,
                 "passed": r.passed,
-                "boot_probe": r.boot_probe,
+                "healthz_status": r.healthz_status,
                 "checks": [asdict(c) for c in r.checks],
             }
             for r in all_runs

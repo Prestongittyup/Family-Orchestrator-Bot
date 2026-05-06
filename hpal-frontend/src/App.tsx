@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AppShell } from "./ui/components/AppShell";
+import { AnalyticsScreen } from "./ui/screens/AnalyticsScreen";
 import { CalendarScreen } from "./ui/screens/CalendarScreen";
 import { ChatScreen } from "./ui/screens/ChatScreen";
 import { DashboardScreen } from "./ui/screens/DashboardScreen";
@@ -260,6 +261,7 @@ const App: React.FC = () => {
           <Route path="/" element={<DashboardScreen />} />
           <Route path="/tasks" element={<TasksScreen />} />
           <Route path="/calendar" element={<CalendarScreen />} />
+          <Route path="/analytics" element={<AnalyticsScreen />} />
           <Route path="/inbox" element={<InboxScreen />} />
           <Route path="/pantry" element={<PantryScreen />} />
           <Route path="/chat" element={<ChatScreen />} />

@@ -13,13 +13,21 @@ from household_os.runtime.state_reducer import StateReductionError, reduce_state
 from household_state.household_state_manager import HouseholdStateManager, LifecycleHydrationView
 from tests.lifecycle_test_utils import assert_no_lifecycle_mutation
 
+_existing_pytestmark = globals().get("pytestmark", [])
+if not isinstance(_existing_pytestmark, list):
+    _existing_pytestmark = [_existing_pytestmark]
+pytestmark = [*_existing_pytestmark, pytest.mark.ci_gate]
 
+
+
+@pytest.mark.unit
 def test_normalize_state_is_single_authority() -> None:
     assert normalize_state(LifecycleState.APPROVED.value) == LifecycleState.APPROVED
     with pytest.raises(ValueError):
         normalize_state("executed")
 
 
+@pytest.mark.unit
 def test_graph_store_parse_is_read_through_only(tmp_path: Path) -> None:
     store = HouseholdStateGraphStore(graph_path=tmp_path / "graph.json")
     source_graph = {
@@ -51,6 +59,7 @@ def test_graph_store_parse_is_read_through_only(tmp_path: Path) -> None:
     assert parsed["_lifecycle_hydration"]["behavior_feedback"][0]["status"] == LifecycleState.APPROVED.value
 
 
+@pytest.mark.unit
 def test_legacy_manager_parse_is_read_through_only(tmp_path: Path) -> None:
     manager = HouseholdStateManager(graph_path=tmp_path / "legacy_graph.json")
     source_graph = {
@@ -78,6 +87,7 @@ def test_legacy_manager_parse_is_read_through_only(tmp_path: Path) -> None:
     assert view.lifecycle_snapshot["current_state"] == LifecycleState.REJECTED.value
 
 
+@pytest.mark.unit
 def test_persistence_guard_rejects_state_rewrite_without_matching_transition(tmp_path: Path) -> None:
     store = HouseholdStateGraphStore(graph_path=tmp_path / "guard_graph.json")
     graph = store.load_graph("guard-household")
@@ -101,6 +111,7 @@ def test_persistence_guard_rejects_state_rewrite_without_matching_transition(tmp
         store.save_graph(graph)
 
 
+@pytest.mark.unit
 def test_reducer_uses_fsm_transition_rules() -> None:
     invalid_stream = [
         DomainEvent.create(
@@ -119,6 +130,7 @@ def test_reducer_uses_fsm_transition_rules() -> None:
         reduce_state(invalid_stream)
 
 
+@pytest.mark.unit
 def test_no_in_place_lifecycle_rewrites_in_persistence_modules() -> None:
     repo_root = Path(__file__).resolve().parents[1]
     targets = [

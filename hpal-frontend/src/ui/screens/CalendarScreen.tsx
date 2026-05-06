@@ -86,10 +86,14 @@ export const CalendarScreen: React.FC = () => {
     });
   };
 
-  const onEditEvent = async (eventId: string, currentTitle: string) => {
-    const title = window.prompt("Edit title", currentTitle);
+  const onEditEvent = async (event: { event_id: string; title: string; start: string; end: string }) => {
+    const title = window.prompt("Edit title", event.title);
     if (!title) return;
-    await updateCalendarEvent(eventId, { title });
+    await updateCalendarEvent(event.event_id, {
+      title,
+      start_time: event.start,
+      end_time: event.end,
+    });
   };
 
   const onDeleteEvent = async (eventId: string) => {
@@ -198,7 +202,7 @@ export const CalendarScreen: React.FC = () => {
                       <p className="task-meta">Participants: {event.participants.length > 0 ? event.participants.join(", ") : "No participants yet"}</p>
                     </div>
                     <div className="calendar-event-actions">
-                      <button type="button" onClick={() => onEditEvent(event.event_id, event.title)}>Edit</button>
+                      <button type="button" onClick={() => onEditEvent(event)}>Edit</button>
                       <button type="button" onClick={() => onDeleteEvent(event.event_id)}>Delete</button>
                     </div>
                   </li>

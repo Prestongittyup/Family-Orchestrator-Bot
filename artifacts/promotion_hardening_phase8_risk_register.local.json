@@ -1,0 +1,23 @@
+{
+  "phase": 8,
+  "name": "risk_register",
+  "status": "complete",
+  "known_risks": [
+    {
+      "id": "R-ARCH-STARTUP-WARN",
+      "description": "Architecture contract startup warnings are pre-existing and continue to appear during test startup.",
+      "severity": "medium",
+      "mitigation": "Track separately from this patch; warnings are non-blocking for runtime behavior and tests."
+    },
+    {
+      "id": "R-RULE-BASED-NLU",
+      "description": "Interpretation layer is deterministic/rule-based and may miss rare phrasing variants.",
+      "severity": "medium",
+      "mitigation": "Expand adversarial fixtures over time and tune signal patterns conservatively."
+    }
+  ],
+  "accepted_risks": [
+    "R-ARCH-STARTUP-WARN",
+    "R-RULE-BASED-NLU"
+  ]
+}

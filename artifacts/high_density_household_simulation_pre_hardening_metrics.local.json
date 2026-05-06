@@ -1,0 +1,234 @@
+{
+  "household_id": "chaos-day-fa1c9ade",
+  "scenario_date": "2026-05-06",
+  "phase0": {
+    "baseline_snapshot": {
+      "decisions": [],
+      "actions": [],
+      "calendar": [],
+      "summary": "Digest today: 0 decisions, 0 actions, 0 events. Change-set v0 with no recorded updates; latest change n/a.",
+      "decision_count": 0,
+      "action_count": 0,
+      "clarity_score": "high"
+    },
+    "expected_capacity": {
+      "max_decisions_before_overload": 3,
+      "max_actions_visible": 5,
+      "desired_signal_to_noise_ratio": "high"
+    }
+  },
+  "phase1": {
+    "input_set_size": 25,
+    "input_categories": {
+      "schedule": 7,
+      "obligation": 6,
+      "conflict": 2,
+      "multi_member": 3,
+      "noise": 3,
+      "ambiguous": 4
+    }
+  },
+  "phase2": {
+    "executed_inputs": 25,
+    "promotion_accuracy": 0.72
+  },
+  "phase3": {
+    "total_inputs": 25,
+    "decisions_generated": 6,
+    "necessary_decisions": 3,
+    "unnecessary_decisions": 3,
+    "missed_decisions": 6,
+    "max_decisions_visible": 6,
+    "max_actions_visible": 6,
+    "decision_pressure_pass": false
+  },
+  "phase4": {
+    "noise_inputs": 3,
+    "noise_promoted": 0,
+    "false_positives": 0,
+    "missed_important_items": 7,
+    "signal_to_noise_ratio": "high",
+    "signal_to_noise_pass": true
+  },
+  "phase5": {
+    "first_action_obvious": true,
+    "cognitive_load": "low",
+    "requires_thinking": true,
+    "decision_priority_clear": true
+  },
+  "phase6": {
+    "conflicts_detected": 1,
+    "conflicts_missed": 4,
+    "decisions_generated_for_conflicts": 1
+  },
+  "phase7": {
+    "replay_matches_live": true,
+    "drift_reasons": {
+      "structural": [],
+      "integrity": [],
+      "causal": []
+    }
+  },
+  "phase8": {
+    "system_behavior_under_load_before": "Baseline home view was stable with decision_count=0 and action_count=0.",
+    "system_behavior_under_load_after": "After 25 inputs, max_decisions_visible=6, max_actions_visible=6, overload_points=8.",
+    "decision_quality_change": "needs_tuning",
+    "signal_noise_improvement": "strong",
+    "user_clarity_improvement": "unclear"
+  },
+  "phase9": {
+    "reduces_decision_fatigue": false,
+    "prioritizes_correctly_under_load": false,
+    "would_real_household_trust_it_daily": false
+  },
+  "phase10": {
+    "input_density_tested": 25,
+    "promotion_accuracy": "72.00%",
+    "decision_quality": {
+      "decisions_generated": 6,
+      "necessary_decisions": 3,
+      "unnecessary_decisions": 3,
+      "missed_decisions": 6
+    },
+    "overload_points": [
+      {
+        "input_id": 18,
+        "input": "Team dinner after game",
+        "decision_count": 4,
+        "action_count": 5
+      },
+      {
+        "input_id": 19,
+        "input": "Something changed for tomorrow",
+        "decision_count": 5,
+        "action_count": 5
+      },
+      {
+        "input_id": 20,
+        "input": "Coach said schedule might shift",
+        "decision_count": 5,
+        "action_count": 5
+      },
+      {
+        "input_id": 21,
+        "input": "Bus running 20 minutes late today",
+        "decision_count": 5,
+        "action_count": 5
+      },
+      {
+        "input_id": 22,
+        "input": "PTA bake sale donations due Thursday",
+        "decision_count": 6,
+        "action_count": 5
+      },
+      {
+        "input_id": 23,
+        "input": "Grandma can do pickup at 3pm",
+        "decision_count": 6,
+        "action_count": 6
+      },
+      {
+        "input_id": 24,
+        "input": "Rain expected; practice may move indoors",
+        "decision_count": 6,
+        "action_count": 6
+      },
+      {
+        "input_id": 25,
+        "input": "Field trip form still missing signature",
+        "decision_count": 6,
+        "action_count": 6
+      }
+    ],
+    "failure_cases": [
+      {
+        "input_id": 10,
+        "input": "New meeting scheduled at 3pm",
+        "category": "conflict",
+        "interpretation": "schedule_create",
+        "promotion_result": "accepted"
+      },
+      {
+        "input_id": 11,
+        "input": "Practice overlaps with dinner time",
+        "category": "conflict",
+        "interpretation": "informational",
+        "promotion_result": "ignored"
+      },
+      {
+        "input_id": 14,
+        "input": "Dinner reservation at 6:30",
+        "category": "multi_member",
+        "interpretation": "informational",
+        "promotion_result": "ignored"
+      },
+      {
+        "input_id": 20,
+        "input": "Coach said schedule might shift",
+        "category": "ambiguous",
+        "interpretation": "informational",
+        "promotion_result": "ignored"
+      },
+      {
+        "input_id": 21,
+        "input": "Bus running 20 minutes late today",
+        "category": "schedule",
+        "interpretation": "informational",
+        "promotion_result": "ignored"
+      },
+      {
+        "input_id": 24,
+        "input": "Rain expected; practice may move indoors",
+        "category": "ambiguous",
+        "interpretation": "informational",
+        "promotion_result": "ignored"
+      },
+      {
+        "input_id": 25,
+        "input": "Field trip form still missing signature",
+        "category": "obligation",
+        "interpretation": "informational",
+        "promotion_result": "ignored"
+      }
+    ],
+    "missed_critical_cases": [
+      {
+        "input_id": 10,
+        "input": "New meeting scheduled at 3pm",
+        "category": "conflict",
+        "interpretation": "schedule_create",
+        "promotion_result": "accepted"
+      },
+      {
+        "input_id": 11,
+        "input": "Practice overlaps with dinner time",
+        "category": "conflict",
+        "interpretation": "informational",
+        "promotion_result": "ignored"
+      },
+      {
+        "input_id": 14,
+        "input": "Dinner reservation at 6:30",
+        "category": "multi_member",
+        "interpretation": "informational",
+        "promotion_result": "ignored"
+      },
+      {
+        "input_id": 21,
+        "input": "Bus running 20 minutes late today",
+        "category": "schedule",
+        "interpretation": "informational",
+        "promotion_result": "ignored"
+      },
+      {
+        "input_id": 25,
+        "input": "Field trip form still missing signature",
+        "category": "obligation",
+        "interpretation": "informational",
+        "promotion_result": "ignored"
+      }
+    ],
+    "confidence_level": "medium",
+    "ready_for_real_ingestion": false
+  }
+}

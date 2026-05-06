@@ -1,0 +1,3884 @@
+{
+  "unit": [
+    {
+      "file": "tests/decision/test_decision_engine.py",
+      "tests": [
+        "test_conflicts_detected [LEGACY]",
+        "test_decision_engine_is_deterministic [LEGACY]",
+        "test_events_are_ranked_by_time [LEGACY]",
+        "test_state_not_mutated [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_asgi_admission.py",
+      "tests": [
+        "test_identity_bootstrap_paths_are_bypassed [LEGACY]",
+        "test_identity_bootstrap_paths_are_bypassed_with_api_prefix_and_slash [LEGACY]",
+        "test_non_bootstrap_identity_paths_are_not_bypassed [LEGACY]",
+        "test_non_oauth_paths_are_not_bypassed [LEGACY]",
+        "test_oauth_critical_paths_are_bypassed [LEGACY]",
+        "test_oauth_paths_are_bypassed_with_api_prefix_and_slash [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_brief_renderer_v1.py",
+      "tests": [
+        "test_brief_endpoint_render_human_non_breaking [LEGACY]",
+        "test_renderer_groups_actions_by_morning_afternoon_evening [LEGACY]",
+        "test_renderer_hides_internal_ids_and_is_readable [LEGACY]",
+        "test_renderer_markdown_format_supported [LEGACY]",
+        "test_renderer_output_is_deterministic_for_same_input [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_col.py",
+      "tests": [
+        "test_action_plan_dict_has_required_keys [LEGACY]",
+        "test_add_message_preserves_immutability [LEGACY]",
+        "test_awaiting_to_executing_on_confirm [LEGACY]",
+        "test_awaiting_to_idle_on_cancel [LEGACY]",
+        "test_blocked_session_does_not_accept_messages [LEGACY]",
+        "test_blocked_state_produces_no_action_plan [LEGACY]",
+        "test_can_accept_message_in_clarifying [LEGACY]",
+        "test_can_accept_message_in_collecting [LEGACY]",
+        "test_can_accept_message_in_idle [LEGACY]",
+        "test_cannot_accept_message_in_blocked [LEGACY]",
+        "test_cannot_accept_message_in_executing [LEGACY]",
+        "test_clarification_prompt_for_ambiguous_field [LEGACY]",
+        "test_clarification_prompt_for_missing_task_id [LEGACY]",
+        "test_clarifying_to_collecting_on_message [LEGACY]",
+        "test_col_response_is_frozen [LEGACY]",
+        "test_col_response_to_dict_format [LEGACY]",
+        "test_collecting_to_clarifying_on_incomplete [LEGACY]",
+        "test_collecting_to_ready_on_complete [LEGACY]",
+        "test_complete_create_task_single_turn [LEGACY]",
+        "test_complete_task_required_fields [LEGACY]",
+        "test_complete_task_single_turn_allows_execution [LEGACY]",
+        "test_complete_when_all_fields_present_and_confident [LEGACY]",
+        "test_confirmation_in_wrong_state_returns_error [LEGACY]",
+        "test_contradiction_marks_field_ambiguous [LEGACY]",
+        "test_conversation_message_is_frozen [LEGACY]",
+        "test_conversation_session_is_frozen [LEGACY]",
+        "test_create_event_required_fields [LEGACY]",
+        "test_create_task_required_fields [LEGACY]",
+        "test_delete_event_cancellation_flow [LEGACY]",
+        "test_delete_event_confirmation_flow [LEGACY]",
+        "test_delete_event_requires_confirmation [LEGACY|REDUNDANT]",
+        "test_executing_to_idle_on_handoff_complete [LEGACY]",
+        "test_from_assistant_sets_role [LEGACY]",
+        "test_from_system_sets_role [LEGACY]",
+        "test_from_user_sets_role [LEGACY]",
+        "test_has_ambiguity [LEGACY]",
+        "test_human_field_name_mappings [LEGACY]",
+        "test_idle_to_collecting_on_first_message [LEGACY]",
+        "test_idle_to_collecting_on_message [LEGACY]",
+        "test_initialize_from_complete_task_message [LEGACY]",
+        "test_initialize_from_create_task_message [LEGACY]",
+        "test_invalid_transition_raises_error [LEGACY|REDUNDANT]",
+        "test_merge_preserves_existing_fields [LEGACY]",
+        "test_messages_have_unique_ids [LEGACY]",
+        "test_missing_field_triggers_clarification [LEGACY]",
+        "test_missing_fields_computed_correctly [LEGACY]",
+        "test_multi_turn_intent_refinement [LEGACY]",
+        "test_multi_turn_merge_adds_new_fields [LEGACY]",
+        "test_multi_turn_merge_increments_turn_count [LEGACY]",
+        "test_multiple_turns_never_lose_session_id [LEGACY]",
+        "test_never_fabricates_missing_fields [LEGACY]",
+        "test_new_session_is_idle [LEGACY]",
+        "test_next_action_enum_values [LEGACY]",
+        "test_no_ambiguity [LEGACY]",
+        "test_no_free_form_reasoning_in_assistant_message [LEGACY]",
+        "test_not_complete_when_ambiguous_fields [LEGACY]",
+        "test_not_complete_when_confidence_low [LEGACY]",
+        "test_not_complete_when_intent_type_none [LEGACY]",
+        "test_not_complete_when_missing_fields [LEGACY]",
+        "test_partial_intent_is_frozen [LEGACY]",
+        "test_ready_to_awaiting_on_confirm [LEGACY]",
+        "test_ready_to_blocked_on_block [LEGACY]",
+        "test_ready_to_executing_on_allow [LEGACY]",
+        "test_required_fields_by_intent_completeness [LEGACY]",
+        "test_required_fields_for_complete_task [LEGACY]",
+        "test_required_fields_for_create_task [LEGACY]",
+        "test_required_fields_for_none_intent [LEGACY]",
+        "test_required_fields_for_reschedule_task [LEGACY]",
+        "test_required_fields_map_covers_all_intent_types [LEGACY]",
+        "test_reschedule_task_required_fields [LEGACY]",
+        "test_reset_session_returns_to_idle [LEGACY]",
+        "test_response_always_has_assistant_message [LEGACY]",
+        "test_response_always_has_session_id [LEGACY]",
+        "test_response_has_structured_next_action_enum [LEGACY]",
+        "test_response_has_structured_state_enum [LEGACY]",
+        "test_session_messages_accumulate [LEGACY]",
+        "test_session_state_enum_values [LEGACY]",
+        "test_session_state_preserved_across_turns [LEGACY]",
+        "test_transition_from_fields_complete [LEGACY]",
+        "test_transition_from_fields_incomplete [LEGACY]",
+        "test_transition_from_policy_allow [LEGACY]",
+        "test_transition_from_policy_block [LEGACY]",
+        "test_transition_from_policy_confirm [LEGACY]",
+        "test_with_updates_creates_new_instance [LEGACY]",
+        "test_with_updates_creates_new_instance [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_cqrs_lifecycle_invariants.py",
+      "tests": [
+        "test_allowed_transitions_is_sole_rule_source [LEGACY]",
+        "test_api_uses_lifecycle_presentation_mapper [LEGACY]",
+        "test_cqrs_write_read_integration [LEGACY]",
+        "test_fsm_is_sole_mutation_authority [LEGACY]",
+        "test_fsm_transition_to_enforces_validation [LEGACY]",
+        "test_hydration_view_is_non_persisted [LEGACY]",
+        "test_loaders_do_not_mutate_lifecycle_fields [LEGACY]",
+        "test_no_normalize_state_mutations [LEGACY]",
+        "test_only_transition_to_mutates_state_in_fsm [LEGACY]",
+        "test_presentation_mapper_is_read_only [LEGACY]",
+        "test_reducer_event_mapping_not_decision_logic [LEGACY]",
+        "test_reducer_is_pure_function [LEGACY]",
+        "test_reducer_validates_using_fsm_rules [LEGACY]",
+        "test_validate_transition_is_authoritative [LEGACY]",
+        "test_write_and_read_models_are_separate [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_decision_engine.py",
+      "tests": [
+        "test_nearer_event_prioritized [LEGACY]",
+        "test_no_state_mutation [LEGACY]",
+        "test_process_returns_expected_shape [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_decision_engine_integration.py",
+      "tests": [
+        "test_decision_engine_prioritization [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_fsm_immutability_enforcement.py",
+      "tests": [
+        "test_graph_store_parse_is_read_through_only [NONE]",
+        "test_legacy_manager_parse_is_read_through_only [NONE]",
+        "test_no_in_place_lifecycle_rewrites_in_persistence_modules [NONE]",
+        "test_normalize_state_is_single_authority [NONE]",
+        "test_persistence_guard_rejects_state_rewrite_without_matching_transition [NONE]",
+        "test_reducer_uses_fsm_transition_rules [NONE]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_google_oauth_env_config.py",
+      "tests": [
+        "test_client_id_injected_from_environment_only [LEGACY]",
+        "test_missing_env_vars_report_soft_configuration_status [LEGACY]",
+        "test_redirect_uri_used_exactly_as_configured [LEGACY]",
+        "test_token_refresh_flow [FLAKY_RISK|LEGACY]",
+        "test_valid_env_vars_generate_oauth_url [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_household_os_runtime.py",
+      "tests": [
+        "test_action_lifecycle_flow [LEGACY]",
+        "test_daily_cycle [LEGACY]",
+        "test_direct_state_mutation_is_blocked [LEGACY]",
+        "test_orchestrator_tick [LEGACY]",
+        "test_trigger_detection [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_household_state.py",
+      "tests": [
+        "test_debug_and_brief_share_same_event_data [LEGACY]",
+        "test_debug_brief_7d_key_matches_brief_projection [LEGACY]",
+        "test_disabled_oauth_health_surfaces_action [LEGACY]",
+        "test_disabled_oauth_returns_valid_household_state [LEGACY]",
+        "test_disabled_oauth_state_serialises_cleanly [LEGACY]",
+        "test_event_beyond_30d_appears_only_in_90d [LEGACY]",
+        "test_event_beyond_7d_appears_only_in_30d_and_90d [LEGACY]",
+        "test_event_in_range_appears_in_all_windows [LEGACY]",
+        "test_household_state_brief_projection_contains_integration_health [LEGACY]",
+        "test_household_state_canonical_fields_are_source_of_truth [LEGACY]",
+        "test_stale_event_excluded_from_all_windows [FLAKY_RISK|LEGACY]",
+        "test_state_builder_applies_windowing [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_identity_layer.py",
+      "tests": [
+        "test_session_rehydration_from_token [LEGACY]",
+        "test_token_refresh_preserves_identity [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_integration_architecture_guard.py",
+      "tests": [
+        "test_allowed_import_passes_runtime_guard [LEGACY]",
+        "test_forbidden_imports_fail_at_runtime_guard [LEGACY]",
+        "test_forbidden_prefix_check_is_deterministic [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_intent_contract.py",
+      "tests": [
+        "test_action_plan_has_generated_timestamp [LEGACY]",
+        "test_action_sequence_numbers_are_correct [LEGACY]",
+        "test_classifier_confidence_score_is_bounded [LEGACY]",
+        "test_classifier_extracts_event_id [LEGACY]",
+        "test_classifier_extracts_plan_id [LEGACY]",
+        "test_classifier_extracts_task_id [LEGACY]",
+        "test_classifier_extracts_task_name [LEGACY]",
+        "test_classifier_low_confidence_unknown_input [LEGACY]",
+        "test_classifier_recognizes_complete_task [LEGACY]",
+        "test_classifier_recognizes_create_event [LEGACY]",
+        "test_classifier_recognizes_create_plan [LEGACY]",
+        "test_classifier_recognizes_create_task [LEGACY]",
+        "test_classifier_recognizes_delete_event [LEGACY]",
+        "test_classifier_same_input_same_output [LEGACY]",
+        "test_complete_task_intent_is_frozen [LEGACY]",
+        "test_create_event_intent_is_frozen [LEGACY]",
+        "test_create_task_intent_is_frozen [LEGACY]",
+        "test_different_intent_types_different_keys [LEGACY]",
+        "test_different_intents_different_idempotency_keys [LEGACY]",
+        "test_full_pipeline_complete_task [LEGACY]",
+        "test_full_pipeline_create_task [LEGACY]",
+        "test_full_pipeline_deterministic [LEGACY]",
+        "test_full_pipeline_fails_on_unknown_task [LEGACY]",
+        "test_idempotency_key_is_deterministic [LEGACY]",
+        "test_pipeline_create_event [LEGACY]",
+        "test_pipeline_with_optional_fields [LEGACY]",
+        "test_planner_creates_action_for_complete_task [LEGACY]",
+        "test_planner_creates_action_for_create_event [LEGACY]",
+        "test_planner_creates_action_for_create_plan [LEGACY]",
+        "test_planner_creates_action_for_create_task [LEGACY]",
+        "test_planner_creates_action_for_delete_event [LEGACY]",
+        "test_planner_creates_action_for_recompute_plan [LEGACY]",
+        "test_planner_creates_action_for_reschedule_task [LEGACY]",
+        "test_planner_creates_action_for_update_plan [LEGACY]",
+        "test_planner_returns_none_for_unknown_intent [LEGACY]",
+        "test_same_intent_same_idempotency_key [LEGACY]",
+        "test_validator_accepts_existing_event [LEGACY]",
+        "test_validator_accepts_existing_plan [LEGACY]",
+        "test_validator_accepts_existing_task [LEGACY]",
+        "test_validator_accepts_valid_create_event_with_optional_fields [LEGACY]",
+        "test_validator_accepts_valid_create_task [LEGACY]",
+        "test_validator_checks_plan_id_optional_reference [LEGACY]",
+        "test_validator_rejects_end_time_before_start_time [LEGACY]",
+        "test_validator_rejects_invalid_datetime [LEGACY]",
+        "test_validator_rejects_low_confidence [LEGACY]",
+        "test_validator_rejects_missing_task_id_for_complete [LEGACY]",
+        "test_validator_rejects_missing_task_name [LEGACY]",
+        "test_validator_rejects_nonexistent_event [LEGACY]",
+        "test_validator_rejects_nonexistent_task [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_intent_resolver.py",
+      "tests": [
+        "test_coerce_intent_type_accepts_enum_name [LEGACY]",
+        "test_coerce_intent_type_accepts_enum_value [LEGACY]",
+        "test_coerce_intent_type_unknown_value_returns_none [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_lifecycle_contract_boundary.py",
+      "tests": [
+        "test_api_layer_uses_mapper_for_lifecycle_output [NONE]",
+        "test_fsm_rejects_presentation_label [NONE]",
+        "test_presentation_mapper_contract [NONE]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_policy_guardrails.py",
+      "tests": [
+        "test_all_allow_rules [LEGACY]",
+        "test_all_decisions_are_defined [LEGACY]",
+        "test_all_intent_types_have_rules [LEGACY]",
+        "test_all_require_confirmation_rules [LEGACY]",
+        "test_allow_decision_properties [LEGACY]",
+        "test_block_decision_properties [LEGACY]",
+        "test_complete_task_is_allowed [LEGACY]",
+        "test_config_allows_customization [LEGACY]",
+        "test_config_is_immutable [LEGACY]",
+        "test_create_task_is_allowed [LEGACY]",
+        "test_create_task_rule_exists [LEGACY]",
+        "test_decision_string_representation [LEGACY]",
+        "test_default_config_is_safe [LEGACY]",
+        "test_delete_event_requires_confirmation [LEGACY|REDUNDANT]",
+        "test_delete_event_rule_confirms [LEGACY]",
+        "test_evaluate_action_plan_directly [LEGACY]",
+        "test_evaluate_multi_action_plan [LEGACY]",
+        "test_evaluation_is_deterministic [LEGACY]",
+        "test_evaluator_accepts_custom_config [LEGACY]",
+        "test_evaluator_initializes_with_defaults [LEGACY]",
+        "test_evaluator_respects_config [LEGACY]",
+        "test_evaluator_with_blocking_config [LEGACY]",
+        "test_extract_entity_ids_from_action_plan [LEGACY]",
+        "test_multiple_evaluators_independent [LEGACY]",
+        "test_policy_input_is_frozen [LEGACY]",
+        "test_policy_input_with_multiple_entity_ids [LEGACY]",
+        "test_policy_input_with_no_entity_ids [LEGACY]",
+        "test_policy_input_with_plan_id [LEGACY]",
+        "test_policy_result_is_frozen [LEGACY]",
+        "test_policy_rule_is_frozen [LEGACY]",
+        "test_reason_codes_are_informative [LEGACY]",
+        "test_recompute_plan_rule_confirms [LEGACY]",
+        "test_require_confirmation_decision_properties [LEGACY]",
+        "test_result_has_rule_name [LEGACY]",
+        "test_result_message_is_non_empty [LEGACY]",
+        "test_rule_has_message [LEGACY]",
+        "test_rule_has_reason_code [LEGACY]",
+        "test_rule_priorities_are_set [LEGACY]",
+        "test_rule_summary_groups_by_decision [LEGACY]",
+        "test_safe_by_default_philosophy [LEGACY]",
+        "test_scope_estimation [LEGACY]",
+        "test_unknown_intent_uses_default_decision [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_recommendation_builder.py",
+      "tests": [
+        "test_no_vague_language [LEGACY]",
+        "test_recommendation_contains_time [LEGACY]",
+        "test_recommendation_is_actionable [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_single_pipeline_enforcement.py",
+      "tests": [
+        "test_brief_endpoint_calls_orchestrator_only [LEGACY]",
+        "test_canonical_decision_engine_importable [LEGACY]",
+        "test_canonical_decision_engine_process_produces_context [LEGACY]",
+        "test_endpoint_uses_only_orchestrator [LEGACY]",
+        "test_no_apps_source_imports_orchestrator_lite [LEGACY]",
+        "test_no_new_orchestrator_or_duplicate_decision_engine_classes [LEGACY]",
+        "test_no_pipeline_symbols_outside_integration_core [LEGACY]",
+        "test_no_source_imports_deleted_symbol [LEGACY]",
+        "test_only_integration_core_decision_engine_exists [LEGACY]",
+        "test_only_integration_core_orchestrator_exists [LEGACY]",
+        "test_only_state_builder_calls_fetch_events [LEGACY]",
+        "test_only_state_builder_imports_providers_module [LEGACY]",
+        "test_services_decision_engine_is_deleted [LEGACY]",
+        "test_synthesis_engine_module_is_deleted [LEGACY]",
+        "test_worker_module_is_deleted [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_state_machine.py",
+      "tests": [
+        "test_all_retryable_errors_defined [LEGACY]",
+        "test_approved_has_3600s_timeout [FLAKY_RISK|LEGACY]",
+        "test_approved_to_committed_allowed [LEGACY]",
+        "test_approved_to_failed_allowed [LEGACY]",
+        "test_approved_to_pending_approval_denied [LEGACY]",
+        "test_assistant_cannot_approve [LEGACY|REDUNDANT]",
+        "test_authorization_denied_is_not_retryable [LEGACY]",
+        "test_can_retry_on_failed_state [FLAKY_RISK|LEGACY]",
+        "test_cannot_retry_after_max_retries [FLAKY_RISK|LEGACY]",
+        "test_committed_has_no_timeout [FLAKY_RISK|LEGACY]",
+        "test_committed_is_terminal [LEGACY]",
+        "test_committed_is_terminal [LEGACY]",
+        "test_database_connection_error_is_retryable [LEGACY]",
+        "test_event_has_timestamp [LEGACY]",
+        "test_event_to_dict [LEGACY]",
+        "test_failed_is_terminal_after_max_retries [LEGACY]",
+        "test_failed_not_terminal_if_can_retry [LEGACY]",
+        "test_failed_to_proposed_allowed [FLAKY_RISK|LEGACY]",
+        "test_get_timeout_seconds [FLAKY_RISK|LEGACY]",
+        "test_has_timed_out_false_before_timeout [FLAKY_RISK|LEGACY]",
+        "test_has_timed_out_true_after_timeout [FLAKY_RISK|LEGACY]",
+        "test_initial_state_is_proposed [LEGACY]",
+        "test_invalid_transition_raises [LEGACY]",
+        "test_invalid_transition_raises [LEGACY]",
+        "test_max_retries_constant [LEGACY]",
+        "test_multiple_retries [LEGACY]",
+        "test_multiple_transitions [LEGACY]",
+        "test_network_timeout_is_retryable [FLAKY_RISK|LEGACY]",
+        "test_noop_transition_raises [LEGACY]",
+        "test_pending_approval_has_1800s_timeout [FLAKY_RISK|LEGACY]",
+        "test_pending_approval_to_approved_allowed [LEGACY]",
+        "test_pending_approval_to_proposed_denied [LEGACY]",
+        "test_pending_approval_to_rejected_allowed [LEGACY]",
+        "test_proposed_has_600s_timeout [FLAKY_RISK|LEGACY]",
+        "test_proposed_to_approved_allowed [LEGACY]",
+        "test_proposed_to_failed_allowed [LEGACY]",
+        "test_proposed_to_pending_approval_allowed [LEGACY]",
+        "test_proposed_to_rejected_allowed [LEGACY]",
+        "test_rejected_is_terminal [LEGACY]",
+        "test_rejected_is_terminal [LEGACY]",
+        "test_retry_delay_exponential_backoff [FLAKY_RISK|LEGACY]",
+        "test_retry_transition_increments_count [FLAKY_RISK|LEGACY]",
+        "test_skipping_approval_not_allowed [LEGACY]",
+        "test_transition_changes_state [LEGACY]",
+        "test_transition_event_has_metadata [LEGACY]",
+        "test_transition_reason_stored [LEGACY]",
+        "test_unknown_error_defaults_to_non_retryable [LEGACY]",
+        "test_valid_transition_passes [LEGACY]",
+        "test_validation_error_is_not_retryable [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    },
+    {
+      "file": "tests/test_time_normalization.py",
+      "tests": [
+        "test_after_lunch_alias [LEGACY]",
+        "test_after_lunch_case_insensitive [LEGACY]",
+        "test_after_lunch_mixed_case [LEGACY]",
+        "test_after_lunch_with_spaces [LEGACY]",
+        "test_afternoon_default [LEGACY]",
+        "test_alias_deterministic [LEGACY]",
+        "test_case_variants_deterministic [LEGACY]",
+        "test_different_date_afternoon [LEGACY]",
+        "test_different_date_morning [LEGACY]",
+        "test_empty_string_input [LEGACY]",
+        "test_evening_default [LEGACY]",
+        "test_hhmm_deterministic [LEGACY]",
+        "test_hhmm_different_dates [LEGACY]",
+        "test_hhmm_format_end_of_day [LEGACY]",
+        "test_hhmm_format_midnight [LEGACY]",
+        "test_hhmm_format_standard [LEGACY]",
+        "test_hhmm_format_with_spaces [LEGACY]",
+        "test_hhmm_invalid_hour [LEGACY]",
+        "test_hhmm_invalid_minute [LEGACY]",
+        "test_hhmm_negative_values [LEGACY]",
+        "test_hhmm_with_non_numeric_characters [LEGACY]",
+        "test_list_aliases_contains_after_lunch [LEGACY]",
+        "test_list_aliases_contains_afternoon [LEGACY]",
+        "test_list_aliases_contains_evening [LEGACY]",
+        "test_list_aliases_contains_morning [LEGACY]",
+        "test_list_aliases_contains_tonight [LEGACY]",
+        "test_list_aliases_count [LEGACY]",
+        "test_list_aliases_deterministic [LEGACY]",
+        "test_malformed_hhmm_multiple_colons [LEGACY]",
+        "test_malformed_hhmm_no_colon [LEGACY]",
+        "test_morning_case_insensitive [LEGACY]",
+        "test_morning_default [LEGACY]",
+        "test_morning_deterministic [LEGACY]",
+        "test_morning_mixed_case [LEGACY]",
+        "test_morning_with_spaces [LEGACY]",
+        "test_none_input [LEGACY]",
+        "test_normalize_multiple_items_deterministic [LEGACY]",
+        "test_normalize_scheduled_action_with_alias [LEGACY]",
+        "test_normalize_scheduled_action_with_block [LEGACY]",
+        "test_normalize_scheduled_action_with_hhmm [LEGACY]",
+        "test_partial_alias [LEGACY]",
+        "test_reverse_lookup_after_lunch [LEGACY]",
+        "test_reverse_lookup_afternoon [LEGACY]",
+        "test_reverse_lookup_empty_string [LEGACY]",
+        "test_reverse_lookup_evening [LEGACY]",
+        "test_reverse_lookup_invalid_datetime [LEGACY]",
+        "test_reverse_lookup_morning [LEGACY]",
+        "test_reverse_lookup_non_standard [LEGACY]",
+        "test_reverse_lookup_none_input [LEGACY]",
+        "test_reverse_lookup_tonight [LEGACY]",
+        "test_tonight_alias [LEGACY]",
+        "test_tonight_with_spaces [LEGACY]",
+        "test_unicode_whitespace [LEGACY]",
+        "test_unknown_text_alias [LEGACY]",
+        "test_whitespace_only_input [LEGACY]"
+      ],
+      "reason": "pure logic/validation/contract behavior"
+    }
+  ],
+  "integration": [
+    {
+      "file": "tests/architecture/test_dependency_graph.py",
+      "tests": [
+        "test_dependency_graph_is_valid [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/architecture/test_fetch_boundary.py",
+      "tests": [
+        "test_only_state_builder_handles_fetch [NONE]",
+        "test_orchestrator_does_not_fetch [NONE]",
+        "test_orchestrator_is_pure_coordinator [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/architecture/test_single_fetch_source.py",
+      "tests": [
+        "test_only_state_builder_has_fetch_events [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/p1_verification/test_auth_lifecycle.py",
+      "tests": [
+        "test_access_token_shorter_expiry [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_cross_household_token_misuse_rejected [DB_HEAVY|LEGACY]",
+        "test_expired_token_rejected [DB_HEAVY|LEGACY|REDUNDANT]",
+        "test_invalid_refresh_token_rejected [DB_HEAVY|LEGACY]",
+        "test_refresh_token_extends_expiry [DB_HEAVY|LEGACY]",
+        "test_revoke_all_user_tokens [DB_HEAVY|LEGACY]",
+        "test_revoke_device_tokens [DB_HEAVY|LEGACY]",
+        "test_revoke_single_token [DB_HEAVY|LEGACY]",
+        "test_tampered_token_rejected [DB_HEAVY|LEGACY]",
+        "test_token_claims_match_issuance [DB_HEAVY|LEGACY]",
+        "test_token_pair_structure [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_valid_token_accepted [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/p1_verification/test_llm_gateway_failures.py",
+      "tests": [
+        "test_confidence_score_bounds [LEGACY]",
+        "test_fallback_response_safe_for_pipeline [FLAKY_RISK|LEGACY]",
+        "test_fallback_returns_valid_response [FLAKY_RISK|LEGACY]",
+        "test_invalid_intent_type_rejected [LEGACY]",
+        "test_normal_prompt_accepted [LEGACY]",
+        "test_normal_prompt_returns_llm_route_under_non_limited_conditions [LEGACY]",
+        "test_oversized_prompt_rejected [LEGACY]",
+        "test_rate_limit_enforced [LEGACY]",
+        "test_rate_limit_per_household [LEGACY]",
+        "test_timeout_doesnt_crash_pipeline [FLAKY_RISK|LEGACY]",
+        "test_timeout_doesnt_trigger_rate_limit [FLAKY_RISK|LEGACY]",
+        "test_timeout_returns_fallback_response [FLAKY_RISK|LEGACY]",
+        "test_valid_intent_names_accepted [LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_action_event_contracts.py",
+      "tests": [
+        "test_action_event_contract_invariants [SSE_HEAVY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_actor_context_propagation.py",
+      "tests": [
+        "test_actor_type_is_mapped_from_api_user_to_user [NONE]",
+        "test_event_metadata_contains_actor_context_payload [NONE]",
+        "test_invalid_actor_type_still_rejected [NONE]",
+        "test_reducer_normalizes_legacy_unknown_actor_type [NONE]",
+        "test_system_worker_context_propagates_auth_scope_system [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_adapter_governance.py",
+      "tests": [
+        "test_governance_behavior_lists_are_frozen_and_explicit [LEGACY]",
+        "test_validate_adapter_output_contract_accepts_minimal_valid_brief [LEGACY]",
+        "test_validate_adapter_output_contract_rejects_forbidden_behavior_keys_softly [LEGACY]",
+        "test_validate_adapter_output_contract_reports_structural_drift_softly [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_assistant_core.py",
+      "tests": [
+        "test_approval_gate_is_inert [LEGACY]",
+        "test_deterministic_output [LEGACY]",
+        "test_intent_parsing_variants [LEGACY]",
+        "test_meal_repetition_prevention [LEGACY]",
+        "test_module_isolation_from_read_only_layers [LEGACY]",
+        "test_scheduling_conflict_detection [LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_auth_realtime_guards.py",
+      "tests": [
+        "test_non_realtime_routes_ignore_query_session_token [LEGACY]",
+        "test_realtime_query_token_extraction_is_supported [LEGACY]",
+        "test_realtime_stream_rejects_missing_auth [LEGACY]",
+        "test_session_validate_not_rejected_as_duplicate [LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_auth_router.py",
+      "tests": [
+        "test_oauth_stub_creates_missing_household_before_registering_user [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_oauth_stub_recovers_from_duplicate_email_integrity_error [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_oauth_stub_uses_request_scoped_services [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_refresh_token_uses_request_scoped_token_service [DB_HEAVY|FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_backpressure_middleware.py",
+      "tests": [
+        "test_api_prefixed_paths_are_normalized_for_classification [LEGACY]",
+        "test_identity_paths_are_classified_short [LEGACY]",
+        "test_non_identity_paths_keep_existing_classification [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_boundary_enforcement.py",
+      "tests": [
+        "test_api_rejects_invalid_state [NONE]",
+        "test_boundary_parses_valid_state [NONE]",
+        "test_boundary_rejects_invalid_type [NONE]",
+        "test_non_api_boundaries_accept_valid [NONE]",
+        "test_non_api_boundaries_reject_legacy [NONE]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_brief_evaluation.py",
+      "tests": [
+        "test_brief_evaluation_pipeline_runs_end_to_end [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_calendar_events_runtime.py",
+      "tests": [
+        "test_persist_calendar_event_failure_emits_failure_event [DB_HEAVY|LEGACY]",
+        "test_persist_calendar_event_success_emits_system_event [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_email_action_summary.py",
+      "tests": [
+        "test_email_action_summary_applies_llm_refinement_when_available [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_classifies_promotional_mail_as_junk [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_does_not_apply_sensitive_sender_bonus_to_junk_domains [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_does_not_force_informational_when_actions_exist [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_extracts_prioritized_actions_and_calendar_candidates [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_ignores_quoted_lines_for_action_extraction [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_is_deterministic_for_identical_input [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_marks_non_action_updates_as_informational [CONCURRENCY_HEAVY|LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_email_priority_llm.py",
+      "tests": [
+        "test_email_priority_llm_applies_valid_high_confidence_refinement [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_disabled_skips_remote_call [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_enabled_requires_credentials [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_middle_band_requires_ambiguity [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_respects_per_minute_budget [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_skips_low_score_cases [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_uses_thread_cache_key [CONCURRENCY_HEAVY|LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_email_service_actions.py",
+      "tests": [
+        "test_handle_email_received_ignores_junk_emails [LEGACY]",
+        "test_handle_email_received_informational_without_attention_skips_task [LEGACY]",
+        "test_handle_email_received_uses_action_item_title_and_importance_priority [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_env_bootstrap.py",
+      "tests": [
+        "test_get_missing_google_oauth_env_vars_reports_missing_keys [LEGACY]",
+        "test_load_environment_populates_google_oauth_env_from_dotenv [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_evaluation_endpoints.py",
+      "tests": [
+        "test_evaluation_results_artifact_endpoint_serves_json [LEGACY]",
+        "test_evaluation_run_endpoint_returns_expected_contract [LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_event_adapter.py",
+      "tests": [
+        "test_batch_adapter_is_deterministic [LEGACY]",
+        "test_batch_preserves_order [LEGACY]",
+        "test_deep_copy_input_produces_identical_output [LEGACY]",
+        "test_different_providers_produce_distinct_sources [LEGACY]",
+        "test_each_provider_event_independent [LEGACY]",
+        "test_event_id_preserved_in_data [LEGACY]",
+        "test_event_type_mapped_to_type_field [LEGACY]",
+        "test_payload_content_preserved [LEGACY]",
+        "test_payload_with_unsorted_keys_normalised [LEGACY]",
+        "test_same_event_produces_identical_output [LEGACY]",
+        "test_same_provider_multiple_events_all_deterministic [LEGACY]",
+        "test_source_metadata_contains_provider_name [LEGACY]",
+        "test_timestamp_preserved_at_top_level [LEGACY]",
+        "test_user_id_preserved_in_data [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_event_mutation_stress.py",
+      "tests": [
+        "test_stability_metrics_are_computed_correctly [NONE]",
+        "test_stress_runner_emits_all_chaos_scenarios [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_event_replay_integrity.py",
+      "tests": [
+        "test_replay_rejects_legacy_event [FLAKY_RISK]",
+        "test_replay_returns_enum [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_event_windowing.py",
+      "tests": [
+        "test_filter_drops_events_beyond_ninety_days_future [LEGACY]",
+        "test_filter_drops_events_older_than_twenty_four_hours_past [LEGACY]",
+        "test_filter_preserves_ongoing_events [LEGACY]",
+        "test_long_term_window_returns_at_most_ninety_days [LEGACY]",
+        "test_mid_term_window_returns_at_most_thirty_days [LEGACY]",
+        "test_retention_pruning_removes_stale_events [LEGACY]",
+        "test_short_term_window_returns_at_most_seven_days [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_external_event_normalization.py",
+      "tests": [
+        "test_deterministic_event_id_generation [LEGACY]",
+        "test_event_id_stability_for_recurring_series [LEGACY]",
+        "test_mixed_single_and_recurring_event_sets [LEGACY]",
+        "test_no_duplicate_events_from_recurring_series [LEGACY]",
+        "test_normalization_consistency_across_providers [LEGACY]",
+        "test_recurring_event_collapse_deduplication [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_feature_flags.py",
+      "tests": [
+        "test_each_result_has_disabled_status [LEGACY]",
+        "test_empty_batch_disabled_is_safe [LEGACY]",
+        "test_event_ids_present_in_disabled_results [LEGACY]",
+        "test_falsy_env_keeps_flag_disabled [LEGACY]",
+        "test_flag_default_registered_as_false [LEGACY]",
+        "test_flag_default_unknown_returns_false [LEGACY]",
+        "test_flag_evaluated_at_call_time [LEGACY]",
+        "test_ingested_count_is_zero_when_disabled [LEGACY]",
+        "test_ingested_count_matches_events_when_enabled [LEGACY]",
+        "test_ingestion_flag_defaults_to_false [LEGACY]",
+        "test_missing_env_var_is_safe [LEGACY]",
+        "test_no_disabled_status_in_results_when_enabled [LEGACY]",
+        "test_os1_called_for_each_event_when_enabled [LEGACY]",
+        "test_os1_not_called_when_disabled [LEGACY]",
+        "test_top_level_status_is_disabled [LEGACY]",
+        "test_top_level_status_key_absent_when_enabled [LEGACY]",
+        "test_total_events_still_reported_when_disabled [LEGACY]",
+        "test_truthy_env_enables_flag [LEGACY]",
+        "test_unknown_flag_defaults_to_false [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_fsm_non_authority.py",
+      "tests": [
+        "test_fsm_does_not_override_state [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_full_suite_integrity.py",
+      "tests": [
+        "test_full_suite_passes [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_google_calendar_full_external_validation.py",
+      "tests": [
+        "test_google_calendar_full_external_validation [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_google_calendar_oauth.py",
+      "tests": [
+        "test_callback_accepts_signed_state_when_pending_store_is_cleared [LEGACY]",
+        "test_callback_preserves_existing_refresh_token_when_omitted [LEGACY]",
+        "test_callback_redirect_preserves_origin_and_household_id [LEGACY]",
+        "test_callback_response_html_is_stable [LEGACY]",
+        "test_callback_returns_200 [LEGACY]",
+        "test_callback_returns_success_html [LEGACY]",
+        "test_callback_state_consumed_after_use [LEGACY]",
+        "test_callback_stores_credentials [LEGACY]",
+        "test_callback_stores_refresh_token [LEGACY]",
+        "test_callback_stores_user_id_correctly [LEGACY]",
+        "test_clear_removes_all_tokens [LEGACY]",
+        "test_connect_different_users_produce_different_state_tokens [LEGACY]",
+        "test_connect_redirects_to_google [LEGACY]",
+        "test_connect_returns_302 [LEGACY]",
+        "test_connect_unconfigured_returns_structured_400 [LEGACY]",
+        "test_connect_url_contains_user_bound_state [LEGACY]",
+        "test_connect_url_has_readonly_scope [LEGACY]",
+        "test_fabricated_state_rejected [LEGACY]",
+        "test_generate_state_returns_string [LEGACY]",
+        "test_generated_state_stored [LEGACY]",
+        "test_http_error_includes_google_error_details [LEGACY]",
+        "test_integrations_router_no_os2_imports [LEGACY]",
+        "test_is_configured_false_when_empty [LEGACY]",
+        "test_is_configured_true_when_all_set [LEGACY]",
+        "test_mismatch_error_message [LEGACY]",
+        "test_multiple_users_independent_tokens [LEGACY]",
+        "test_no_credentials_stored_on_mismatch [LEGACY]",
+        "test_no_write_scopes_in_url [LEGACY]",
+        "test_oauth_config_module_no_forbidden_imports [LEGACY]",
+        "test_posts_correct_payload [LEGACY]",
+        "test_posts_to_google_token_url [LEGACY]",
+        "test_processed_state_outcome_persists_across_store_restart [LEGACY]",
+        "test_raises_on_http_error [LEGACY]",
+        "test_refresh_posts_correct_payload [LEGACY]",
+        "test_refresh_returns_access_token [LEGACY]",
+        "test_returns_access_token [LEGACY]",
+        "test_returns_refresh_token [LEGACY]",
+        "test_same_state_produces_identical_url [LEGACY]",
+        "test_state_mismatch_returns_false [LEGACY]",
+        "test_state_persists_across_store_restart_when_path_configured [LEGACY]",
+        "test_status_returns_connected_with_metadata [FLAKY_RISK|LEGACY]",
+        "test_status_returns_not_connected_when_missing_credentials [LEGACY]",
+        "test_sync_ingests_gmail_messages_with_household_override [FLAKY_RISK|LEGACY]",
+        "test_sync_requires_connected_google_credentials [LEGACY]",
+        "test_sync_returns_reconnect_hint_when_gmail_scope_missing [FLAKY_RISK|LEGACY]",
+        "test_two_complete_flows_store_same_credentials [LEGACY]",
+        "test_unknown_state_returns_false [LEGACY]",
+        "test_url_contains_client_id [LEGACY]",
+        "test_url_contains_readonly_scope [LEGACY]",
+        "test_url_encodes_state [LEGACY]",
+        "test_url_has_response_type_code [LEGACY]",
+        "test_url_includes_redirect_uri [LEGACY]",
+        "test_url_requests_include_granted_scopes [LEGACY]",
+        "test_url_requests_offline_access [LEGACY]",
+        "test_url_starts_with_google_auth_url [LEGACY]",
+        "test_validate_and_consume_removes_token [LEGACY]",
+        "test_validate_and_consume_returns_true_for_correct_pair [LEGACY]",
+        "test_validate_and_consume_single_use [LEGACY]",
+        "test_wrong_user_id_rejected [LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_governance_gates.py",
+      "tests": [
+        "test_docs_markdown_is_pruned_to_canonical_set [NONE]",
+        "test_gitignore_has_secret_and_artifact_guardrails [NONE]",
+        "test_governance_workflow_targets_existing_gate_tests [NONE]",
+        "test_root_markdown_is_pruned_to_canonical_set [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_hard_freeze_regression.py",
+      "tests": [
+        "test_no_generated_runtime_artifacts_in_repo_root [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_household_os.py",
+      "tests": [
+        "test_household_os_approval_recording [LEGACY]",
+        "test_household_os_cross_domain_reasoning [LEGACY]",
+        "test_household_os_deterministic_output [LEGACY]",
+        "test_household_os_maps_relative_daypart_to_requested_slot [LEGACY]",
+        "test_household_os_meal_schedule_uses_reference_date [LEGACY]",
+        "test_household_os_no_module_leakage [LEGACY]",
+        "test_household_os_preserves_explicit_requested_appointment_time [LEGACY]",
+        "test_household_os_preserves_explicit_requested_time_without_year [LEGACY]",
+        "test_household_os_rejects_empty_allowed_domains [LEGACY]",
+        "test_household_os_single_action_output [LEGACY]",
+        "test_household_os_state_graph_consistency [LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_identity_events_runtime.py",
+      "tests": [
+        "test_create_session_token_retries_on_sqlite_lock [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_create_user_failure_emits_user_creation_failed [DB_HEAVY|LEGACY]",
+        "test_create_user_success_emits_user_created [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_identity_layer.py",
+      "tests": [
+        "test_bootstrap_resolves_to_any_user_in_household [LEGACY]",
+        "test_device_registration_consistency [LEGACY]",
+        "test_devices_isolated_between_users [LEGACY]",
+        "test_encode_decode_determinism [LEGACY]",
+        "test_expired_token_rejected [FLAKY_RISK|LEGACY|REDUNDANT]",
+        "test_household_creation_persistence [LEGACY]",
+        "test_last_seen_tracking [FLAKY_RISK|LEGACY]",
+        "test_multi_user_household_membership [LEGACY]",
+        "test_role_based_permissions [LEGACY]",
+        "test_session_token_encodes_claims [LEGACY]",
+        "test_user_creation_persistence [LEGACY]",
+        "test_users_isolated_between_households [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_ingestion_events_runtime.py",
+      "tests": [
+        "test_invalid_email_emits_email_parse_failed [LEGACY]",
+        "test_junk_email_is_ignored_before_routing [FLAKY_RISK|LEGACY]",
+        "test_resolve_household_id_for_email_falls_back_to_source_mapping [LEGACY]",
+        "test_resolve_household_id_for_email_prefers_explicit_household_id [LEGACY]",
+        "test_resolve_household_id_for_email_uses_recipient_identity_lookup [LEGACY]",
+        "test_valid_email_emits_email_parsed [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_ingestion_router.py",
+      "tests": [
+        "test_ingest_email_route_delegates_to_service [LEGACY]",
+        "test_ingest_email_route_maps_ingestion_error [LEGACY]",
+        "test_ingest_provider_email_batch_route_returns_row_statuses [LEGACY]",
+        "test_ingest_provider_email_route_parses_and_delegates [LEGACY]",
+        "test_ingest_webhook_route_delegates_to_service [LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_insight_bridge.py",
+      "tests": [
+        "test_artifact_parsing_integrity [NONE]",
+        "test_deterministic_output_structure [NONE]",
+        "test_isolation_guarantee [REDUNDANT]",
+        "test_pattern_detection [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_integration_core.py",
+      "tests": [
+        "test_credential_store_uses_encryption_ready_cipher_interface [LEGACY]",
+        "test_default_provider_registry_has_gmail_and_google_calendar [LEGACY]",
+        "test_mock_token_not_allowed_when_not_in_test_mode [LEGACY]",
+        "test_mock_token_supported_in_test_mode [LEGACY]",
+        "test_placeholder_provider_status_is_deterministic_and_no_network [LEGACY]",
+        "test_provider_registry_supports_dependency_injection [LEGACY]",
+        "test_user_identity_model_is_strongly_typed [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_integration_identity_system.py",
+      "tests": [
+        "test_household_membership_assignment [LEGACY]",
+        "test_lookup_by_user_id_and_household_id [LEGACY]",
+        "test_user_creation [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_intelligence_analytics_dls.py",
+      "tests": [
+        "test_classify_system_mode_thresholds [NONE]",
+        "test_compute_dls_applies_false_positive_penalty [NONE]",
+        "test_compute_dls_matches_spec [NONE]",
+        "test_dashboard_metrics_include_required_tradeoff_fields [FLAKY_RISK]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_intelligence_routing_resilience.py",
+      "tests": [
+        "test_decide_keeps_rules_sufficient_when_ai_not_needed_even_if_tier_lookup_fails [DB_HEAVY]",
+        "test_decide_returns_rule_only_when_limit_check_fails [DB_HEAVY|FLAKY_RISK]",
+        "test_decide_returns_rule_only_when_tier_resolution_fails_for_ai_path [DB_HEAVY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_intent_lock.py",
+      "tests": [
+        "test_case_insensitive_classification [CONCURRENCY_HEAVY]",
+        "test_confidence_bounds [CONCURRENCY_HEAVY]",
+        "test_daily_focus_cannot_produce_domain_specific_action [CONCURRENCY_HEAVY]",
+        "test_daily_focus_detection_explicit [CONCURRENCY_HEAVY]",
+        "test_daily_focus_detection_organizing [CONCURRENCY_HEAVY]",
+        "test_daily_focus_detection_priorities [CONCURRENCY_HEAVY]",
+        "test_daily_focus_intent_allows_general_domain [CONCURRENCY_HEAVY]",
+        "test_explicit_intent_high_confidence [CONCURRENCY_HEAVY]",
+        "test_fallback_has_valid_reasoning [CONCURRENCY_HEAVY]",
+        "test_fallback_is_general_domain [CONCURRENCY_HEAVY]",
+        "test_fallback_recommendation_is_safe [CONCURRENCY_HEAVY]",
+        "test_fallback_recommendation_structure [CONCURRENCY_HEAVY]",
+        "test_filter_calendar_candidates_from_medical_intent [CONCURRENCY_HEAVY]",
+        "test_filter_fitness_candidates_from_fitness_intent [CONCURRENCY_HEAVY]",
+        "test_filter_meal_candidates_from_meal_intent [CONCURRENCY_HEAVY]",
+        "test_fitness_detection_exercise [CONCURRENCY_HEAVY]",
+        "test_fitness_detection_explicit [CONCURRENCY_HEAVY]",
+        "test_fitness_detection_workout [CONCURRENCY_HEAVY]",
+        "test_fitness_intent_allows_fitness_domain [CONCURRENCY_HEAVY]",
+        "test_fitness_intent_blocks_other_domains [CONCURRENCY_HEAVY]",
+        "test_fitness_prompt_cannot_produce_appointment [CONCURRENCY_HEAVY]",
+        "test_fitness_prompt_cannot_produce_meal [CONCURRENCY_HEAVY]",
+        "test_meal_detection_explicit [CONCURRENCY_HEAVY]",
+        "test_meal_detection_grocery [CONCURRENCY_HEAVY]",
+        "test_meal_intent_allows_meal_domain [CONCURRENCY_HEAVY]",
+        "test_meal_prompt_cannot_produce_appointment [CONCURRENCY_HEAVY]",
+        "test_meal_prompt_cannot_produce_workout [CONCURRENCY_HEAVY]",
+        "test_medical_detection_dentist [CONCURRENCY_HEAVY]",
+        "test_medical_detection_doctor [CONCURRENCY_HEAVY]",
+        "test_medical_intent_allows_calendar_domain [CONCURRENCY_HEAVY]",
+        "test_medical_prompt_cannot_produce_workout [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_leakage_daily_focus_to_calendar [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_leakage_daily_focus_to_fitness [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_leakage_daily_focus_to_meal [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_leakage_fitness_to_calendar [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_leakage_fitness_to_meal [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_leakage_meal_to_fitness [CONCURRENCY_HEAVY]",
+        "test_no_match_low_confidence [CONCURRENCY_HEAVY]",
+        "test_realistic_daily_focus_scenario [CONCURRENCY_HEAVY]",
+        "test_realistic_fitness_scenario [CONCURRENCY_HEAVY]",
+        "test_realistic_meal_scenario [CONCURRENCY_HEAVY]",
+        "test_realistic_medical_scenario [CONCURRENCY_HEAVY]",
+        "test_scheduling_detection_explicit [CONCURRENCY_HEAVY]",
+        "test_scheduling_intent_allows_calendar_domain [CONCURRENCY_HEAVY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_layer_redundancy_guard.py",
+      "tests": [
+        "test_canonical_layer_directories_exist [NONE]",
+        "test_integration_core_canonical_files_not_duplicated_in_other_integration_core_folders [NONE]",
+        "test_integration_core_facade_is_thin_reexport_only [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_life_state_model.py",
+      "tests": [
+        "test_intent_lock_still_prevents_cross_domain_leakage [CONCURRENCY_HEAVY]",
+        "test_life_state_never_changes_primary_intent_classification [CONCURRENCY_HEAVY]",
+        "test_persistence_updates_after_run_and_approval [CONCURRENCY_HEAVY]",
+        "test_routing_preference_shifts_under_high_workload [CONCURRENCY_HEAVY]",
+        "test_stress_index_rises_with_overlapping_events [CONCURRENCY_HEAVY]",
+        "test_workload_score_increases_with_dense_calendar_state [CONCURRENCY_HEAVY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_lifecycle_surface_consistency_guard.py",
+      "tests": [
+        "test_no_legacy_lifecycle_literals_in_runtime_code [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_live_orchestration_simulation.py",
+      "tests": [
+        "test_live_orchestration_assertions_are_computed [NONE]",
+        "test_live_orchestration_simulation_is_deterministic_for_same_seed [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_manual_priority_adapter.py",
+      "tests": [
+        "test_keyword_scoring_rules_are_correct [LEGACY]",
+        "test_low_priority_actions_filtered_to_unscheduled_by_threshold [LEGACY]",
+        "test_score_is_deterministic_for_same_input [LEGACY]",
+        "test_time_adjustments_are_applied [LEGACY]",
+        "test_visibility_block_default_unscheduled_for_missing_time [LEGACY]",
+        "test_visibility_filter_is_deterministic_for_same_input [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_migration_cleanliness.py",
+      "tests": [
+        "test_all_persisted_states_are_canonical [DB_HEAVY]",
+        "test_no_legacy_state_strings_present [DB_HEAVY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_no_direct_broadcaster_bypass.py",
+      "tests": [
+        "test_no_direct_broadcaster_bypass [SSE_HEAVY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_no_legacy_lifecycle_strings.py",
+      "tests": [
+        "test_no_legacy_lifecycle_strings_in_fixtures_and_data [NONE]",
+        "test_no_legacy_lifecycle_strings_in_python_files [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_no_raw_lifecycle_strings.py",
+      "tests": [
+        "test_no_raw_lifecycle_strings [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_oauth_credential_store.py",
+      "tests": [
+        "test_credentials_persist_when_backed_by_file [LEGACY]",
+        "test_delete_credentials [LEGACY]",
+        "test_lookup_miss_reloads_from_disk [LEGACY]",
+        "test_overwrite_credentials [LEGACY]",
+        "test_store_and_retrieve_credentials [LEGACY]",
+        "test_supports_multiple_providers_per_user [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_operational_mode.py",
+      "tests": [
+        "test_operational_api_contract_validity [LEGACY]",
+        "test_operational_brief_executes_real_pipeline [LEGACY]",
+        "test_operational_output_structure_is_deterministic [LEGACY]",
+        "test_operational_pipeline_isolation_from_simulation_and_evaluation [LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_outlook_calendar_provider.py",
+      "tests": [
+        "test_outlook_provider_fetches_events_from_primary_and_shared_calendars [LEGACY]",
+        "test_outlook_provider_returns_disabled_when_not_connected [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_persistence_roundtrip_integrity.py",
+      "tests": [
+        "test_state_round_trip [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_policy_engine.py",
+      "tests": [
+        "test_isolation_guarantee [REDUNDANT]",
+        "test_itinerary_structure_integrity [NONE]",
+        "test_memory_determinism [NONE]",
+        "test_non_execution_guarantee [NONE]",
+        "test_policy_generation_validity [NONE]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_provider_email_adapter.py",
+      "tests": [
+        "test_google_payload_parser_converts_html_body_to_plain_text [LEGACY]",
+        "test_google_payload_parser_supports_gmail_message_shape [LEGACY]",
+        "test_outlook_payload_parser_supports_graph_message_shape [LEGACY]",
+        "test_provider_name_normalization_aliases [LEGACY]",
+        "test_unknown_provider_uses_generic_parser [LEGACY]",
+        "test_yahoo_payload_parser_supports_header_style_shape [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_provider_registry.py",
+      "tests": [
+        "test_mock_fetch_events_returns_deterministic_data [LEGACY]",
+        "test_provider_registration [LEGACY]",
+        "test_provider_retrieval [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_recommendation_humanization.py",
+      "tests": [
+        "test_humanized_language [NONE]",
+        "test_no_raw_timestamps [NONE]",
+        "test_relative_time_formatting [NONE]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_root_ui_routing.py",
+      "tests": [
+        "test_only_one_root_route_exists [NONE]",
+        "test_root_renders_integration_control_panel [NONE]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_sample_household_os_outputs.py",
+      "tests": [
+        "test_sample_household_os_outputs [NONE]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_state_builder_multi_provider.py",
+      "tests": [
+        "test_state_builder_aggregates_connected_calendar_providers [LEGACY]",
+        "test_state_builder_keeps_google_fallback_when_no_provider_credentials [LEGACY]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_static_silent_mutations.py",
+      "tests": [
+        "test_no_silent_mutations [NONE]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_task_service_events.py",
+      "tests": [
+        "test_update_task_metadata_emits_event [DB_HEAVY|LEGACY]",
+        "test_update_task_metadata_no_change_still_emits [DB_HEAVY|LEGACY]",
+        "test_update_task_metadata_nonexistent_task_no_event [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    },
+    {
+      "file": "tests/test_ui_canonical_wiring_guard.py",
+      "tests": [
+        "test_cozi_dashboard_exists [NONE]",
+        "test_cozi_fetches_brief_with_contract_validation [NONE]",
+        "test_cozi_fetches_operational_context [NONE]",
+        "test_synthetic_overlay_is_explicitly_opt_in [NONE]"
+      ],
+      "reason": "uncertain classification escalated conservatively above unit"
+    },
+    {
+      "file": "tests/test_ui_simulation_endpoints.py",
+      "tests": [
+        "test_simulation_run_endpoint_returns_structured_payload [NONE]",
+        "test_simulation_stream_and_results_endpoints [NONE]"
+      ],
+      "reason": "component interaction via API/DB/gateway/event-store/SSE"
+    }
+  ],
+  "system": [
+    {
+      "file": "tests/conftest.py",
+      "tests": [
+        "test_client [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/p1_verification/test_e2e_integration.py",
+      "tests": [
+        "test_full_request_with_valid_token [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_invalid_token_rejected_early [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_llm_timeout_fallback_still_writes [DB_HEAVY|FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_nominal_request_flow [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_valid_intent_triggers_write [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_write_emits_event [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_write_failure_no_event [DB_HEAVY|LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "SSE/watermark with persistence interaction"
+    },
+    {
+      "file": "tests/p1_verification/test_event_bus_correctness.py",
+      "tests": [
+        "test_all_subscribers_receive_events [LEGACY|SSE_HEAVY]",
+        "test_complex_payload_preserved [LEGACY|SSE_HEAVY]",
+        "test_empty_payload_handled [LEGACY|SSE_HEAVY]",
+        "test_events_isolated_by_household [LEGACY|SSE_HEAVY]",
+        "test_events_ordered_by_watermark [LEGACY|SSE_HEAVY]",
+        "test_late_subscriber_only_receives_future_events [LEGACY|SSE_HEAVY]",
+        "test_multiple_events_same_watermark_consistent [LEGACY|SSE_HEAVY]",
+        "test_subscriber_receives_only_subscribed_events [LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "SSE/watermark with persistence interaction"
+    },
+    {
+      "file": "tests/test_actor_type_enforcement.py",
+      "tests": [
+        "test_actor_type_propagates_api_to_approve_actions [LEGACY]",
+        "test_api_user_can_approve_action [LEGACY]",
+        "test_assistant_cannot_approve [LEGACY|REDUNDANT]",
+        "test_fsm_blocks_assistant_transition_directly [LEGACY]",
+        "test_household_ownership_enforced [LEGACY]",
+        "test_system_worker_allowed_fsm_transition [LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_architecture_suite.py",
+      "tests": [
+        "test_action_pipeline_direct_invocation_guard_only_orchestrator [DB_HEAVY|SSE_HEAVY]",
+        "test_archive_guard_runtime_modules_have_no_archive_imports [DB_HEAVY|SSE_HEAVY]",
+        "test_command_guard_has_single_command_post_entrypoint [DB_HEAVY|SSE_HEAVY]",
+        "test_command_guard_only_allowlisted_api_modules_use_command_runtime [DB_HEAVY|SSE_HEAVY]",
+        "test_event_log_repository_import_guard_only_allowlisted_modules [DB_HEAVY|SSE_HEAVY]",
+        "test_llm_guard_runtime_modules_only_use_gateway [DB_HEAVY|SSE_HEAVY]",
+        "test_sensitive_state_write_guard_single_entrypoint [DB_HEAVY|SSE_HEAVY]",
+        "test_state_guard_no_file_based_runtime_state_authority [DB_HEAVY|SSE_HEAVY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_assistant_runtime.py",
+      "tests": [
+        "test_runtime_detects_cross_domain_conflicts [LEGACY]",
+        "test_runtime_does_not_execute_without_approval [LEGACY]",
+        "test_runtime_merges_multiple_domains [LEGACY]",
+        "test_runtime_output_is_deterministic [LEGACY]",
+        "test_state_snapshot_is_read_only [LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_assistant_runtime_router.py",
+      "tests": [
+        "test_approval_executes_action [LEGACY]",
+        "test_run_endpoint_returns_action [LEGACY]",
+        "test_today_view_returns_state [LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_behavior_feedback.py",
+      "tests": [
+        "test_ignored_actions_reduce_priority [LEGACY]",
+        "test_preferred_time_is_reused [LEGACY]",
+        "test_rejection_affects_future_recommendations [LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_brief_builder.py",
+      "tests": [
+        "test_brief_includes_decision_when_available [LEGACY]",
+        "test_brief_matches_state_projection [LEGACY]",
+        "test_brief_uses_state_only [LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_chat_events_runtime.py",
+      "tests": [
+        "test_action_ids_confirm_executes_orchestrator_approval [LEGACY]",
+        "test_extract_signal_count_parses_action_and_calendar_counts [LEGACY]",
+        "test_failure_emits_chat_message_failed [LEGACY]",
+        "test_process_message_complete_task_executes_direct_capability [LEGACY]",
+        "test_process_message_create_task_executes_direct_capability [LEGACY]",
+        "test_process_message_inbox_prompt_returns_contextual_intelligence [LEGACY]",
+        "test_process_message_schedule_event_executes_direct_capability [LEGACY]",
+        "test_process_message_sync_inbox_executes_direct_capability [LEGACY]",
+        "test_success_emits_chat_message_sent [LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_cqrs_lifecycle_invariants.py",
+      "tests": [
+        "test_api_never_exposes_raw_enum [LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_daily_loop_engine.py",
+      "tests": [
+        "test_daily_get_endpoint_does_not_persist [LEGACY]",
+        "test_daily_loop_consumes_runtime_plan_output [LEGACY]",
+        "test_daily_loop_generation_is_read_only [LEGACY]",
+        "test_daily_loop_has_no_overlapping_time_blocks [LEGACY]",
+        "test_daily_loop_output_is_deterministic [LEGACY]",
+        "test_daily_loop_places_meals_and_workouts [LEGACY]",
+        "test_daily_loop_preserves_buffer_time [LEGACY]",
+        "test_daily_regenerate_endpoint_persists [LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_event_sourcing.py",
+      "tests": [
+        "test_aggregate_not_found_error [DB_HEAVY]",
+        "test_append_and_retrieve [DB_HEAVY]",
+        "test_append_only_guarantees [DB_HEAVY]",
+        "test_approve_command_from_proposed [DB_HEAVY]",
+        "test_command_on_empty_events_fails [DB_HEAVY]",
+        "test_command_on_terminal_state_fails [DB_HEAVY]",
+        "test_commit_command_from_approved [DB_HEAVY]",
+        "test_commit_command_requires_approved_state [DB_HEAVY]",
+        "test_compute_snapshot [DB_HEAVY]",
+        "test_consistency_check_divergent_states [DB_HEAVY]",
+        "test_consistency_check_matching_states [DB_HEAVY]",
+        "test_deterministic_state_reduction [DB_HEAVY]",
+        "test_divergence_detection_raises_error [DB_HEAVY]",
+        "test_empty_events_raises_error [DB_HEAVY]",
+        "test_event_creation [DB_HEAVY]",
+        "test_event_hashability [DB_HEAVY]",
+        "test_event_immutability [DB_HEAVY]",
+        "test_event_replay_returns_enum [DB_HEAVY]",
+        "test_event_with_explicit_timestamp [DB_HEAVY]",
+        "test_fail_command [DB_HEAVY]",
+        "test_full_workflow_proposed_to_committed [DB_HEAVY]",
+        "test_full_workflow_rejection [DB_HEAVY]",
+        "test_get_all_aggregates [DB_HEAVY]",
+        "test_get_events_since [DB_HEAVY]",
+        "test_get_valid_next_events [DB_HEAVY]",
+        "test_historical_replay_strict [DB_HEAVY|FLAKY_RISK]",
+        "test_invalid_first_event_raises_error [DB_HEAVY]",
+        "test_invalid_state_rejected [DB_HEAVY]",
+        "test_invalid_transition_raises_error [DB_HEAVY|REDUNDANT]",
+        "test_is_terminal_state [DB_HEAVY]",
+        "test_linear_workflow_proposed_to_committed [DB_HEAVY]",
+        "test_migration_mode_consistency_throughout_workflow [DB_HEAVY]",
+        "test_migration_stats_tracking [DB_HEAVY]",
+        "test_multiple_aggregates [DB_HEAVY]",
+        "test_prevents_duplicate_event_ids [DB_HEAVY]",
+        "test_proposed_to_failed [DB_HEAVY]",
+        "test_proposed_to_rejected [DB_HEAVY]",
+        "test_reducer_always_returns_enum [DB_HEAVY]",
+        "test_reject_command_from_proposed [DB_HEAVY]",
+        "test_single_proposed_event [DB_HEAVY]",
+        "test_terminal_states_cannot_transition [DB_HEAVY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_event_store_invariants.py",
+      "tests": [
+        "test_duplicate_event_id_rejected [DB_HEAVY]",
+        "test_forbidden_append_caller_is_blocked [DB_HEAVY]",
+        "test_invalid_replay_access_denied_for_user_actor [DB_HEAVY]",
+        "test_state_reduction_fails_for_unknown_actor_type [DB_HEAVY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_frontend_runtime_contract.py",
+      "tests": [
+        "test_action_execution_idempotency [LEGACY|SSE_HEAVY]",
+        "test_chat_session_consistency_under_retry [LEGACY|SSE_HEAVY]",
+        "test_deterministic_patch_replay [LEGACY|SSE_HEAVY]",
+        "test_failure_recovery_uses_backend_snapshot_authority [LEGACY|SSE_HEAVY]",
+        "test_snapshot_reconstruction_equivalence [LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_google_calendar_integration_surface.py",
+      "tests": [
+        "test_end_to_end_calendar_ingestion_flow [LEGACY]",
+        "test_google_oauth_url_generation [LEGACY]",
+        "test_oauth_callback_stores_credentials [LEGACY]",
+        "test_orchestrator_builds_household_state_from_credential_store [FLAKY_RISK|LEGACY]",
+        "test_orchestrator_household_state_has_raw_events_in_debug_meta [FLAKY_RISK|LEGACY]",
+        "test_provider_fetch_with_mock_credentials [LEGACY]",
+        "test_provider_refreshes_expired_access_token_before_google_calls [FLAKY_RISK|LEGACY]",
+        "test_provider_returns_empty_dataset_when_expired_and_refresh_token_missing [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_google_oauth_missing_config_safe_boot.py",
+      "tests": [
+        "test_missing_google_oauth_config_does_not_crash_system [LEGACY]",
+        "test_orchestrator_continues_running_when_google_oauth_not_configured [LEGACY]",
+        "test_provider_fetch_returns_empty_and_disabled_when_oauth_not_configured [LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_household_state_manager.py",
+      "tests": [
+        "test_conflict_detection_across_domains [LEGACY]",
+        "test_no_module_leakage_in_response [LEGACY]",
+        "test_single_action_output_guarantee [LEGACY]",
+        "test_state_convergence_after_multiple_queries [LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_intent_confidence_router.py",
+      "tests": [
+        "test_allowed_domains_property [CONCURRENCY_HEAVY]",
+        "test_ambiguity_flag_clear_on_strong_single_intent [CONCURRENCY_HEAVY]",
+        "test_ambiguity_flag_set_on_low_confidence [CONCURRENCY_HEAVY]",
+        "test_ambiguous_produces_clarification [CONCURRENCY_HEAVY]",
+        "test_build_returns_list [CONCURRENCY_HEAVY]",
+        "test_clarification_response_shape [CONCURRENCY_HEAVY]",
+        "test_confidence_bounds_always_valid [CONCURRENCY_HEAVY]",
+        "test_daily_focus_executes [CONCURRENCY_HEAVY]",
+        "test_daily_focus_still_blocked_from_fitness [CONCURRENCY_HEAVY]",
+        "test_explicit_fitness_high_confidence [CONCURRENCY_HEAVY]",
+        "test_explicit_medical_high_confidence [CONCURRENCY_HEAVY]",
+        "test_fitness_still_blocked_from_calendar [CONCURRENCY_HEAVY]",
+        "test_has_all_scores_dict [CONCURRENCY_HEAVY]",
+        "test_has_ambiguity_flag [CONCURRENCY_HEAVY]",
+        "test_has_confidence_float [CONCURRENCY_HEAVY]",
+        "test_has_primary_intent [CONCURRENCY_HEAVY]",
+        "test_has_secondary_intents_list [CONCURRENCY_HEAVY]",
+        "test_high_confidence_explicit_fitness [CONCURRENCY_HEAVY]",
+        "test_high_confidence_no_clarification [CONCURRENCY_HEAVY]",
+        "test_high_confidence_response_has_routing_case [CONCURRENCY_HEAVY]",
+        "test_high_confidence_response_has_secondary_suggestions [CONCURRENCY_HEAVY]",
+        "test_high_confidence_routing_case [CONCURRENCY_HEAVY]",
+        "test_high_confidence_should_execute [CONCURRENCY_HEAVY]",
+        "test_high_confidence_single_domain [CONCURRENCY_HEAVY]",
+        "test_is_high_confidence_property [CONCURRENCY_HEAVY]",
+        "test_is_low_confidence_on_no_match [CONCURRENCY_HEAVY]",
+        "test_is_multi_intent_with_secondaries [CONCURRENCY_HEAVY]",
+        "test_is_not_multi_intent_without_secondaries [CONCURRENCY_HEAVY]",
+        "test_low_confidence_clarification_is_question [CONCURRENCY_HEAVY]",
+        "test_low_confidence_clarification_no_jargon [CONCURRENCY_HEAVY]",
+        "test_low_confidence_empty_domains [CONCURRENCY_HEAVY]",
+        "test_low_confidence_has_clarification_text [CONCURRENCY_HEAVY]",
+        "test_low_confidence_never_executes [CONCURRENCY_HEAVY]",
+        "test_low_confidence_no_keywords [CONCURRENCY_HEAVY]",
+        "test_low_confidence_returns_clarification [CONCURRENCY_HEAVY]",
+        "test_low_confidence_routing_case [CONCURRENCY_HEAVY]",
+        "test_low_confidence_should_not_execute [CONCURRENCY_HEAVY]",
+        "test_medical_still_blocked_from_meal [CONCURRENCY_HEAVY]",
+        "test_medium_confidence_max_2_domains [CONCURRENCY_HEAVY]",
+        "test_medium_confidence_no_clarification [CONCURRENCY_HEAVY]",
+        "test_medium_confidence_routing_case [CONCURRENCY_HEAVY]",
+        "test_medium_confidence_should_execute [CONCURRENCY_HEAVY]",
+        "test_medium_confidence_top2_domains [CONCURRENCY_HEAVY]",
+        "test_multi_intent_life_together_scenario [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_in_suggestions [CONCURRENCY_HEAVY]",
+        "test_one_suggestion_per_intent [CONCURRENCY_HEAVY]",
+        "test_returns_intent_classification [CONCURRENCY_HEAVY]",
+        "test_suggestions_are_not_mixed_into_primary_action [CONCURRENCY_HEAVY]",
+        "test_suggestions_are_secondary_suggestion_instances [CONCURRENCY_HEAVY]",
+        "test_suggestions_have_required_fields [CONCURRENCY_HEAVY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_invariance_enforcement.py",
+      "tests": [
+        "test_no_direct_realtimeevent_outside_broadcaster [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_no_direct_sse_formatting_outside_broadcaster [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_no_to_sse_anywhere_in_runtime_paths [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_no_transport_flags_in_repository [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_redis_ingress_reenters_canonical_pipeline [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_replay_routes_via_router_without_transport_branching [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_router_has_no_conditional_sse_logic [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_single_emission_path_runtime_contract [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_watermark_ignores_external_and_is_monotonic [DB_HEAVY|LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "SSE/watermark with persistence interaction"
+    },
+    {
+      "file": "tests/test_lifecycle_integrity_invariants.py",
+      "tests": [
+        "test_db_roundtrip_state [DB_HEAVY|LEGACY]",
+        "test_fsm_never_overrides_reducer [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_output_governor.py",
+      "tests": [
+        "test_daily_focus_api_response_uses_governed_fallback [LEGACY]",
+        "test_daily_focus_never_returns_booking_meal_or_fitness_actions [LEGACY]",
+        "test_fallback_always_returns_schedule_review_recommendation [LEGACY]",
+        "test_no_banned_system_phrases_appear_in_output [LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_security_verification_harness.py",
+      "tests": [
+        "test_empty_action_ids_does_not_bypass_auth [DB_HEAVY|LEGACY]",
+        "test_execution_context_from_api_request_carries_correct_fields [DB_HEAVY|LEGACY]",
+        "test_execution_context_system_context_actor_is_system_worker [DB_HEAVY|LEGACY]",
+        "test_fsm_terminal_states_cannot_be_transitioned_out_of [DB_HEAVY|LEGACY]",
+        "test_invariant_actor_context_propagation [DB_HEAVY|LEGACY]",
+        "test_invariant_assistant_blocked_at_api_layer [DB_HEAVY|LEGACY]",
+        "test_invariant_assistant_blocked_at_fsm_layer [DB_HEAVY|LEGACY]",
+        "test_invariant_assistant_blocked_at_orchestrator_layer [DB_HEAVY|LEGACY]",
+        "test_invariant_assistant_blocked_via_execution_context [DB_HEAVY|LEGACY]",
+        "test_invariant_context_not_silently_dropped_on_retry [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_invariant_cross_household_access_blocked [DB_HEAVY|LEGACY]",
+        "test_invariant_cross_household_via_orchestrator_direct [DB_HEAVY|LEGACY]",
+        "test_invariant_events_actor_type_not_unknown_for_identified_caller [DB_HEAVY|LEGACY]",
+        "test_invariant_events_contain_actor_type [DB_HEAVY|LEGACY]",
+        "test_invariant_execution_context_metadata_wired_to_events [DB_HEAVY|LEGACY]",
+        "test_invariant_fsm_allows_api_user_with_context [DB_HEAVY|LEGACY]",
+        "test_invariant_fsm_blocks_approval_skip_when_requires_approval [DB_HEAVY|LEGACY]",
+        "test_invariant_fsm_blocks_assistant_in_proposed_to_approved [DB_HEAVY|LEGACY]",
+        "test_invariant_fsm_blocks_assistant_with_context [DB_HEAVY|LEGACY]",
+        "test_invariant_fsm_blocks_assistant_without_context [DB_HEAVY|LEGACY]",
+        "test_invariant_missing_actor_type_does_not_approve [DB_HEAVY|LEGACY]",
+        "test_invariant_missing_actor_type_never_becomes_assistant [DB_HEAVY|LEGACY]",
+        "test_invariant_replay_of_valid_stream_succeeds [DB_HEAVY|LEGACY]",
+        "test_invariant_replay_proposed_to_approved_skipping_required_guard [DB_HEAVY|LEGACY]",
+        "test_invariant_replay_with_injected_assistant_approval_fails_or_rejects [DB_HEAVY|LEGACY]",
+        "test_invariant_system_worker_bypasses_household_check_for_tick [DB_HEAVY|LEGACY]",
+        "test_invariant_system_worker_events_marked_correctly [DB_HEAVY|LEGACY]",
+        "test_unknown_actor_type_is_rejected [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_sse_canonical_only.py",
+      "tests": [
+        "test_canonical_event_envelope_passes [LEGACY|SSE_HEAVY]",
+        "test_domain_event_rejected [LEGACY|SSE_HEAVY]",
+        "test_logging_includes_event_type_and_origin [LEGACY|SSE_HEAVY]",
+        "test_null_event_rejected [LEGACY|SSE_HEAVY]",
+        "test_only_canonical_envelope_passes [FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_origin_module_detection [LEGACY|SSE_HEAVY]",
+        "test_raw_dict_rejected [LEGACY|SSE_HEAVY]",
+        "test_reject_integer_event [LEGACY|SSE_HEAVY]",
+        "test_reject_string_event [LEGACY|SSE_HEAVY]",
+        "test_rejection_message_includes_origin [LEGACY|SSE_HEAVY]",
+        "test_rejection_message_mentions_allowed_type [LEGACY|SSE_HEAVY]",
+        "test_rejection_message_shows_received_type [LEGACY|SSE_HEAVY]",
+        "test_system_event_rejected_if_not_canonical_envelope [LEGACY|SSE_HEAVY]",
+        "test_validation_called_in_publish_async [LEGACY|SSE_HEAVY]",
+        "test_validation_called_in_publish_sync [LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "SSE/watermark with persistence interaction"
+    },
+    {
+      "file": "tests/test_sse_event_closure.py",
+      "tests": [
+        "test_idempotency_preservation_duplicate_events_deduped [LEGACY|SSE_HEAVY]",
+        "test_no_direct_canonical_envelope_instantiation_in_business_services [LEGACY|SSE_HEAVY]",
+        "test_no_direct_sse_construction_runtime_paths [LEGACY|SSE_HEAVY]",
+        "test_registry_enforcement_hard_reject_unknown_event_type [FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_replay_determinism_same_input_identical_stream [LEGACY|SSE_HEAVY]",
+        "test_replay_has_no_transport_branching_or_direct_sse_calls [LEGACY|SSE_HEAVY]",
+        "test_schema_parity_domain_to_canonical_to_sse_lossless_subset [FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_watermark_ordering_shuffled_input_rejects_stale [LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_trust_boundary_enforcement.py",
+      "tests": [
+        "test_adapter_importing_state_store_directly_must_fail [DB_HEAVY|LEGACY]",
+        "test_direct_action_pipeline_call_must_fail [DB_HEAVY|LEGACY]",
+        "test_event_store_append_from_external_module_must_fail [DB_HEAVY|LEGACY]",
+        "test_external_module_importing_fsm_must_fail [DB_HEAVY|LEGACY]",
+        "test_forged_actor_event_replay_must_fail [DB_HEAVY|LEGACY]",
+        "test_fsm_transition_outside_orchestrator_must_fail [DB_HEAVY|LEGACY]",
+        "test_orchestrator_handle_request_approve_must_pass [DB_HEAVY|LEGACY]",
+        "test_orchestrator_handle_request_reject_must_pass [DB_HEAVY|LEGACY]",
+        "test_replay_from_unauthorized_module_context_must_fail [DB_HEAVY|LEGACY]",
+        "test_router_importing_action_pipeline_directly_must_fail [DB_HEAVY|LEGACY]",
+        "test_scheduler_authorized_execution_requires_valid_token [DB_HEAVY|LEGACY]",
+        "test_state_store_load_outside_orchestrator_must_fail [DB_HEAVY|LEGACY]",
+        "test_unsigned_event_replay_must_fail [DB_HEAVY|LEGACY|REDUNDANT]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_trust_surface_closure.py",
+      "tests": [
+        "test_authorized_path_via_handle_request_is_allowed [DB_HEAVY|LEGACY]",
+        "test_negative_direct_event_store_append_must_fail [DB_HEAVY|LEGACY]",
+        "test_negative_direct_pipeline_call_must_fail [DB_HEAVY|LEGACY]",
+        "test_negative_direct_state_store_save_must_fail [DB_HEAVY|LEGACY]",
+        "test_negative_fsm_transition_outside_orchestrator_must_fail [DB_HEAVY|LEGACY]",
+        "test_static_trust_surface_closure_report [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_trust_surface_final_closure.py",
+      "tests": [
+        "test_runtime_authorized_orchestrator_path_is_allowed [DB_HEAVY|LEGACY]",
+        "test_runtime_enforcement_requires_orchestrator_provenance [DB_HEAVY|LEGACY]",
+        "test_trust_surface_final_closure_report [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_ui_bootstrap_router.py",
+      "tests": [
+        "test_bootstrap_excludes_junk_email_notifications [DB_HEAVY|LEGACY]",
+        "test_bootstrap_includes_calendar_db_events_when_projection_empty [DB_HEAVY|LEGACY]",
+        "test_bootstrap_includes_email_summary_notifications [DB_HEAVY|LEGACY]",
+        "test_bootstrap_includes_email_summary_notifications_from_email_received [DB_HEAVY|LEGACY]",
+        "test_bootstrap_includes_integration_events_when_user_is_connected [DB_HEAVY|LEGACY]",
+        "test_bootstrap_includes_pantry_and_weekly_recipe_suggestions [DB_HEAVY|LEGACY]",
+        "test_bootstrap_includes_runtime_graph_events_and_tasks [DB_HEAVY|LEGACY]",
+        "test_bootstrap_refreshes_cached_state_when_email_summary_changes [DB_HEAVY|LEGACY]",
+        "test_bootstrap_rolls_up_low_priority_email_notifications [DB_HEAVY|LEGACY]",
+        "test_chat_response_structure_validation [DB_HEAVY|LEGACY]",
+        "test_email_detail_endpoint_returns_404_when_email_not_found [DB_HEAVY|LEGACY]",
+        "test_email_detail_endpoint_returns_combined_email_view [DB_HEAVY|LEGACY]",
+        "test_no_internal_leakage_validation [DB_HEAVY|LEGACY]",
+        "test_patch_replay_consistency [DB_HEAVY|LEGACY]",
+        "test_resolve_recipe_url_falls_back_to_search_for_invalid_candidate [DB_HEAVY|LEGACY]",
+        "test_resolve_recipe_url_falls_back_when_health_check_fails [DB_HEAVY|LEGACY]",
+        "test_snapshot_determinism [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "SSE/watermark with persistence interaction; full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_unified_trust_boundary.py",
+      "tests": [
+        "test_case_variant_actor_types_must_fail_hard [LEGACY]",
+        "test_direct_pipeline_execution_attempt_must_fail [LEGACY]",
+        "test_direct_state_read_cross_household_must_fail [LEGACY]",
+        "test_forged_actor_type_event_replay_must_fail [LEGACY]",
+        "test_legacy_execution_bypass_must_fail_without_explicit_authorization [LEGACY]",
+        "test_mismatched_signature_event_replay_must_fail [LEGACY]",
+        "test_missing_actor_identity_must_not_default [LEGACY]",
+        "test_reject_without_authorization_gate_must_fail [LEGACY]",
+        "test_run_legacy_path_must_be_gated_or_fail [LEGACY]",
+        "test_system_worker_spoof_attempt_must_fail_without_verified_proof [LEGACY]",
+        "test_today_cross_household_access_must_fail_without_authorization [LEGACY]",
+        "test_unsigned_event_replay_must_fail [LEGACY|REDUNDANT]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    },
+    {
+      "file": "tests/test_xai_layer.py",
+      "tests": [
+        "test_all_reason_codes_have_templates [LEGACY]",
+        "test_causal_mapper_determinism [LEGACY]",
+        "test_composite_validation_passes_clean_run [LEGACY]",
+        "test_event_linked_to_plan [LEGACY]",
+        "test_explanation_id_is_stable_across_instances [LEGACY]",
+        "test_manual_override_gets_user_override_code [LEGACY]",
+        "test_mapper_known_command_types [LEGACY]",
+        "test_mapper_unknown_command_type_returns_fallback [LEGACY]",
+        "test_no_internal_ids_in_explanation_text [LEGACY]",
+        "test_plan_conflict_revision_gets_event_time_conflict_code [LEGACY]",
+        "test_plan_merged_gets_plan_optimized_code [LEGACY]",
+        "test_plan_recompute_with_trigger_source_gets_system_recompute_code [LEGACY]",
+        "test_task_blocked_status [LEGACY]",
+        "test_task_completed_status [LEGACY]",
+        "test_task_created_by_system [LEGACY]",
+        "test_template_engine_determinism [LEGACY]",
+        "test_template_engine_no_unexpected_placeholders [LEGACY]",
+        "test_validation_completeness_detects_missing [LEGACY]",
+        "test_validation_completeness_passes_when_all_covered [LEGACY]",
+        "test_validation_downstream_coverage_passes_when_all_covered [LEGACY]",
+        "test_validation_downstream_coverage_warns_on_missing [LEGACY]",
+        "test_validation_duplicate_detected [LEGACY]",
+        "test_validation_family_isolation_detects_leakage [LEGACY]",
+        "test_validation_family_isolation_passes [LEGACY]",
+        "test_validation_no_duplicates_passes_for_unique [LEGACY]",
+        "test_validation_replay_determinism_passes [LEGACY]"
+      ],
+      "reason": "full-stack runtime/replay/orchestrator behavior under bounded conditions"
+    }
+  ],
+  "chaos": [
+    {
+      "file": "tests/p1_verification/test_chaos_concurrency.py",
+      "tests": [
+        "test_100_concurrent_task_creates_result_in_1 [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_concurrent_creates_different_items_all_succeed [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_concurrent_writes_different_households_isolated [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_event_emission_no_cross_household_leakage [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_events_ordered_under_concurrent_publishes [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_llm_timeouts_concurrent_dont_crash [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_mixed_valid_invalid_tokens_concurrent [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_rate_limit_under_concurrent_requests [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_retry_storm_deduplicated [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "stress/reconnect/concurrency or chaos-style scenario"
+    },
+    {
+      "file": "tests/p1_verification/test_event_bus_correctness.py",
+      "tests": [
+        "test_events_queued_during_reconnect_not_lost [LEGACY|SSE_HEAVY]",
+        "test_subscriber_reconnect_receives_subsequent_events [LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "stress/reconnect/concurrency or chaos-style scenario"
+    },
+    {
+      "file": "tests/p1_verification/test_idempotency_correctness.py",
+      "tests": [
+        "test_2xx_response_records_completion [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_5xx_response_releases_key_safely [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_concurrent_different_keys_all_succeed [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_concurrent_task_creations_deduplicated [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_different_households_different_namespace [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_duplicate_reservation_rejected [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_first_reservation_succeeds [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_parallel_identical_requests_single_winner [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_release_allows_reuse [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "stress/reconnect/concurrency or chaos-style scenario"
+    },
+    {
+      "file": "tests/test_household_simulation.py",
+      "tests": [
+        "test_byzantine_resilience [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_consistency_assurance [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_convergence_to_stable_state [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_deterministic_replay [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_deterministic_replay_convergence [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_family_isolation [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_full_matrix_execution [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_matrix_coverage [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_network_chaos_resilience [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_no_cross_family_leakage [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_no_duplicate_task_execution [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_no_lost_updates [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_no_lost_updates [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_no_phantom_states [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_no_silent_inconsistencies [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_resilience_to_byzantine_failures [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_resilience_to_network_chaos [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_resilience_to_transient_failures [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_stable_convergence [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_task_idempotency [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_transient_failure_recovery [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_valid_states_only [CONCURRENCY_HEAVY|SSE_HEAVY]"
+      ],
+      "reason": "stress/reconnect/concurrency or chaos-style scenario"
+    },
+    {
+      "file": "tests/test_llm_gateway_runtime_hardening.py",
+      "tests": [
+        "test_generate_text_cache_hit_skips_provider_and_usage [CONCURRENCY_HEAVY]",
+        "test_generate_text_does_not_retry_invalid_json_responses [CONCURRENCY_HEAVY]",
+        "test_generate_text_inflight_burst_keeps_single_provider_execution [CONCURRENCY_HEAVY]",
+        "test_generate_text_inflight_deduplicates_parallel_calls [CONCURRENCY_HEAVY]",
+        "test_generate_text_retries_transient_failures_with_bounded_backoff [CONCURRENCY_HEAVY]",
+        "test_generate_text_survives_cache_read_write_failures [CONCURRENCY_HEAVY]",
+        "test_generate_text_uses_fallback_once_and_records_usage_once [CONCURRENCY_HEAVY]"
+      ],
+      "reason": "stress/reconnect/concurrency or chaos-style scenario"
+    },
+    {
+      "file": "tests/test_p0_torture.py",
+      "tests": [
+        "test_30_second_chaos [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_50_parallel_writes [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_concurrent_retries_at_boundary [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_old_watermark_triggers_resync [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_quick_reconnect_flood [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_reconnect_500_iterations [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_replay_during_concurrent_writes [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_suite_summary [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_ttl_boundary_exact [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]"
+      ],
+      "reason": "stress/reconnect/concurrency or chaos-style scenario"
+    },
+    {
+      "file": "tests/test_pantry_router.py",
+      "tests": [
+        "test_adjust_inventory_refreshes_projection_watermark [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_adjust_inventory_supports_units_and_decimal_quantities [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_adjust_inventory_updates_counts [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_cook_recipe_decrements_inventory_and_records_history [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_receipt_ingestion_detects_and_applies_text_items [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "stress/reconnect/concurrency or chaos-style scenario"
+    },
+    {
+      "file": "tests/test_system_stability_lock.py",
+      "tests": [
+        "test_system_stability_lock [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "stress/reconnect/concurrency or chaos-style scenario"
+    },
+    {
+      "file": "tests/test_xai_harness_integration.py",
+      "tests": [
+        "test_all_xai_invariants_pass_no_failures [CONCURRENCY_HEAVY]",
+        "test_concurrent_plan_creation_explanation_completeness [CONCURRENCY_HEAVY]",
+        "test_conflicting_updates_explanation_completeness [CONCURRENCY_HEAVY]",
+        "test_full_matrix_report [CONCURRENCY_HEAVY]",
+        "test_no_cross_family_explanation_leakage [CONCURRENCY_HEAVY]",
+        "test_no_duplicate_explanations_concurrent_plan_creation [CONCURRENCY_HEAVY]",
+        "test_no_duplicate_explanations_task_idempotency [CONCURRENCY_HEAVY|FLAKY_RISK]",
+        "test_replay_determinism_concurrent_plan_creation [CONCURRENCY_HEAVY]",
+        "test_replay_determinism_task_idempotency [CONCURRENCY_HEAVY]",
+        "test_task_idempotency_explanation_completeness [CONCURRENCY_HEAVY]"
+      ],
+      "reason": "stress/reconnect/concurrency or chaos-style scenario"
+    }
+  ],
+  "legacy_candidates": [
+    {
+      "file": "tests/conftest.py",
+      "tests": [
+        "test_client [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/decision/test_decision_engine.py",
+      "tests": [
+        "test_conflicts_detected [LEGACY]",
+        "test_decision_engine_is_deterministic [LEGACY]",
+        "test_events_are_ranked_by_time [LEGACY]",
+        "test_state_not_mutated [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/p1_verification/test_auth_lifecycle.py",
+      "tests": [
+        "test_access_token_shorter_expiry [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_cross_household_token_misuse_rejected [DB_HEAVY|LEGACY]",
+        "test_expired_token_rejected [DB_HEAVY|LEGACY|REDUNDANT]",
+        "test_invalid_refresh_token_rejected [DB_HEAVY|LEGACY]",
+        "test_refresh_token_extends_expiry [DB_HEAVY|LEGACY]",
+        "test_revoke_all_user_tokens [DB_HEAVY|LEGACY]",
+        "test_revoke_device_tokens [DB_HEAVY|LEGACY]",
+        "test_revoke_single_token [DB_HEAVY|LEGACY]",
+        "test_tampered_token_rejected [DB_HEAVY|LEGACY]",
+        "test_token_claims_match_issuance [DB_HEAVY|LEGACY]",
+        "test_token_pair_structure [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_valid_token_accepted [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/p1_verification/test_chaos_concurrency.py",
+      "tests": [
+        "test_100_concurrent_task_creates_result_in_1 [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_concurrent_creates_different_items_all_succeed [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_concurrent_writes_different_households_isolated [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_event_emission_no_cross_household_leakage [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_events_ordered_under_concurrent_publishes [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_llm_timeouts_concurrent_dont_crash [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_mixed_valid_invalid_tokens_concurrent [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_rate_limit_under_concurrent_requests [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_retry_storm_deduplicated [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/p1_verification/test_e2e_integration.py",
+      "tests": [
+        "test_full_request_with_valid_token [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_invalid_token_rejected_early [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_llm_timeout_fallback_still_writes [DB_HEAVY|FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_nominal_request_flow [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_valid_intent_triggers_write [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_write_emits_event [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_write_failure_no_event [DB_HEAVY|LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/p1_verification/test_event_bus_correctness.py",
+      "tests": [
+        "test_all_subscribers_receive_events [LEGACY|SSE_HEAVY]",
+        "test_complex_payload_preserved [LEGACY|SSE_HEAVY]",
+        "test_empty_payload_handled [LEGACY|SSE_HEAVY]",
+        "test_events_isolated_by_household [LEGACY|SSE_HEAVY]",
+        "test_events_ordered_by_watermark [LEGACY|SSE_HEAVY]",
+        "test_events_queued_during_reconnect_not_lost [LEGACY|SSE_HEAVY]",
+        "test_late_subscriber_only_receives_future_events [LEGACY|SSE_HEAVY]",
+        "test_multiple_events_same_watermark_consistent [LEGACY|SSE_HEAVY]",
+        "test_subscriber_receives_only_subscribed_events [LEGACY|SSE_HEAVY]",
+        "test_subscriber_reconnect_receives_subsequent_events [LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/p1_verification/test_idempotency_correctness.py",
+      "tests": [
+        "test_2xx_response_records_completion [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_5xx_response_releases_key_safely [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_concurrent_different_keys_all_succeed [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_concurrent_task_creations_deduplicated [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_different_households_different_namespace [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_duplicate_reservation_rejected [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_first_reservation_succeeds [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_parallel_identical_requests_single_winner [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_release_allows_reuse [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/p1_verification/test_llm_gateway_failures.py",
+      "tests": [
+        "test_confidence_score_bounds [LEGACY]",
+        "test_fallback_response_safe_for_pipeline [FLAKY_RISK|LEGACY]",
+        "test_fallback_returns_valid_response [FLAKY_RISK|LEGACY]",
+        "test_invalid_intent_type_rejected [LEGACY]",
+        "test_normal_prompt_accepted [LEGACY]",
+        "test_normal_prompt_returns_llm_route_under_non_limited_conditions [LEGACY]",
+        "test_oversized_prompt_rejected [LEGACY]",
+        "test_rate_limit_enforced [LEGACY]",
+        "test_rate_limit_per_household [LEGACY]",
+        "test_timeout_doesnt_crash_pipeline [FLAKY_RISK|LEGACY]",
+        "test_timeout_doesnt_trigger_rate_limit [FLAKY_RISK|LEGACY]",
+        "test_timeout_returns_fallback_response [FLAKY_RISK|LEGACY]",
+        "test_valid_intent_names_accepted [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_actor_type_enforcement.py",
+      "tests": [
+        "test_actor_type_propagates_api_to_approve_actions [LEGACY]",
+        "test_api_user_can_approve_action [LEGACY]",
+        "test_assistant_cannot_approve [LEGACY|REDUNDANT]",
+        "test_fsm_blocks_assistant_transition_directly [LEGACY]",
+        "test_household_ownership_enforced [LEGACY]",
+        "test_system_worker_allowed_fsm_transition [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_adapter_governance.py",
+      "tests": [
+        "test_governance_behavior_lists_are_frozen_and_explicit [LEGACY]",
+        "test_validate_adapter_output_contract_accepts_minimal_valid_brief [LEGACY]",
+        "test_validate_adapter_output_contract_rejects_forbidden_behavior_keys_softly [LEGACY]",
+        "test_validate_adapter_output_contract_reports_structural_drift_softly [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_asgi_admission.py",
+      "tests": [
+        "test_identity_bootstrap_paths_are_bypassed [LEGACY]",
+        "test_identity_bootstrap_paths_are_bypassed_with_api_prefix_and_slash [LEGACY]",
+        "test_non_bootstrap_identity_paths_are_not_bypassed [LEGACY]",
+        "test_non_oauth_paths_are_not_bypassed [LEGACY]",
+        "test_oauth_critical_paths_are_bypassed [LEGACY]",
+        "test_oauth_paths_are_bypassed_with_api_prefix_and_slash [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_assistant_core.py",
+      "tests": [
+        "test_approval_gate_is_inert [LEGACY]",
+        "test_deterministic_output [LEGACY]",
+        "test_intent_parsing_variants [LEGACY]",
+        "test_meal_repetition_prevention [LEGACY]",
+        "test_module_isolation_from_read_only_layers [LEGACY]",
+        "test_scheduling_conflict_detection [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_assistant_runtime.py",
+      "tests": [
+        "test_runtime_detects_cross_domain_conflicts [LEGACY]",
+        "test_runtime_does_not_execute_without_approval [LEGACY]",
+        "test_runtime_merges_multiple_domains [LEGACY]",
+        "test_runtime_output_is_deterministic [LEGACY]",
+        "test_state_snapshot_is_read_only [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_assistant_runtime_router.py",
+      "tests": [
+        "test_approval_executes_action [LEGACY]",
+        "test_run_endpoint_returns_action [LEGACY]",
+        "test_today_view_returns_state [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_auth_realtime_guards.py",
+      "tests": [
+        "test_non_realtime_routes_ignore_query_session_token [LEGACY]",
+        "test_realtime_query_token_extraction_is_supported [LEGACY]",
+        "test_realtime_stream_rejects_missing_auth [LEGACY]",
+        "test_session_validate_not_rejected_as_duplicate [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_auth_router.py",
+      "tests": [
+        "test_oauth_stub_creates_missing_household_before_registering_user [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_oauth_stub_recovers_from_duplicate_email_integrity_error [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_oauth_stub_uses_request_scoped_services [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_refresh_token_uses_request_scoped_token_service [DB_HEAVY|FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_backpressure_middleware.py",
+      "tests": [
+        "test_api_prefixed_paths_are_normalized_for_classification [LEGACY]",
+        "test_identity_paths_are_classified_short [LEGACY]",
+        "test_non_identity_paths_keep_existing_classification [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_behavior_feedback.py",
+      "tests": [
+        "test_ignored_actions_reduce_priority [LEGACY]",
+        "test_preferred_time_is_reused [LEGACY]",
+        "test_rejection_affects_future_recommendations [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_brief_builder.py",
+      "tests": [
+        "test_brief_includes_decision_when_available [LEGACY]",
+        "test_brief_matches_state_projection [LEGACY]",
+        "test_brief_uses_state_only [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_brief_renderer_v1.py",
+      "tests": [
+        "test_brief_endpoint_render_human_non_breaking [LEGACY]",
+        "test_renderer_groups_actions_by_morning_afternoon_evening [LEGACY]",
+        "test_renderer_hides_internal_ids_and_is_readable [LEGACY]",
+        "test_renderer_markdown_format_supported [LEGACY]",
+        "test_renderer_output_is_deterministic_for_same_input [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_calendar_events_runtime.py",
+      "tests": [
+        "test_persist_calendar_event_failure_emits_failure_event [DB_HEAVY|LEGACY]",
+        "test_persist_calendar_event_success_emits_system_event [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_chat_events_runtime.py",
+      "tests": [
+        "test_action_ids_confirm_executes_orchestrator_approval [LEGACY]",
+        "test_extract_signal_count_parses_action_and_calendar_counts [LEGACY]",
+        "test_failure_emits_chat_message_failed [LEGACY]",
+        "test_process_message_complete_task_executes_direct_capability [LEGACY]",
+        "test_process_message_create_task_executes_direct_capability [LEGACY]",
+        "test_process_message_inbox_prompt_returns_contextual_intelligence [LEGACY]",
+        "test_process_message_schedule_event_executes_direct_capability [LEGACY]",
+        "test_process_message_sync_inbox_executes_direct_capability [LEGACY]",
+        "test_success_emits_chat_message_sent [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_col.py",
+      "tests": [
+        "test_action_plan_dict_has_required_keys [LEGACY]",
+        "test_add_message_preserves_immutability [LEGACY]",
+        "test_awaiting_to_executing_on_confirm [LEGACY]",
+        "test_awaiting_to_idle_on_cancel [LEGACY]",
+        "test_blocked_session_does_not_accept_messages [LEGACY]",
+        "test_blocked_state_produces_no_action_plan [LEGACY]",
+        "test_can_accept_message_in_clarifying [LEGACY]",
+        "test_can_accept_message_in_collecting [LEGACY]",
+        "test_can_accept_message_in_idle [LEGACY]",
+        "test_cannot_accept_message_in_blocked [LEGACY]",
+        "test_cannot_accept_message_in_executing [LEGACY]",
+        "test_clarification_prompt_for_ambiguous_field [LEGACY]",
+        "test_clarification_prompt_for_missing_task_id [LEGACY]",
+        "test_clarifying_to_collecting_on_message [LEGACY]",
+        "test_col_response_is_frozen [LEGACY]",
+        "test_col_response_to_dict_format [LEGACY]",
+        "test_collecting_to_clarifying_on_incomplete [LEGACY]",
+        "test_collecting_to_ready_on_complete [LEGACY]",
+        "test_complete_create_task_single_turn [LEGACY]",
+        "test_complete_task_required_fields [LEGACY]",
+        "test_complete_task_single_turn_allows_execution [LEGACY]",
+        "test_complete_when_all_fields_present_and_confident [LEGACY]",
+        "test_confirmation_in_wrong_state_returns_error [LEGACY]",
+        "test_contradiction_marks_field_ambiguous [LEGACY]",
+        "test_conversation_message_is_frozen [LEGACY]",
+        "test_conversation_session_is_frozen [LEGACY]",
+        "test_create_event_required_fields [LEGACY]",
+        "test_create_task_required_fields [LEGACY]",
+        "test_delete_event_cancellation_flow [LEGACY]",
+        "test_delete_event_confirmation_flow [LEGACY]",
+        "test_delete_event_requires_confirmation [LEGACY|REDUNDANT]",
+        "test_executing_to_idle_on_handoff_complete [LEGACY]",
+        "test_from_assistant_sets_role [LEGACY]",
+        "test_from_system_sets_role [LEGACY]",
+        "test_from_user_sets_role [LEGACY]",
+        "test_has_ambiguity [LEGACY]",
+        "test_human_field_name_mappings [LEGACY]",
+        "test_idle_to_collecting_on_first_message [LEGACY]",
+        "test_idle_to_collecting_on_message [LEGACY]",
+        "test_initialize_from_complete_task_message [LEGACY]",
+        "test_initialize_from_create_task_message [LEGACY]",
+        "test_invalid_transition_raises_error [LEGACY|REDUNDANT]",
+        "test_merge_preserves_existing_fields [LEGACY]",
+        "test_messages_have_unique_ids [LEGACY]",
+        "test_missing_field_triggers_clarification [LEGACY]",
+        "test_missing_fields_computed_correctly [LEGACY]",
+        "test_multi_turn_intent_refinement [LEGACY]",
+        "test_multi_turn_merge_adds_new_fields [LEGACY]",
+        "test_multi_turn_merge_increments_turn_count [LEGACY]",
+        "test_multiple_turns_never_lose_session_id [LEGACY]",
+        "test_never_fabricates_missing_fields [LEGACY]",
+        "test_new_session_is_idle [LEGACY]",
+        "test_next_action_enum_values [LEGACY]",
+        "test_no_ambiguity [LEGACY]",
+        "test_no_free_form_reasoning_in_assistant_message [LEGACY]",
+        "test_not_complete_when_ambiguous_fields [LEGACY]",
+        "test_not_complete_when_confidence_low [LEGACY]",
+        "test_not_complete_when_intent_type_none [LEGACY]",
+        "test_not_complete_when_missing_fields [LEGACY]",
+        "test_partial_intent_is_frozen [LEGACY]",
+        "test_ready_to_awaiting_on_confirm [LEGACY]",
+        "test_ready_to_blocked_on_block [LEGACY]",
+        "test_ready_to_executing_on_allow [LEGACY]",
+        "test_required_fields_by_intent_completeness [LEGACY]",
+        "test_required_fields_for_complete_task [LEGACY]",
+        "test_required_fields_for_create_task [LEGACY]",
+        "test_required_fields_for_none_intent [LEGACY]",
+        "test_required_fields_for_reschedule_task [LEGACY]",
+        "test_required_fields_map_covers_all_intent_types [LEGACY]",
+        "test_reschedule_task_required_fields [LEGACY]",
+        "test_reset_session_returns_to_idle [LEGACY]",
+        "test_response_always_has_assistant_message [LEGACY]",
+        "test_response_always_has_session_id [LEGACY]",
+        "test_response_has_structured_next_action_enum [LEGACY]",
+        "test_response_has_structured_state_enum [LEGACY]",
+        "test_session_messages_accumulate [LEGACY]",
+        "test_session_state_enum_values [LEGACY]",
+        "test_session_state_preserved_across_turns [LEGACY]",
+        "test_transition_from_fields_complete [LEGACY]",
+        "test_transition_from_fields_incomplete [LEGACY]",
+        "test_transition_from_policy_allow [LEGACY]",
+        "test_transition_from_policy_block [LEGACY]",
+        "test_transition_from_policy_confirm [LEGACY]",
+        "test_with_updates_creates_new_instance [LEGACY]",
+        "test_with_updates_creates_new_instance [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_cqrs_lifecycle_invariants.py",
+      "tests": [
+        "test_allowed_transitions_is_sole_rule_source [LEGACY]",
+        "test_api_never_exposes_raw_enum [LEGACY]",
+        "test_api_uses_lifecycle_presentation_mapper [LEGACY]",
+        "test_cqrs_write_read_integration [LEGACY]",
+        "test_fsm_is_sole_mutation_authority [LEGACY]",
+        "test_fsm_transition_to_enforces_validation [LEGACY]",
+        "test_hydration_view_is_non_persisted [LEGACY]",
+        "test_loaders_do_not_mutate_lifecycle_fields [LEGACY]",
+        "test_no_normalize_state_mutations [LEGACY]",
+        "test_only_transition_to_mutates_state_in_fsm [LEGACY]",
+        "test_presentation_mapper_is_read_only [LEGACY]",
+        "test_reducer_event_mapping_not_decision_logic [LEGACY]",
+        "test_reducer_is_pure_function [LEGACY]",
+        "test_reducer_validates_using_fsm_rules [LEGACY]",
+        "test_validate_transition_is_authoritative [LEGACY]",
+        "test_write_and_read_models_are_separate [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_daily_loop_engine.py",
+      "tests": [
+        "test_daily_get_endpoint_does_not_persist [LEGACY]",
+        "test_daily_loop_consumes_runtime_plan_output [LEGACY]",
+        "test_daily_loop_generation_is_read_only [LEGACY]",
+        "test_daily_loop_has_no_overlapping_time_blocks [LEGACY]",
+        "test_daily_loop_output_is_deterministic [LEGACY]",
+        "test_daily_loop_places_meals_and_workouts [LEGACY]",
+        "test_daily_loop_preserves_buffer_time [LEGACY]",
+        "test_daily_regenerate_endpoint_persists [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_decision_engine.py",
+      "tests": [
+        "test_nearer_event_prioritized [LEGACY]",
+        "test_no_state_mutation [LEGACY]",
+        "test_process_returns_expected_shape [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_decision_engine_integration.py",
+      "tests": [
+        "test_decision_engine_prioritization [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_email_action_summary.py",
+      "tests": [
+        "test_email_action_summary_applies_llm_refinement_when_available [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_classifies_promotional_mail_as_junk [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_does_not_apply_sensitive_sender_bonus_to_junk_domains [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_does_not_force_informational_when_actions_exist [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_extracts_prioritized_actions_and_calendar_candidates [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_ignores_quoted_lines_for_action_extraction [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_is_deterministic_for_identical_input [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_marks_non_action_updates_as_informational [CONCURRENCY_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_email_priority_llm.py",
+      "tests": [
+        "test_email_priority_llm_applies_valid_high_confidence_refinement [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_disabled_skips_remote_call [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_enabled_requires_credentials [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_middle_band_requires_ambiguity [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_respects_per_minute_budget [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_skips_low_score_cases [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_uses_thread_cache_key [CONCURRENCY_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_email_service_actions.py",
+      "tests": [
+        "test_handle_email_received_ignores_junk_emails [LEGACY]",
+        "test_handle_email_received_informational_without_attention_skips_task [LEGACY]",
+        "test_handle_email_received_uses_action_item_title_and_importance_priority [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_env_bootstrap.py",
+      "tests": [
+        "test_get_missing_google_oauth_env_vars_reports_missing_keys [LEGACY]",
+        "test_load_environment_populates_google_oauth_env_from_dotenv [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_evaluation_endpoints.py",
+      "tests": [
+        "test_evaluation_results_artifact_endpoint_serves_json [LEGACY]",
+        "test_evaluation_run_endpoint_returns_expected_contract [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_event_adapter.py",
+      "tests": [
+        "test_batch_adapter_is_deterministic [LEGACY]",
+        "test_batch_preserves_order [LEGACY]",
+        "test_deep_copy_input_produces_identical_output [LEGACY]",
+        "test_different_providers_produce_distinct_sources [LEGACY]",
+        "test_each_provider_event_independent [LEGACY]",
+        "test_event_id_preserved_in_data [LEGACY]",
+        "test_event_type_mapped_to_type_field [LEGACY]",
+        "test_payload_content_preserved [LEGACY]",
+        "test_payload_with_unsorted_keys_normalised [LEGACY]",
+        "test_same_event_produces_identical_output [LEGACY]",
+        "test_same_provider_multiple_events_all_deterministic [LEGACY]",
+        "test_source_metadata_contains_provider_name [LEGACY]",
+        "test_timestamp_preserved_at_top_level [LEGACY]",
+        "test_user_id_preserved_in_data [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_event_windowing.py",
+      "tests": [
+        "test_filter_drops_events_beyond_ninety_days_future [LEGACY]",
+        "test_filter_drops_events_older_than_twenty_four_hours_past [LEGACY]",
+        "test_filter_preserves_ongoing_events [LEGACY]",
+        "test_long_term_window_returns_at_most_ninety_days [LEGACY]",
+        "test_mid_term_window_returns_at_most_thirty_days [LEGACY]",
+        "test_retention_pruning_removes_stale_events [LEGACY]",
+        "test_short_term_window_returns_at_most_seven_days [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_external_event_normalization.py",
+      "tests": [
+        "test_deterministic_event_id_generation [LEGACY]",
+        "test_event_id_stability_for_recurring_series [LEGACY]",
+        "test_mixed_single_and_recurring_event_sets [LEGACY]",
+        "test_no_duplicate_events_from_recurring_series [LEGACY]",
+        "test_normalization_consistency_across_providers [LEGACY]",
+        "test_recurring_event_collapse_deduplication [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_feature_flags.py",
+      "tests": [
+        "test_each_result_has_disabled_status [LEGACY]",
+        "test_empty_batch_disabled_is_safe [LEGACY]",
+        "test_event_ids_present_in_disabled_results [LEGACY]",
+        "test_falsy_env_keeps_flag_disabled [LEGACY]",
+        "test_flag_default_registered_as_false [LEGACY]",
+        "test_flag_default_unknown_returns_false [LEGACY]",
+        "test_flag_evaluated_at_call_time [LEGACY]",
+        "test_ingested_count_is_zero_when_disabled [LEGACY]",
+        "test_ingested_count_matches_events_when_enabled [LEGACY]",
+        "test_ingestion_flag_defaults_to_false [LEGACY]",
+        "test_missing_env_var_is_safe [LEGACY]",
+        "test_no_disabled_status_in_results_when_enabled [LEGACY]",
+        "test_os1_called_for_each_event_when_enabled [LEGACY]",
+        "test_os1_not_called_when_disabled [LEGACY]",
+        "test_top_level_status_is_disabled [LEGACY]",
+        "test_top_level_status_key_absent_when_enabled [LEGACY]",
+        "test_total_events_still_reported_when_disabled [LEGACY]",
+        "test_truthy_env_enables_flag [LEGACY]",
+        "test_unknown_flag_defaults_to_false [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_frontend_runtime_contract.py",
+      "tests": [
+        "test_action_execution_idempotency [LEGACY|SSE_HEAVY]",
+        "test_chat_session_consistency_under_retry [LEGACY|SSE_HEAVY]",
+        "test_deterministic_patch_replay [LEGACY|SSE_HEAVY]",
+        "test_failure_recovery_uses_backend_snapshot_authority [LEGACY|SSE_HEAVY]",
+        "test_snapshot_reconstruction_equivalence [LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_fsm_non_authority.py",
+      "tests": [
+        "test_fsm_does_not_override_state [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_google_calendar_full_external_validation.py",
+      "tests": [
+        "test_google_calendar_full_external_validation [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_google_calendar_integration_surface.py",
+      "tests": [
+        "test_end_to_end_calendar_ingestion_flow [LEGACY]",
+        "test_google_oauth_url_generation [LEGACY]",
+        "test_oauth_callback_stores_credentials [LEGACY]",
+        "test_orchestrator_builds_household_state_from_credential_store [FLAKY_RISK|LEGACY]",
+        "test_orchestrator_household_state_has_raw_events_in_debug_meta [FLAKY_RISK|LEGACY]",
+        "test_provider_fetch_with_mock_credentials [LEGACY]",
+        "test_provider_refreshes_expired_access_token_before_google_calls [FLAKY_RISK|LEGACY]",
+        "test_provider_returns_empty_dataset_when_expired_and_refresh_token_missing [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_google_calendar_oauth.py",
+      "tests": [
+        "test_callback_accepts_signed_state_when_pending_store_is_cleared [LEGACY]",
+        "test_callback_preserves_existing_refresh_token_when_omitted [LEGACY]",
+        "test_callback_redirect_preserves_origin_and_household_id [LEGACY]",
+        "test_callback_response_html_is_stable [LEGACY]",
+        "test_callback_returns_200 [LEGACY]",
+        "test_callback_returns_success_html [LEGACY]",
+        "test_callback_state_consumed_after_use [LEGACY]",
+        "test_callback_stores_credentials [LEGACY]",
+        "test_callback_stores_refresh_token [LEGACY]",
+        "test_callback_stores_user_id_correctly [LEGACY]",
+        "test_clear_removes_all_tokens [LEGACY]",
+        "test_connect_different_users_produce_different_state_tokens [LEGACY]",
+        "test_connect_redirects_to_google [LEGACY]",
+        "test_connect_returns_302 [LEGACY]",
+        "test_connect_unconfigured_returns_structured_400 [LEGACY]",
+        "test_connect_url_contains_user_bound_state [LEGACY]",
+        "test_connect_url_has_readonly_scope [LEGACY]",
+        "test_fabricated_state_rejected [LEGACY]",
+        "test_generate_state_returns_string [LEGACY]",
+        "test_generated_state_stored [LEGACY]",
+        "test_http_error_includes_google_error_details [LEGACY]",
+        "test_integrations_router_no_os2_imports [LEGACY]",
+        "test_is_configured_false_when_empty [LEGACY]",
+        "test_is_configured_true_when_all_set [LEGACY]",
+        "test_mismatch_error_message [LEGACY]",
+        "test_multiple_users_independent_tokens [LEGACY]",
+        "test_no_credentials_stored_on_mismatch [LEGACY]",
+        "test_no_write_scopes_in_url [LEGACY]",
+        "test_oauth_config_module_no_forbidden_imports [LEGACY]",
+        "test_posts_correct_payload [LEGACY]",
+        "test_posts_to_google_token_url [LEGACY]",
+        "test_processed_state_outcome_persists_across_store_restart [LEGACY]",
+        "test_raises_on_http_error [LEGACY]",
+        "test_refresh_posts_correct_payload [LEGACY]",
+        "test_refresh_returns_access_token [LEGACY]",
+        "test_returns_access_token [LEGACY]",
+        "test_returns_refresh_token [LEGACY]",
+        "test_same_state_produces_identical_url [LEGACY]",
+        "test_state_mismatch_returns_false [LEGACY]",
+        "test_state_persists_across_store_restart_when_path_configured [LEGACY]",
+        "test_status_returns_connected_with_metadata [FLAKY_RISK|LEGACY]",
+        "test_status_returns_not_connected_when_missing_credentials [LEGACY]",
+        "test_sync_ingests_gmail_messages_with_household_override [FLAKY_RISK|LEGACY]",
+        "test_sync_requires_connected_google_credentials [LEGACY]",
+        "test_sync_returns_reconnect_hint_when_gmail_scope_missing [FLAKY_RISK|LEGACY]",
+        "test_two_complete_flows_store_same_credentials [LEGACY]",
+        "test_unknown_state_returns_false [LEGACY]",
+        "test_url_contains_client_id [LEGACY]",
+        "test_url_contains_readonly_scope [LEGACY]",
+        "test_url_encodes_state [LEGACY]",
+        "test_url_has_response_type_code [LEGACY]",
+        "test_url_includes_redirect_uri [LEGACY]",
+        "test_url_requests_include_granted_scopes [LEGACY]",
+        "test_url_requests_offline_access [LEGACY]",
+        "test_url_starts_with_google_auth_url [LEGACY]",
+        "test_validate_and_consume_removes_token [LEGACY]",
+        "test_validate_and_consume_returns_true_for_correct_pair [LEGACY]",
+        "test_validate_and_consume_single_use [LEGACY]",
+        "test_wrong_user_id_rejected [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_google_oauth_env_config.py",
+      "tests": [
+        "test_client_id_injected_from_environment_only [LEGACY]",
+        "test_missing_env_vars_report_soft_configuration_status [LEGACY]",
+        "test_redirect_uri_used_exactly_as_configured [LEGACY]",
+        "test_token_refresh_flow [FLAKY_RISK|LEGACY]",
+        "test_valid_env_vars_generate_oauth_url [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_google_oauth_missing_config_safe_boot.py",
+      "tests": [
+        "test_missing_google_oauth_config_does_not_crash_system [LEGACY]",
+        "test_orchestrator_continues_running_when_google_oauth_not_configured [LEGACY]",
+        "test_provider_fetch_returns_empty_and_disabled_when_oauth_not_configured [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_household_os.py",
+      "tests": [
+        "test_household_os_approval_recording [LEGACY]",
+        "test_household_os_cross_domain_reasoning [LEGACY]",
+        "test_household_os_deterministic_output [LEGACY]",
+        "test_household_os_maps_relative_daypart_to_requested_slot [LEGACY]",
+        "test_household_os_meal_schedule_uses_reference_date [LEGACY]",
+        "test_household_os_no_module_leakage [LEGACY]",
+        "test_household_os_preserves_explicit_requested_appointment_time [LEGACY]",
+        "test_household_os_preserves_explicit_requested_time_without_year [LEGACY]",
+        "test_household_os_rejects_empty_allowed_domains [LEGACY]",
+        "test_household_os_single_action_output [LEGACY]",
+        "test_household_os_state_graph_consistency [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_household_os_runtime.py",
+      "tests": [
+        "test_action_lifecycle_flow [LEGACY]",
+        "test_daily_cycle [LEGACY]",
+        "test_direct_state_mutation_is_blocked [LEGACY]",
+        "test_orchestrator_tick [LEGACY]",
+        "test_trigger_detection [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_household_state.py",
+      "tests": [
+        "test_debug_and_brief_share_same_event_data [LEGACY]",
+        "test_debug_brief_7d_key_matches_brief_projection [LEGACY]",
+        "test_disabled_oauth_health_surfaces_action [LEGACY]",
+        "test_disabled_oauth_returns_valid_household_state [LEGACY]",
+        "test_disabled_oauth_state_serialises_cleanly [LEGACY]",
+        "test_event_beyond_30d_appears_only_in_90d [LEGACY]",
+        "test_event_beyond_7d_appears_only_in_30d_and_90d [LEGACY]",
+        "test_event_in_range_appears_in_all_windows [LEGACY]",
+        "test_household_state_brief_projection_contains_integration_health [LEGACY]",
+        "test_household_state_canonical_fields_are_source_of_truth [LEGACY]",
+        "test_stale_event_excluded_from_all_windows [FLAKY_RISK|LEGACY]",
+        "test_state_builder_applies_windowing [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_household_state_manager.py",
+      "tests": [
+        "test_conflict_detection_across_domains [LEGACY]",
+        "test_no_module_leakage_in_response [LEGACY]",
+        "test_single_action_output_guarantee [LEGACY]",
+        "test_state_convergence_after_multiple_queries [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_identity_events_runtime.py",
+      "tests": [
+        "test_create_session_token_retries_on_sqlite_lock [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_create_user_failure_emits_user_creation_failed [DB_HEAVY|LEGACY]",
+        "test_create_user_success_emits_user_created [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_identity_layer.py",
+      "tests": [
+        "test_bootstrap_resolves_to_any_user_in_household [LEGACY]",
+        "test_device_registration_consistency [LEGACY]",
+        "test_devices_isolated_between_users [LEGACY]",
+        "test_encode_decode_determinism [LEGACY]",
+        "test_expired_token_rejected [FLAKY_RISK|LEGACY|REDUNDANT]",
+        "test_household_creation_persistence [LEGACY]",
+        "test_last_seen_tracking [FLAKY_RISK|LEGACY]",
+        "test_multi_user_household_membership [LEGACY]",
+        "test_role_based_permissions [LEGACY]",
+        "test_session_rehydration_from_token [LEGACY]",
+        "test_session_token_encodes_claims [LEGACY]",
+        "test_token_refresh_preserves_identity [LEGACY]",
+        "test_user_creation_persistence [LEGACY]",
+        "test_users_isolated_between_households [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_ingestion_events_runtime.py",
+      "tests": [
+        "test_invalid_email_emits_email_parse_failed [LEGACY]",
+        "test_junk_email_is_ignored_before_routing [FLAKY_RISK|LEGACY]",
+        "test_resolve_household_id_for_email_falls_back_to_source_mapping [LEGACY]",
+        "test_resolve_household_id_for_email_prefers_explicit_household_id [LEGACY]",
+        "test_resolve_household_id_for_email_uses_recipient_identity_lookup [LEGACY]",
+        "test_valid_email_emits_email_parsed [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_ingestion_router.py",
+      "tests": [
+        "test_ingest_email_route_delegates_to_service [LEGACY]",
+        "test_ingest_email_route_maps_ingestion_error [LEGACY]",
+        "test_ingest_provider_email_batch_route_returns_row_statuses [LEGACY]",
+        "test_ingest_provider_email_route_parses_and_delegates [LEGACY]",
+        "test_ingest_webhook_route_delegates_to_service [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_integration_architecture_guard.py",
+      "tests": [
+        "test_allowed_import_passes_runtime_guard [LEGACY]",
+        "test_forbidden_imports_fail_at_runtime_guard [LEGACY]",
+        "test_forbidden_prefix_check_is_deterministic [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_integration_core.py",
+      "tests": [
+        "test_credential_store_uses_encryption_ready_cipher_interface [LEGACY]",
+        "test_default_provider_registry_has_gmail_and_google_calendar [LEGACY]",
+        "test_mock_token_not_allowed_when_not_in_test_mode [LEGACY]",
+        "test_mock_token_supported_in_test_mode [LEGACY]",
+        "test_placeholder_provider_status_is_deterministic_and_no_network [LEGACY]",
+        "test_provider_registry_supports_dependency_injection [LEGACY]",
+        "test_user_identity_model_is_strongly_typed [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_integration_identity_system.py",
+      "tests": [
+        "test_household_membership_assignment [LEGACY]",
+        "test_lookup_by_user_id_and_household_id [LEGACY]",
+        "test_user_creation [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_intent_contract.py",
+      "tests": [
+        "test_action_plan_has_generated_timestamp [LEGACY]",
+        "test_action_sequence_numbers_are_correct [LEGACY]",
+        "test_classifier_confidence_score_is_bounded [LEGACY]",
+        "test_classifier_extracts_event_id [LEGACY]",
+        "test_classifier_extracts_plan_id [LEGACY]",
+        "test_classifier_extracts_task_id [LEGACY]",
+        "test_classifier_extracts_task_name [LEGACY]",
+        "test_classifier_low_confidence_unknown_input [LEGACY]",
+        "test_classifier_recognizes_complete_task [LEGACY]",
+        "test_classifier_recognizes_create_event [LEGACY]",
+        "test_classifier_recognizes_create_plan [LEGACY]",
+        "test_classifier_recognizes_create_task [LEGACY]",
+        "test_classifier_recognizes_delete_event [LEGACY]",
+        "test_classifier_same_input_same_output [LEGACY]",
+        "test_complete_task_intent_is_frozen [LEGACY]",
+        "test_create_event_intent_is_frozen [LEGACY]",
+        "test_create_task_intent_is_frozen [LEGACY]",
+        "test_different_intent_types_different_keys [LEGACY]",
+        "test_different_intents_different_idempotency_keys [LEGACY]",
+        "test_full_pipeline_complete_task [LEGACY]",
+        "test_full_pipeline_create_task [LEGACY]",
+        "test_full_pipeline_deterministic [LEGACY]",
+        "test_full_pipeline_fails_on_unknown_task [LEGACY]",
+        "test_idempotency_key_is_deterministic [LEGACY]",
+        "test_pipeline_create_event [LEGACY]",
+        "test_pipeline_with_optional_fields [LEGACY]",
+        "test_planner_creates_action_for_complete_task [LEGACY]",
+        "test_planner_creates_action_for_create_event [LEGACY]",
+        "test_planner_creates_action_for_create_plan [LEGACY]",
+        "test_planner_creates_action_for_create_task [LEGACY]",
+        "test_planner_creates_action_for_delete_event [LEGACY]",
+        "test_planner_creates_action_for_recompute_plan [LEGACY]",
+        "test_planner_creates_action_for_reschedule_task [LEGACY]",
+        "test_planner_creates_action_for_update_plan [LEGACY]",
+        "test_planner_returns_none_for_unknown_intent [LEGACY]",
+        "test_same_intent_same_idempotency_key [LEGACY]",
+        "test_validator_accepts_existing_event [LEGACY]",
+        "test_validator_accepts_existing_plan [LEGACY]",
+        "test_validator_accepts_existing_task [LEGACY]",
+        "test_validator_accepts_valid_create_event_with_optional_fields [LEGACY]",
+        "test_validator_accepts_valid_create_task [LEGACY]",
+        "test_validator_checks_plan_id_optional_reference [LEGACY]",
+        "test_validator_rejects_end_time_before_start_time [LEGACY]",
+        "test_validator_rejects_invalid_datetime [LEGACY]",
+        "test_validator_rejects_low_confidence [LEGACY]",
+        "test_validator_rejects_missing_task_id_for_complete [LEGACY]",
+        "test_validator_rejects_missing_task_name [LEGACY]",
+        "test_validator_rejects_nonexistent_event [LEGACY]",
+        "test_validator_rejects_nonexistent_task [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_intent_resolver.py",
+      "tests": [
+        "test_coerce_intent_type_accepts_enum_name [LEGACY]",
+        "test_coerce_intent_type_accepts_enum_value [LEGACY]",
+        "test_coerce_intent_type_unknown_value_returns_none [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_invariance_enforcement.py",
+      "tests": [
+        "test_no_direct_realtimeevent_outside_broadcaster [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_no_direct_sse_formatting_outside_broadcaster [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_no_to_sse_anywhere_in_runtime_paths [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_no_transport_flags_in_repository [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_redis_ingress_reenters_canonical_pipeline [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_replay_routes_via_router_without_transport_branching [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_router_has_no_conditional_sse_logic [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_single_emission_path_runtime_contract [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_watermark_ignores_external_and_is_monotonic [DB_HEAVY|LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_lifecycle_integrity_invariants.py",
+      "tests": [
+        "test_db_roundtrip_state [DB_HEAVY|LEGACY]",
+        "test_fsm_never_overrides_reducer [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_manual_priority_adapter.py",
+      "tests": [
+        "test_keyword_scoring_rules_are_correct [LEGACY]",
+        "test_low_priority_actions_filtered_to_unscheduled_by_threshold [LEGACY]",
+        "test_score_is_deterministic_for_same_input [LEGACY]",
+        "test_time_adjustments_are_applied [LEGACY]",
+        "test_visibility_block_default_unscheduled_for_missing_time [LEGACY]",
+        "test_visibility_filter_is_deterministic_for_same_input [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_oauth_credential_store.py",
+      "tests": [
+        "test_credentials_persist_when_backed_by_file [LEGACY]",
+        "test_delete_credentials [LEGACY]",
+        "test_lookup_miss_reloads_from_disk [LEGACY]",
+        "test_overwrite_credentials [LEGACY]",
+        "test_store_and_retrieve_credentials [LEGACY]",
+        "test_supports_multiple_providers_per_user [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_operational_mode.py",
+      "tests": [
+        "test_operational_api_contract_validity [LEGACY]",
+        "test_operational_brief_executes_real_pipeline [LEGACY]",
+        "test_operational_output_structure_is_deterministic [LEGACY]",
+        "test_operational_pipeline_isolation_from_simulation_and_evaluation [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_outlook_calendar_provider.py",
+      "tests": [
+        "test_outlook_provider_fetches_events_from_primary_and_shared_calendars [LEGACY]",
+        "test_outlook_provider_returns_disabled_when_not_connected [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_output_governor.py",
+      "tests": [
+        "test_daily_focus_api_response_uses_governed_fallback [LEGACY]",
+        "test_daily_focus_never_returns_booking_meal_or_fitness_actions [LEGACY]",
+        "test_fallback_always_returns_schedule_review_recommendation [LEGACY]",
+        "test_no_banned_system_phrases_appear_in_output [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_pantry_router.py",
+      "tests": [
+        "test_adjust_inventory_refreshes_projection_watermark [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_adjust_inventory_supports_units_and_decimal_quantities [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_adjust_inventory_updates_counts [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_cook_recipe_decrements_inventory_and_records_history [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_receipt_ingestion_detects_and_applies_text_items [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_policy_guardrails.py",
+      "tests": [
+        "test_all_allow_rules [LEGACY]",
+        "test_all_decisions_are_defined [LEGACY]",
+        "test_all_intent_types_have_rules [LEGACY]",
+        "test_all_require_confirmation_rules [LEGACY]",
+        "test_allow_decision_properties [LEGACY]",
+        "test_block_decision_properties [LEGACY]",
+        "test_complete_task_is_allowed [LEGACY]",
+        "test_config_allows_customization [LEGACY]",
+        "test_config_is_immutable [LEGACY]",
+        "test_create_task_is_allowed [LEGACY]",
+        "test_create_task_rule_exists [LEGACY]",
+        "test_decision_string_representation [LEGACY]",
+        "test_default_config_is_safe [LEGACY]",
+        "test_delete_event_requires_confirmation [LEGACY|REDUNDANT]",
+        "test_delete_event_rule_confirms [LEGACY]",
+        "test_evaluate_action_plan_directly [LEGACY]",
+        "test_evaluate_multi_action_plan [LEGACY]",
+        "test_evaluation_is_deterministic [LEGACY]",
+        "test_evaluator_accepts_custom_config [LEGACY]",
+        "test_evaluator_initializes_with_defaults [LEGACY]",
+        "test_evaluator_respects_config [LEGACY]",
+        "test_evaluator_with_blocking_config [LEGACY]",
+        "test_extract_entity_ids_from_action_plan [LEGACY]",
+        "test_multiple_evaluators_independent [LEGACY]",
+        "test_policy_input_is_frozen [LEGACY]",
+        "test_policy_input_with_multiple_entity_ids [LEGACY]",
+        "test_policy_input_with_no_entity_ids [LEGACY]",
+        "test_policy_input_with_plan_id [LEGACY]",
+        "test_policy_result_is_frozen [LEGACY]",
+        "test_policy_rule_is_frozen [LEGACY]",
+        "test_reason_codes_are_informative [LEGACY]",
+        "test_recompute_plan_rule_confirms [LEGACY]",
+        "test_require_confirmation_decision_properties [LEGACY]",
+        "test_result_has_rule_name [LEGACY]",
+        "test_result_message_is_non_empty [LEGACY]",
+        "test_rule_has_message [LEGACY]",
+        "test_rule_has_reason_code [LEGACY]",
+        "test_rule_priorities_are_set [LEGACY]",
+        "test_rule_summary_groups_by_decision [LEGACY]",
+        "test_safe_by_default_philosophy [LEGACY]",
+        "test_scope_estimation [LEGACY]",
+        "test_unknown_intent_uses_default_decision [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_provider_email_adapter.py",
+      "tests": [
+        "test_google_payload_parser_converts_html_body_to_plain_text [LEGACY]",
+        "test_google_payload_parser_supports_gmail_message_shape [LEGACY]",
+        "test_outlook_payload_parser_supports_graph_message_shape [LEGACY]",
+        "test_provider_name_normalization_aliases [LEGACY]",
+        "test_unknown_provider_uses_generic_parser [LEGACY]",
+        "test_yahoo_payload_parser_supports_header_style_shape [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_provider_registry.py",
+      "tests": [
+        "test_mock_fetch_events_returns_deterministic_data [LEGACY]",
+        "test_provider_registration [LEGACY]",
+        "test_provider_retrieval [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_recommendation_builder.py",
+      "tests": [
+        "test_no_vague_language [LEGACY]",
+        "test_recommendation_contains_time [LEGACY]",
+        "test_recommendation_is_actionable [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_security_verification_harness.py",
+      "tests": [
+        "test_empty_action_ids_does_not_bypass_auth [DB_HEAVY|LEGACY]",
+        "test_execution_context_from_api_request_carries_correct_fields [DB_HEAVY|LEGACY]",
+        "test_execution_context_system_context_actor_is_system_worker [DB_HEAVY|LEGACY]",
+        "test_fsm_terminal_states_cannot_be_transitioned_out_of [DB_HEAVY|LEGACY]",
+        "test_invariant_actor_context_propagation [DB_HEAVY|LEGACY]",
+        "test_invariant_assistant_blocked_at_api_layer [DB_HEAVY|LEGACY]",
+        "test_invariant_assistant_blocked_at_fsm_layer [DB_HEAVY|LEGACY]",
+        "test_invariant_assistant_blocked_at_orchestrator_layer [DB_HEAVY|LEGACY]",
+        "test_invariant_assistant_blocked_via_execution_context [DB_HEAVY|LEGACY]",
+        "test_invariant_context_not_silently_dropped_on_retry [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_invariant_cross_household_access_blocked [DB_HEAVY|LEGACY]",
+        "test_invariant_cross_household_via_orchestrator_direct [DB_HEAVY|LEGACY]",
+        "test_invariant_events_actor_type_not_unknown_for_identified_caller [DB_HEAVY|LEGACY]",
+        "test_invariant_events_contain_actor_type [DB_HEAVY|LEGACY]",
+        "test_invariant_execution_context_metadata_wired_to_events [DB_HEAVY|LEGACY]",
+        "test_invariant_fsm_allows_api_user_with_context [DB_HEAVY|LEGACY]",
+        "test_invariant_fsm_blocks_approval_skip_when_requires_approval [DB_HEAVY|LEGACY]",
+        "test_invariant_fsm_blocks_assistant_in_proposed_to_approved [DB_HEAVY|LEGACY]",
+        "test_invariant_fsm_blocks_assistant_with_context [DB_HEAVY|LEGACY]",
+        "test_invariant_fsm_blocks_assistant_without_context [DB_HEAVY|LEGACY]",
+        "test_invariant_missing_actor_type_does_not_approve [DB_HEAVY|LEGACY]",
+        "test_invariant_missing_actor_type_never_becomes_assistant [DB_HEAVY|LEGACY]",
+        "test_invariant_replay_of_valid_stream_succeeds [DB_HEAVY|LEGACY]",
+        "test_invariant_replay_proposed_to_approved_skipping_required_guard [DB_HEAVY|LEGACY]",
+        "test_invariant_replay_with_injected_assistant_approval_fails_or_rejects [DB_HEAVY|LEGACY]",
+        "test_invariant_system_worker_bypasses_household_check_for_tick [DB_HEAVY|LEGACY]",
+        "test_invariant_system_worker_events_marked_correctly [DB_HEAVY|LEGACY]",
+        "test_unknown_actor_type_is_rejected [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_single_pipeline_enforcement.py",
+      "tests": [
+        "test_brief_endpoint_calls_orchestrator_only [LEGACY]",
+        "test_canonical_decision_engine_importable [LEGACY]",
+        "test_canonical_decision_engine_process_produces_context [LEGACY]",
+        "test_endpoint_uses_only_orchestrator [LEGACY]",
+        "test_no_apps_source_imports_orchestrator_lite [LEGACY]",
+        "test_no_new_orchestrator_or_duplicate_decision_engine_classes [LEGACY]",
+        "test_no_pipeline_symbols_outside_integration_core [LEGACY]",
+        "test_no_source_imports_deleted_symbol [LEGACY]",
+        "test_only_integration_core_decision_engine_exists [LEGACY]",
+        "test_only_integration_core_orchestrator_exists [LEGACY]",
+        "test_only_state_builder_calls_fetch_events [LEGACY]",
+        "test_only_state_builder_imports_providers_module [LEGACY]",
+        "test_services_decision_engine_is_deleted [LEGACY]",
+        "test_synthesis_engine_module_is_deleted [LEGACY]",
+        "test_worker_module_is_deleted [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_sse_canonical_only.py",
+      "tests": [
+        "test_canonical_event_envelope_passes [LEGACY|SSE_HEAVY]",
+        "test_domain_event_rejected [LEGACY|SSE_HEAVY]",
+        "test_logging_includes_event_type_and_origin [LEGACY|SSE_HEAVY]",
+        "test_null_event_rejected [LEGACY|SSE_HEAVY]",
+        "test_only_canonical_envelope_passes [FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_origin_module_detection [LEGACY|SSE_HEAVY]",
+        "test_raw_dict_rejected [LEGACY|SSE_HEAVY]",
+        "test_reject_integer_event [LEGACY|SSE_HEAVY]",
+        "test_reject_string_event [LEGACY|SSE_HEAVY]",
+        "test_rejection_message_includes_origin [LEGACY|SSE_HEAVY]",
+        "test_rejection_message_mentions_allowed_type [LEGACY|SSE_HEAVY]",
+        "test_rejection_message_shows_received_type [LEGACY|SSE_HEAVY]",
+        "test_system_event_rejected_if_not_canonical_envelope [LEGACY|SSE_HEAVY]",
+        "test_validation_called_in_publish_async [LEGACY|SSE_HEAVY]",
+        "test_validation_called_in_publish_sync [LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_sse_event_closure.py",
+      "tests": [
+        "test_idempotency_preservation_duplicate_events_deduped [LEGACY|SSE_HEAVY]",
+        "test_no_direct_canonical_envelope_instantiation_in_business_services [LEGACY|SSE_HEAVY]",
+        "test_no_direct_sse_construction_runtime_paths [LEGACY|SSE_HEAVY]",
+        "test_registry_enforcement_hard_reject_unknown_event_type [FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_replay_determinism_same_input_identical_stream [LEGACY|SSE_HEAVY]",
+        "test_replay_has_no_transport_branching_or_direct_sse_calls [LEGACY|SSE_HEAVY]",
+        "test_schema_parity_domain_to_canonical_to_sse_lossless_subset [FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_watermark_ordering_shuffled_input_rejects_stale [LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_state_builder_multi_provider.py",
+      "tests": [
+        "test_state_builder_aggregates_connected_calendar_providers [LEGACY]",
+        "test_state_builder_keeps_google_fallback_when_no_provider_credentials [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_state_machine.py",
+      "tests": [
+        "test_all_retryable_errors_defined [LEGACY]",
+        "test_approved_has_3600s_timeout [FLAKY_RISK|LEGACY]",
+        "test_approved_to_committed_allowed [LEGACY]",
+        "test_approved_to_failed_allowed [LEGACY]",
+        "test_approved_to_pending_approval_denied [LEGACY]",
+        "test_assistant_cannot_approve [LEGACY|REDUNDANT]",
+        "test_authorization_denied_is_not_retryable [LEGACY]",
+        "test_can_retry_on_failed_state [FLAKY_RISK|LEGACY]",
+        "test_cannot_retry_after_max_retries [FLAKY_RISK|LEGACY]",
+        "test_committed_has_no_timeout [FLAKY_RISK|LEGACY]",
+        "test_committed_is_terminal [LEGACY]",
+        "test_committed_is_terminal [LEGACY]",
+        "test_database_connection_error_is_retryable [LEGACY]",
+        "test_event_has_timestamp [LEGACY]",
+        "test_event_to_dict [LEGACY]",
+        "test_failed_is_terminal_after_max_retries [LEGACY]",
+        "test_failed_not_terminal_if_can_retry [LEGACY]",
+        "test_failed_to_proposed_allowed [FLAKY_RISK|LEGACY]",
+        "test_get_timeout_seconds [FLAKY_RISK|LEGACY]",
+        "test_has_timed_out_false_before_timeout [FLAKY_RISK|LEGACY]",
+        "test_has_timed_out_true_after_timeout [FLAKY_RISK|LEGACY]",
+        "test_initial_state_is_proposed [LEGACY]",
+        "test_invalid_transition_raises [LEGACY]",
+        "test_invalid_transition_raises [LEGACY]",
+        "test_max_retries_constant [LEGACY]",
+        "test_multiple_retries [LEGACY]",
+        "test_multiple_transitions [LEGACY]",
+        "test_network_timeout_is_retryable [FLAKY_RISK|LEGACY]",
+        "test_noop_transition_raises [LEGACY]",
+        "test_pending_approval_has_1800s_timeout [FLAKY_RISK|LEGACY]",
+        "test_pending_approval_to_approved_allowed [LEGACY]",
+        "test_pending_approval_to_proposed_denied [LEGACY]",
+        "test_pending_approval_to_rejected_allowed [LEGACY]",
+        "test_proposed_has_600s_timeout [FLAKY_RISK|LEGACY]",
+        "test_proposed_to_approved_allowed [LEGACY]",
+        "test_proposed_to_failed_allowed [LEGACY]",
+        "test_proposed_to_pending_approval_allowed [LEGACY]",
+        "test_proposed_to_rejected_allowed [LEGACY]",
+        "test_rejected_is_terminal [LEGACY]",
+        "test_rejected_is_terminal [LEGACY]",
+        "test_retry_delay_exponential_backoff [FLAKY_RISK|LEGACY]",
+        "test_retry_transition_increments_count [FLAKY_RISK|LEGACY]",
+        "test_skipping_approval_not_allowed [LEGACY]",
+        "test_transition_changes_state [LEGACY]",
+        "test_transition_event_has_metadata [LEGACY]",
+        "test_transition_reason_stored [LEGACY]",
+        "test_unknown_error_defaults_to_non_retryable [LEGACY]",
+        "test_valid_transition_passes [LEGACY]",
+        "test_validation_error_is_not_retryable [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_system_stability_lock.py",
+      "tests": [
+        "test_system_stability_lock [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_task_service_events.py",
+      "tests": [
+        "test_update_task_metadata_emits_event [DB_HEAVY|LEGACY]",
+        "test_update_task_metadata_no_change_still_emits [DB_HEAVY|LEGACY]",
+        "test_update_task_metadata_nonexistent_task_no_event [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_time_normalization.py",
+      "tests": [
+        "test_after_lunch_alias [LEGACY]",
+        "test_after_lunch_case_insensitive [LEGACY]",
+        "test_after_lunch_mixed_case [LEGACY]",
+        "test_after_lunch_with_spaces [LEGACY]",
+        "test_afternoon_default [LEGACY]",
+        "test_alias_deterministic [LEGACY]",
+        "test_case_variants_deterministic [LEGACY]",
+        "test_different_date_afternoon [LEGACY]",
+        "test_different_date_morning [LEGACY]",
+        "test_empty_string_input [LEGACY]",
+        "test_evening_default [LEGACY]",
+        "test_hhmm_deterministic [LEGACY]",
+        "test_hhmm_different_dates [LEGACY]",
+        "test_hhmm_format_end_of_day [LEGACY]",
+        "test_hhmm_format_midnight [LEGACY]",
+        "test_hhmm_format_standard [LEGACY]",
+        "test_hhmm_format_with_spaces [LEGACY]",
+        "test_hhmm_invalid_hour [LEGACY]",
+        "test_hhmm_invalid_minute [LEGACY]",
+        "test_hhmm_negative_values [LEGACY]",
+        "test_hhmm_with_non_numeric_characters [LEGACY]",
+        "test_list_aliases_contains_after_lunch [LEGACY]",
+        "test_list_aliases_contains_afternoon [LEGACY]",
+        "test_list_aliases_contains_evening [LEGACY]",
+        "test_list_aliases_contains_morning [LEGACY]",
+        "test_list_aliases_contains_tonight [LEGACY]",
+        "test_list_aliases_count [LEGACY]",
+        "test_list_aliases_deterministic [LEGACY]",
+        "test_malformed_hhmm_multiple_colons [LEGACY]",
+        "test_malformed_hhmm_no_colon [LEGACY]",
+        "test_morning_case_insensitive [LEGACY]",
+        "test_morning_default [LEGACY]",
+        "test_morning_deterministic [LEGACY]",
+        "test_morning_mixed_case [LEGACY]",
+        "test_morning_with_spaces [LEGACY]",
+        "test_none_input [LEGACY]",
+        "test_normalize_multiple_items_deterministic [LEGACY]",
+        "test_normalize_scheduled_action_with_alias [LEGACY]",
+        "test_normalize_scheduled_action_with_block [LEGACY]",
+        "test_normalize_scheduled_action_with_hhmm [LEGACY]",
+        "test_partial_alias [LEGACY]",
+        "test_reverse_lookup_after_lunch [LEGACY]",
+        "test_reverse_lookup_afternoon [LEGACY]",
+        "test_reverse_lookup_empty_string [LEGACY]",
+        "test_reverse_lookup_evening [LEGACY]",
+        "test_reverse_lookup_invalid_datetime [LEGACY]",
+        "test_reverse_lookup_morning [LEGACY]",
+        "test_reverse_lookup_non_standard [LEGACY]",
+        "test_reverse_lookup_none_input [LEGACY]",
+        "test_reverse_lookup_tonight [LEGACY]",
+        "test_tonight_alias [LEGACY]",
+        "test_tonight_with_spaces [LEGACY]",
+        "test_unicode_whitespace [LEGACY]",
+        "test_unknown_text_alias [LEGACY]",
+        "test_whitespace_only_input [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_trust_boundary_enforcement.py",
+      "tests": [
+        "test_adapter_importing_state_store_directly_must_fail [DB_HEAVY|LEGACY]",
+        "test_direct_action_pipeline_call_must_fail [DB_HEAVY|LEGACY]",
+        "test_event_store_append_from_external_module_must_fail [DB_HEAVY|LEGACY]",
+        "test_external_module_importing_fsm_must_fail [DB_HEAVY|LEGACY]",
+        "test_forged_actor_event_replay_must_fail [DB_HEAVY|LEGACY]",
+        "test_fsm_transition_outside_orchestrator_must_fail [DB_HEAVY|LEGACY]",
+        "test_orchestrator_handle_request_approve_must_pass [DB_HEAVY|LEGACY]",
+        "test_orchestrator_handle_request_reject_must_pass [DB_HEAVY|LEGACY]",
+        "test_replay_from_unauthorized_module_context_must_fail [DB_HEAVY|LEGACY]",
+        "test_router_importing_action_pipeline_directly_must_fail [DB_HEAVY|LEGACY]",
+        "test_scheduler_authorized_execution_requires_valid_token [DB_HEAVY|LEGACY]",
+        "test_state_store_load_outside_orchestrator_must_fail [DB_HEAVY|LEGACY]",
+        "test_unsigned_event_replay_must_fail [DB_HEAVY|LEGACY|REDUNDANT]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_trust_surface_closure.py",
+      "tests": [
+        "test_authorized_path_via_handle_request_is_allowed [DB_HEAVY|LEGACY]",
+        "test_negative_direct_event_store_append_must_fail [DB_HEAVY|LEGACY]",
+        "test_negative_direct_pipeline_call_must_fail [DB_HEAVY|LEGACY]",
+        "test_negative_direct_state_store_save_must_fail [DB_HEAVY|LEGACY]",
+        "test_negative_fsm_transition_outside_orchestrator_must_fail [DB_HEAVY|LEGACY]",
+        "test_static_trust_surface_closure_report [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_trust_surface_final_closure.py",
+      "tests": [
+        "test_runtime_authorized_orchestrator_path_is_allowed [DB_HEAVY|LEGACY]",
+        "test_runtime_enforcement_requires_orchestrator_provenance [DB_HEAVY|LEGACY]",
+        "test_trust_surface_final_closure_report [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_ui_bootstrap_router.py",
+      "tests": [
+        "test_bootstrap_excludes_junk_email_notifications [DB_HEAVY|LEGACY]",
+        "test_bootstrap_includes_calendar_db_events_when_projection_empty [DB_HEAVY|LEGACY]",
+        "test_bootstrap_includes_email_summary_notifications [DB_HEAVY|LEGACY]",
+        "test_bootstrap_includes_email_summary_notifications_from_email_received [DB_HEAVY|LEGACY]",
+        "test_bootstrap_includes_integration_events_when_user_is_connected [DB_HEAVY|LEGACY]",
+        "test_bootstrap_includes_pantry_and_weekly_recipe_suggestions [DB_HEAVY|LEGACY]",
+        "test_bootstrap_includes_runtime_graph_events_and_tasks [DB_HEAVY|LEGACY]",
+        "test_bootstrap_refreshes_cached_state_when_email_summary_changes [DB_HEAVY|LEGACY]",
+        "test_bootstrap_rolls_up_low_priority_email_notifications [DB_HEAVY|LEGACY]",
+        "test_chat_response_structure_validation [DB_HEAVY|LEGACY]",
+        "test_email_detail_endpoint_returns_404_when_email_not_found [DB_HEAVY|LEGACY]",
+        "test_email_detail_endpoint_returns_combined_email_view [DB_HEAVY|LEGACY]",
+        "test_no_internal_leakage_validation [DB_HEAVY|LEGACY]",
+        "test_patch_replay_consistency [DB_HEAVY|LEGACY]",
+        "test_resolve_recipe_url_falls_back_to_search_for_invalid_candidate [DB_HEAVY|LEGACY]",
+        "test_resolve_recipe_url_falls_back_when_health_check_fails [DB_HEAVY|LEGACY]",
+        "test_snapshot_determinism [DB_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_unified_trust_boundary.py",
+      "tests": [
+        "test_case_variant_actor_types_must_fail_hard [LEGACY]",
+        "test_direct_pipeline_execution_attempt_must_fail [LEGACY]",
+        "test_direct_state_read_cross_household_must_fail [LEGACY]",
+        "test_forged_actor_type_event_replay_must_fail [LEGACY]",
+        "test_legacy_execution_bypass_must_fail_without_explicit_authorization [LEGACY]",
+        "test_mismatched_signature_event_replay_must_fail [LEGACY]",
+        "test_missing_actor_identity_must_not_default [LEGACY]",
+        "test_reject_without_authorization_gate_must_fail [LEGACY]",
+        "test_run_legacy_path_must_be_gated_or_fail [LEGACY]",
+        "test_system_worker_spoof_attempt_must_fail_without_verified_proof [LEGACY]",
+        "test_today_cross_household_access_must_fail_without_authorization [LEGACY]",
+        "test_unsigned_event_replay_must_fail [LEGACY|REDUNDANT]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_xai_layer.py",
+      "tests": [
+        "test_all_reason_codes_have_templates [LEGACY]",
+        "test_causal_mapper_determinism [LEGACY]",
+        "test_composite_validation_passes_clean_run [LEGACY]",
+        "test_event_linked_to_plan [LEGACY]",
+        "test_explanation_id_is_stable_across_instances [LEGACY]",
+        "test_manual_override_gets_user_override_code [LEGACY]",
+        "test_mapper_known_command_types [LEGACY]",
+        "test_mapper_unknown_command_type_returns_fallback [LEGACY]",
+        "test_no_internal_ids_in_explanation_text [LEGACY]",
+        "test_plan_conflict_revision_gets_event_time_conflict_code [LEGACY]",
+        "test_plan_merged_gets_plan_optimized_code [LEGACY]",
+        "test_plan_recompute_with_trigger_source_gets_system_recompute_code [LEGACY]",
+        "test_task_blocked_status [LEGACY]",
+        "test_task_completed_status [LEGACY]",
+        "test_task_created_by_system [LEGACY]",
+        "test_template_engine_determinism [LEGACY]",
+        "test_template_engine_no_unexpected_placeholders [LEGACY]",
+        "test_validation_completeness_detects_missing [LEGACY]",
+        "test_validation_completeness_passes_when_all_covered [LEGACY]",
+        "test_validation_downstream_coverage_passes_when_all_covered [LEGACY]",
+        "test_validation_downstream_coverage_warns_on_missing [LEGACY]",
+        "test_validation_duplicate_detected [LEGACY]",
+        "test_validation_family_isolation_detects_leakage [LEGACY]",
+        "test_validation_family_isolation_passes [LEGACY]",
+        "test_validation_no_duplicates_passes_for_unique [LEGACY]",
+        "test_validation_replay_determinism_passes [LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    }
+  ],
+  "redundant_candidates": [
+    {
+      "file": "tests/p1_verification/test_auth_lifecycle.py",
+      "tests": [
+        "test_expired_token_rejected [DB_HEAVY|LEGACY|REDUNDANT]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_actor_type_enforcement.py",
+      "tests": [
+        "test_assistant_cannot_approve [LEGACY|REDUNDANT]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_col.py",
+      "tests": [
+        "test_delete_event_requires_confirmation [LEGACY|REDUNDANT]",
+        "test_invalid_transition_raises_error [LEGACY|REDUNDANT]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_event_sourcing.py",
+      "tests": [
+        "test_invalid_transition_raises_error [DB_HEAVY|REDUNDANT]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_identity_layer.py",
+      "tests": [
+        "test_expired_token_rejected [FLAKY_RISK|LEGACY|REDUNDANT]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_insight_bridge.py",
+      "tests": [
+        "test_isolation_guarantee [REDUNDANT]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_policy_engine.py",
+      "tests": [
+        "test_isolation_guarantee [REDUNDANT]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_policy_guardrails.py",
+      "tests": [
+        "test_delete_event_requires_confirmation [LEGACY|REDUNDANT]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_state_machine.py",
+      "tests": [
+        "test_assistant_cannot_approve [LEGACY|REDUNDANT]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_trust_boundary_enforcement.py",
+      "tests": [
+        "test_unsigned_event_replay_must_fail [DB_HEAVY|LEGACY|REDUNDANT]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_unified_trust_boundary.py",
+      "tests": [
+        "test_unsigned_event_replay_must_fail [LEGACY|REDUNDANT]"
+      ],
+      "reason": "heuristic candidate set"
+    }
+  ],
+  "flaky_risk": [
+    {
+      "file": "tests/p1_verification/test_auth_lifecycle.py",
+      "tests": [
+        "test_access_token_shorter_expiry [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_token_pair_structure [DB_HEAVY|FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/p1_verification/test_chaos_concurrency.py",
+      "tests": [
+        "test_100_concurrent_task_creates_result_in_1 [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_concurrent_creates_different_items_all_succeed [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_concurrent_writes_different_households_isolated [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_event_emission_no_cross_household_leakage [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_events_ordered_under_concurrent_publishes [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_llm_timeouts_concurrent_dont_crash [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_mixed_valid_invalid_tokens_concurrent [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_rate_limit_under_concurrent_requests [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_retry_storm_deduplicated [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/p1_verification/test_e2e_integration.py",
+      "tests": [
+        "test_full_request_with_valid_token [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_invalid_token_rejected_early [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_llm_timeout_fallback_still_writes [DB_HEAVY|FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_nominal_request_flow [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_valid_intent_triggers_write [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_write_emits_event [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_write_failure_no_event [DB_HEAVY|LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/p1_verification/test_event_bus_correctness.py",
+      "tests": [
+        "test_all_subscribers_receive_events [LEGACY|SSE_HEAVY]",
+        "test_complex_payload_preserved [LEGACY|SSE_HEAVY]",
+        "test_empty_payload_handled [LEGACY|SSE_HEAVY]",
+        "test_events_isolated_by_household [LEGACY|SSE_HEAVY]",
+        "test_events_ordered_by_watermark [LEGACY|SSE_HEAVY]",
+        "test_events_queued_during_reconnect_not_lost [LEGACY|SSE_HEAVY]",
+        "test_late_subscriber_only_receives_future_events [LEGACY|SSE_HEAVY]",
+        "test_multiple_events_same_watermark_consistent [LEGACY|SSE_HEAVY]",
+        "test_subscriber_receives_only_subscribed_events [LEGACY|SSE_HEAVY]",
+        "test_subscriber_reconnect_receives_subsequent_events [LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/p1_verification/test_idempotency_correctness.py",
+      "tests": [
+        "test_2xx_response_records_completion [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_5xx_response_releases_key_safely [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_concurrent_different_keys_all_succeed [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_concurrent_task_creations_deduplicated [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_different_households_different_namespace [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_duplicate_reservation_rejected [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_first_reservation_succeeds [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_parallel_identical_requests_single_winner [CONCURRENCY_HEAVY|DB_HEAVY|LEGACY]",
+        "test_release_allows_reuse [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/p1_verification/test_llm_gateway_failures.py",
+      "tests": [
+        "test_fallback_response_safe_for_pipeline [FLAKY_RISK|LEGACY]",
+        "test_fallback_returns_valid_response [FLAKY_RISK|LEGACY]",
+        "test_timeout_doesnt_crash_pipeline [FLAKY_RISK|LEGACY]",
+        "test_timeout_doesnt_trigger_rate_limit [FLAKY_RISK|LEGACY]",
+        "test_timeout_returns_fallback_response [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_action_event_contracts.py",
+      "tests": [
+        "test_action_event_contract_invariants [SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_architecture_suite.py",
+      "tests": [
+        "test_action_pipeline_direct_invocation_guard_only_orchestrator [DB_HEAVY|SSE_HEAVY]",
+        "test_archive_guard_runtime_modules_have_no_archive_imports [DB_HEAVY|SSE_HEAVY]",
+        "test_command_guard_has_single_command_post_entrypoint [DB_HEAVY|SSE_HEAVY]",
+        "test_command_guard_only_allowlisted_api_modules_use_command_runtime [DB_HEAVY|SSE_HEAVY]",
+        "test_event_log_repository_import_guard_only_allowlisted_modules [DB_HEAVY|SSE_HEAVY]",
+        "test_llm_guard_runtime_modules_only_use_gateway [DB_HEAVY|SSE_HEAVY]",
+        "test_sensitive_state_write_guard_single_entrypoint [DB_HEAVY|SSE_HEAVY]",
+        "test_state_guard_no_file_based_runtime_state_authority [DB_HEAVY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_auth_router.py",
+      "tests": [
+        "test_oauth_stub_creates_missing_household_before_registering_user [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_oauth_stub_recovers_from_duplicate_email_integrity_error [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_oauth_stub_uses_request_scoped_services [DB_HEAVY|FLAKY_RISK|LEGACY]",
+        "test_refresh_token_uses_request_scoped_token_service [DB_HEAVY|FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_email_action_summary.py",
+      "tests": [
+        "test_email_action_summary_applies_llm_refinement_when_available [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_classifies_promotional_mail_as_junk [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_does_not_apply_sensitive_sender_bonus_to_junk_domains [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_does_not_force_informational_when_actions_exist [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_extracts_prioritized_actions_and_calendar_candidates [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_ignores_quoted_lines_for_action_extraction [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_is_deterministic_for_identical_input [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_action_summary_marks_non_action_updates_as_informational [CONCURRENCY_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_email_priority_llm.py",
+      "tests": [
+        "test_email_priority_llm_applies_valid_high_confidence_refinement [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_disabled_skips_remote_call [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_enabled_requires_credentials [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_middle_band_requires_ambiguity [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_respects_per_minute_budget [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_skips_low_score_cases [CONCURRENCY_HEAVY|LEGACY]",
+        "test_email_priority_llm_uses_thread_cache_key [CONCURRENCY_HEAVY|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_event_replay_integrity.py",
+      "tests": [
+        "test_replay_rejects_legacy_event [FLAKY_RISK]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_event_sourcing.py",
+      "tests": [
+        "test_historical_replay_strict [DB_HEAVY|FLAKY_RISK]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_frontend_runtime_contract.py",
+      "tests": [
+        "test_action_execution_idempotency [LEGACY|SSE_HEAVY]",
+        "test_chat_session_consistency_under_retry [LEGACY|SSE_HEAVY]",
+        "test_deterministic_patch_replay [LEGACY|SSE_HEAVY]",
+        "test_failure_recovery_uses_backend_snapshot_authority [LEGACY|SSE_HEAVY]",
+        "test_snapshot_reconstruction_equivalence [LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_google_calendar_integration_surface.py",
+      "tests": [
+        "test_orchestrator_builds_household_state_from_credential_store [FLAKY_RISK|LEGACY]",
+        "test_orchestrator_household_state_has_raw_events_in_debug_meta [FLAKY_RISK|LEGACY]",
+        "test_provider_refreshes_expired_access_token_before_google_calls [FLAKY_RISK|LEGACY]",
+        "test_provider_returns_empty_dataset_when_expired_and_refresh_token_missing [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_google_calendar_oauth.py",
+      "tests": [
+        "test_status_returns_connected_with_metadata [FLAKY_RISK|LEGACY]",
+        "test_sync_ingests_gmail_messages_with_household_override [FLAKY_RISK|LEGACY]",
+        "test_sync_returns_reconnect_hint_when_gmail_scope_missing [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_google_oauth_env_config.py",
+      "tests": [
+        "test_token_refresh_flow [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_household_simulation.py",
+      "tests": [
+        "test_byzantine_resilience [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_consistency_assurance [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_convergence_to_stable_state [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_deterministic_replay [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_deterministic_replay_convergence [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_family_isolation [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_full_matrix_execution [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_matrix_coverage [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_network_chaos_resilience [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_no_cross_family_leakage [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_no_duplicate_task_execution [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_no_lost_updates [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_no_lost_updates [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_no_phantom_states [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_no_silent_inconsistencies [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_resilience_to_byzantine_failures [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_resilience_to_network_chaos [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_resilience_to_transient_failures [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_stable_convergence [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_task_idempotency [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_transient_failure_recovery [CONCURRENCY_HEAVY|SSE_HEAVY]",
+        "test_valid_states_only [CONCURRENCY_HEAVY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_household_state.py",
+      "tests": [
+        "test_stale_event_excluded_from_all_windows [FLAKY_RISK|LEGACY]",
+        "test_state_builder_applies_windowing [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_identity_events_runtime.py",
+      "tests": [
+        "test_create_session_token_retries_on_sqlite_lock [DB_HEAVY|FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_identity_layer.py",
+      "tests": [
+        "test_expired_token_rejected [FLAKY_RISK|LEGACY|REDUNDANT]",
+        "test_last_seen_tracking [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_ingestion_events_runtime.py",
+      "tests": [
+        "test_junk_email_is_ignored_before_routing [FLAKY_RISK|LEGACY]",
+        "test_valid_email_emits_email_parsed [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_intelligence_analytics_dls.py",
+      "tests": [
+        "test_dashboard_metrics_include_required_tradeoff_fields [FLAKY_RISK]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_intelligence_routing_resilience.py",
+      "tests": [
+        "test_decide_returns_rule_only_when_limit_check_fails [DB_HEAVY|FLAKY_RISK]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_intent_confidence_router.py",
+      "tests": [
+        "test_allowed_domains_property [CONCURRENCY_HEAVY]",
+        "test_ambiguity_flag_clear_on_strong_single_intent [CONCURRENCY_HEAVY]",
+        "test_ambiguity_flag_set_on_low_confidence [CONCURRENCY_HEAVY]",
+        "test_ambiguous_produces_clarification [CONCURRENCY_HEAVY]",
+        "test_build_returns_list [CONCURRENCY_HEAVY]",
+        "test_clarification_response_shape [CONCURRENCY_HEAVY]",
+        "test_confidence_bounds_always_valid [CONCURRENCY_HEAVY]",
+        "test_daily_focus_executes [CONCURRENCY_HEAVY]",
+        "test_daily_focus_still_blocked_from_fitness [CONCURRENCY_HEAVY]",
+        "test_explicit_fitness_high_confidence [CONCURRENCY_HEAVY]",
+        "test_explicit_medical_high_confidence [CONCURRENCY_HEAVY]",
+        "test_fitness_still_blocked_from_calendar [CONCURRENCY_HEAVY]",
+        "test_has_all_scores_dict [CONCURRENCY_HEAVY]",
+        "test_has_ambiguity_flag [CONCURRENCY_HEAVY]",
+        "test_has_confidence_float [CONCURRENCY_HEAVY]",
+        "test_has_primary_intent [CONCURRENCY_HEAVY]",
+        "test_has_secondary_intents_list [CONCURRENCY_HEAVY]",
+        "test_high_confidence_explicit_fitness [CONCURRENCY_HEAVY]",
+        "test_high_confidence_no_clarification [CONCURRENCY_HEAVY]",
+        "test_high_confidence_response_has_routing_case [CONCURRENCY_HEAVY]",
+        "test_high_confidence_response_has_secondary_suggestions [CONCURRENCY_HEAVY]",
+        "test_high_confidence_routing_case [CONCURRENCY_HEAVY]",
+        "test_high_confidence_should_execute [CONCURRENCY_HEAVY]",
+        "test_high_confidence_single_domain [CONCURRENCY_HEAVY]",
+        "test_is_high_confidence_property [CONCURRENCY_HEAVY]",
+        "test_is_low_confidence_on_no_match [CONCURRENCY_HEAVY]",
+        "test_is_multi_intent_with_secondaries [CONCURRENCY_HEAVY]",
+        "test_is_not_multi_intent_without_secondaries [CONCURRENCY_HEAVY]",
+        "test_low_confidence_clarification_is_question [CONCURRENCY_HEAVY]",
+        "test_low_confidence_clarification_no_jargon [CONCURRENCY_HEAVY]",
+        "test_low_confidence_empty_domains [CONCURRENCY_HEAVY]",
+        "test_low_confidence_has_clarification_text [CONCURRENCY_HEAVY]",
+        "test_low_confidence_never_executes [CONCURRENCY_HEAVY]",
+        "test_low_confidence_no_keywords [CONCURRENCY_HEAVY]",
+        "test_low_confidence_returns_clarification [CONCURRENCY_HEAVY]",
+        "test_low_confidence_routing_case [CONCURRENCY_HEAVY]",
+        "test_low_confidence_should_not_execute [CONCURRENCY_HEAVY]",
+        "test_medical_still_blocked_from_meal [CONCURRENCY_HEAVY]",
+        "test_medium_confidence_max_2_domains [CONCURRENCY_HEAVY]",
+        "test_medium_confidence_no_clarification [CONCURRENCY_HEAVY]",
+        "test_medium_confidence_routing_case [CONCURRENCY_HEAVY]",
+        "test_medium_confidence_should_execute [CONCURRENCY_HEAVY]",
+        "test_medium_confidence_top2_domains [CONCURRENCY_HEAVY]",
+        "test_multi_intent_life_together_scenario [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_in_suggestions [CONCURRENCY_HEAVY]",
+        "test_one_suggestion_per_intent [CONCURRENCY_HEAVY]",
+        "test_returns_intent_classification [CONCURRENCY_HEAVY]",
+        "test_suggestions_are_not_mixed_into_primary_action [CONCURRENCY_HEAVY]",
+        "test_suggestions_are_secondary_suggestion_instances [CONCURRENCY_HEAVY]",
+        "test_suggestions_have_required_fields [CONCURRENCY_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_intent_lock.py",
+      "tests": [
+        "test_case_insensitive_classification [CONCURRENCY_HEAVY]",
+        "test_confidence_bounds [CONCURRENCY_HEAVY]",
+        "test_daily_focus_cannot_produce_domain_specific_action [CONCURRENCY_HEAVY]",
+        "test_daily_focus_detection_explicit [CONCURRENCY_HEAVY]",
+        "test_daily_focus_detection_organizing [CONCURRENCY_HEAVY]",
+        "test_daily_focus_detection_priorities [CONCURRENCY_HEAVY]",
+        "test_daily_focus_intent_allows_general_domain [CONCURRENCY_HEAVY]",
+        "test_explicit_intent_high_confidence [CONCURRENCY_HEAVY]",
+        "test_fallback_has_valid_reasoning [CONCURRENCY_HEAVY]",
+        "test_fallback_is_general_domain [CONCURRENCY_HEAVY]",
+        "test_fallback_recommendation_is_safe [CONCURRENCY_HEAVY]",
+        "test_fallback_recommendation_structure [CONCURRENCY_HEAVY]",
+        "test_filter_calendar_candidates_from_medical_intent [CONCURRENCY_HEAVY]",
+        "test_filter_fitness_candidates_from_fitness_intent [CONCURRENCY_HEAVY]",
+        "test_filter_meal_candidates_from_meal_intent [CONCURRENCY_HEAVY]",
+        "test_fitness_detection_exercise [CONCURRENCY_HEAVY]",
+        "test_fitness_detection_explicit [CONCURRENCY_HEAVY]",
+        "test_fitness_detection_workout [CONCURRENCY_HEAVY]",
+        "test_fitness_intent_allows_fitness_domain [CONCURRENCY_HEAVY]",
+        "test_fitness_intent_blocks_other_domains [CONCURRENCY_HEAVY]",
+        "test_fitness_prompt_cannot_produce_appointment [CONCURRENCY_HEAVY]",
+        "test_fitness_prompt_cannot_produce_meal [CONCURRENCY_HEAVY]",
+        "test_meal_detection_explicit [CONCURRENCY_HEAVY]",
+        "test_meal_detection_grocery [CONCURRENCY_HEAVY]",
+        "test_meal_intent_allows_meal_domain [CONCURRENCY_HEAVY]",
+        "test_meal_prompt_cannot_produce_appointment [CONCURRENCY_HEAVY]",
+        "test_meal_prompt_cannot_produce_workout [CONCURRENCY_HEAVY]",
+        "test_medical_detection_dentist [CONCURRENCY_HEAVY]",
+        "test_medical_detection_doctor [CONCURRENCY_HEAVY]",
+        "test_medical_intent_allows_calendar_domain [CONCURRENCY_HEAVY]",
+        "test_medical_prompt_cannot_produce_workout [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_leakage_daily_focus_to_calendar [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_leakage_daily_focus_to_fitness [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_leakage_daily_focus_to_meal [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_leakage_fitness_to_calendar [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_leakage_fitness_to_meal [CONCURRENCY_HEAVY]",
+        "test_no_cross_domain_leakage_meal_to_fitness [CONCURRENCY_HEAVY]",
+        "test_no_match_low_confidence [CONCURRENCY_HEAVY]",
+        "test_realistic_daily_focus_scenario [CONCURRENCY_HEAVY]",
+        "test_realistic_fitness_scenario [CONCURRENCY_HEAVY]",
+        "test_realistic_meal_scenario [CONCURRENCY_HEAVY]",
+        "test_realistic_medical_scenario [CONCURRENCY_HEAVY]",
+        "test_scheduling_detection_explicit [CONCURRENCY_HEAVY]",
+        "test_scheduling_intent_allows_calendar_domain [CONCURRENCY_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_invariance_enforcement.py",
+      "tests": [
+        "test_no_direct_realtimeevent_outside_broadcaster [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_no_direct_sse_formatting_outside_broadcaster [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_no_to_sse_anywhere_in_runtime_paths [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_no_transport_flags_in_repository [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_redis_ingress_reenters_canonical_pipeline [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_replay_routes_via_router_without_transport_branching [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_router_has_no_conditional_sse_logic [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_single_emission_path_runtime_contract [DB_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_watermark_ignores_external_and_is_monotonic [DB_HEAVY|LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_life_state_model.py",
+      "tests": [
+        "test_intent_lock_still_prevents_cross_domain_leakage [CONCURRENCY_HEAVY]",
+        "test_life_state_never_changes_primary_intent_classification [CONCURRENCY_HEAVY]",
+        "test_persistence_updates_after_run_and_approval [CONCURRENCY_HEAVY]",
+        "test_routing_preference_shifts_under_high_workload [CONCURRENCY_HEAVY]",
+        "test_stress_index_rises_with_overlapping_events [CONCURRENCY_HEAVY]",
+        "test_workload_score_increases_with_dense_calendar_state [CONCURRENCY_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_llm_gateway_runtime_hardening.py",
+      "tests": [
+        "test_generate_text_cache_hit_skips_provider_and_usage [CONCURRENCY_HEAVY]",
+        "test_generate_text_does_not_retry_invalid_json_responses [CONCURRENCY_HEAVY]",
+        "test_generate_text_inflight_burst_keeps_single_provider_execution [CONCURRENCY_HEAVY]",
+        "test_generate_text_inflight_deduplicates_parallel_calls [CONCURRENCY_HEAVY]",
+        "test_generate_text_retries_transient_failures_with_bounded_backoff [CONCURRENCY_HEAVY]",
+        "test_generate_text_survives_cache_read_write_failures [CONCURRENCY_HEAVY]",
+        "test_generate_text_uses_fallback_once_and_records_usage_once [CONCURRENCY_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_no_direct_broadcaster_bypass.py",
+      "tests": [
+        "test_no_direct_broadcaster_bypass [SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_p0_torture.py",
+      "tests": [
+        "test_30_second_chaos [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_50_parallel_writes [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_concurrent_retries_at_boundary [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_old_watermark_triggers_resync [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_quick_reconnect_flood [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_reconnect_500_iterations [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_replay_during_concurrent_writes [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_suite_summary [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]",
+        "test_ttl_boundary_exact [CONCURRENCY_HEAVY|FLAKY_RISK|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_pantry_router.py",
+      "tests": [
+        "test_adjust_inventory_refreshes_projection_watermark [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_adjust_inventory_supports_units_and_decimal_quantities [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_adjust_inventory_updates_counts [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_cook_recipe_decrements_inventory_and_records_history [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]",
+        "test_receipt_ingestion_detects_and_applies_text_items [CONCURRENCY_HEAVY|LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_security_verification_harness.py",
+      "tests": [
+        "test_invariant_context_not_silently_dropped_on_retry [DB_HEAVY|FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_sse_canonical_only.py",
+      "tests": [
+        "test_canonical_event_envelope_passes [LEGACY|SSE_HEAVY]",
+        "test_domain_event_rejected [LEGACY|SSE_HEAVY]",
+        "test_logging_includes_event_type_and_origin [LEGACY|SSE_HEAVY]",
+        "test_null_event_rejected [LEGACY|SSE_HEAVY]",
+        "test_only_canonical_envelope_passes [FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_origin_module_detection [LEGACY|SSE_HEAVY]",
+        "test_raw_dict_rejected [LEGACY|SSE_HEAVY]",
+        "test_reject_integer_event [LEGACY|SSE_HEAVY]",
+        "test_reject_string_event [LEGACY|SSE_HEAVY]",
+        "test_rejection_message_includes_origin [LEGACY|SSE_HEAVY]",
+        "test_rejection_message_mentions_allowed_type [LEGACY|SSE_HEAVY]",
+        "test_rejection_message_shows_received_type [LEGACY|SSE_HEAVY]",
+        "test_system_event_rejected_if_not_canonical_envelope [LEGACY|SSE_HEAVY]",
+        "test_validation_called_in_publish_async [LEGACY|SSE_HEAVY]",
+        "test_validation_called_in_publish_sync [LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_sse_event_closure.py",
+      "tests": [
+        "test_idempotency_preservation_duplicate_events_deduped [LEGACY|SSE_HEAVY]",
+        "test_no_direct_canonical_envelope_instantiation_in_business_services [LEGACY|SSE_HEAVY]",
+        "test_no_direct_sse_construction_runtime_paths [LEGACY|SSE_HEAVY]",
+        "test_registry_enforcement_hard_reject_unknown_event_type [FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_replay_determinism_same_input_identical_stream [LEGACY|SSE_HEAVY]",
+        "test_replay_has_no_transport_branching_or_direct_sse_calls [LEGACY|SSE_HEAVY]",
+        "test_schema_parity_domain_to_canonical_to_sse_lossless_subset [FLAKY_RISK|LEGACY|SSE_HEAVY]",
+        "test_watermark_ordering_shuffled_input_rejects_stale [LEGACY|SSE_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_state_machine.py",
+      "tests": [
+        "test_approved_has_3600s_timeout [FLAKY_RISK|LEGACY]",
+        "test_can_retry_on_failed_state [FLAKY_RISK|LEGACY]",
+        "test_cannot_retry_after_max_retries [FLAKY_RISK|LEGACY]",
+        "test_committed_has_no_timeout [FLAKY_RISK|LEGACY]",
+        "test_failed_to_proposed_allowed [FLAKY_RISK|LEGACY]",
+        "test_get_timeout_seconds [FLAKY_RISK|LEGACY]",
+        "test_has_timed_out_false_before_timeout [FLAKY_RISK|LEGACY]",
+        "test_has_timed_out_true_after_timeout [FLAKY_RISK|LEGACY]",
+        "test_network_timeout_is_retryable [FLAKY_RISK|LEGACY]",
+        "test_pending_approval_has_1800s_timeout [FLAKY_RISK|LEGACY]",
+        "test_proposed_has_600s_timeout [FLAKY_RISK|LEGACY]",
+        "test_retry_delay_exponential_backoff [FLAKY_RISK|LEGACY]",
+        "test_retry_transition_increments_count [FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_system_stability_lock.py",
+      "tests": [
+        "test_system_stability_lock [CONCURRENCY_HEAVY|DB_HEAVY|FLAKY_RISK|LEGACY]"
+      ],
+      "reason": "heuristic candidate set"
+    },
+    {
+      "file": "tests/test_xai_harness_integration.py",
+      "tests": [
+        "test_all_xai_invariants_pass_no_failures [CONCURRENCY_HEAVY]",
+        "test_concurrent_plan_creation_explanation_completeness [CONCURRENCY_HEAVY]",
+        "test_conflicting_updates_explanation_completeness [CONCURRENCY_HEAVY]",
+        "test_full_matrix_report [CONCURRENCY_HEAVY]",
+        "test_no_cross_family_explanation_leakage [CONCURRENCY_HEAVY]",
+        "test_no_duplicate_explanations_concurrent_plan_creation [CONCURRENCY_HEAVY]",
+        "test_no_duplicate_explanations_task_idempotency [CONCURRENCY_HEAVY|FLAKY_RISK]",
+        "test_replay_determinism_concurrent_plan_creation [CONCURRENCY_HEAVY]",
+        "test_replay_determinism_task_idempotency [CONCURRENCY_HEAVY]",
+        "test_task_idempotency_explanation_completeness [CONCURRENCY_HEAVY]"
+      ],
+      "reason": "heuristic candidate set"
+    }
+  ]
+}

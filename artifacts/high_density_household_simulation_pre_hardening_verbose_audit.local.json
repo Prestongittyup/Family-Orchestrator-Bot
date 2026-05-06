@@ -1,0 +1,150 @@
+{
+  "input_density_tested": 25,
+  "promotion_accuracy": "72.00%",
+  "decision_quality": {
+    "decisions_generated": 6,
+    "necessary_decisions": 3,
+    "unnecessary_decisions": 3,
+    "missed_decisions": 6
+  },
+  "overload_points": [
+    {
+      "input_id": 18,
+      "input": "Team dinner after game",
+      "decision_count": 4,
+      "action_count": 5
+    },
+    {
+      "input_id": 19,
+      "input": "Something changed for tomorrow",
+      "decision_count": 5,
+      "action_count": 5
+    },
+    {
+      "input_id": 20,
+      "input": "Coach said schedule might shift",
+      "decision_count": 5,
+      "action_count": 5
+    },
+    {
+      "input_id": 21,
+      "input": "Bus running 20 minutes late today",
+      "decision_count": 5,
+      "action_count": 5
+    },
+    {
+      "input_id": 22,
+      "input": "PTA bake sale donations due Thursday",
+      "decision_count": 6,
+      "action_count": 5
+    },
+    {
+      "input_id": 23,
+      "input": "Grandma can do pickup at 3pm",
+      "decision_count": 6,
+      "action_count": 6
+    },
+    {
+      "input_id": 24,
+      "input": "Rain expected; practice may move indoors",
+      "decision_count": 6,
+      "action_count": 6
+    },
+    {
+      "input_id": 25,
+      "input": "Field trip form still missing signature",
+      "decision_count": 6,
+      "action_count": 6
+    }
+  ],
+  "failure_cases": [
+    {
+      "input_id": 10,
+      "input": "New meeting scheduled at 3pm",
+      "category": "conflict",
+      "interpretation": "schedule_create",
+      "promotion_result": "accepted"
+    },
+    {
+      "input_id": 11,
+      "input": "Practice overlaps with dinner time",
+      "category": "conflict",
+      "interpretation": "informational",
+      "promotion_result": "ignored"
+    },
+    {
+      "input_id": 14,
+      "input": "Dinner reservation at 6:30",
+      "category": "multi_member",
+      "interpretation": "informational",
+      "promotion_result": "ignored"
+    },
+    {
+      "input_id": 20,
+      "input": "Coach said schedule might shift",
+      "category": "ambiguous",
+      "interpretation": "informational",
+      "promotion_result": "ignored"
+    },
+    {
+      "input_id": 21,
+      "input": "Bus running 20 minutes late today",
+      "category": "schedule",
+      "interpretation": "informational",
+      "promotion_result": "ignored"
+    },
+    {
+      "input_id": 24,
+      "input": "Rain expected; practice may move indoors",
+      "category": "ambiguous",
+      "interpretation": "informational",
+      "promotion_result": "ignored"
+    },
+    {
+      "input_id": 25,
+      "input": "Field trip form still missing signature",
+      "category": "obligation",
+      "interpretation": "informational",
+      "promotion_result": "ignored"
+    }
+  ],
+  "missed_critical_cases": [
+    {
+      "input_id": 10,
+      "input": "New meeting scheduled at 3pm",
+      "category": "conflict",
+      "interpretation": "schedule_create",
+      "promotion_result": "accepted"
+    },
+    {
+      "input_id": 11,
+      "input": "Practice overlaps with dinner time",
+      "category": "conflict",
+      "interpretation": "informational",
+      "promotion_result": "ignored"
+    },
+    {
+      "input_id": 14,
+      "input": "Dinner reservation at 6:30",
+      "category": "multi_member",
+      "interpretation": "informational",
+      "promotion_result": "ignored"
+    },
+    {
+      "input_id": 21,
+      "input": "Bus running 20 minutes late today",
+      "category": "schedule",
+      "interpretation": "informational",
+      "promotion_result": "ignored"
+    },
+    {
+      "input_id": 25,
+      "input": "Field trip form still missing signature",
+      "category": "obligation",
+      "interpretation": "informational",
+      "promotion_result": "ignored"
+    }
+  ],
+  "confidence_level": "medium",
+  "ready_for_real_ingestion": false
+}

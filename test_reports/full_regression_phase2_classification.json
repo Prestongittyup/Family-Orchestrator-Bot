@@ -1,0 +1,758 @@
+{
+  "totals": {
+    "missing_routes": 51,
+    "legacy_state_expectations": 3,
+    "auth_context_failures": 27,
+    "eventual_consistency_assumptions": 6,
+    "environment_dependency_failures": 31,
+    "invalid_or_obsolete_tests": 66
+  },
+  "missing_routes": [
+    {
+      "test": "tests.test_auth_router::test_oauth_stub_uses_request_scoped_services",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_auth_router::test_oauth_stub_creates_missing_household_before_registering_user",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_auth_router::test_refresh_token_uses_request_scoped_token_service",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_auth_router::test_oauth_stub_recovers_from_duplicate_email_integrity_error",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_google_calendar_integration_surface::test_google_oauth_url_generation",
+      "reason": "assert 404 == 302\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_google_calendar_integration_surface::test_oauth_callback_stores_credentials",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_integration_surface::test_end_to_end_calendar_ingestion_flow",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestConnectEndpoint::test_connect_returns_302",
+      "reason": "assert 404 == 302\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestConnectEndpoint::test_connect_redirects_to_google",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestConnectEndpoint::test_connect_url_contains_user_bound_state",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestConnectEndpoint::test_callback_redirect_preserves_origin_and_household_id",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestConnectEndpoint::test_connect_url_has_readonly_scope",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestConnectEndpoint::test_connect_unconfigured_returns_structured_400",
+      "reason": "assert 404 == 400\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestConnectEndpoint::test_connect_different_users_produce_different_state_tokens",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestCallbackHappyPath::test_callback_returns_200",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestCallbackHappyPath::test_callback_returns_success_html",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestCallbackHappyPath::test_callback_stores_credentials",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestCallbackHappyPath::test_callback_stores_user_id_correctly",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestCallbackHappyPath::test_callback_stores_refresh_token",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestCallbackHappyPath::test_callback_preserves_existing_refresh_token_when_omitted",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestCallbackHappyPath::test_callback_state_consumed_after_use",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestCallbackHappyPath::test_callback_accepts_signed_state_when_pending_store_is_cleared",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestStateMismatch::test_wrong_user_id_rejected",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestStateMismatch::test_fabricated_state_rejected",
+      "reason": "assert 404 == 400\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestConnectionStatusEndpoint::test_status_returns_not_connected_when_missing_credentials",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestConnectionStatusEndpoint::test_status_returns_connected_with_metadata",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestConnectionStatusEndpoint::test_mismatch_error_message",
+      "reason": "assert 404 == 400\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestGoogleEmailSyncEndpoint::test_sync_ingests_gmail_messages_with_household_override",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestGoogleEmailSyncEndpoint::test_sync_returns_reconnect_hint_when_gmail_scope_missing",
+      "reason": "assert 404 == 412\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestDeterminism::test_two_complete_flows_store_same_credentials",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestDeterminism::test_callback_response_html_is_stable",
+      "reason": "KeyError: 'location'"
+    },
+    {
+      "test": "tests.test_google_oauth_missing_config_safe_boot::test_missing_google_oauth_config_does_not_crash_system",
+      "reason": "assert 404 == 400\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_ingestion_router::test_ingest_email_route_delegates_to_service",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_ingestion_router::test_ingest_email_route_maps_ingestion_error",
+      "reason": "assert 404 == 422\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_ingestion_router::test_ingest_webhook_route_delegates_to_service",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_ingestion_router::test_ingest_provider_email_route_parses_and_delegates",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_ingestion_router::test_ingest_provider_email_batch_route_returns_row_statuses",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_live_orchestration_simulation::test_live_orchestration_simulation_is_deterministic_for_same_seed",
+      "reason": "httpx.HTTPStatusError: Client error '404 Not Found' for url 'http://testserver/event'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    },
+    {
+      "test": "tests.test_live_orchestration_simulation::test_live_orchestration_assertions_are_computed",
+      "reason": "httpx.HTTPStatusError: Client error '404 Not Found' for url 'http://testserver/event'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    },
+    {
+      "test": "tests.test_operational_mode::test_operational_api_contract_validity",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_operational_mode::test_operational_output_structure_is_deterministic",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_operational_mode::test_operational_brief_executes_real_pipeline",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_root_ui_routing::test_root_renders_integration_control_panel",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_system_stability_lock::test_system_stability_lock",
+      "reason": "AssertionError: OS-1 event post failed for stability-task-001: 404 {\"detail\":\"Not Found\"}\nassert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_ui_bootstrap_router::test_snapshot_determinism",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_ui_bootstrap_router::test_chat_response_structure_validation",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_ui_bootstrap_router::test_no_internal_leakage_validation",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_ui_bootstrap_router::test_email_detail_endpoint_returns_combined_email_view",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_ui_bootstrap_router::test_email_detail_endpoint_returns_404_when_email_not_found",
+      "reason": "AssertionError: assert {'detail': 'Not Found'} == {'detail': 'email_not_found'}\n  \n  Differing items:\n  #x1B[0m{#x1B[33m'#x1B[39;49;00m#x1B[33mdetail#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m: #x1B[33m'#x1B[39;49;00m#x1B[33mNot Found#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m}#x1B[90m#x1B[39;49;00m != #x1B[0m{#x1B[33m'#x1B[39;49;00m#x1B[33mdetail#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m: #x1B[33m'#x1B[39;49;00m#x1B[33memail_not_found#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m}#x1B[90m#x1B[39;49;00m\n  \n  Full diff:\n  #x1B[0m#x1B[90m #x1B[39;49;00m {#x1B[90m#x1B[39;49;00m\n  #x1B[91m-     'detail': 'email_not_found',#x1B[39;49;00m#x1B[90m#x1B[39;49;00m...\n  \n  ...Full output truncated (4 lines hidden), use '-vv' to show"
+    },
+    {
+      "test": "tests.test_ui_simulation_endpoints::test_simulation_run_endpoint_returns_structured_payload",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_ui_simulation_endpoints::test_simulation_stream_and_results_endpoints",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    }
+  ],
+  "legacy_state_expectations": [
+    {
+      "test": "tests.test_evaluation_endpoints::test_evaluation_results_artifact_endpoint_serves_json",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_hard_freeze_regression::test_no_generated_runtime_artifacts_in_repo_root",
+      "reason": "AssertionError: Generated runtime/audit artifacts must not live in repository root. Move them under verification_reports/root_artifacts/. Found: ['boot_smoke_report.json', 'evaluation_results.json', 'simulation_results.json']\nassert ['boot_smoke_...results.json'] == []\n  \n  Left contains 3 more items, first extra item: #x1B[0m#x1B[33m'#x1B[39;49;00m#x1B[33mboot_smoke_report.json#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  \n  Full diff:\n  #x1B[0m#x1B[91m- []#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  #x1B[92m+ [#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  #x1B[92m+     'boot_smoke_report.json',#x1B[39;49;00m#x1B[90m#x1B[39;49;00m...\n  \n  ...Full output truncated (3 lines hidden), use '-vv' to show"
+    },
+    {
+      "test": "tests.test_trust_surface_closure::test_static_trust_surface_closure_report",
+      "reason": "AssertionError: Trust surface closure failed. Detected bypassable entry points:\n  - UNROUTED: household_os.runtime.action_pipeline:LifecycleAction.model_post_init\n  - UNROUTED: household_os.runtime.action_pipeline:LifecycleAction.state\n  - DIRECT_MUTATION_SURFACE: scripts.boot_smoke_test:main\nassert not [EntryPointAnalysis(module='household_os.runtime.action_pipeline', qualname='LifecycleAction.model_post_init', entry_type='scheduler_job', trace=['StateProxy'], classification='UNROUTED', reason='Entry point touches sensitive runtime surface but does not prove routing'), EntryPointAnalysis(module='household_os.runtime.action_pipeline', qualname='LifecycleAction.state', entry_type='scheduler_job', trace=['parse_lifecycle_state', 'assert_lifecycle_state'], classification='UNROUTED', reason='Entry point touches sensitive runtime surface but does not prove routing'), EntryPointAnalysis(module='scripts.boot_smoke_test', qualname='main', entry_type='cli_script', trace=['argparse.ArgumentParser', 'parser.add_argument', 'parser.add_argument', 'parser.add_argument', 'parser.parse_args', 'range', 'sum', 'Counter', 'REPORT_PATH.write_text', 'print', 'BootSmokeHarness', 'harness.execute_single_run', 'all_runs.append', 'int', 'time.strftime', 'bool', 'bool', '_determinism_label', 'json.dumps', 'json.dumps', 'time.sleep', 'failure_counter.get', 'time.gmtime', 'random.uniform', 'random.randint', 'asdict'], classification='DIRECT_MUTATION_SURFACE', reason='Sensitive direct calls without orchestrator.handle_request')]"
+    }
+  ],
+  "auth_context_failures": [
+    {
+      "test": "tests.test_daily_loop_engine::test_daily_loop_output_is_deterministic",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Forbidden call blocked: HouseholdStateGraphStore.load_graph from assistant.daily_loop.daily_loop_engine"
+    },
+    {
+      "test": "tests.test_daily_loop_engine::test_daily_loop_has_no_overlapping_time_blocks",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Forbidden call blocked: HouseholdStateGraphStore.load_graph from assistant.daily_loop.daily_loop_engine"
+    },
+    {
+      "test": "tests.test_daily_loop_engine::test_daily_loop_places_meals_and_workouts",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Forbidden call blocked: HouseholdStateGraphStore.load_graph from assistant.daily_loop.daily_loop_engine"
+    },
+    {
+      "test": "tests.test_daily_loop_engine::test_daily_loop_preserves_buffer_time",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Forbidden call blocked: HouseholdStateGraphStore.load_graph from assistant.daily_loop.daily_loop_engine"
+    },
+    {
+      "test": "tests.test_daily_loop_engine::test_daily_loop_consumes_runtime_plan_output",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Forbidden call blocked: HouseholdOSDecisionEngine.run from household_state.decision_engine"
+    },
+    {
+      "test": "tests.test_daily_loop_engine::test_daily_loop_generation_is_read_only",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Forbidden call blocked: HouseholdStateGraphStore.load_graph from assistant.daily_loop.daily_loop_engine"
+    },
+    {
+      "test": "tests.test_event_replay_integrity::test_replay_returns_enum",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Replay access denied for caller: household_os.runtime.tracing"
+    },
+    {
+      "test": "tests.test_event_replay_integrity::test_replay_rejects_legacy_event",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Replay access denied for caller: household_os.runtime.tracing"
+    },
+    {
+      "test": "tests.test_event_sourcing::test_event_replay_returns_enum",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Replay access denied for caller: household_os.runtime.tracing"
+    },
+    {
+      "test": "tests.test_event_sourcing::test_historical_replay_strict",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Replay access denied for caller: household_os.runtime.tracing"
+    },
+    {
+      "test": "tests.test_event_store_invariants::test_state_reduction_fails_for_unknown_actor_type",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Replay access denied for caller: household_os.runtime.tracing"
+    },
+    {
+      "test": "tests.test_household_os_runtime::test_action_lifecycle_flow",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Forbidden call blocked: ActionPipeline.approve_actions from household_os.runtime.tracing"
+    },
+    {
+      "test": "tests.test_household_os_runtime::test_orchestrator_tick",
+      "reason": "PermissionError: actor_type is required"
+    },
+    {
+      "test": "tests.test_household_os_runtime::test_daily_cycle",
+      "reason": "PermissionError: actor_type is required"
+    },
+    {
+      "test": "tests.test_household_state_manager::test_state_convergence_after_multiple_queries",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Forbidden call blocked: HouseholdOSDecisionEngine.run from household_state.decision_engine"
+    },
+    {
+      "test": "tests.test_household_state_manager::test_conflict_detection_across_domains",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Forbidden call blocked: HouseholdOSDecisionEngine.run from household_state.decision_engine"
+    },
+    {
+      "test": "tests.test_security_verification_harness.TestInvariant1ActorContextPropagation::test_invariant_context_not_silently_dropped_on_retry",
+      "reason": "AssertionError: VIOLATION: approve path executed without actor_type in FSM context. Contexts observed: []\nassert False\n +  where False = any(<generator object TestInvariant1ActorContextPropagation.test_invariant_context_not_silently_dropped_on_retry.<locals>.<genexpr> at 0x000001CFE17AA810>)"
+    },
+    {
+      "test": "tests.test_security_verification_harness.TestInvariant2AssistantCannotApprove::test_invariant_assistant_blocked_at_orchestrator_layer",
+      "reason": "AssertionError: VIOLATION: Orchestrator raised PermissionError but the message does not indicate assistant denial. Got: 'verified actor is missing subject_id'\nassert ('assistant' in 'verified actor is missing subject_id' or 'cannot approve' in 'verified actor is missing subject_id' or 'permission' in 'verified actor is missing subject_id')"
+    },
+    {
+      "test": "tests.test_trust_boundary_enforcement::test_event_store_append_from_external_module_must_fail",
+      "reason": "Failed: DID NOT RAISE <class 'household_os.security.trust_boundary_enforcer.SecurityViolation'>"
+    },
+    {
+      "test": "tests.test_trust_boundary_enforcement::test_state_store_load_outside_orchestrator_must_fail",
+      "reason": "Failed: DID NOT RAISE <class 'household_os.security.trust_boundary_enforcer.SecurityViolation'>"
+    },
+    {
+      "test": "tests.test_trust_boundary_enforcement::test_fsm_transition_outside_orchestrator_must_fail",
+      "reason": "Failed: DID NOT RAISE <class 'household_os.security.trust_boundary_enforcer.SecurityViolation'>"
+    },
+    {
+      "test": "tests.test_trust_surface_closure::test_negative_direct_event_store_append_must_fail",
+      "reason": "Failed: DID NOT RAISE <class 'household_os.security.trust_boundary_enforcer.SecurityViolation'>"
+    },
+    {
+      "test": "tests.test_trust_surface_closure::test_negative_direct_state_store_save_must_fail",
+      "reason": "Failed: DID NOT RAISE <class 'household_os.security.trust_boundary_enforcer.SecurityViolation'>"
+    },
+    {
+      "test": "tests.test_trust_surface_closure::test_negative_fsm_transition_outside_orchestrator_must_fail",
+      "reason": "Failed: DID NOT RAISE <class 'household_os.security.trust_boundary_enforcer.SecurityViolation'>"
+    },
+    {
+      "test": "tests.test_trust_surface_final_closure::test_trust_surface_final_closure_report",
+      "reason": "AssertionError: DIRECT_MUTATION_SURFACE must be 0\nassert not [SurfaceFinding(kind='DIRECT_MUTATION_SURFACE', module='household_state.decision_engine', symbol='household_os.core.decision_engine', reason='Forbidden direct import outside trust registry'), SurfaceFinding(kind='DIRECT_MUTATION_SURFACE', module='household_state.household_state_manager', symbol='household_os.core.household_state_graph', reason='Forbidden direct import outside trust registry')]"
+    },
+    {
+      "test": "tests.test_unified_trust_boundary::test_direct_pipeline_execution_attempt_must_fail",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Forbidden call blocked: ActionPipeline.execute_approved_actions from household_os.runtime.tracing"
+    },
+    {
+      "test": "tests.test_unified_trust_boundary::test_reject_without_authorization_gate_must_fail",
+      "reason": "household_os.security.trust_boundary_enforcer.SecurityViolation: Forbidden call blocked: ActionPipeline.reject_actions from household_os.runtime.tracing"
+    }
+  ],
+  "eventual_consistency_assumptions": [
+    {
+      "test": "tests.test_cqrs_lifecycle_invariants::test_reducer_validates_using_fsm_rules",
+      "reason": "assert 'from apps.api.core.state_machine import' in '\"\"\"\\nState Reducer - Pure Function for Deriving Lifecycle State from Events\\n\\nCore principle: State is computed by replaying events in order.\\nThis enables:\\n- Deterministic state reconstruction\\n- Event sourcing correctness\\n- Audit trail of all state changes\\n- Easy temporal queries (state at any point in time)\\n\\nCQRS Constraint:\\n- This is a READ MODEL ONLY (Query side)\\n- Reducer validates transitions but does NOT define them\\n- Transition rules are OWNED by StateMachine in apps/api/core/state_machine.py\\n- Reducer calls validate_transition() from FSM to audit historical events\\n- Reducer does NOT decide what transitions are legal (FSM decides)\\n- Reducer maps event types to states (event stream determines state progression)\\n- NO state mutation occurs here (this is pure read/derivation only)\\n\"\"\"\\n\\nfrom __future__ import annotations\\n\\nimport logging\\n\\nfrom household_os.runtime.state_machine import ActionState, TransitionError, validate_transition\\nfrom household_os.core.lifecycle_state import (\\n    LifecycleState,\\n    assert_lifecycle_state,\\n    parse_lifecycle_state,\\n)\\nfrom household_os.runtime.tracing import trace_function\\nfrom household_os.runtime.domain_event...valid_next_events(\\n    state: LifecycleState,\\n) -> set[str]:\\n    \"\"\"\\n    Get valid event types that can occur from a given state.\\n\\n    Useful for:\\n    - Validating commands\\n    - UI state (what actions are available)\\n    - Transition validation\\n\\n    Args:\\n        state: Current lifecycle state\\n\\n    Returns:\\n        Set of valid event type strings\\n    \"\"\"\\n    parsed = assert_lifecycle_state(state)\\n    transitions = {\\n        LifecycleState.PROPOSED: {\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_APPROVED\"],\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_FAILED\"],\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_REJECTED\"],\\n        },\\n        LifecycleState.PENDING_APPROVAL: {\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_APPROVED\"],\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_FAILED\"],\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_REJECTED\"],\\n        },\\n        LifecycleState.APPROVED: {\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_COMMITTED\"],\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_FAILED\"],\\n        },\\n        LifecycleState.COMMITTED: set(),\\n        LifecycleState.FAILED: set(),\\n        LifecycleState.REJECTED: set(),\\n    }\\n    return transitions.get(parsed, set())\\n'"
+    },
+    {
+      "test": "tests.test_cqrs_lifecycle_invariants::test_reducer_event_mapping_not_decision_logic",
+      "reason": "assert 21 < 20\n +  where 21 = <built-in method count of str object at 0x000001CFDF9F4030>('if ')\n +    where <built-in method count of str object at 0x000001CFDF9F4030> = '\"\"\"\\nState Reducer - Pure Function for Deriving Lifecycle State from Events\\n\\nCore principle: State is computed by replaying events in order.\\nThis enables:\\n- Deterministic state reconstruction\\n- Event sourcing correctness\\n- Audit trail of all state changes\\n- Easy temporal queries (state at any point in time)\\n\\nCQRS Constraint:\\n- This is a READ MODEL ONLY (Query side)\\n- Reducer validates transitions but does NOT define them\\n- Transition rules are OWNED by StateMachine in apps/api/core/state_machine.py\\n- Reducer calls validate_transition() from FSM to audit historical events\\n- Reducer does NOT decide what transitions are legal (FSM decides)\\n- Reducer maps event types to states (event stream determines state progression)\\n- NO state mutation occurs here (this is pure read/derivation only)\\n\"\"\"\\n\\nfrom __future__ import annotations\\n\\nimport logging\\n\\nfrom household_os.runtime.state_machine import ActionState, TransitionError, validate_transition\\nfrom household_os.core.lifecycle_state import (\\n    LifecycleState,\\n    assert_lifecycle_state,\\n    parse_lifecycle_state,\\n)\\nfrom household_os.runtime.tracing import trace_function\\nfrom household_os.runtime.domain_event...valid_next_events(\\n    state: LifecycleState,\\n) -> set[str]:\\n    \"\"\"\\n    Get valid event types that can occur from a given state.\\n\\n    Useful for:\\n    - Validating commands\\n    - UI state (what actions are available)\\n    - Transition validation\\n\\n    Args:\\n        state: Current lifecycle state\\n\\n    Returns:\\n        Set of valid event type strings\\n    \"\"\"\\n    parsed = assert_lifecycle_state(state)\\n    transitions = {\\n        LifecycleState.PROPOSED: {\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_APPROVED\"],\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_FAILED\"],\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_REJECTED\"],\\n        },\\n        LifecycleState.PENDING_APPROVAL: {\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_APPROVED\"],\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_FAILED\"],\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_REJECTED\"],\\n        },\\n        LifecycleState.APPROVED: {\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_COMMITTED\"],\\n            LIFECYCLE_EVENT_TYPES[\"ACTION_FAILED\"],\\n        },\\n        LifecycleState.COMMITTED: set(),\\n        LifecycleState.FAILED: set(),\\n        LifecycleState.REJECTED: set(),\\n    }\\n    return transitions.get(parsed, set())\\n'.count"
+    },
+    {
+      "test": "tests.test_household_simulation::test_task_idempotency",
+      "reason": "AssertionError: Task idempotency failed: [<tests.harness.invariant_validator.InvariantViolation object at 0x000001CFE1CB5400>]\nassert False\n +  where False = ScenarioRunResult(scenario_name='task_execution_idempotency_scenario', run_id='task_execution_idempotency_scenario_1_1777450502.776817', success=False, duration_seconds=1.092543, state_hash='8e34b8b768c1b3f05e631de6e5ea69faeda631e7180c0a66070c2aff4e27dfac', event_count=123, entity_count=20, execution_stats={'total_commands': 80, 'successful_commands': 40, 'failed_commands': 0, 'retried_commands': 0, 'duplicate_detections': 40}, violations=[<tests.harness.invariant_validator.InvariantViolation object at 0x000001CFE1CB5400>], violation_summary={'total_violations': 1, 'by_severity': {'critical': 1}, 'by_invariant': {'no_duplicate_task_execution': 1}, 'critical_count': 1}, failure_injection_summary={'total_injected': 0, 'by_mode': {}, 'cascade_count': 0}, event_log=[{'type': 'member_registered', 'person_id': 'member_0', 'name': 'Member 0', 'role': 'parent', 'timestamp': '2026-04-29T03:15:02.776889'}, {'type': 'member_registered', 'person_id': 'member_1', 'name': 'Member 1', 'role': 'teenager', 'timestamp': '2026-04-29T03:15:02.776908'}, {'type': 'scenario_started', 'name': 'task_execution_idempotency_scenario', 'timestamp': '2026-04-29T03:15:02.776935'}, {'type': 'explanation_generat...eType.COMPLETED: 'completed'>, trigger_type=<TriggerType.USER_ACTION: 'user_action'>, trigger_source_id=None, trigger_source_name=None, initiated_by=<InitiatedBy.USER: 'user'>, reason_code=<ReasonCode.TASK_COMPLETED: 'TASK_COMPLETED'>, explanation_text=\"Task 'Task member_1_8' was marked as completed.\", timestamp=datetime.datetime(2026, 4, 29, 3, 15, 3, 869326), downstream_effects=[], plan_id=None, projection_version=None, idempotency_key='f0bbee7e-590c-45f6-9dcd-435293527ac6'), ExplanationSchema(explanation_id='aabf8904-4df0-51dc-9f5d-e8a563369158', family_id='family-1', entity_type=<EntityType.TASK: 'task'>, entity_id='d3a17880-b9eb-4d53-9f23-2ec10f8792b1', entity_name='Task member_1_9', change_type=<ChangeType.COMPLETED: 'completed'>, trigger_type=<TriggerType.USER_ACTION: 'user_action'>, trigger_source_id=None, trigger_source_name=None, initiated_by=<InitiatedBy.USER: 'user'>, reason_code=<ReasonCode.TASK_COMPLETED: 'TASK_COMPLETED'>, explanation_text=\"Task 'Task member_1_9' was marked as completed.\", timestamp=datetime.datetime(2026, 4, 29, 3, 15, 3, 869421), downstream_effects=[], plan_id=None, projection_version=None, idempotency_key='1aa5f1e7-48cc-4724-9da2-a577499f40ce')]).success"
+    },
+    {
+      "test": "tests.test_household_simulation::test_transient_failure_recovery",
+      "reason": "AssertionError: Transient failures not recoverable\nassert (False or 1 == 0)\n +  where False = ScenarioRunResult(scenario_name='task_execution_idempotency_scenario', run_id='task_execution_idempotency_scenario_1_1777450503.942661', success=False, duration_seconds=0.550201, state_hash='dc6e88cf7a7d4f2b8c4f77129cc000d76e1a6484cb2ad6fe23208cb17b06e829', event_count=63, entity_count=10, execution_stats={'total_commands': 40, 'successful_commands': 20, 'failed_commands': 0, 'retried_commands': 0, 'duplicate_detections': 20}, violations=[<tests.harness.invariant_validator.InvariantViolation object at 0x000001CFDF8BB9D0>], violation_summary={'total_violations': 1, 'by_severity': {'critical': 1}, 'by_invariant': {'no_duplicate_task_execution': 1}, 'critical_count': 1}, failure_injection_summary={'total_injected': 0, 'by_mode': {}, 'cascade_count': 0}, event_log=[{'type': 'member_registered', 'person_id': 'member_0', 'name': 'Member 0', 'role': 'parent', 'timestamp': '2026-04-29T03:15:03.942754'}, {'type': 'member_registered', 'person_id': 'member_1', 'name': 'Member 1', 'role': 'teenager', 'timestamp': '2026-04-29T03:15:03.942776'}, {'type': 'scenario_started', 'name': 'task_execution_idempotency_scenario', 'timestamp': '2026-04-29T03:15:03.942796'}, {'type': 'explanation_generate...eType.COMPLETED: 'completed'>, trigger_type=<TriggerType.USER_ACTION: 'user_action'>, trigger_source_id=None, trigger_source_name=None, initiated_by=<InitiatedBy.USER: 'user'>, reason_code=<ReasonCode.TASK_COMPLETED: 'TASK_COMPLETED'>, explanation_text=\"Task 'Task member_1_3' was marked as completed.\", timestamp=datetime.datetime(2026, 4, 29, 3, 15, 4, 492889), downstream_effects=[], plan_id=None, projection_version=None, idempotency_key='13c47acd-327d-4f18-bc1f-8fde33398e34'), ExplanationSchema(explanation_id='a37e99df-2c61-5f22-8dad-132ae42ddb36', family_id='family-1', entity_type=<EntityType.TASK: 'task'>, entity_id='dab57617-b35e-4eb5-b67a-ab5685eed303', entity_name='Task member_1_4', change_type=<ChangeType.COMPLETED: 'completed'>, trigger_type=<TriggerType.USER_ACTION: 'user_action'>, trigger_source_id=None, trigger_source_name=None, initiated_by=<InitiatedBy.USER: 'user'>, reason_code=<ReasonCode.TASK_COMPLETED: 'TASK_COMPLETED'>, explanation_text=\"Task 'Task member_1_4' was marked as completed.\", timestamp=datetime.datetime(2026, 4, 29, 3, 15, 4, 492958), downstream_effects=[], plan_id=None, projection_version=None, idempotency_key='527ba8bb-4191-4394-a515-55144e8843c9')]).success\n +  and   1 = len([<tests.harness.invariant_validator.InvariantViolation object at 0x000001CFDF8BB9D0>])\n +    where [<tests.harness.invariant_validator.InvariantViolation object at 0x000001CFDF8BB9D0>] = ScenarioRunResult(scenario_name='task_execution_idempotency_scenario', run_id='task_execution_idempotency_scenario_1_1777450503.942661', success=False, duration_seconds=0.550201, state_hash='dc6e88cf7a7d4f2b8c4f77129cc000d76e1a6484cb2ad6fe23208cb17b06e829', event_count=63, entity_count=10, execution_stats={'total_commands': 40, 'successful_commands': 20, 'failed_commands': 0, 'retried_commands': 0, 'duplicate_detections': 20}, violations=[<tests.harness.invariant_validator.InvariantViolation object at 0x000001CFDF8BB9D0>], violation_summary={'total_violations': 1, 'by_severity': {'critical': 1}, 'by_invariant': {'no_duplicate_task_execution': 1}, 'critical_count': 1}, failure_injection_summary={'total_injected': 0, 'by_mode': {}, 'cascade_count': 0}, event_log=[{'type': 'member_registered', 'person_id': 'member_0', 'name': 'Member 0', 'role': 'parent', 'timestamp': '2026-04-29T03:15:03.942754'}, {'type': 'member_registered', 'person_id': 'member_1', 'name': 'Member 1', 'role': 'teenager', 'timestamp': '2026-04-29T03:15:03.942776'}, {'type': 'scenario_started', 'name': 'task_execution_idempotency_scenario', 'timestamp': '2026-04-29T03:15:03.942796'}, {'type': 'explanation_generate...eType.COMPLETED: 'completed'>, trigger_type=<TriggerType.USER_ACTION: 'user_action'>, trigger_source_id=None, trigger_source_name=None, initiated_by=<InitiatedBy.USER: 'user'>, reason_code=<ReasonCode.TASK_COMPLETED: 'TASK_COMPLETED'>, explanation_text=\"Task 'Task member_1_3' was marked as completed.\", timestamp=datetime.datetime(2026, 4, 29, 3, 15, 4, 492889), downstream_effects=[], plan_id=None, projection_version=None, idempotency_key='13c47acd-327d-4f18-bc1f-8fde33398e34'), ExplanationSchema(explanation_id='a37e99df-2c61-5f22-8dad-132ae42ddb36', family_id='family-1', entity_type=<EntityType.TASK: 'task'>, entity_id='dab57617-b35e-4eb5-b67a-ab5685eed303', entity_name='Task member_1_4', change_type=<ChangeType.COMPLETED: 'completed'>, trigger_type=<TriggerType.USER_ACTION: 'user_action'>, trigger_source_id=None, trigger_source_name=None, initiated_by=<InitiatedBy.USER: 'user'>, reason_code=<ReasonCode.TASK_COMPLETED: 'TASK_COMPLETED'>, explanation_text=\"Task 'Task member_1_4' was marked as completed.\", timestamp=datetime.datetime(2026, 4, 29, 3, 15, 4, 492958), downstream_effects=[], plan_id=None, projection_version=None, idempotency_key='527ba8bb-4191-4394-a515-55144e8843c9')]).violations"
+    },
+    {
+      "test": "tests.test_household_simulation::test_deterministic_replay",
+      "reason": "AssertionError: Deterministic replay did not converge. Hashes: ['b1a386c0cb45b30329d61f19e06bdce93bccb846128e234fb3e549f37cd9d6a9', '2ebd664b60fabf521f3bc0c5ddf9ad012ebb436d16c42c899fcb8cb78365c331', 'ab5bbe189e5fa8cf2225738beebbb3a595d6d11d0b40dc4bf179e5faa95e721c']\nassert False"
+    },
+    {
+      "test": "tests.test_household_simulation::test_matrix_coverage",
+      "reason": "AssertionError: Success rate 66.7% below threshold\nassert 0.6666666666666666 >= 0.8"
+    }
+  ],
+  "environment_dependency_failures": [
+    {
+      "test": "tests.architecture.test_fetch_boundary::test_only_state_builder_handles_fetch",
+      "reason": "ModuleNotFoundError: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.architecture.test_fetch_boundary::test_orchestrator_does_not_fetch",
+      "reason": "ModuleNotFoundError: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.architecture.test_single_fetch_source::test_only_state_builder_has_fetch_events",
+      "reason": "ModuleNotFoundError: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.test_action_event_contracts::test_action_event_contract_invariants",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\apps\\\\api\\\\schemas\\\\event.py'"
+    },
+    {
+      "test": "tests.test_cqrs_lifecycle_invariants::test_fsm_is_sole_mutation_authority",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\apps\\\\api\\\\core\\\\state_machine.py'"
+    },
+    {
+      "test": "tests.test_cqrs_lifecycle_invariants::test_only_transition_to_mutates_state_in_fsm",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\apps\\\\api\\\\core\\\\state_machine.py'"
+    },
+    {
+      "test": "tests.test_cqrs_lifecycle_invariants::test_api_uses_lifecycle_presentation_mapper",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\apps\\\\api\\\\assistant_runtime_router.py'"
+    },
+    {
+      "test": "tests.test_cqrs_lifecycle_invariants::test_api_never_exposes_raw_enum",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\apps\\\\api\\\\assistant_runtime_router.py'"
+    },
+    {
+      "test": "tests.test_cqrs_lifecycle_invariants::test_write_and_read_models_are_separate",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\apps\\\\api\\\\core\\\\state_machine.py'"
+    },
+    {
+      "test": "tests.test_feature_flags.TestIngestionDisabled::test_os1_not_called_when_disabled",
+      "reason": "ImportError: import error in apps.api.integration_core: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.test_feature_flags.TestIngestionDisabled::test_top_level_status_is_disabled",
+      "reason": "ImportError: import error in apps.api.integration_core: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.test_feature_flags.TestIngestionDisabled::test_ingested_count_is_zero_when_disabled",
+      "reason": "ImportError: import error in apps.api.integration_core: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.test_feature_flags.TestIngestionDisabled::test_total_events_still_reported_when_disabled",
+      "reason": "ImportError: import error in apps.api.integration_core: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.test_feature_flags.TestIngestionDisabled::test_each_result_has_disabled_status",
+      "reason": "ImportError: import error in apps.api.integration_core: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.test_feature_flags.TestIngestionDisabled::test_event_ids_present_in_disabled_results",
+      "reason": "ImportError: import error in apps.api.integration_core: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.test_feature_flags.TestIngestionEnabled::test_os1_called_for_each_event_when_enabled",
+      "reason": "ImportError: import error in apps.api.integration_core: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.test_feature_flags.TestIngestionEnabled::test_no_disabled_status_in_results_when_enabled",
+      "reason": "ImportError: import error in apps.api.integration_core: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.test_feature_flags.TestIngestionEnabled::test_ingested_count_matches_events_when_enabled",
+      "reason": "ImportError: import error in apps.api.integration_core: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.test_feature_flags.TestIngestionEnabled::test_top_level_status_key_absent_when_enabled",
+      "reason": "ImportError: import error in apps.api.integration_core: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.test_feature_flags.TestIngestionEnabled::test_flag_evaluated_at_call_time",
+      "reason": "ImportError: import error in apps.api.integration_core: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestArchitectureGuard::test_oauth_config_module_no_forbidden_imports",
+      "reason": "ModuleNotFoundError: No module named 'apps.api.integration_core'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestArchitectureGuard::test_integrations_router_no_os2_imports",
+      "reason": "ModuleNotFoundError: No module named 'apps.api.endpoints'"
+    },
+    {
+      "test": "tests.test_invariance_enforcement::test_no_to_sse_anywhere_in_runtime_paths",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\apps\\\\api\\\\services\\\\canonical_event_router.py'"
+    },
+    {
+      "test": "tests.test_invariance_enforcement::test_router_has_no_conditional_sse_logic",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\apps\\\\api\\\\services\\\\canonical_event_router.py'"
+    },
+    {
+      "test": "tests.test_lifecycle_contract_boundary::test_api_layer_uses_mapper_for_lifecycle_output",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'apps\\\\api\\\\assistant_runtime_router.py'"
+    },
+    {
+      "test": "tests.test_single_pipeline_enforcement::test_brief_endpoint_calls_orchestrator_only",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\apps\\\\api\\\\endpoints\\\\brief_endpoint.py'"
+    },
+    {
+      "test": "tests.test_single_pipeline_enforcement::test_endpoint_uses_only_orchestrator",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\apps\\\\api\\\\endpoints\\\\brief_endpoint.py'"
+    },
+    {
+      "test": "tests.test_sse_event_closure::test_no_direct_sse_construction_runtime_paths",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\apps\\\\api\\\\services\\\\task_service.py'"
+    },
+    {
+      "test": "tests.test_sse_event_closure::test_no_direct_canonical_envelope_instantiation_in_business_services",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\apps\\\\api\\\\services\\\\task_service.py'"
+    },
+    {
+      "test": "tests.test_sse_event_closure::test_replay_has_no_transport_branching_or_direct_sse_calls",
+      "reason": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\apps\\\\api\\\\services\\\\event_replay_service.py'"
+    },
+    {
+      "test": "tests.test_trust_boundary_enforcement::test_external_module_importing_fsm_must_fail",
+      "reason": "AssertionError: Regex pattern did not match.\n  Expected regex: 'Trust boundary violation|Import boundary violation'\n  Actual message: \"No module named 'apps.api.core'\""
+    }
+  ],
+  "invalid_or_obsolete_tests": [
+    {
+      "test": "tests.p1_verification.test_auth_lifecycle.TestAuthTokenIssuance::test_token_pair_structure",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('35071c21e29c59fe72662b6562bf4b8a20f18f3fb228b7539a7e6828a49e66df', 'family-b582b82e', 'user-251c459b', 'dev-cacfe452', 'ADMIN', '{\"device_id\": \"dev-cacfe452\", \"exp\": 1777433387, \"household_id\": \"family-b582b82e\", \"iat\": 1777432487, \"iss\": \"hpal\", \"jti\": \"9e1d114e-9ae9-4684-97f9-145c04c7fa83\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-251c459b\"}', 1, '2026-04-29 03:14:47.780228', '2026-04-29 03:29:47.000000', '2026-04-29 03:14:47.780233')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_auth_lifecycle.TestAuthTokenIssuance::test_access_token_shorter_expiry",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('fc3d36d487b6712953cca11d6901a5ce2a5e86af880ac2b2259d57237603ca5e', 'family-d1e62be3', 'user-d5f1c81b', 'dev-0f490e5b', 'ADMIN', '{\"device_id\": \"dev-0f490e5b\", \"exp\": 1777433388, \"household_id\": \"family-d1e62be3\", \"iat\": 1777432488, \"iss\": \"hpal\", \"jti\": \"381180ad-7312-470d-b9e9-f49b45676d21\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-d5f1c81b\"}', 1, '2026-04-29 03:14:48.157527', '2026-04-29 03:29:48.000000', '2026-04-29 03:14:48.157531')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_auth_lifecycle.TestAuthTokenValidation::test_valid_token_accepted",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('865b54406d65a6d33cabe61bb772a0711d418856e86bf0ca7926b5cdb8a2b813', 'family-56705957', 'user-11004601', 'dev-bd951a1a', 'ADMIN', '{\"device_id\": \"dev-bd951a1a\", \"exp\": 1777433388, \"household_id\": \"family-56705957\", \"iat\": 1777432488, \"iss\": \"hpal\", \"jti\": \"ca8dee56-907d-4d9a-9970-52fc35d219ec\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-11004601\"}', 1, '2026-04-29 03:14:48.491158', '2026-04-29 03:29:48.000000', '2026-04-29 03:14:48.491162')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_auth_lifecycle.TestAuthTokenValidation::test_expired_token_rejected",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('e211b9b64cb8579960a643d9c51b71533af230ceac297f17bcba69c9b316bda4', 'family-09979fe1', 'user-bfb0b186', 'dev-47e86229', 'ADMIN', '{\"device_id\": \"dev-47e86229\", \"exp\": 1777433388, \"household_id\": \"family-09979fe1\", \"iat\": 1777432488, \"iss\": \"hpal\", \"jti\": \"bb8dcc90-1100-462e-9a0b-2bd59eb47866\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-bfb0b186\"}', 1, '2026-04-29 03:14:48.855142', '2026-04-29 03:29:48.000000', '2026-04-29 03:14:48.855146')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_auth_lifecycle.TestAuthTokenValidation::test_tampered_token_rejected",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('8d3ab1a533335b9dcb08d43d0f2880a68f4379b6885591aaf6018c791d0b236e', 'family-3fcd805e', 'user-01d1077a', 'dev-88ac5227', 'ADMIN', '{\"device_id\": \"dev-88ac5227\", \"exp\": 1777433389, \"household_id\": \"family-3fcd805e\", \"iat\": 1777432489, \"iss\": \"hpal\", \"jti\": \"504ff897-f032-4765-b67c-c2e5df1f42a3\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-01d1077a\"}', 1, '2026-04-29 03:14:49.173514', '2026-04-29 03:29:49.000000', '2026-04-29 03:14:49.173518')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_auth_lifecycle.TestAuthTokenRefresh::test_refresh_token_extends_expiry",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('f2aa9d2d16c1cb590cc4ca0936d168454787b82c3d1a618f2b92dd314dc12c75', 'family-c5c4c064', 'user-15500d63', 'dev-52bef7c7', 'ADMIN', '{\"device_id\": \"dev-52bef7c7\", \"exp\": 1777433389, \"household_id\": \"family-c5c4c064\", \"iat\": 1777432489, \"iss\": \"hpal\", \"jti\": \"91142e15-1f81-44e1-afa9-e2f0ad9a9367\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-15500d63\"}', 1, '2026-04-29 03:14:49.499387', '2026-04-29 03:29:49.000000', '2026-04-29 03:14:49.499392')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_auth_lifecycle.TestAuthTokenRevocation::test_revoke_single_token",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('2ea482a420313570fa18175e3fa879850461d9d1667ad6ac31170b9bfc12e2bd', 'family-85f9c284', 'user-72f64ebf', 'dev-5031f0bb', 'ADMIN', '{\"device_id\": \"dev-5031f0bb\", \"exp\": 1777433389, \"household_id\": \"family-85f9c284\", \"iat\": 1777432489, \"iss\": \"hpal\", \"jti\": \"dcfca8ec-295e-435b-b9fa-4bb88b00a9ba\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-72f64ebf\"}', 1, '2026-04-29 03:14:49.809721', '2026-04-29 03:29:49.000000', '2026-04-29 03:14:49.809725')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_auth_lifecycle.TestAuthTokenRevocation::test_revoke_all_user_tokens",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('b42262fe221e42a98f835066fea83f9a1e535139b61116a19a5d55a7192e6253', 'family-20a34021', 'user-20d65d17', 'dev-5176a9b6', 'ADMIN', '{\"device_id\": \"dev-5176a9b6\", \"exp\": 1777433390, \"household_id\": \"family-20a34021\", \"iat\": 1777432490, \"iss\": \"hpal\", \"jti\": \"9cf1bc46-7b75-4578-bb09-9b376fc1ba99\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-20d65d17\"}', 1, '2026-04-29 03:14:50.108518', '2026-04-29 03:29:50.000000', '2026-04-29 03:14:50.108521')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_auth_lifecycle.TestAuthTokenRevocation::test_revoke_device_tokens",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('7119681a549873859035507270e1a6e4006f473a2086de26077d744c42ab9ce4', 'family-35a6bd01', 'user-df67c991', 'dev-703e74a9', 'ADMIN', '{\"device_id\": \"dev-703e74a9\", \"exp\": 1777433390, \"household_id\": \"family-35a6bd01\", \"iat\": 1777432490, \"iss\": \"hpal\", \"jti\": \"f57e7d3f-d8ba-4f71-a405-d51ccbddbe0e\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-df67c991\"}', 1, '2026-04-29 03:14:50.416960', '2026-04-29 03:29:50.000000', '2026-04-29 03:14:50.416968')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_auth_lifecycle.TestAuthHouseholdScopeBinding::test_cross_household_token_misuse_rejected",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('94fe15453dfc6f02d46415c7c96257402be2b5ea69fda1b2c8f2ab4133cf3720', 'family-bc96a929', 'user-ba636708', 'dev-ffa31294', 'ADMIN', '{\"device_id\": \"dev-ffa31294\", \"exp\": 1777433390, \"household_id\": \"family-bc96a929\", \"iat\": 1777432490, \"iss\": \"hpal\", \"jti\": \"eb2a27fc-74ed-4eee-8e42-6dc239f29cc4\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-ba636708\"}', 1, '2026-04-29 03:14:50.740410', '2026-04-29 03:29:50.000000', '2026-04-29 03:14:50.740414')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_auth_lifecycle.TestAuthHouseholdScopeBinding::test_token_claims_match_issuance",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('c33283438bdcea060719f45999350302bbda5d0375152f4d6817f3662408bfc2', 'family-620a45bb', 'user-6cf60de5', 'dev-db0c867d', 'CHILD', '{\"device_id\": \"dev-db0c867d\", \"exp\": 1777433391, \"household_id\": \"family-620a45bb\", \"iat\": 1777432491, \"iss\": \"hpal\", \"jti\": \"280829b4-9b2d-4a6d-b9e5-01110abc8841\", \"role\": \"CHILD\", \"typ\": \"access\", \"user_id\": \"user-6cf60de5\"}', 1, '2026-04-29 03:14:51.046273', '2026-04-29 03:29:51.000000', '2026-04-29 03:14:51.046277')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_chaos_concurrency.TestChaosAuthFailures::test_mixed_valid_invalid_tokens_concurrent",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('ce9041fffdced4d836a3e9bb5537bb0cf519b9465202100ef4252f7f0a99b743', 'family-1', 'user-1', 'dev-1', 'ADMIN', '{\"device_id\": \"dev-1\", \"exp\": 1777433391, \"household_id\": \"family-1\", \"iat\": 1777432491, \"iss\": \"hpal\", \"jti\": \"daff7194-983d-461d-bebe-4353f744b6cb\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-1\"}', 1, '2026-04-29 03:14:51.769414', '2026-04-29 03:29:51.000000', '2026-04-29 03:14:51.769418')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_chaos_concurrency.TestChaosLLMFailures::test_rate_limit_under_concurrent_requests",
+      "reason": "assert 6 <= 5"
+    },
+    {
+      "test": "tests.p1_verification.test_e2e_integration.TestE2EAuthenticatedRequest::test_full_request_with_valid_token",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('37bf0d549dfe624efafce4ba1469ce39288d6dab21c48a65ec95ceb420ed67ac', 'family-1', 'user-1', 'dev-1', 'ADMIN', '{\"device_id\": \"dev-1\", \"exp\": 1777433392, \"household_id\": \"family-1\", \"iat\": 1777432492, \"iss\": \"hpal\", \"jti\": \"1c972648-cf0e-4009-8f77-904753389058\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-1\"}', 1, '2026-04-29 03:14:52.439397', '2026-04-29 03:29:52.000000', '2026-04-29 03:14:52.439403')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_e2e_integration.TestE2EIntentResolutionToWrite::test_valid_intent_triggers_write",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('f76287106f8f19dcaf945240aa496b3403c4090ada047d721d90c2590a7e11b2', 'family-1', 'user-1', 'dev-1', 'ADMIN', '{\"device_id\": \"dev-1\", \"exp\": 1777433392, \"household_id\": \"family-1\", \"iat\": 1777432492, \"iss\": \"hpal\", \"jti\": \"e92736b6-8b96-4b91-b295-ad88a66fd81c\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-1\"}', 1, '2026-04-29 03:14:52.829468', '2026-04-29 03:29:52.000000', '2026-04-29 03:14:52.829472')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_e2e_integration.TestE2EIntentResolutionToWrite::test_llm_timeout_fallback_still_writes",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('3813178beea68e017920a85e5f7dca781f698c5788464910d99bac041174d2a9', 'family-1', 'user-1', 'dev-1', 'ADMIN', '{\"device_id\": \"dev-1\", \"exp\": 1777433393, \"household_id\": \"family-1\", \"iat\": 1777432493, \"iss\": \"hpal\", \"jti\": \"d177d65a-c11f-4c03-9593-f43e218c8b42\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-1\"}', 1, '2026-04-29 03:14:53.198553', '2026-04-29 03:29:53.000000', '2026-04-29 03:14:53.198557')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.p1_verification.test_e2e_integration.TestE2EEndToEndNominal::test_nominal_request_flow",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('d68cf4ebded17b01243214d1d9ddc1bad868609da034f83209dccf2efadc4f70', 'family-1', 'user-1', 'dev-1', 'ADMIN', '{\"device_id\": \"dev-1\", \"exp\": 1777433393, \"household_id\": \"family-1\", \"iat\": 1777432493, \"iss\": \"hpal\", \"jti\": \"f6e92e70-1261-484a-a21c-9002443fcf1f\", \"role\": \"ADMIN\", \"typ\": \"access\", \"user_id\": \"user-1\"}', 1, '2026-04-29 03:14:53.614992', '2026-04-29 03:29:53.000000', '2026-04-29 03:14:53.614996')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.test_actor_context_propagation::test_actor_type_is_mapped_from_api_user_to_user",
+      "reason": "AssertionError: assert 'api_user' == 'user'\n  \n  #x1B[0m#x1B[91m- user#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  #x1B[92m+ api_user#x1B[39;49;00m#x1B[90m#x1B[39;49;00m"
+    },
+    {
+      "test": "tests.test_actor_type_enforcement::test_actor_type_propagates_api_to_approve_actions",
+      "reason": "household_os.runtime.event_store.EventStoreError: event_store.append received invalid actor_context.actor_type: 'api_user'"
+    },
+    {
+      "test": "tests.test_assistant_runtime_router::test_approval_executes_action",
+      "reason": "AssertionError: assert 'committed' == 'executed'\n  \n  #x1B[0m#x1B[91m- executed#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  #x1B[92m+ committed#x1B[39;49;00m#x1B[90m#x1B[39;49;00m"
+    },
+    {
+      "test": "tests.test_assistant_runtime_router::test_today_view_returns_state",
+      "reason": "assert False\n +  where False = any(<generator object test_today_view_returns_state.<locals>.<genexpr> at 0x000001CFE1537440>)"
+    },
+    {
+      "test": "tests.test_auth_realtime_guards::test_session_validate_not_rejected_as_duplicate",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_auth_realtime_guards::test_realtime_stream_rejects_missing_auth",
+      "reason": "assert 404 == 401\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_behavior_feedback::test_rejection_affects_future_recommendations",
+      "reason": "AssertionError: assert 'tomorrow evening at 6:30 PM' in 'Adjust household coordination queue'"
+    },
+    {
+      "test": "tests.test_behavior_feedback::test_preferred_time_is_reused",
+      "reason": "AssertionError: assert 'evening at 6:30 PM' in 'Adjust household coordination queue'"
+    },
+    {
+      "test": "tests.test_behavior_feedback::test_ignored_actions_reduce_priority",
+      "reason": "AssertionError: assert '30-minute workout' in 'Adjust household coordination queue'"
+    },
+    {
+      "test": "tests.test_daily_loop_engine::test_daily_get_endpoint_does_not_persist",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_daily_loop_engine::test_daily_regenerate_endpoint_persists",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_evaluation_endpoints::test_evaluation_run_endpoint_returns_expected_contract",
+      "reason": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+    },
+    {
+      "test": "tests.test_event_mutation_stress::test_stress_runner_emits_all_chaos_scenarios",
+      "reason": "httpx.HTTPStatusError: Client error '404 Not Found' for url 'http://testserver/event'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    },
+    {
+      "test": "tests.test_fsm_immutability_enforcement::test_legacy_manager_parse_is_read_through_only",
+      "reason": "AttributeError: 'HouseholdStateManager' object has no attribute '_parse_lifecycle_sections'"
+    },
+    {
+      "test": "tests.test_google_calendar_oauth.TestGoogleEmailSyncEndpoint::test_sync_requires_connected_google_credentials",
+      "reason": "TypeError: string indices must be integers, not 'str'"
+    },
+    {
+      "test": "tests.test_governance_gates::test_docs_markdown_is_pruned_to_canonical_set",
+      "reason": "AssertionError: Docs markdown drift detected. Keep only canonical Home OS docs set. Found: ['docs/CONTRACT_GUARD.md', 'docs/HOUSEHOLD_OS_API_QUICK_START.md', 'docs/PROJECT_DIRECTIVE.md', 'docs/README.md', 'docs/architecture/GOAL_PROGRESS_MAP.md', 'docs/architecture/LAYER_MAP.md']\nassert {'docs/CONTRA...LAYER_MAP.md'} == {'docs/HOUSEH...LAYER_MAP.md'}\n  \n  Extra items in the left set:\n  #x1B[0m#x1B[33m'#x1B[39;49;00m#x1B[33mdocs/CONTRACT_GUARD.md#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  \n  Full diff:\n  #x1B[0m#x1B[90m #x1B[39;49;00m {#x1B[90m#x1B[39;49;00m\n  #x1B[92m+     'docs/CONTRACT_GUARD.md',#x1B[39;49;00m#x1B[90m#x1B[39;49;00m...\n  \n  ...Full output truncated (6 lines hidden), use '-vv' to show"
+    },
+    {
+      "test": "tests.test_household_state_manager::test_no_module_leakage_in_response",
+      "reason": "AssertionError: assert {'action_id',...'impact', ...} == {'current_sta..._action', ...}\n  \n  Extra items in the left set:\n  #x1B[0m#x1B[33m'#x1B[39;49;00m#x1B[33mrecommendation#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  #x1B[0m#x1B[33m'#x1B[39;49;00m#x1B[33mrouting_case#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  #x1B[0m#x1B[33m'#x1B[39;49;00m#x1B[33mwhy#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  #x1B[0m#x1B[33m'#x1B[39;49;00m#x1B[33mapproval_required#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  #x1B[0m#x1B[33m'#x1B[39;49;00m#x1B[33mimpact#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m...\n  \n  ...Full output truncated (20 lines hidden), use '-vv' to show"
+    },
+    {
+      "test": "tests.test_identity_layer.TestPersistenceDeterminism::test_encode_decode_determinism",
+      "reason": "AssertionError: Same input must produce same token\nassert 'eyJkZXZpY2Vf...iQURNSU4ifQ==' == 'eyJkZXZpY2Vf...iQURNSU4ifQ=='\n  \n  #x1B[0m#x1B[91m- eyJkZXZpY2VfaWQiOiAiZGV2LTAwMSIsICJob3VzZWhvbGRfaWQiOiAiaGgtMDAxIiwgInRva2VuX2NyZWF0ZWRfYXQiOiAiMjAyNi0wNC0yOVQwMzoxNToxMy43OTAxNjgiLCAidXNlcl9pZCI6ICJ1c2VyLTAwMSIsICJ1c2VyX3JvbGUiOiAiQURNSU4ifQ==#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  ?                                                                                                                                 ^^^#x1B[90m#x1B[39;49;00m\n  #x1B[92m+ eyJkZXZpY2VfaWQiOiAiZGV2LTAwMSIsICJob3VzZWhvbGRfaWQiOiAiaGgtMDAxIiwgInRva2VuX2NyZWF0ZWRfYXQiOiAiMjAyNi0wNC0yOVQwMzoxNToxMy43OTAxMzIiLCAidXNlcl9pZCI6ICJ1c2VyLTAwMSIsICJ1c2VyX3JvbGUiOiAiQU...\n  \n  ...Full output truncated (2 lines hidden), use '-vv' to show"
+    },
+    {
+      "test": "tests.test_identity_layer.TestPersistenceDeterminism::test_household_creation_persistence",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: households.household_id\n[SQL: INSERT INTO households (household_id, name, timezone, created_at, updated_at) VALUES (?, ?, ?, ?, ?)]\n[parameters: ('hh-test-001', 'Test Household', 'UTC', '2026-04-29 03:15:13.806440', '2026-04-29 03:15:13.806446')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.test_identity_layer.TestPersistenceDeterminism::test_user_creation_persistence",
+      "reason": "ValueError: founder_email_already_exists: alice@example.com"
+    },
+    {
+      "test": "tests.test_identity_layer.TestHouseholdIsolation::test_users_isolated_between_households",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: households.household_id\n[SQL: INSERT INTO households (household_id, name, timezone, created_at, updated_at) VALUES (?, ?, ?, ?, ?)]\n[parameters: ('Household 1', 'UTC', 'UTC', '2026-04-29 03:15:14.242238', '2026-04-29 03:15:14.242243')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.test_identity_layer.TestHouseholdIsolation::test_devices_isolated_between_users",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: households.household_id\n[SQL: INSERT INTO households (household_id, name, timezone, created_at, updated_at) VALUES (?, ?, ?, ?, ?)]\n[parameters: ('Test', 'UTC', 'UTC', '2026-04-29 03:15:14.590547', '2026-04-29 03:15:14.590553')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.test_identity_layer.TestDeviceSwitching::test_last_seen_tracking",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: households.household_id\n[SQL: INSERT INTO households (household_id, name, timezone, created_at, updated_at) VALUES (?, ?, ?, ?, ?)]\n[parameters: ('Test', 'UTC', 'UTC', '2026-04-29 03:15:14.959830', '2026-04-29 03:15:14.959850')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.test_identity_layer.TestTokenExpiration::test_expired_token_rejected",
+      "reason": "sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) FOREIGN KEY constraint failed\n[SQL: INSERT INTO session_tokens (token_id, household_id, user_id, device_id, role, session_claims, is_valid, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]\n[parameters: ('9f5bc5880f66bddc32f7fee24aa99e044eccd84b52115d060d7a45aa3c3929f0', 'hh', 'user', 'dev', 'ADMIN', '{}', 1, '2026-04-29 03:15:15.384100', '2026-04-28 03:15:15.383689', '2026-04-29 03:15:15.384103')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)"
+    },
+    {
+      "test": "tests.test_intelligence_analytics_dls::test_dashboard_metrics_include_required_tradeoff_fields",
+      "reason": "AssertionError: assert 'HYBRID' == 'LLM_CORE'\n  \n  #x1B[0m#x1B[91m- LLM_CORE#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  #x1B[92m+ HYBRID#x1B[39;49;00m#x1B[90m#x1B[39;49;00m"
+    },
+    {
+      "test": "tests.test_layer_redundancy_guard::test_canonical_layer_directories_exist",
+      "reason": "AssertionError: Missing canonical layer folder: C:\\Users\\fb002895\\Desktop\\Personal\\Family Orchestration Bot\\apps\\api\\endpoints\nassert False\n +  where False = exists()\n +    where exists = WindowsPath('C:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/apps/api/endpoints').exists"
+    },
+    {
+      "test": "tests.test_layer_redundancy_guard::test_integration_core_facade_is_thin_reexport_only",
+      "reason": "AssertionError: Compatibility facade must remain a one-line re-export to avoid duplicate logic. Unexpected content in C:\\Users\\fb002895\\Desktop\\Personal\\Family Orchestration Bot\\integration_core\\__init__.py: ['from archive.apps.api.integration_core import *']\nassert ['from archiv...ore import *'] == ['from apps.a...ore import *']\n  \n  At index 0 diff: #x1B[0m#x1B[33m'#x1B[39;49;00m#x1B[33mfrom archive.apps.api.integration_core import *#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m != #x1B[0m#x1B[33m'#x1B[39;49;00m#x1B[33mfrom apps.api.integration_core import *#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  \n  Full diff:\n  #x1B[0m#x1B[90m #x1B[39;49;00m [#x1B[90m#x1B[39;49;00m\n  #x1B[91m-     'from apps.api.integration_core import *',#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  #x1B[92m+     'from archive.apps.api.integration_core import *',#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  ?           ++++++++#x1B[90m#x1B[39;49;00m\n  #x1B[90m #x1B[39;49;00m ]#x1B[90m#x1B[39;49;00m"
+    },
+    {
+      "test": "tests.test_layer_redundancy_guard::test_integration_core_canonical_files_not_duplicated_in_other_integration_core_folders",
+      "reason": "AssertionError: Unexpected integration_core duplicates found outside canonical+facade paths: archive\\apps\\api\\integration_core\\brief_builder.py, archive\\apps\\api\\integration_core\\orchestrator.py, archive\\apps\\api\\integration_core\\providers.py, archive\\apps\\api\\integration_core\\state_builder.py\nassert not [WindowsPath('C:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/archive/apps/api/integration_core/brief_builder.py'), WindowsPath('C:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/archive/apps/api/integration_core/orchestrator.py'), WindowsPath('C:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/archive/apps/api/integration_core/providers.py'), WindowsPath('C:/Users/fb002895/Desktop/Personal/Family Orchestration Bot/archive/apps/api/integration_core/state_builder.py')]"
+    },
+    {
+      "test": "tests.test_operational_mode::test_operational_pipeline_isolation_from_simulation_and_evaluation",
+      "reason": "AttributeError: <module 'archive.apps.api.endpoints.evaluation_router' from 'C:\\\\Users\\\\fb002895\\\\Desktop\\\\Personal\\\\Family Orchestration Bot\\\\archive\\\\apps\\\\api\\\\endpoints\\\\evaluation_router.py'> has no attribute 'run_live_simulation'"
+    },
+    {
+      "test": "tests.test_output_governor::test_daily_focus_api_response_uses_governed_fallback",
+      "reason": "AssertionError: assert 'Adjust house...ination queue' == 'Block 30 min...day fills up.'\n  \n  #x1B[0m#x1B[91m- Block 30 minutes this morning to review your schedule and prioritize your most important tasks before your day fills up.#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  #x1B[92m+ Adjust household coordination queue#x1B[39;49;00m#x1B[90m#x1B[39;49;00m"
+    },
+    {
+      "test": "tests.test_p0_torture.TestReconnectTortureLoop::test_reconnect_500_iterations",
+      "reason": "RuntimeError: Failed to create household: 404"
+    },
+    {
+      "test": "tests.test_p0_torture.TestReconnectTortureLoop::test_quick_reconnect_flood",
+      "reason": "RuntimeError: Failed to create household: 404"
+    },
+    {
+      "test": "tests.test_p0_torture.TestReplayLiveOverlap::test_replay_during_concurrent_writes",
+      "reason": "RuntimeError: Failed to create household: 404"
+    },
+    {
+      "test": "tests.test_p0_torture.TestConcurrentWriteStorm::test_50_parallel_writes",
+      "reason": "RuntimeError: Failed to create household: 404"
+    },
+    {
+      "test": "tests.test_p0_torture.TestIdempotencyTTL::test_ttl_boundary_exact",
+      "reason": "RuntimeError: Failed to create household: 404"
+    },
+    {
+      "test": "tests.test_p0_torture.TestIdempotencyTTL::test_concurrent_retries_at_boundary",
+      "reason": "RuntimeError: Failed to create household: 404"
+    },
+    {
+      "test": "tests.test_p0_torture.TestBufferOverflow::test_old_watermark_triggers_resync",
+      "reason": "RuntimeError: Failed to create household: 404"
+    },
+    {
+      "test": "tests.test_p0_torture.TestChaosMix::test_30_second_chaos",
+      "reason": "RuntimeError: Failed to create household: 404"
+    },
+    {
+      "test": "tests.test_recommendation_humanization::test_no_raw_timestamps",
+      "reason": "AssertionError: assert 'tomorrow' in 'adjust household coordination queue'\n +  where 'adjust household coordination queue' = <built-in method lower of str object at 0x000001CFE22A6A10>()\n +    where <built-in method lower of str object at 0x000001CFE22A6A10> = 'Adjust household coordination queue'.lower"
+    },
+    {
+      "test": "tests.test_recommendation_humanization::test_humanized_language",
+      "reason": "AssertionError: assert 'Adjust house...ination queue' == 'Schedule a 4...day fills up.'\n  \n  #x1B[0m#x1B[91m- Schedule a 45-minute workout tomorrow morning at 6:00 AM before your day fills up.#x1B[39;49;00m#x1B[90m#x1B[39;49;00m\n  #x1B[92m+ Adjust household coordination queue#x1B[39;49;00m#x1B[90m#x1B[39;49;00m"
+    },
+    {
+      "test": "tests.test_root_ui_routing::test_only_one_root_route_exists",
+      "reason": "assert 0 == 1\n +  where 0 = len([])"
+    },
+    {
+      "test": "tests.test_sample_household_os_outputs::test_sample_household_os_outputs",
+      "reason": "AssertionError: Contract keys mismatch. Expected {'grouped_approval_payload', 'current_state_summary', 'reasoning_trace', 'follow_ups', 'intent_interpretation', 'request_id', 'recommended_action'}, got {'grouped_approval_payload', 'recommendation', 'follow_ups', 'reasoning_trace', 'request_id', 'secondary_suggestions', 'routing_case', 'why', 'approval_required', 'impact', 'intent_interpretation', 'current_state_summary', 'recommended_action', 'action_id'}\nassert False"
+    },
+    {
+      "test": "tests.test_security_verification_harness.TestInvariant1ActorContextPropagation::test_invariant_actor_context_propagation",
+      "reason": "AssertionError: VIOLATION: validate_transition was never called with a context dict. actor_type was dropped before reaching the FSM.\nassert []"
+    },
+    {
+      "test": "tests.test_sse_canonical_only.TestSSECanonicalOnly::test_validation_called_in_publish_async",
+      "reason": "AttributeError: module 'apps.api' has no attribute 'observability'"
+    },
+    {
+      "test": "tests.test_sse_canonical_only.TestSSECanonicalOnly::test_logging_includes_event_type_and_origin",
+      "reason": "AttributeError: module 'apps.api' has no attribute 'observability'"
+    },
+    {
+      "test": "tests.test_sse_event_closure::test_schema_parity_domain_to_canonical_to_sse_lossless_subset",
+      "reason": "pydantic_core._pydantic_core.ValidationError: 1 validation error for CanonicalEventEnvelope\n  Value error, Invalid canonical event type: action_proposed [type=value_error, input_value={'event_id': 'c9b51236-4d...0a316a0abb54b427530312'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error"
+    },
+    {
+      "test": "tests.test_task_service_events::test_update_task_metadata_emits_event",
+      "reason": "AttributeError: module 'apps.api' has no attribute 'services'"
+    },
+    {
+      "test": "tests.test_task_service_events::test_update_task_metadata_no_change_still_emits",
+      "reason": "AttributeError: module 'apps.api' has no attribute 'services'"
+    },
+    {
+      "test": "tests.test_task_service_events::test_update_task_metadata_nonexistent_task_no_event",
+      "reason": "AttributeError: module 'apps.api' has no attribute 'services'"
+    }
+  ]
+}

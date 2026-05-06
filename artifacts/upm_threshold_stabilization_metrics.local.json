@@ -1,0 +1,56 @@
+{
+  "phase1_baseline_calibration": {
+    "decision_count": 18,
+    "unnecessary_decisions": 11,
+    "missed_decisions": 2,
+    "conflicts_missed": 0,
+    "upm_score_distribution": {
+      "priority_class": "not_available_in_baseline_artifact",
+      "decision_score_bins": "not_available_in_baseline_artifact"
+    },
+    "borderline_event_rate": "not_available_in_baseline_artifact"
+  },
+  "phase1_after_calibration": {
+    "decision_count": 18,
+    "unnecessary_decisions": 3,
+    "missed_decisions": 0,
+    "conflicts_missed": 0,
+    "upm_score_distribution": {
+      "priority_class": {
+        "critical": 0,
+        "high": 8,
+        "medium": 9,
+        "low": 3,
+        "noise": 5
+      },
+      "decision_score_bins": {
+        "0.0-0.1": 3,
+        "0.2-0.3": 2,
+        "0.3-0.4": 2,
+        "0.4-0.5": 1,
+        "0.5-0.6": 5,
+        "0.6-0.7": 4,
+        "0.7-0.8": 3,
+        "0.8-0.9": 5
+      }
+    },
+    "borderline_event_rate": 0.12
+  },
+  "phase7_validation": {
+    "repeated_stream_identical": true,
+    "input_count": 25,
+    "max_decisions_visible": 18,
+    "decision_scales_sublinearly": true
+  },
+  "phase8_before_after": {
+    "decision_count_before": 18,
+    "decision_count_after": 18,
+    "missed_decisions_before": 2,
+    "missed_decisions_after": 0,
+    "unnecessary_decisions_before": 11,
+    "unnecessary_decisions_after": 3,
+    "stability_improvement": "required",
+    "compression_effectiveness": "72.73% reduction",
+    "recall_guarantee": "100% required"
+  }
+}

@@ -1,1 +1,1 @@
-from archive.apps.api.integration_core.providers import *
+from apps.api.integration_core.providers import *

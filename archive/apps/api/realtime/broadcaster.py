@@ -355,6 +355,15 @@ class HouseholdBroadcaster:
                     if subscriber not in self._subscribers.get(household_id, []):
                         # Queue was removed by fanout backpressure handling.
                         break
+                    # Keep SSE clients responsive to local stop/disconnect signals.
+                    yield self._format_sse(
+                        event_type="heartbeat",
+                        data={
+                            "household_id": household_id,
+                            "watermark": 0,
+                            "payload": {"status": "idle"},
+                        },
+                    )
                     continue
                 payload = self._event_to_stream_payload(event)
                 yield self._format_sse(event_type="update", data=payload)

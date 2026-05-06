@@ -1,0 +1,162 @@
+{
+  "changed_files": [],
+  "checks": {
+    "ephemeral_verification_state": {
+      "ok": true,
+      "summary": {
+        "cached_scan_usage_forbidden": true,
+        "clean_execution_required": true,
+        "ephemeral_verification_required": true,
+        "execution_bound_scans_only": true,
+        "execution_id": "isolation-local-001",
+        "execution_isolation_enforced": true,
+        "external_baseline_supplied": false,
+        "no_cross_phase_memory": true,
+        "no_shared_runtime_state": true,
+        "repo_state_binding_required": true,
+        "repo_state_hash": "a6123a090c01a99f44d596e3ad035ee99bc640d5:fbabd9692ef24211",
+        "scan_timestamp": "2026-04-30T14:04:46.196423Z",
+        "step6_requires_fresh_reverification": true
+      },
+      "violations": []
+    },
+    "event_sourcing": {
+      "ok": true,
+      "violations": []
+    },
+    "execution_isolation_state": {
+      "ok": true,
+      "summary": {
+        "clean_execution_required": true,
+        "execution_isolation_enforced": true,
+        "isolation_mode": "separate_process",
+        "no_cross_phase_memory": true,
+        "no_shared_runtime_state": true,
+        "phase_contexts": {
+          "step1": {
+            "process_boot_id": null,
+            "process_id": null
+          },
+          "step2": {
+            "process_boot_id": null,
+            "process_id": null
+          },
+          "step6": {
+            "process_boot_id": "9caec06b0635432bbf281467cac14715",
+            "process_id": 43280
+          }
+        }
+      },
+      "violations": []
+    },
+    "fsm_mutation_authority": {
+      "metadata": {
+        "command": "C:\\Users\\fb002895\\Desktop\\Personal\\Family Orchestration Bot\\.venv\\Scripts\\python.exe ci/state_mutation_guard.py apps/",
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "Scoped Lifecycle State Mutation Guard Report\n================================================================================\n\u00e2\u0153\u201c No lifecycle state mutations detected on lifecycle-managed objects."
+      },
+      "ok": true,
+      "violations": []
+    },
+    "gateway_bypass": {
+      "ok": true,
+      "violations": []
+    },
+    "illegal_runtime_mutation": {
+      "ok": true,
+      "violations": []
+    },
+    "llm_advisory_only": {
+      "ok": true,
+      "violations": []
+    },
+    "post_refactor_canonical_health_gate": {
+      "ok": true,
+      "summary": {
+        "derive_health_definitions": [
+          {
+            "line": 101,
+            "module": "core/health/system_health.py",
+            "symbol": "derive_system_health"
+          }
+        ],
+        "forbidden_patterns": [
+          "derive_*health",
+          "_policy_determinism_from_projection",
+          "_saga_completion_validity",
+          "_derive_projection_health",
+          "inline health aggregation logic"
+        ],
+        "forbidden_symbol_hits": [],
+        "inline_health_aggregation_hits": [],
+        "scan_scope": "repository_static_full"
+      },
+      "violations": []
+    },
+    "sse_watermark_invariants": {
+      "ok": true,
+      "violations": []
+    }
+  },
+  "clean_execution_required": true,
+  "diff_only": false,
+  "execution_isolation_enforced": true,
+  "execution_state": {
+    "execution_id": "isolation-local-001",
+    "repo_state_hash": "a6123a090c01a99f44d596e3ad035ee99bc640d5:fbabd9692ef24211",
+    "scan_timestamp": "2026-04-30T14:04:46.196423Z"
+  },
+  "generated_at": "2026-04-30T14:04:49.130499Z",
+  "no_cross_phase_memory": true,
+  "no_shared_runtime_state": true,
+  "phase": "verify_pre",
+  "phase_runtime_state": {
+    "clean_execution_required": true,
+    "execution_isolation_enforced": true,
+    "isolation_mode": "separate_process",
+    "no_cross_phase_memory": true,
+    "no_shared_runtime_state": true,
+    "phase": "verify_pre",
+    "process_boot_id": "9caec06b0635432bbf281467cac14715",
+    "process_id": 43280,
+    "python_executable": "C:\\Users\\fb002895\\Desktop\\Personal\\Family Orchestration Bot\\.venv\\Scripts\\python.exe",
+    "runtime_initialized_at": "2026-04-30T14:04:46.196446Z"
+  },
+  "post_refactor_gate": {
+    "forbidden_patterns": [
+      "derive_*health",
+      "_policy_determinism_from_projection",
+      "_saga_completion_validity",
+      "_derive_projection_health",
+      "inline health aggregation logic"
+    ],
+    "fresh_static_scan_performed": true,
+    "installed": true,
+    "migration_state": "READY_FOR_STEP6",
+    "static_scan_required_before_step6": true,
+    "step6_blocked": false
+  },
+  "rfc_compliance": true,
+  "verification_cycle": {
+    "isolated_phase_execution_required": true,
+    "reverification_performed": false,
+    "step1": {
+      "execution_id": "isolation-local-001",
+      "ok": true,
+      "repo_state_hash": "a6123a090c01a99f44d596e3ad035ee99bc640d5:fbabd9692ef24211",
+      "scan_fresh": true,
+      "scan_scope": "repository_static_full",
+      "scan_timestamp": "2026-04-30T14:04:46.196423Z",
+      "violations_detected": 0
+    },
+    "step2": {
+      "evaluation_fresh": true,
+      "execution_id": "isolation-local-001",
+      "repo_state_hash": "a6123a090c01a99f44d596e3ad035ee99bc640d5:fbabd9692ef24211",
+      "rfc_alignment": true,
+      "scan_timestamp": "2026-04-30T14:04:46.196423Z"
+    }
+  },
+  "violations": []
+}

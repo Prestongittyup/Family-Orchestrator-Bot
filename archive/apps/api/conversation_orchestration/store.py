@@ -12,10 +12,14 @@ Design constraints:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from threading import RLock
 
 from archive.apps.api.conversation_orchestration.schema import ConversationSession, SessionState
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 @dataclass(frozen=True)
@@ -79,7 +83,7 @@ class ConversationSessionStore:
             return SessionStoreSnapshot(
                 version=self._version,
                 sessions=sessions,
-                generated_at=datetime.utcnow(),
+                generated_at=_utcnow(),
             )
 
 

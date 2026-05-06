@@ -1,0 +1,90 @@
+{
+  "artifact": "promotion_hardening_verbose_audit",
+  "generated_at": "2026-05-06T14:59:00Z",
+  "objective": "Deterministic interpretation-aware promotion hardening with adversarial reliability proof.",
+  "phase_0_baseline": {
+    "status": "complete",
+    "evidence": "promotion_hardening_baseline.local.json",
+    "finding": "Pre-hardening promotion behavior defaulted most adversarial inputs to FYI/ignore."
+  },
+  "phase_1_runtime_hardening": {
+    "status": "complete",
+    "changes": [
+      "Added interpretation taxonomy and confidence threshold.",
+      "Implemented deterministic interpretation for cancellation, time change, deadline, obligation, ambiguity, informational.",
+      "Added dependency-aware schedule matching and conflict checks.",
+      "Added calendar_update path with cancellation/time-change handling.",
+      "Added confidence fallback routing to decision cards."
+    ],
+    "primary_file": "app/services/commands/runtime.py"
+  },
+  "phase_2_traceability": {
+    "status": "complete",
+    "changes": [
+      "Promotion response and effects now include interpretation_type, interpretation_confidence, promotion_reason.",
+      "Promotion events now include dependency_schedule_id, conflict_schedule_id, secondary_entity fields.",
+      "Promoted task/schedule records now store interpretation_type and promotion_reason."
+    ]
+  },
+  "phase_3_replay_enforcement": {
+    "status": "complete",
+    "changes": [
+      "Replay validation now rejects household_item_promoted events missing interpretation_type, promotion_reason, or promotion_target.",
+      "Replay projection now preserves added promotion traceability fields."
+    ],
+    "primary_file": "core/replay/event_replay_engine.py"
+  },
+  "phase_4_adversarial_tests": {
+    "status": "complete",
+    "new_tests": [
+      "tests/test_household_message_promotion_adversarial.py::test_household_message_promotion_adversarial_matrix",
+      "tests/test_household_message_promotion_adversarial.py::test_household_message_promotion_home_and_due_date_impact",
+      "tests/replay/test_event_replay_engine.py::test_household_message_adversarial_stream_replay_equivalence"
+    ]
+  },
+  "phase_5_regression_results": {
+    "status": "complete",
+    "results": [
+      {
+        "suite": "targeted_promotion_replay_home",
+        "passed": 28,
+        "failed": 0
+      },
+      {
+        "suite": "architecture_impacted_bundle",
+        "passed": 34,
+        "failed": 0
+      }
+    ]
+  },
+  "phase_6_before_after": {
+    "status": "complete",
+    "evidence": "promotion_hardening_before_after.local.json",
+    "summary": {
+      "non_ignore_promotions_before": 1,
+      "non_ignore_promotions_after": 9,
+      "decision_generated_before": 0,
+      "decision_generated_after": 4
+    }
+  },
+  "phase_7_product_readiness": {
+    "status": "complete",
+    "assessment": {
+      "promotion_logic_hardened": "yes",
+      "replay_consistency_maintained": "yes",
+      "home_surface_impact_validated": "yes",
+      "traceability_visible": "yes"
+    }
+  },
+  "phase_8_remaining_risk": {
+    "status": "documented",
+    "items": [
+      "Architecture contract startup warning remains pre-existing and was not in scope for this hardening pass.",
+      "Interpretation remains deterministic and keyword/rule-driven by design."
+    ]
+  },
+  "phase_9_release_recommendation": {
+    "status": "go",
+    "recommendation": "Promote this hardening patch. Continue monitoring for new linguistic variants and expand adversarial fixtures incrementally."
+  }
+}

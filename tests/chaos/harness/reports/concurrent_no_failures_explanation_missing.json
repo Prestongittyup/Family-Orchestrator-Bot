@@ -1,0 +1,8 @@
+{
+  "run_id": "concurrent_no_failures",
+  "generated_at": "2026-04-29T19:19:54.850793",
+  "mutation_count": 15,
+  "explanation_count": 15,
+  "missing_count": 0,
+  "pass": true
+}

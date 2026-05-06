@@ -364,7 +364,7 @@ location /health {
 Check endpoint:
 
 ```bash
-curl https://hpal-frontend.example.com/health
+curl https://hpal-frontend.example.com/healthz
 ```
 
 ---

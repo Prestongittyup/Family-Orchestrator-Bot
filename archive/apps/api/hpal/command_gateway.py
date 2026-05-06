@@ -5,6 +5,7 @@ import json
 from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime
+from datetime import timezone
 from typing import Any
 
 from archive.apps.api.hpal.auto_reconciliation import AutoReconciliationHook
@@ -563,4 +564,4 @@ class HpalCommandGateway:
         return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
     def _now_iso(self) -> str:
-        return datetime.utcnow().isoformat() + "Z"
+        return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")

@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import asyncio
+import gc
 import json
 import sqlite3
+import warnings
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -9,6 +12,12 @@ from typing import Any
 import pytest
 
 from household_os.core.lifecycle_state import LifecycleState, parse_lifecycle_state
+
+_existing_pytestmark = globals().get("pytestmark", [])
+if not isinstance(_existing_pytestmark, list):
+    _existing_pytestmark = [_existing_pytestmark]
+pytestmark = [*_existing_pytestmark, pytest.mark.ci_gate]
+
 
 LIFECYCLE_KEYS = {
     "state",
@@ -33,6 +42,34 @@ LIFECYCLE_PATH_HINTS = {
 class RawStateValue:
     source: str
     value: str
+
+
+def _close_orphaned_event_loops() -> None:
+    # Some async tests can leave non-current loop objects alive until GC.
+    for obj in gc.get_objects():
+        if not isinstance(obj, asyncio.AbstractEventLoop):
+            continue
+        if obj.is_running() or obj.is_closed():
+            continue
+        try:
+            obj.close()
+        except Exception:
+            continue
+
+
+def _close_default_policy_loop_if_idle() -> None:
+    try:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            loop = asyncio.get_event_loop_policy().get_event_loop()
+    except RuntimeError:
+        return
+
+    if loop.is_running() or loop.is_closed():
+        return
+
+    loop.close()
+    asyncio.set_event_loop(None)
 
 
 def _repo_root() -> Path:
@@ -113,6 +150,16 @@ def _load_raw_state_values() -> list[RawStateValue]:
     return found
 
 
+@pytest.fixture(autouse=True)
+def _close_default_event_loop_after_test() -> None:
+    _close_default_policy_loop_if_idle()
+    _close_orphaned_event_loops()
+    yield
+    _close_default_policy_loop_if_idle()
+    _close_orphaned_event_loops()
+
+
+@pytest.mark.integration
 def test_all_persisted_states_are_canonical() -> None:
     raw_values = _load_raw_state_values()
 
@@ -127,6 +174,7 @@ def test_all_persisted_states_are_canonical() -> None:
     assert not invalid, "Non-canonical persisted lifecycle values found:\n" + "\n".join(invalid)
 
 
+@pytest.mark.integration
 def test_no_legacy_state_strings_present() -> None:
     raw_values = _load_raw_state_values()
 

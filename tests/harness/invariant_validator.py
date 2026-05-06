@@ -11,7 +11,11 @@ Validates critical system invariants:
 
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 class InvariantViolation:
@@ -30,7 +34,7 @@ class InvariantViolation:
         self.description = description
         self.affected_entities = affected_entities or []
         self.details = details or {}
-        self.detected_at = datetime.utcnow()
+        self.detected_at = _utcnow()
     
     def to_dict(self) -> dict:
         return {

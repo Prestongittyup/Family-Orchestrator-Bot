@@ -1,0 +1,109 @@
+from archive.apps.api.integration_core.architecture_guard import (
+    FORBIDDEN_IMPORT_PREFIXES,
+    IntegrationCoreBoundaryViolation,
+    assert_allowed_import,
+    guarded_import,
+    validate_loaded_module_boundaries,
+)
+from archive.apps.api.integration_core.credentials import (
+    CredentialStore,
+    CredentialCipher,
+    InMemoryOAuthCredentialStore,
+    NoopCredentialCipher,
+    OAuthCredential,
+    OAuthCredentialRecord,
+    OAuthCredentialStore,
+    OAuthToken,
+)
+from archive.apps.api.integration_core.identity import Household, User, UserIdentity
+from archive.apps.api.integration_core.identity_service import IdentityService
+from archive.apps.api.integration_core.orchestrator import (
+    ExternalEvent,
+    IntegrationOrchestrator,
+    Orchestrator,
+    create_orchestrator,
+)
+from archive.apps.api.integration_core.brief_builder import BriefBuilder
+from archive.apps.api.integration_core.models.household_state import (
+    CalendarEvent,
+    HouseholdState,
+    IntegrationHealth,
+    WindowedCalendar,
+)
+from archive.apps.api.integration_core.state_builder import StateBuilder
+from archive.apps.api.integration_core.event_adapter import adapt_external_events, external_event_to_os1_payload
+from archive.apps.api.integration_core.feature_flags import (
+    INTEGRATION_CORE_INGESTION_ENABLED,
+    flag_default,
+    is_enabled,
+)
+from archive.apps.api.integration_core.os1_bridge import _IdempotencyStore, get_idempotency_store, ingest_external_events
+from archive.apps.api.integration_core.repository import IdentityRepository, InMemoryIdentityRepository
+from archive.apps.api.integration_core.registry import ProviderRegistry, build_default_provider_registry
+from archive.apps.api.integration_core.google_calendar_provider import (
+    GoogleCalendarRealProvider,
+    PROVIDER_NAME as GOOGLE_CALENDAR_REAL_PROVIDER_NAME,
+    map_google_event_to_raw,
+    build_event_id_debug,
+)
+from archive.apps.api.integration_core.outlook_calendar_provider import (
+    OutlookCalendarProvider,
+    PROVIDER_NAME as OUTLOOK_CALENDAR_PROVIDER_NAME,
+    map_outlook_event_to_raw,
+)
+from archive.apps.api.integration_core.google_calendar_sandbox_runner import (
+    GoogleCalendarSandboxRunner,
+    SandboxRunResult,
+)
+from archive.apps.api.integration_core.decision_engine import (
+    DecisionEngine,
+    DecisionContext,
+)
+
+__all__ = [
+    "FORBIDDEN_IMPORT_PREFIXES",
+    "IntegrationCoreBoundaryViolation",
+    "assert_allowed_import",
+    "guarded_import",
+    "validate_loaded_module_boundaries",
+    "CredentialCipher",
+    "CredentialStore",
+    "OAuthCredentialStore",
+    "OAuthCredential",
+    "OAuthToken",
+    "OAuthCredentialRecord",
+    "NoopCredentialCipher",
+    "InMemoryOAuthCredentialStore",
+    "User",
+    "Household",
+    "UserIdentity",
+    "IdentityRepository",
+    "InMemoryIdentityRepository",
+    "IdentityService",
+    "ExternalEvent",
+    "BriefBuilder",
+    "Orchestrator",
+    "create_orchestrator",
+    "IntegrationOrchestrator",
+    "ingest_external_events",
+    "get_idempotency_store",
+    "_IdempotencyStore",
+    "INTEGRATION_CORE_INGESTION_ENABLED",
+    "is_enabled",
+    "flag_default",
+    "adapt_external_events",
+    "external_event_to_os1_payload",
+    "ProviderRegistry",
+    "build_default_provider_registry",
+    "GoogleCalendarRealProvider",
+    "GOOGLE_CALENDAR_REAL_PROVIDER_NAME",
+    "map_google_event_to_raw",
+    "build_event_id_debug",
+    "OutlookCalendarProvider",
+    "OUTLOOK_CALENDAR_PROVIDER_NAME",
+    "map_outlook_event_to_raw",
+    "GoogleCalendarSandboxRunner",
+    "SandboxRunResult",
+    "DecisionEngine",
+    "DecisionContext",
+]

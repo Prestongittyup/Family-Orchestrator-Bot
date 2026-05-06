@@ -1,0 +1,754 @@
+{
+  "summary": {
+    "KEEP": 30,
+    "MODIFY": 74,
+    "DELETE": 12,
+    "RISK": 8
+  },
+  "files": [
+    {
+      "path": "tests/integration/architecture/test_dependency_graph.py",
+      "category": "KEEP",
+      "reason": "Directly enforces dependency boundaries aligned to gateway-centric architecture.",
+      "suggested_action": "Keep as architecture guard in CI."
+    },
+    {
+      "path": "tests/integration/architecture/test_fetch_boundary.py",
+      "category": "KEEP",
+      "reason": "Validates fetch boundary placement and prevents bypass around orchestrated state construction.",
+      "suggested_action": "Keep; update module references as needed."
+    },
+    {
+      "path": "tests/integration/architecture/test_single_fetch_source.py",
+      "category": "KEEP",
+      "reason": "Ensures a single canonical fetch source to avoid split-brain state reads.",
+      "suggested_action": "Keep as invariant guard."
+    },
+    {
+      "path": "tests/integration/test_actor_context_propagation.py",
+      "category": "KEEP",
+      "reason": "Verifies actor context propagation into event metadata and reducer behavior.",
+      "suggested_action": "Keep; this protects gateway/auth provenance semantics."
+    },
+    {
+      "path": "tests/integration/test_boundary_enforcement.py",
+      "category": "KEEP",
+      "reason": "Confirms lifecycle boundary parsing/rejection logic for invalid states.",
+      "suggested_action": "Keep as boundary contract test."
+    },
+    {
+      "path": "tests/integration/test_event_replay_integrity.py",
+      "category": "KEEP",
+      "reason": "Checks replay determinism and rejection of legacy/non-canonical lifecycle values.",
+      "suggested_action": "Keep as event-log truth invariant."
+    },
+    {
+      "path": "tests/integration/test_intelligence_analytics_dls.py",
+      "category": "KEEP",
+      "reason": "Validates deterministic comparator/analytics behavior where LLM is treated as measured advisory signal.",
+      "suggested_action": "Keep; ensure no execution authority assumptions."
+    },
+    {
+      "path": "tests/integration/test_intelligence_routing_resilience.py",
+      "category": "KEEP",
+      "reason": "Asserts degraded routing to RULE_ONLY on usage/infra failures, matching non-authoritative AI policy.",
+      "suggested_action": "Keep as risk-gating resilience test."
+    },
+    {
+      "path": "tests/integration/test_lifecycle_surface_consistency_guard.py",
+      "category": "KEEP",
+      "reason": "Guards lifecycle-state consistency across boundaries.",
+      "suggested_action": "Keep as state-machine invariant."
+    },
+    {
+      "path": "tests/integration/test_no_legacy_lifecycle_strings.py",
+      "category": "KEEP",
+      "reason": "Prevents reintroduction of legacy lifecycle literals into canonical state flow.",
+      "suggested_action": "Keep as migration guard."
+    },
+    {
+      "path": "tests/integration/test_no_raw_lifecycle_strings.py",
+      "category": "KEEP",
+      "reason": "Enforces canonical lifecycle representation and parsing boundaries.",
+      "suggested_action": "Keep as schema/invariant guard."
+    },
+    {
+      "path": "tests/integration/test_persistence_roundtrip_integrity.py",
+      "category": "KEEP",
+      "reason": "Round-trip lifecycle persistence integrity remains essential under event-sourced state.",
+      "suggested_action": "Keep but run via authorized store/orchestrator path only."
+    },
+    {
+      "path": "tests/integration/test_policy_engine.py",
+      "category": "KEEP",
+      "reason": "Validates deterministic policy/rules behavior and non-execution guarantees.",
+      "suggested_action": "Keep as rules-engine authority coverage."
+    },
+    {
+      "path": "tests/system/test_architecture_suite.py",
+      "category": "KEEP",
+      "reason": "System-level architecture conformance suite for RFC boundaries.",
+      "suggested_action": "Keep as mandatory gate."
+    },
+    {
+      "path": "tests/system/test_event_sourcing.py",
+      "category": "KEEP",
+      "reason": "Core event-sourcing/state-reducer correctness coverage.",
+      "suggested_action": "Keep as mandatory gate."
+    },
+    {
+      "path": "tests/system/test_event_store_invariants.py",
+      "category": "KEEP",
+      "reason": "Asserts event store integrity and provenance constraints.",
+      "suggested_action": "Keep as mandatory gate."
+    },
+    {
+      "path": "tests/test_action_event_contracts.py",
+      "category": "KEEP",
+      "reason": "Checks action/event contract invariants needed for gateway-to-event-log consistency.",
+      "suggested_action": "Keep in core CI."
+    },
+    {
+      "path": "tests/test_fsm_immutability_enforcement.py",
+      "category": "KEEP",
+      "reason": "Ensures state transitions are governed by canonical FSM authority.",
+      "suggested_action": "Keep in core CI."
+    },
+    {
+      "path": "tests/test_governance_gates.py",
+      "category": "KEEP",
+      "reason": "Repository governance and gate integrity checks protect drift.",
+      "suggested_action": "Keep as release guard."
+    },
+    {
+      "path": "tests/test_hard_freeze_regression.py",
+      "category": "KEEP",
+      "reason": "Prevents prohibited runtime artifacts and architecture drift regressions.",
+      "suggested_action": "Keep as hygiene guard."
+    },
+    {
+      "path": "tests/test_invariance_enforcement.py",
+      "category": "KEEP",
+      "reason": "Protects canonical pipeline and SSE transport invariants.",
+      "suggested_action": "Keep as core invariant suite."
+    },
+    {
+      "path": "tests/test_layer_redundancy_guard.py",
+      "category": "KEEP",
+      "reason": "Detects duplicated/redundant architecture surfaces.",
+      "suggested_action": "Keep as architecture anti-drift guard."
+    },
+    {
+      "path": "tests/test_migration_cleanliness.py",
+      "category": "KEEP",
+      "reason": "Validates persisted lifecycle data is canonical post-migration.",
+      "suggested_action": "Keep in migration/core gates."
+    },
+    {
+      "path": "tests/test_no_direct_broadcaster_bypass.py",
+      "category": "KEEP",
+      "reason": "Enforces single realtime emission path via canonical broadcaster boundaries.",
+      "suggested_action": "Keep as SSE boundary guard."
+    },
+    {
+      "path": "tests/test_sse_event_closure.py",
+      "category": "KEEP",
+      "reason": "Covers SSE schema parity, replay determinism, watermark ordering, and idempotency behavior.",
+      "suggested_action": "Keep as critical realtime invariant suite."
+    },
+    {
+      "path": "tests/test_static_silent_mutations.py",
+      "category": "KEEP",
+      "reason": "Detects silent mutation paths that bypass event-sourced controls.",
+      "suggested_action": "Keep as integrity guard."
+    },
+    {
+      "path": "tests/test_trust_surface_closure.py",
+      "category": "KEEP",
+      "reason": "Validates trust-surface closure and blocks direct mutation surfaces outside orchestrator path.",
+      "suggested_action": "Keep as gateway boundary guard."
+    },
+    {
+      "path": "tests/test_trust_surface_final_closure.py",
+      "category": "KEEP",
+      "reason": "Runtime trust-surface enforcement confirmation for sensitive components.",
+      "suggested_action": "Keep; monitor for runtime flake but preserve in system stage."
+    },
+    {
+      "path": "tests/test_ui_canonical_wiring_guard.py",
+      "category": "KEEP",
+      "reason": "Ensures UI wiring hits canonical backend contracts rather than legacy endpoints.",
+      "suggested_action": "Keep as boundary contract guard."
+    },
+    {
+      "path": "tests/unit/test_lifecycle_contract_boundary.py",
+      "category": "KEEP",
+      "reason": "Fast unit checks for lifecycle contract boundaries and mapper behavior.",
+      "suggested_action": "Keep in default fast CI tier."
+    },
+    {
+      "path": "tests/integration/test_brief_evaluation.py",
+      "category": "MODIFY",
+      "reason": "Touches intelligence/planning behavior that must be explicitly non-authoritative for execution.",
+      "suggested_action": "Reframe to prove LLM/advisory outputs cannot bypass rules/risk/gateway decisions."
+    },
+    {
+      "path": "tests/integration/test_event_mutation_stress.py",
+      "category": "MODIFY",
+      "reason": "Integration coverage remains relevant but needs alignment to current gateway + saga + event-log model.",
+      "suggested_action": "Update assertions to avoid direct state writes and legacy path assumptions."
+    },
+    {
+      "path": "tests/integration/test_insight_bridge.py",
+      "category": "MODIFY",
+      "reason": "Touches intelligence/planning behavior that must be explicitly non-authoritative for execution.",
+      "suggested_action": "Reframe to prove LLM/advisory outputs cannot bypass rules/risk/gateway decisions."
+    },
+    {
+      "path": "tests/integration/test_intent_lock.py",
+      "category": "MODIFY",
+      "reason": "Touches intelligence/planning behavior that must be explicitly non-authoritative for execution.",
+      "suggested_action": "Reframe to prove LLM/advisory outputs cannot bypass rules/risk/gateway decisions."
+    },
+    {
+      "path": "tests/integration/test_life_state_model.py",
+      "category": "MODIFY",
+      "reason": "Integration coverage remains relevant but needs alignment to current gateway + saga + event-log model.",
+      "suggested_action": "Update assertions to avoid direct state writes and legacy path assumptions."
+    },
+    {
+      "path": "tests/integration/test_recommendation_humanization.py",
+      "category": "MODIFY",
+      "reason": "Touches intelligence/planning behavior that must be explicitly non-authoritative for execution.",
+      "suggested_action": "Reframe to prove LLM/advisory outputs cannot bypass rules/risk/gateway decisions."
+    },
+    {
+      "path": "tests/integration/test_root_ui_routing.py",
+      "category": "MODIFY",
+      "reason": "Integration/UI simulation coverage is useful but not currently framed around RFC-001 core invariants.",
+      "suggested_action": "Trim to contract-level assertions and remove demo-style/non-deterministic expectations."
+    },
+    {
+      "path": "tests/integration/test_sample_household_os_outputs.py",
+      "category": "MODIFY",
+      "reason": "Integration/UI simulation coverage is useful but not currently framed around RFC-001 core invariants.",
+      "suggested_action": "Trim to contract-level assertions and remove demo-style/non-deterministic expectations."
+    },
+    {
+      "path": "tests/integration/test_ui_simulation_endpoints.py",
+      "category": "MODIFY",
+      "reason": "Integration/UI simulation coverage is useful but not currently framed around RFC-001 core invariants.",
+      "suggested_action": "Trim to contract-level assertions and remove demo-style/non-deterministic expectations."
+    },
+    {
+      "path": "tests/legacy/p1_verification/test_auth_lifecycle.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/p1_verification/test_chaos_concurrency.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/p1_verification/test_e2e_integration.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/p1_verification/test_event_bus_correctness.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/p1_verification/test_idempotency_correctness.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/p1_verification/test_llm_gateway_failures.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/test_actor_type_enforcement.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_adapter_governance.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_asgi_admission.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_auth_realtime_guards.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_auth_router.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_backpressure_middleware.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_behavior_feedback.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_calendar_events_runtime.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_chat_events_runtime.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_col.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_cqrs_lifecycle_invariants.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_email_action_summary.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_email_priority_llm.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_email_service_actions.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_env_bootstrap.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_evaluation_endpoints.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_event_adapter.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_event_windowing.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_external_event_normalization.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/test_feature_flags.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_frontend_runtime_contract.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_fsm_non_authority.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_google_calendar_full_external_validation.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_google_calendar_integration_surface.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/test_google_calendar_oauth.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/test_google_oauth_env_config.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/test_google_oauth_missing_config_safe_boot.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_household_os.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_household_os_runtime.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_household_state.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_household_state_manager.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_identity_events_runtime.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_identity_layer.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_ingestion_events_runtime.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_ingestion_router.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_integration_architecture_guard.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_integration_core.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_integration_identity_system.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_intent_contract.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_intent_resolver.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_lifecycle_integrity_invariants.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_oauth_credential_store.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/test_operational_mode.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_outlook_calendar_provider.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_pantry_router.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_policy_guardrails.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/test_provider_email_adapter.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/test_provider_registry.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/test_single_pipeline_enforcement.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/test_sse_canonical_only.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_state_builder_multi_provider.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_state_machine.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_task_service_events.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_time_normalization.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_trust_boundary_enforcement.py",
+      "category": "MODIFY",
+      "reason": "Covers important domain behavior but still tied to legacy module paths/assumptions.",
+      "suggested_action": "Port to app.main/household_os execution-gateway paths and canonical event-log assertions."
+    },
+    {
+      "path": "tests/legacy/test_ui_bootstrap_router.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_unified_trust_boundary.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/legacy/test_xai_layer.py",
+      "category": "MODIFY",
+      "reason": "Likely still useful but anchored to legacy imports/routes or pre-saga execution assumptions.",
+      "suggested_action": "Refactor to RFC-001 contracts: gateway mandatory, event-log truth, advisory LLM only."
+    },
+    {
+      "path": "tests/system/test_intent_confidence_router.py",
+      "category": "MODIFY",
+      "reason": "System intent routing tests are valuable but can imply LLM-centric routing authority.",
+      "suggested_action": "Constrain tests to advisory classification only; assert execution authority remains rules/risk gated."
+    },
+    {
+      "path": "tests/legacy/decision/test_decision_engine.py",
+      "category": "DELETE",
+      "reason": "Targets superseded pre-RFC component boundaries (direct assistant/decision/brief layer assumptions).",
+      "suggested_action": "Delete with cluster pruning; preserve only gateway + event-log invariant coverage."
+    },
+    {
+      "path": "tests/legacy/test_assistant_core.py",
+      "category": "DELETE",
+      "reason": "Targets superseded pre-RFC component boundaries (direct assistant/decision/brief layer assumptions).",
+      "suggested_action": "Delete with cluster pruning; preserve only gateway + event-log invariant coverage."
+    },
+    {
+      "path": "tests/legacy/test_assistant_runtime.py",
+      "category": "DELETE",
+      "reason": "Targets superseded pre-RFC component boundaries (direct assistant/decision/brief layer assumptions).",
+      "suggested_action": "Delete with cluster pruning; preserve only gateway + event-log invariant coverage."
+    },
+    {
+      "path": "tests/legacy/test_assistant_runtime_router.py",
+      "category": "DELETE",
+      "reason": "Targets superseded pre-RFC component boundaries (direct assistant/decision/brief layer assumptions).",
+      "suggested_action": "Delete with cluster pruning; preserve only gateway + event-log invariant coverage."
+    },
+    {
+      "path": "tests/legacy/test_brief_builder.py",
+      "category": "DELETE",
+      "reason": "Targets superseded pre-RFC component boundaries (direct assistant/decision/brief layer assumptions).",
+      "suggested_action": "Delete with cluster pruning; preserve only gateway + event-log invariant coverage."
+    },
+    {
+      "path": "tests/legacy/test_brief_renderer_v1.py",
+      "category": "DELETE",
+      "reason": "Targets superseded pre-RFC component boundaries (direct assistant/decision/brief layer assumptions).",
+      "suggested_action": "Delete with cluster pruning; preserve only gateway + event-log invariant coverage."
+    },
+    {
+      "path": "tests/legacy/test_daily_loop_engine.py",
+      "category": "DELETE",
+      "reason": "Targets superseded pre-RFC component boundaries (direct assistant/decision/brief layer assumptions).",
+      "suggested_action": "Delete with cluster pruning; preserve only gateway + event-log invariant coverage."
+    },
+    {
+      "path": "tests/legacy/test_decision_engine.py",
+      "category": "DELETE",
+      "reason": "Targets superseded pre-RFC component boundaries (direct assistant/decision/brief layer assumptions).",
+      "suggested_action": "Delete with cluster pruning; preserve only gateway + event-log invariant coverage."
+    },
+    {
+      "path": "tests/legacy/test_decision_engine_integration.py",
+      "category": "DELETE",
+      "reason": "Targets superseded pre-RFC component boundaries (direct assistant/decision/brief layer assumptions).",
+      "suggested_action": "Delete with cluster pruning; preserve only gateway + event-log invariant coverage."
+    },
+    {
+      "path": "tests/legacy/test_manual_priority_adapter.py",
+      "category": "DELETE",
+      "reason": "Targets superseded pre-RFC component boundaries (direct assistant/decision/brief layer assumptions).",
+      "suggested_action": "Delete with cluster pruning; preserve only gateway + event-log invariant coverage."
+    },
+    {
+      "path": "tests/legacy/test_output_governor.py",
+      "category": "DELETE",
+      "reason": "Targets superseded pre-RFC component boundaries (direct assistant/decision/brief layer assumptions).",
+      "suggested_action": "Delete with cluster pruning; preserve only gateway + event-log invariant coverage."
+    },
+    {
+      "path": "tests/legacy/test_recommendation_builder.py",
+      "category": "DELETE",
+      "reason": "Targets superseded pre-RFC component boundaries (direct assistant/decision/brief layer assumptions).",
+      "suggested_action": "Delete with cluster pruning; preserve only gateway + event-log invariant coverage."
+    },
+    {
+      "path": "tests/chaos/test_household_simulation.py",
+      "category": "RISK",
+      "reason": "Chaos/torture simulation with timing-sensitive behavior; useful for resilience, but flaky/long for normal CI.",
+      "suggested_action": "Move to scheduled nightly chaos pipeline with explicit timeout budget and stability baseline."
+    },
+    {
+      "path": "tests/chaos/test_llm_gateway_runtime_hardening.py",
+      "category": "RISK",
+      "reason": "Concurrency and cache timing assertions are valuable but can flake under variable runtime scheduling.",
+      "suggested_action": "Keep as non-blocking reliability suite; enforce retries or isolate with deterministic fakes."
+    },
+    {
+      "path": "tests/chaos/test_p0_torture.py",
+      "category": "RISK",
+      "reason": "Extreme reconnect/replay/write-storm torture test; high runtime and instability risk.",
+      "suggested_action": "Keep out of default CI; run in dedicated soak/torture stage."
+    },
+    {
+      "path": "tests/chaos/test_xai_harness_integration.py",
+      "category": "RISK",
+      "reason": "Broad matrix chaos integration with many scenarios; likely slow and noisy for fast feedback loops.",
+      "suggested_action": "Run as periodic resilience certification, not per-commit gate."
+    },
+    {
+      "path": "tests/integration/test_full_suite_integrity.py",
+      "category": "RISK",
+      "reason": "Recursive full-suite invocation from inside pytest can dramatically inflate runtime and duplicate coverage.",
+      "suggested_action": "Disable in standard CI; run only as explicit pipeline job when requested."
+    },
+    {
+      "path": "tests/integration/test_live_orchestration_simulation.py",
+      "category": "RISK",
+      "reason": "End-to-end simulation harness is useful but likely slow and timing-sensitive.",
+      "suggested_action": "Shift to nightly/system-stage runs with strict wall-clock limits."
+    },
+    {
+      "path": "tests/legacy/test_security_verification_harness.py",
+      "category": "RISK",
+      "reason": "Large harness-style security verification can overlap with torture/integration checks and run long.",
+      "suggested_action": "Extract critical assertions into focused tests; keep bulk harness for scheduled audits."
+    },
+    {
+      "path": "tests/legacy/test_system_stability_lock.py",
+      "category": "RISK",
+      "reason": "Stability-lock style checks are often timing dependent and environment sensitive.",
+      "suggested_action": "Retain as review-only guard; avoid blocking fast CI."
+    }
+  ]
+}

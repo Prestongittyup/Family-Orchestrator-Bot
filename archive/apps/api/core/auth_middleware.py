@@ -1,3 +1,6 @@
+# ARCHIVE MODULE - NOT PART OF ACTIVE RUNTIME
+# DO NOT IMPORT INTO app/
+
 from __future__ import annotations
 
 from collections.abc import Awaitable, Callable
@@ -23,9 +26,6 @@ _PUBLIC_PATHS = {
     "/v1/identity/device/register",
     "/v1/identity/bootstrap",
     "/v1/identity/session/validate",
-    "/v1/system/boot-status",
-    "/v1/system/boot-probe",
-    "/v1/system/health",
     "/v1/ui/bootstrap",
     "/v1/ui/message",
     "/v1/ui/action",
@@ -126,3 +126,4 @@ def install_auth_middleware(app: Any) -> None:
             metrics.note_invalid_token_non_401()
             return JSONResponse({"detail": "invalid_or_expired_token"}, status_code=401)
         return response
+

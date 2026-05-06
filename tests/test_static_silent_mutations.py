@@ -1,8 +1,15 @@
 from __future__ import annotations
+import pytest
 
 import ast
 from dataclasses import dataclass
 from pathlib import Path
+
+_existing_pytestmark = globals().get("pytestmark", [])
+if not isinstance(_existing_pytestmark, list):
+    _existing_pytestmark = [_existing_pytestmark]
+pytestmark = [*_existing_pytestmark, pytest.mark.ci_gate]
+
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -149,6 +156,7 @@ def _collect_violations() -> list[Violation]:
     return violations
 
 
+@pytest.mark.integration
 def test_no_silent_mutations() -> None:
     violations = _collect_violations()
 

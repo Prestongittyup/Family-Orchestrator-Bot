@@ -167,9 +167,7 @@ class ChatGatewayService:
                     },
                 )
             )
-            return self._safe_fallback_response(
-                family_id=family_id,
-                session_id=session_id,
+            return self._minimal_fallback_response(
                 reason="The assistant is handling high load right now. I kept state consistent; please retry.",
             )
 
@@ -280,18 +278,24 @@ class ChatGatewayService:
                     f"(Also: {assistant_message})"
                 )
 
-            current = self._bootstrap_service.get_state(family_id=family_id)
             key = _SessionKey(family_id=family_id, session_id=session_id)
             previous = self._last_snapshot.get(key)
-            ui_patch = self._patch_service.generate_patches(previous=previous, current=current)
-            self._last_snapshot[key] = current
+            try:
+                current = self._bootstrap_service.get_state(family_id=family_id)
+                ui_patch = self._patch_service.generate_patches(previous=previous, current=current)
+                self._last_snapshot[key] = current
+                explanation_summary = current.explanation_digest[:5]
+            except Exception as refresh_exc:
+                logger.warning("chat_state_refresh_degraded: %s", refresh_exc)
+                ui_patch = []
+                explanation_summary = []
 
             response = ChatResponse(
                 assistant_message=assistant_message,
                 action_cards=cards,
                 ui_patch=ui_patch,
                 requires_confirmation=requires_confirmation,
-                explanation_summary=current.explanation_digest[:5],
+                explanation_summary=explanation_summary,
             )
             router.emit(
                 SystemEvent.ChatMessageSent(
@@ -328,11 +332,8 @@ class ChatGatewayService:
                 )
             )
             logger.warning("chat_process_fallback: %s", exc)
-            return self._safe_fallback_response(
-                family_id=family_id,
-                session_id=session_id,
+            return self._minimal_fallback_response(
                 reason="I couldn't fully process that request. I kept the household state consistent and you can retry.",
-                user_message=message,
             )
         finally:
             _MESSAGE_WORKERS.release()
@@ -761,18 +762,24 @@ class ChatGatewayService:
         action_cards: list[ActionCard] | None = None,
         requires_confirmation: bool = False,
     ) -> ChatResponse:
-        current = self._bootstrap_service.get_state(family_id=family_id)
         key = _SessionKey(family_id=family_id, session_id=session_id)
         previous = self._last_snapshot.get(key)
-        ui_patch = self._patch_service.generate_patches(previous=previous, current=current)
-        self._last_snapshot[key] = current
+        try:
+            current = self._bootstrap_service.get_state(family_id=family_id)
+            ui_patch = self._patch_service.generate_patches(previous=previous, current=current)
+            self._last_snapshot[key] = current
+            explanation_summary = current.explanation_digest[:5]
+        except Exception as exc:
+            logger.warning("stateful_response_degraded: %s", exc)
+            ui_patch = []
+            explanation_summary = []
 
         return ChatResponse(
             assistant_message=assistant_message,
             action_cards=list(action_cards or []),
             ui_patch=ui_patch,
             requires_confirmation=requires_confirmation,
-            explanation_summary=current.explanation_digest[:5],
+            explanation_summary=explanation_summary,
         )
 
     @staticmethod
@@ -1127,23 +1134,41 @@ class ChatGatewayService:
         reason: str,
         user_message: str | None = None,
     ) -> ChatResponse:
-        current = self._bootstrap_service.get_state(family_id=family_id)
         key = _SessionKey(family_id=family_id, session_id=session_id)
         previous = self._last_snapshot.get(key)
-        ui_patch = self._patch_service.generate_patches(previous=previous, current=current)
-        self._last_snapshot[key] = current
+        current: UIBootstrapState | None = None
+        ui_patch: list[dict[str, Any]] = []
+        explanation_summary: list[Any] = []
+        try:
+            current = self._bootstrap_service.get_state(family_id=family_id)
+            ui_patch = self._patch_service.generate_patches(previous=previous, current=current)
+            self._last_snapshot[key] = current
+            explanation_summary = current.explanation_digest[:5]
+        except Exception as exc:
+            logger.warning("safe_fallback_response_degraded: %s", exc)
 
         assistant_message = reason
-        contextual_guidance = self._build_contextual_guidance(current=current, user_message=user_message)
-        if contextual_guidance:
-            assistant_message = f"{reason}\n\n{contextual_guidance}"
+        if current is not None:
+            contextual_guidance = self._build_contextual_guidance(current=current, user_message=user_message)
+            if contextual_guidance:
+                assistant_message = f"{reason}\n\n{contextual_guidance}"
 
         return ChatResponse(
             assistant_message=assistant_message,
             action_cards=[],
             ui_patch=ui_patch,
             requires_confirmation=False,
-            explanation_summary=current.explanation_digest[:5],
+            explanation_summary=explanation_summary,
+        )
+
+    @staticmethod
+    def _minimal_fallback_response(*, reason: str) -> ChatResponse:
+        return ChatResponse(
+            assistant_message=reason,
+            action_cards=[],
+            ui_patch=[],
+            requires_confirmation=False,
+            explanation_summary=[],
         )
 
     @staticmethod

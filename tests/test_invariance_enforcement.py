@@ -1,4 +1,5 @@
 from __future__ import annotations
+import pytest
 
 import json
 from pathlib import Path
@@ -9,6 +10,12 @@ from archive.apps.api.schemas.event import SystemEvent
 from archive.apps.api.services.canonical_event_adapter import CanonicalEventAdapter
 from archive.apps.api.realtime.broadcaster import HouseholdBroadcaster
 
+_existing_pytestmark = globals().get("pytestmark", [])
+if not isinstance(_existing_pytestmark, list):
+    _existing_pytestmark = [_existing_pytestmark]
+pytestmark = [*_existing_pytestmark, pytest.mark.ci_gate]
+
+
 ROOT = Path(__file__).resolve().parents[1]
 APPS_API = ROOT / "apps" / "api"
 
@@ -17,6 +24,8 @@ def _read(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_no_to_sse_anywhere_in_runtime_paths() -> None:
     runtime_targets = [
         APPS_API / "services" / "canonical_event_router.py",
@@ -27,6 +36,8 @@ def test_no_to_sse_anywhere_in_runtime_paths() -> None:
         assert "to_sse" not in _read(file_path)
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_router_has_no_conditional_sse_logic() -> None:
     router_file = APPS_API / "services" / "canonical_event_router.py"
     content = _read(router_file)
@@ -36,6 +47,8 @@ def test_router_has_no_conditional_sse_logic() -> None:
     assert "broadcaster.publish_sync(envelope)" in content
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_no_direct_realtimeevent_outside_broadcaster() -> None:
     violations: list[str] = []
     for file_path in APPS_API.rglob("*.py"):
@@ -48,6 +61,8 @@ def test_no_direct_realtimeevent_outside_broadcaster() -> None:
     assert not violations, f"RealtimeEvent constructor found outside broadcaster: {violations}"
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_no_direct_sse_formatting_outside_broadcaster() -> None:
     violations: list[str] = []
     for file_path in APPS_API.rglob("*.py"):
@@ -62,6 +77,8 @@ def test_no_direct_sse_formatting_outside_broadcaster() -> None:
     assert not violations, f"_format_sse usage outside broadcaster: {violations}"
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_replay_routes_via_router_without_transport_branching(monkeypatch) -> None:
     import archive.apps.api.services.event_replay_service as replay_service
 
@@ -89,6 +106,8 @@ def test_replay_routes_via_router_without_transport_branching(monkeypatch) -> No
     assert kwargs == {"persist": False, "dispatch": True}
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_watermark_ignores_external_and_is_monotonic() -> None:
     b = HouseholdBroadcaster()
 
@@ -121,6 +140,8 @@ def test_watermark_ignores_external_and_is_monotonic() -> None:
     assert w2 == w1 + 1
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_redis_ingress_reenters_canonical_pipeline(monkeypatch) -> None:
     from archive.apps.api.realtime.event_bus import RedisRealtimeEventBus
 
@@ -163,6 +184,8 @@ def test_redis_ingress_reenters_canonical_pipeline(monkeypatch) -> None:
     assert hasattr(calls[0]["envelope"], "event_type")
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_single_emission_path_runtime_contract() -> None:
     event = SystemEvent(
         household_id="hh-path",
@@ -179,6 +202,8 @@ def test_single_emission_path_runtime_contract() -> None:
     assert envelope.payload == {"a": 1}
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_no_transport_flags_in_repository() -> None:
     import os
 

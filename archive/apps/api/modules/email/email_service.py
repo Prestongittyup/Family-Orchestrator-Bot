@@ -41,6 +41,45 @@ def _action_titles(action_items: list[dict[str, Any]] | None, fallback_title: st
     return [fallback_title]
 
 
+def _normalized_actions(data: EmailReceivedEvent) -> list[dict[str, Any]]:
+    normalized: list[dict[str, Any]] = []
+
+    for row in data.actions or []:
+        if not isinstance(row, dict):
+            continue
+        action_type = str(row.get("type") or "").strip().lower()
+        if action_type not in {"reply", "task"}:
+            continue
+        title = str(row.get("title") or "").strip()
+        if not title:
+            continue
+        urgency_raw = str(row.get("urgency") or "normal").strip().lower()
+        urgency = "high" if urgency_raw == "high" else "normal"
+        due = str(row.get("due") or "").strip() or None
+        normalized.append(
+            {
+                "type": action_type,
+                "title": title,
+                "urgency": urgency,
+                "due": due,
+            }
+        )
+
+    if normalized:
+        return normalized
+
+    fallback_titles = _action_titles(data.action_items, data.subject)
+    return [
+        {
+            "type": "task",
+            "title": title,
+            "urgency": "normal",
+            "due": None,
+        }
+        for title in fallback_titles
+    ]
+
+
 def _start_hint_from_due_hint(value: str | None) -> str | None:
     if value is None:
         return None
@@ -76,6 +115,21 @@ def handle_email_received(household_id: str, data: EmailReceivedEvent) -> dict:
             "triage_decision": "junk",
         }
 
+    needs_attention = bool(data.needs_attention) if data.needs_attention is not None else triage_decision == "task"
+    actions = _normalized_actions(data)
+
+    if not needs_attention and triage_decision == "informational":
+        return {
+            "status": "email_informational",
+            "task_id": None,
+            "task_title": None,
+            "action_item_count": 0,
+            "importance_bucket": data.importance_bucket,
+            "priority": _priority_from_importance_bucket(data.importance_bucket) or "low",
+            "calendar_event_id": None,
+            "triage_decision": "informational",
+        }
+
     # SHADOW MODE: Observe TIL estimates for email event
     til = get_til()
     
@@ -100,10 +154,20 @@ def handle_email_received(household_id: str, data: EmailReceivedEvent) -> dict:
         f"suggested_time={til_suggestion['start_time']}"
     )
 
-    action_titles = _action_titles(data.action_items, data.subject)
-    task_title = action_titles[0]
-    if triage_decision == "informational":
-        task_title = f"Review email: {data.subject}".strip() or action_titles[0]
+    if not actions:
+        actions = [
+            {
+                "type": "task",
+                "title": data.subject,
+                "urgency": "normal",
+                "due": None,
+            }
+        ]
+
+    action_titles = [str(action.get("title") or "").strip() for action in actions if str(action.get("title") or "").strip()]
+    task_title = action_titles[0] if action_titles else data.subject
+    if triage_decision == "informational" and needs_attention:
+        task_title = f"Review email: {data.subject}".strip() or task_title
 
     task = create_task(household_id, task_title)
 
@@ -122,8 +186,10 @@ def handle_email_received(household_id: str, data: EmailReceivedEvent) -> dict:
         tags.append("informational")
     metadata_segments: list[str] = []
 
-    if data.summary:
-        metadata_segments.append(f"Summary: {data.summary}")
+    if data.state_summary or data.summary:
+        metadata_segments.append(f"Summary: {data.state_summary or data.summary}")
+    if data.reason:
+        metadata_segments.append(f"Reason: {data.reason}")
     if data.category:
         metadata_segments.append(data.category)
     if len(action_titles) > 1:
@@ -181,7 +247,7 @@ def handle_email_received(household_id: str, data: EmailReceivedEvent) -> dict:
         "status": "email_processed",
         "task_id": task.id,
         "task_title": task_title,
-        "action_item_count": len(action_titles),
+        "action_item_count": len(actions),
         "importance_bucket": data.importance_bucket,
         "priority": final_priority,
         "calendar_event_id": calendar_event_id,

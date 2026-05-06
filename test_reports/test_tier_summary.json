@@ -1,0 +1,88 @@
+{
+  "unit": 374,
+  "integration": 392,
+  "system": 332,
+  "chaos": 91,
+  "legacy": 889,
+  "flaky": 67,
+  "largest_system_files": [
+    {
+      "file": "tests/system/test_intent_confidence_router.py",
+      "count": 50
+    },
+    {
+      "file": "tests/system/test_event_sourcing.py",
+      "count": 41
+    },
+    {
+      "file": "tests/legacy/test_xai_layer.py",
+      "count": 34
+    },
+    {
+      "file": "tests/legacy/test_security_verification_harness.py",
+      "count": 28
+    },
+    {
+      "file": "tests/legacy/test_ui_bootstrap_router.py",
+      "count": 17
+    },
+    {
+      "file": "tests/legacy/test_sse_canonical_only.py",
+      "count": 15
+    },
+    {
+      "file": "tests/legacy/test_trust_boundary_enforcement.py",
+      "count": 13
+    },
+    {
+      "file": "tests/legacy/test_unified_trust_boundary.py",
+      "count": 12
+    },
+    {
+      "file": "tests/legacy/test_chat_events_runtime.py",
+      "count": 9
+    },
+    {
+      "file": "tests/test_invariance_enforcement.py",
+      "count": 9
+    }
+  ],
+  "largest_chaos_files": [
+    {
+      "file": "tests/chaos/test_xai_harness_integration.py",
+      "count": 38
+    },
+    {
+      "file": "tests/chaos/test_household_simulation.py",
+      "count": 11
+    },
+    {
+      "file": "tests/chaos/test_p0_torture.py",
+      "count": 9
+    },
+    {
+      "file": "tests/legacy/p1_verification/test_chaos_concurrency.py",
+      "count": 9
+    },
+    {
+      "file": "tests/legacy/p1_verification/test_idempotency_correctness.py",
+      "count": 9
+    },
+    {
+      "file": "tests/chaos/test_llm_gateway_runtime_hardening.py",
+      "count": 7
+    },
+    {
+      "file": "tests/legacy/test_pantry_router.py",
+      "count": 5
+    },
+    {
+      "file": "tests/legacy/p1_verification/test_event_bus_correctness.py",
+      "count": 2
+    },
+    {
+      "file": "tests/legacy/test_system_stability_lock.py",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "artifact": "promotion_hardening_reliability",
+  "generated_at": "2026-05-06T14:58:00Z",
+  "validation_runs": [
+    {
+      "command": ".venv/Scripts/python.exe -m pytest tests/test_household_message_promotion_adversarial.py tests/replay/test_event_replay_engine.py tests/test_home_v0_loop.py -q",
+      "result": "passed",
+      "passed": 28,
+      "failed": 0,
+      "duration_seconds": 6.6,
+      "notes": "Includes new adversarial matrix, home impact assertions, replay determinism, and existing home loop regression coverage."
+    },
+    {
+      "task": "Run architecture+impacted tests",
+      "command": "python -m pytest tests/test_hard_freeze_regression.py tests/test_layer_redundancy_guard.py tests/test_ui_canonical_wiring_guard.py tests/test_sprint0_sprint1_minimal_execution.py tests/test_task_creation_command_runtime.py tests/replay/test_event_replay_engine.py -q",
+      "result": "passed",
+      "passed": 34,
+      "failed": 0,
+      "duration_seconds": 0.41,
+      "warnings": [
+        "PytestConfigWarning: Unknown config option: timeout"
+      ]
+    }
+  ],
+  "reliability_checks": {
+    "promotion_reasons_attached": "yes",
+    "interpretation_type_attached": "yes",
+    "confidence_gating_to_decision": "yes",
+    "replay_validation_enforces_traceability_fields": "yes",
+    "replay_projection_preserves_traceability_fields": "yes",
+    "adversarial_replay_equivalence": "yes",
+    "home_digest_impact_verified": "yes",
+    "due_date_materialization_for_obligations_verified": "yes"
+  },
+  "residual_risks": [
+    "Architecture contract startup warning is pre-existing and non-blocking for these tests.",
+    "Natural-language interpretation remains deterministic but still rule-based; future semantic upgrades can improve recall for unusual phrasing."
+  ]
+}

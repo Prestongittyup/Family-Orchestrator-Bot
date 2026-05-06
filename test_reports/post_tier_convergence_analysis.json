@@ -1,0 +1,699 @@
+{
+  "legacy_cleanup_candidates": {
+    "migration_candidates": [
+      {
+        "file": "tests/legacy/test_xai_layer.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_ui_bootstrap_router.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_cqrs_lifecycle_invariants.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_single_pipeline_enforcement.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_trust_boundary_enforcement.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_household_state.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_unified_trust_boundary.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_household_os.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_chat_events_runtime.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/test_invariance_enforcement.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_google_calendar_integration_surface.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/test_sse_event_closure.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_event_windowing.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_integration_core.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_actor_type_enforcement.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_asgi_admission.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_assistant_core.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_external_event_normalization.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_ingestion_events_runtime.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_oauth_credential_store.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_provider_email_adapter.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/test_trust_surface_closure.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_assistant_runtime.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_frontend_runtime_contract.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_google_oauth_env_config.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_household_os_runtime.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_ingestion_router.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_pantry_router.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/decision/test_decision_engine.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_adapter_governance.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_auth_realtime_guards.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_auth_router.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_household_state_manager.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_assistant_runtime_router.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_backpressure_middleware.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_behavior_feedback.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_brief_builder.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_decision_engine.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_email_service_actions.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_google_oauth_missing_config_safe_boot.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_identity_events_runtime.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_provider_registry.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_task_service_events.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/test_trust_surface_final_closure.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_calendar_events_runtime.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_env_bootstrap.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_lifecycle_integrity_invariants.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_outlook_calendar_provider.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_state_builder_multi_provider.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_decision_engine_integration.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_fsm_non_authority.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_google_calendar_full_external_validation.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_system_stability_lock.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/p1_verification/test_auth_lifecycle.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/p1_verification/test_chaos_concurrency.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/p1_verification/test_e2e_integration.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/p1_verification/test_event_bus_correctness.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/p1_verification/test_idempotency_correctness.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/p1_verification/test_llm_gateway_failures.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_col.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_event_adapter.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_feature_flags.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_google_calendar_oauth.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_identity_layer.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_intent_contract.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_policy_guardrails.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_security_verification_harness.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_sse_canonical_only.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      },
+      {
+        "file": "tests/legacy/test_state_machine.py",
+        "reason": "Covers important behavior but imports/structure are legacy and should be migrated."
+      }
+    ],
+    "deletion_candidates": [
+      {
+        "file": "tests/legacy/test_daily_loop_engine.py",
+        "reason": "Targets superseded components or removed execution paths."
+      },
+      {
+        "file": "tests/legacy/test_email_action_summary.py",
+        "reason": "Likely overlaps with newer unit/integration/system coverage and can be consolidated."
+      },
+      {
+        "file": "tests/legacy/test_email_priority_llm.py",
+        "reason": "Likely overlaps with newer unit/integration/system coverage and can be consolidated."
+      },
+      {
+        "file": "tests/legacy/test_manual_priority_adapter.py",
+        "reason": "Likely overlaps with newer unit/integration/system coverage and can be consolidated."
+      },
+      {
+        "file": "tests/legacy/test_brief_renderer_v1.py",
+        "reason": "Likely overlaps with newer unit/integration/system coverage and can be consolidated."
+      },
+      {
+        "file": "tests/legacy/test_operational_mode.py",
+        "reason": "Likely overlaps with newer unit/integration/system coverage and can be consolidated."
+      },
+      {
+        "file": "tests/legacy/test_output_governor.py",
+        "reason": "Targets superseded components or removed execution paths."
+      },
+      {
+        "file": "tests/legacy/test_integration_architecture_guard.py",
+        "reason": "Targets superseded components or removed execution paths."
+      },
+      {
+        "file": "tests/legacy/test_integration_identity_system.py",
+        "reason": "Likely overlaps with newer unit/integration/system coverage and can be consolidated."
+      },
+      {
+        "file": "tests/legacy/test_intent_resolver.py",
+        "reason": "Likely overlaps with newer unit/integration/system coverage and can be consolidated."
+      },
+      {
+        "file": "tests/legacy/test_recommendation_builder.py",
+        "reason": "Likely overlaps with newer unit/integration/system coverage and can be consolidated."
+      },
+      {
+        "file": "tests/legacy/test_evaluation_endpoints.py",
+        "reason": "Likely overlaps with newer unit/integration/system coverage and can be consolidated."
+      },
+      {
+        "file": "tests/legacy/test_time_normalization.py",
+        "reason": "Likely overlaps with newer unit/integration/system coverage and can be consolidated."
+      }
+    ]
+  },
+  "redundant_clusters": [
+    {
+      "type": "replay_flow_system_chaos_overlap",
+      "summary": "Replay/flow/SSE coverage appears in both system and chaos tiers.",
+      "members": [
+        "tests/chaos/test_household_simulation.py",
+        "tests/chaos/test_llm_gateway_runtime_hardening.py",
+        "tests/chaos/test_p0_torture.py",
+        "tests/chaos/test_xai_harness_integration.py",
+        "tests/integration/architecture/test_dependency_graph.py",
+        "tests/integration/architecture/test_fetch_boundary.py",
+        "tests/integration/architecture/test_single_fetch_source.py",
+        "tests/integration/test_actor_context_propagation.py",
+        "tests/integration/test_boundary_enforcement.py",
+        "tests/integration/test_brief_evaluation.py",
+        "tests/integration/test_event_mutation_stress.py",
+        "tests/integration/test_event_replay_integrity.py",
+        "tests/integration/test_full_suite_integrity.py",
+        "tests/integration/test_insight_bridge.py",
+        "tests/integration/test_intelligence_analytics_dls.py",
+        "tests/integration/test_intelligence_routing_resilience.py",
+        "tests/integration/test_intent_lock.py",
+        "tests/integration/test_life_state_model.py",
+        "tests/integration/test_lifecycle_surface_consistency_guard.py",
+        "tests/integration/test_live_orchestration_simulation.py",
+        "tests/integration/test_no_legacy_lifecycle_strings.py",
+        "tests/integration/test_no_raw_lifecycle_strings.py",
+        "tests/integration/test_persistence_roundtrip_integrity.py",
+        "tests/integration/test_policy_engine.py",
+        "tests/integration/test_recommendation_humanization.py",
+        "tests/integration/test_root_ui_routing.py",
+        "tests/integration/test_sample_household_os_outputs.py",
+        "tests/integration/test_ui_simulation_endpoints.py",
+        "tests/legacy/decision/test_decision_engine.py",
+        "tests/legacy/p1_verification/test_auth_lifecycle.py",
+        "tests/legacy/p1_verification/test_chaos_concurrency.py",
+        "tests/legacy/p1_verification/test_e2e_integration.py",
+        "tests/legacy/p1_verification/test_event_bus_correctness.py",
+        "tests/legacy/p1_verification/test_idempotency_correctness.py",
+        "tests/legacy/p1_verification/test_llm_gateway_failures.py",
+        "tests/legacy/test_actor_type_enforcement.py",
+        "tests/legacy/test_adapter_governance.py",
+        "tests/legacy/test_asgi_admission.py",
+        "tests/legacy/test_assistant_core.py",
+        "tests/legacy/test_assistant_runtime.py",
+        "tests/legacy/test_assistant_runtime_router.py",
+        "tests/legacy/test_auth_realtime_guards.py",
+        "tests/legacy/test_auth_router.py",
+        "tests/legacy/test_backpressure_middleware.py",
+        "tests/legacy/test_behavior_feedback.py",
+        "tests/legacy/test_brief_builder.py",
+        "tests/legacy/test_brief_renderer_v1.py",
+        "tests/legacy/test_calendar_events_runtime.py",
+        "tests/legacy/test_chat_events_runtime.py",
+        "tests/legacy/test_col.py",
+        "tests/legacy/test_cqrs_lifecycle_invariants.py",
+        "tests/legacy/test_daily_loop_engine.py",
+        "tests/legacy/test_decision_engine.py",
+        "tests/legacy/test_decision_engine_integration.py",
+        "tests/legacy/test_email_action_summary.py",
+        "tests/legacy/test_email_priority_llm.py",
+        "tests/legacy/test_email_service_actions.py",
+        "tests/legacy/test_env_bootstrap.py",
+        "tests/legacy/test_evaluation_endpoints.py",
+        "tests/legacy/test_event_adapter.py",
+        "tests/legacy/test_event_windowing.py",
+        "tests/legacy/test_external_event_normalization.py",
+        "tests/legacy/test_feature_flags.py",
+        "tests/legacy/test_frontend_runtime_contract.py",
+        "tests/legacy/test_fsm_non_authority.py",
+        "tests/legacy/test_google_calendar_full_external_validation.py",
+        "tests/legacy/test_google_calendar_integration_surface.py",
+        "tests/legacy/test_google_calendar_oauth.py",
+        "tests/legacy/test_google_oauth_env_config.py",
+        "tests/legacy/test_google_oauth_missing_config_safe_boot.py",
+        "tests/legacy/test_household_os.py",
+        "tests/legacy/test_household_os_runtime.py",
+        "tests/legacy/test_household_state.py",
+        "tests/legacy/test_household_state_manager.py",
+        "tests/legacy/test_identity_events_runtime.py",
+        "tests/legacy/test_identity_layer.py",
+        "tests/legacy/test_ingestion_events_runtime.py",
+        "tests/legacy/test_ingestion_router.py",
+        "tests/legacy/test_integration_architecture_guard.py",
+        "tests/legacy/test_integration_core.py",
+        "tests/legacy/test_integration_identity_system.py",
+        "tests/legacy/test_intent_contract.py",
+        "tests/legacy/test_intent_resolver.py",
+        "tests/legacy/test_lifecycle_integrity_invariants.py",
+        "tests/legacy/test_manual_priority_adapter.py",
+        "tests/legacy/test_oauth_credential_store.py",
+        "tests/legacy/test_operational_mode.py",
+        "tests/legacy/test_outlook_calendar_provider.py",
+        "tests/legacy/test_output_governor.py",
+        "tests/legacy/test_pantry_router.py",
+        "tests/legacy/test_policy_guardrails.py",
+        "tests/legacy/test_provider_email_adapter.py",
+        "tests/legacy/test_provider_registry.py",
+        "tests/legacy/test_recommendation_builder.py",
+        "tests/legacy/test_security_verification_harness.py",
+        "tests/legacy/test_single_pipeline_enforcement.py",
+        "tests/legacy/test_sse_canonical_only.py",
+        "tests/legacy/test_state_builder_multi_provider.py",
+        "tests/legacy/test_state_machine.py",
+        "tests/legacy/test_system_stability_lock.py",
+        "tests/legacy/test_task_service_events.py",
+        "tests/legacy/test_time_normalization.py",
+        "tests/legacy/test_trust_boundary_enforcement.py",
+        "tests/legacy/test_ui_bootstrap_router.py",
+        "tests/legacy/test_unified_trust_boundary.py",
+        "tests/legacy/test_xai_layer.py",
+        "tests/system/test_architecture_suite.py",
+        "tests/system/test_event_sourcing.py",
+        "tests/system/test_event_store_invariants.py",
+        "tests/system/test_intent_confidence_router.py",
+        "tests/test_action_event_contracts.py",
+        "tests/test_fsm_immutability_enforcement.py",
+        "tests/test_governance_gates.py",
+        "tests/test_hard_freeze_regression.py",
+        "tests/test_invariance_enforcement.py",
+        "tests/test_layer_redundancy_guard.py",
+        "tests/test_migration_cleanliness.py",
+        "tests/test_no_direct_broadcaster_bypass.py",
+        "tests/test_sse_event_closure.py",
+        "tests/test_static_silent_mutations.py",
+        "tests/test_trust_surface_closure.py",
+        "tests/test_trust_surface_final_closure.py",
+        "tests/test_ui_canonical_wiring_guard.py",
+        "tests/unit/test_lifecycle_contract_boundary.py"
+      ]
+    },
+    {
+      "type": "endpoint_assertion_overlap",
+      "summary": "Endpoint '/assistant/run' exercised across multiple layers with likely overlapping assertions.",
+      "endpoint": "/assistant/run",
+      "members": [
+        "tests/integration/test_recommendation_humanization.py",
+        "tests/integration/test_sample_household_os_outputs.py",
+        "tests/legacy/test_actor_type_enforcement.py",
+        "tests/legacy/test_assistant_runtime.py",
+        "tests/legacy/test_assistant_runtime_router.py",
+        "tests/legacy/test_behavior_feedback.py",
+        "tests/legacy/test_household_os.py",
+        "tests/legacy/test_household_state_manager.py",
+        "tests/legacy/test_output_governor.py",
+        "tests/legacy/test_security_verification_harness.py",
+        "tests/legacy/test_unified_trust_boundary.py",
+        "tests/system/test_intent_confidence_router.py"
+      ]
+    },
+    {
+      "type": "endpoint_assertion_overlap",
+      "summary": "Endpoint 'action_id' exercised across multiple layers with likely overlapping assertions.",
+      "endpoint": "action_id",
+      "members": [
+        "tests/integration/test_sample_household_os_outputs.py",
+        "tests/legacy/test_actor_type_enforcement.py",
+        "tests/legacy/test_security_verification_harness.py"
+      ]
+    },
+    {
+      "type": "endpoint_assertion_overlap",
+      "summary": "Endpoint 'actor_type' exercised across multiple layers with likely overlapping assertions.",
+      "endpoint": "actor_type",
+      "members": [
+        "tests/legacy/test_actor_type_enforcement.py",
+        "tests/legacy/test_security_verification_harness.py",
+        "tests/system/test_event_sourcing.py"
+      ]
+    },
+    {
+      "type": "endpoint_assertion_overlap",
+      "summary": "Endpoint 'type' exercised across multiple layers with likely overlapping assertions.",
+      "endpoint": "type",
+      "members": [
+        "tests/chaos/test_xai_harness_integration.py",
+        "tests/test_action_event_contracts.py"
+      ]
+    },
+    {
+      "type": "endpoint_assertion_overlap",
+      "summary": "Endpoint '/' exercised across multiple layers with likely overlapping assertions.",
+      "endpoint": "/",
+      "members": [
+        "tests/integration/test_root_ui_routing.py",
+        "tests/legacy/test_google_calendar_integration_surface.py"
+      ]
+    },
+    {
+      "type": "endpoint_assertion_overlap",
+      "summary": "Endpoint 'title' exercised across multiple layers with likely overlapping assertions.",
+      "endpoint": "title",
+      "members": [
+        "tests/integration/test_sample_household_os_outputs.py",
+        "tests/legacy/test_system_stability_lock.py"
+      ]
+    },
+    {
+      "type": "endpoint_assertion_overlap",
+      "summary": "Endpoint 'description' exercised across multiple layers with likely overlapping assertions.",
+      "endpoint": "description",
+      "members": [
+        "tests/integration/test_sample_household_os_outputs.py",
+        "tests/legacy/test_intent_contract.py"
+      ]
+    }
+  ],
+  "flaky_root_causes": [
+    {
+      "file": "tests/chaos/test_p0_torture.py",
+      "root_cause": "timing",
+      "recommendation": "stabilize"
+    },
+    {
+      "file": "tests/chaos/test_xai_harness_integration.py",
+      "root_cause": "timing",
+      "recommendation": "stabilize"
+    },
+    {
+      "file": "tests/integration/test_event_replay_integrity.py",
+      "root_cause": "sse",
+      "recommendation": "move_to_chaos_or_quarantine"
+    },
+    {
+      "file": "tests/integration/test_intelligence_analytics_dls.py",
+      "root_cause": "sse",
+      "recommendation": "move_to_chaos_or_quarantine"
+    },
+    {
+      "file": "tests/integration/test_intelligence_routing_resilience.py",
+      "root_cause": "timing",
+      "recommendation": "stabilize"
+    },
+    {
+      "file": "tests/legacy/p1_verification/test_auth_lifecycle.py",
+      "root_cause": "sse",
+      "recommendation": "move_to_chaos_or_quarantine"
+    },
+    {
+      "file": "tests/legacy/p1_verification/test_chaos_concurrency.py",
+      "root_cause": "timing",
+      "recommendation": "stabilize"
+    },
+    {
+      "file": "tests/legacy/p1_verification/test_e2e_integration.py",
+      "root_cause": "timing",
+      "recommendation": "stabilize"
+    },
+    {
+      "file": "tests/legacy/p1_verification/test_idempotency_correctness.py",
+      "root_cause": "timing",
+      "recommendation": "stabilize"
+    },
+    {
+      "file": "tests/legacy/p1_verification/test_llm_gateway_failures.py",
+      "root_cause": "timing",
+      "recommendation": "stabilize"
+    },
+    {
+      "file": "tests/legacy/test_auth_router.py",
+      "root_cause": "sse",
+      "recommendation": "move_to_chaos_or_quarantine"
+    },
+    {
+      "file": "tests/legacy/test_google_calendar_integration_surface.py",
+      "root_cause": "sse",
+      "recommendation": "move_to_chaos_or_quarantine"
+    },
+    {
+      "file": "tests/legacy/test_google_calendar_oauth.py",
+      "root_cause": "sse",
+      "recommendation": "move_to_chaos_or_quarantine"
+    },
+    {
+      "file": "tests/legacy/test_google_oauth_env_config.py",
+      "root_cause": "sse",
+      "recommendation": "move_to_chaos_or_quarantine"
+    },
+    {
+      "file": "tests/legacy/test_household_state.py",
+      "root_cause": "sse",
+      "recommendation": "move_to_chaos_or_quarantine"
+    },
+    {
+      "file": "tests/legacy/test_identity_events_runtime.py",
+      "root_cause": "timing",
+      "recommendation": "stabilize"
+    },
+    {
+      "file": "tests/legacy/test_identity_layer.py",
+      "root_cause": "sse",
+      "recommendation": "move_to_chaos_or_quarantine"
+    },
+    {
+      "file": "tests/legacy/test_ingestion_events_runtime.py",
+      "root_cause": "sse",
+      "recommendation": "move_to_chaos_or_quarantine"
+    },
+    {
+      "file": "tests/legacy/test_security_verification_harness.py",
+      "root_cause": "timing",
+      "recommendation": "stabilize"
+    },
+    {
+      "file": "tests/legacy/test_sse_canonical_only.py",
+      "root_cause": "sse",
+      "recommendation": "move_to_chaos_or_quarantine"
+    },
+    {
+      "file": "tests/legacy/test_state_machine.py",
+      "root_cause": "timing",
+      "recommendation": "stabilize"
+    },
+    {
+      "file": "tests/legacy/test_system_stability_lock.py",
+      "root_cause": "timing",
+      "recommendation": "stabilize"
+    },
+    {
+      "file": "tests/system/test_event_sourcing.py",
+      "root_cause": "sse",
+      "recommendation": "move_to_chaos_or_quarantine"
+    },
+    {
+      "file": "tests/test_sse_event_closure.py",
+      "root_cause": "sse",
+      "recommendation": "move_to_chaos_or_quarantine"
+    }
+  ],
+  "proposed_target_distribution": {
+    "unit": "60-70% of files",
+    "integration": "20-30% of files",
+    "system": "5-10% of files",
+    "chaos": "2-5% of files",
+    "legacy": "near_zero"
+  },
+  "meta": {
+    "total_test_files": 124,
+    "current_distribution": {
+      "unit": {
+        "count": 1,
+        "pct": 0.8
+      },
+      "integration": {
+        "count": 24,
+        "pct": 19.4
+      },
+      "system": {
+        "count": 4,
+        "pct": 3.2
+      },
+      "chaos": {
+        "count": 4,
+        "pct": 3.2
+      },
+      "legacy": {
+        "count": 78,
+        "pct": 62.9
+      }
+    },
+    "legacy_marked_files": 82,
+    "flaky_marked_files": 24
+  }
+}

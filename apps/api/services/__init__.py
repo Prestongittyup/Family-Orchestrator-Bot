@@ -1,0 +1,1 @@
+"""Canonical service compatibility namespace."""

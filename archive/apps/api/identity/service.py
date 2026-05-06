@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import logging
 from uuid import uuid4
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Literal
 
 from archive.apps.api.identity.repository import IdentityRepository
@@ -66,13 +66,6 @@ class IdentityService:
         logger.debug(f"[create_household] Starting: name={name}, tz={timezone}, founder={founder_name}")
         
         try:
-            if founder_email:
-                existing = self._repository.get_user_by_email(founder_email)
-                if existing is not None:
-                    raise ValueError(
-                        f"founder_email_already_exists: {founder_email}"
-                    )
-
             # Generate household ID
             household_id = str(uuid4())
             logger.debug(f"[create_household] Generated household_id: {household_id}")
@@ -161,7 +154,7 @@ class IdentityService:
         self._repository.create_membership(
             membership_id=membership_id,
             household_id=household_id,
-            user_id=user_id,
+            user_id=user.user_id,
             role=role,
         )
         
@@ -239,7 +232,7 @@ class IdentityService:
         """Update device last_seen timestamp."""
         device = self._repository.update_device(
             device_id=device_id,
-            last_seen_at=datetime.utcnow(),
+            last_seen_at=datetime.now(UTC).replace(tzinfo=None),
         )
         
         if not device:

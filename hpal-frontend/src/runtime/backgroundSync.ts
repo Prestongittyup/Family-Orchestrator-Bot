@@ -288,13 +288,14 @@ export class BackgroundSyncManager {
    */
   private async replayAction(action: QueuedAction): Promise<void> {
     try {
-      const response = await fetch("/api/v1/ui/action", {
+      const commandEnvelope = this.toCanonicalCommandFromQueuedAction(action);
+      const response = await fetch("/api/command", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           ...action.headers,
         },
-        body: JSON.stringify(action.action),
+        body: JSON.stringify(commandEnvelope),
       });
 
       if (response.ok) {
@@ -326,13 +327,14 @@ export class BackgroundSyncManager {
    */
   private async replayMessage(message: QueuedMessage): Promise<void> {
     try {
-      const response = await fetch("/api/v1/ui/message", {
+      const commandEnvelope = this.toCanonicalCommandFromQueuedMessage(message);
+      const response = await fetch("/api/command", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           ...message.headers,
         },
-        body: JSON.stringify({ message: message.message }),
+        body: JSON.stringify(commandEnvelope),
       });
 
       if (response.ok) {
@@ -356,6 +358,96 @@ export class BackgroundSyncManager {
         console.error("Max retries exceeded for message:", message.id);
       }
     }
+  }
+
+  private toCanonicalCommandFromQueuedAction(action: QueuedAction): {
+    command_type: string;
+    household_id: string;
+    payload: Record<string, unknown>;
+  } {
+    const payload = this.toRecord(action.action);
+    const householdId = this.resolveHouseholdId(payload, action.headers);
+    if (!householdId) {
+      throw new Error("offline_sync_failed:missing_household_id");
+    }
+
+    const commandType = typeof payload.command_type === "string" ? payload.command_type.trim() : "";
+    if (commandType) {
+      const nestedPayload = this.toRecord(payload.payload);
+      return {
+        command_type: commandType,
+        household_id: householdId,
+        payload: {
+          household_id: householdId,
+          ...nestedPayload,
+        },
+      };
+    }
+
+    const actionCardId = String(payload.action_card_id || payload.action_id || "").trim();
+    if (!actionCardId) {
+      throw new Error("offline_sync_failed:unsupported_action_payload");
+    }
+
+    return {
+      command_type: "assistant.approve",
+      household_id: householdId,
+      payload: {
+        household_id: householdId,
+        action_id: actionCardId,
+        request_id: String(payload.session_id || "").trim() || undefined,
+      },
+    };
+  }
+
+  private toCanonicalCommandFromQueuedMessage(message: QueuedMessage): {
+    command_type: string;
+    household_id: string;
+    payload: Record<string, unknown>;
+  } {
+    const householdId = this.resolveHouseholdId({}, message.headers);
+    if (!householdId) {
+      throw new Error("offline_sync_failed:missing_household_id");
+    }
+
+    return {
+      command_type: "assistant.query",
+      household_id: householdId,
+      payload: {
+        household_id: householdId,
+        query: message.message,
+        message: message.message,
+      },
+    };
+  }
+
+  private resolveHouseholdId(
+    payload: Record<string, unknown>,
+    headers: Record<string, string>,
+  ): string {
+    const payloadHouseholdId = String(payload.household_id || payload.family_id || "").trim();
+    if (payloadHouseholdId) {
+      return payloadHouseholdId;
+    }
+
+    const headerEntries = Object.entries(headers);
+    for (const [key, value] of headerEntries) {
+      if (key.toLowerCase() === "x-hpal-household-id") {
+        const householdId = String(value || "").trim();
+        if (householdId) {
+          return householdId;
+        }
+      }
+    }
+
+    return "";
+  }
+
+  private toRecord(value: unknown): Record<string, unknown> {
+    if (value && typeof value === "object") {
+      return value as Record<string, unknown>;
+    }
+    return {};
   }
 
   private getBackoffMs(retryCount: number): number {

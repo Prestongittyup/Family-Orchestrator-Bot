@@ -6,6 +6,12 @@ from pathlib import Path
 
 import pytest
 
+_existing_pytestmark = globals().get("pytestmark", [])
+if not isinstance(_existing_pytestmark, list):
+    _existing_pytestmark = [_existing_pytestmark]
+pytestmark = [*_existing_pytestmark, pytest.mark.ci_gate]
+
+
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT_PATH = ROOT / "schemas" / "event_contracts.yaml"
@@ -15,6 +21,7 @@ SYSTEM_EVENT_PATH = ROOT / "apps" / "api" / "schemas" / "event.py"
 def _load_contracts() -> dict:
     try:
         import yaml
+
         raw = yaml.safe_load(CONTRACT_PATH.read_text(encoding="utf-8"))
         assert isinstance(raw, dict) and "contracts" in raw
         contracts = raw["contracts"]
@@ -149,6 +156,7 @@ def _calls_in_function(fn_node: ast.FunctionDef | ast.AsyncFunctionDef) -> list[
     return calls
 
 
+@pytest.mark.integration
 def test_action_event_contract_invariants() -> None:
     contracts = _load_contracts()
     registered_types = _system_event_types()

@@ -1,69 +1,68 @@
-# Family Orchestration Bot — Execution Directive
+# Execution Runtime Directive (RFC-001 Aligned)
+
+## Authority
+
+RFC-001 is the sole source of truth for system behavior and execution boundaries.
 
 ## System Purpose
-This repository is a modular household orchestration backend built in Python (FastAPI + SQLite).
 
-## Current Phase: Phase 1 (Execution Spine)
+- This system is an event-sourced household orchestration backend.
+- All operations are command-driven and gateway-controlled.
+- State is derived from the canonical event log.
 
-We are NOT building features yet. We are building a working event pipeline.
+## Canonical Execution Flow
 
----
+User Request
+→ Command Validation
+→ Execution Gateway
+→ Rules Engine
+→ LLM Advisory (optional)
+→ Risk Engine
+→ Decision (auto/approve/block)
+→ Saga Execution
+→ Event Commit
+→ Projection Update
+→ Response
 
-## Phase 1 Goal
-Build a minimal working system that can:
+## Allowed System Behavior
 
-1. Accept a SystemEvent via HTTP POST
-2. Validate event using Pydantic schema
-3. Route event based on type
-4. Execute module handler (Task module only for now)
-5. Persist output to SQLite
-6. Return created entity response
+- Event-driven architecture is mandatory.
+- Execution Gateway is the single mutation surface.
+- Saga orchestration is required for multi-step operations.
+- Rules engine is deterministic and side-effect free.
+- Risk engine controls execution gating.
+- LLM is advisory only.
 
----
+## Storage Model
 
-## Architecture Rules
+- Event log is the source of truth.
+- SQLite is an implementation detail of the event persistence layer only.
+- No system design constraints are tied to database choice.
 
-- FastAPI backend only
-- Python only (no Node, no JS backend logic)
-- SQLite only for persistence (no external DB)
-- No AI/agents yet
-- No workflows yet
-- No email/calendar ingestion yet
+## Module Constraints (RFC-001 Aligned)
 
----
+- execution_gateway: ONLY mutation surface.
+- rules_engine: deterministic logic only.
+- risk_engine: decision gating only.
+- saga: multi-step orchestration.
+- projections: read models only.
+- llm_gateway: advisory only.
 
-## Core Flow
+## Forbidden Behaviors
 
-API → SystemEvent → Router → Module Service → SQLite → Response
+- bypassing execution gateway.
+- direct state mutation outside event log.
+- treating projections as source of truth.
+- LLM-driven execution.
+- bypassing saga for multi-step workflows.
+- non-event-sourced state writes.
 
----
-
-## Allowed Modules in Phase 1
-
-- Task module ONLY
-
-Everything else is stubbed or ignored.
-
----
-
-## Required Behavior
-
-When editing or generating code:
-
-- Follow existing folder structure under /apps/api
-- Do not create new architectural layers without approval
-- Keep services thin and deterministic
-- Use schema definitions in /schemas as contract reference
-
----
-
-## First Milestone
+## First Operational Requirement (Updated)
 
 System must support:
 
-POST /event
-→ type: task_created
-→ creates task in SQLite
-→ returns task_id
-
-This is the ONLY required success condition for Phase 1.
+- POST /command
+- Valid command routed through Execution Gateway
+- Event emitted to canonical event log
+- Projection updated deterministically
+- Response returned from projection

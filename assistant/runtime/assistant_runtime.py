@@ -107,7 +107,17 @@ class AssistantRuntimeEngine:
         effective_state = state if state is not None else _fallback_household_state(household_id)
         request_id = _request_id(query, household_id, repeat_window_days, fitness_goal)
         existing_response = self._state_manager.get_response(household_id, request_id)
-        if existing_response is None:
+        hydrated: HouseholdDecisionResponse | None = None
+        should_refresh = existing_response is None
+
+        if not should_refresh:
+            hydrated = HouseholdDecisionResponse.model_validate(existing_response)
+            # When an explicit state snapshot is provided, avoid reusing legacy cached responses
+            # that were generated without cross-domain conflict hydration.
+            cached_missing_conflicts = state is not None and not hydrated.current_state_summary.conflicts
+            should_refresh = hydrated.recommended_action.approval_status == "approved" or cached_missing_conflicts
+
+        if should_refresh:
             graph = self._state_manager.refresh_graph(
                 household_id=household_id,
                 state=effective_state,
@@ -122,31 +132,15 @@ class AssistantRuntimeEngine:
             )
             self._state_manager.store_decision(household_id, query, decision_response.model_dump())
         else:
-            hydrated = HouseholdDecisionResponse.model_validate(existing_response)
-            if hydrated.recommended_action.approval_status == "approved":
-                graph = self._state_manager.refresh_graph(
-                    household_id=household_id,
-                    state=effective_state,
-                    query=query,
-                    fitness_goal=fitness_goal,
+            decision_response = hydrated
+            if decision_response.current_state_summary.pending_approval_count < 1:
+                decision_response = decision_response.model_copy(
+                    update={
+                        "current_state_summary": decision_response.current_state_summary.model_copy(
+                            update={"pending_approval_count": 1}
+                        )
+                    }
                 )
-                decision_response = self._decision_engine.decide(
-                    household_id=household_id,
-                    query=query,
-                    graph=graph,
-                    request_id=request_id,
-                )
-                self._state_manager.store_decision(household_id, query, decision_response.model_dump())
-            else:
-                decision_response = hydrated
-                if decision_response.current_state_summary.pending_approval_count < 1:
-                    decision_response = decision_response.model_copy(
-                        update={
-                            "current_state_summary": decision_response.current_state_summary.model_copy(
-                                update={"pending_approval_count": 1}
-                            )
-                        }
-                    )
 
         intent = parse_intent(query)
         base_response = self._planning_engine.build_response(

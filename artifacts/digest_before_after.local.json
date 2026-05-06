@@ -1,0 +1,10 @@
+{
+  "before_home_behavior": "Home behaved as a dashboard snapshot. Summary text was generic/non-temporal, ordering was not explicitly change-set aware, and newly ingested household intent did not flow through a dedicated message ingestion + promotion path.",
+  "after_home_behavior": "Home behaves as a digest surface. Summary is time-aware and change-aware (including change-set/version and latest-change timestamp), ordering prioritizes decision pressure first, and promoted items from household message ingestion are reflected in actions/calendar/needs_decision without schema expansion.",
+  "product_loop_before": "User action and inbox-like intent handling were fragmented: no minimal HouseholdMessage ingestion primitive, no explicit private-to-household promotion event chain, and weaker guarantee that /home represented a deterministic attention digest tied to new changes.",
+  "product_loop_after": "input -> household_message_ingested -> household_item_promoted -> canonical domain events -> replay projection -> /home digest -> user decision/action command -> new events -> replay -> refreshed /home. State transitions persist through runtime + event log + replay rather than local-only shaping.",
+  "ingestion_added": true,
+  "promotion_active": true,
+  "decision_persistence": "PASS",
+  "digest_behavior": "PASS"
+}

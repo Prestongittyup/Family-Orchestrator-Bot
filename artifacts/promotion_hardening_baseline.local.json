@@ -1,0 +1,95 @@
+{
+  "artifact": "promotion_hardening_baseline",
+  "captured_with": "fastapi.testclient",
+  "captured_at": "2026-05-06T14:45:00Z",
+  "scope": "pre-hardening runtime behavior on adversarial prompt set",
+  "baseline_matrix": [
+    {
+      "input": "Soccer practice cancelled Tuesday",
+      "classification": "fyi",
+      "promotion_target": "ignore",
+      "promotion_status": "ignored",
+      "promoted_entity_type": ""
+    },
+    {
+      "input": "Game moved from 5pm to 7pm",
+      "classification": "fyi",
+      "promotion_target": "ignore",
+      "promotion_status": "ignored",
+      "promoted_entity_type": ""
+    },
+    {
+      "input": "Practice now starts 30 minutes earlier",
+      "classification": "fyi",
+      "promotion_target": "ignore",
+      "promotion_status": "ignored",
+      "promoted_entity_type": ""
+    },
+    {
+      "input": "Bring snacks for Friday practice",
+      "classification": "fyi",
+      "promotion_target": "ignore",
+      "promotion_status": "ignored",
+      "promoted_entity_type": ""
+    },
+    {
+      "input": "Pay $15 for picture day by Friday",
+      "classification": "fyi",
+      "promotion_target": "ignore",
+      "promotion_status": "ignored",
+      "promoted_entity_type": ""
+    },
+    {
+      "input": "Sign permission slip before Monday",
+      "classification": "fyi",
+      "promotion_target": "ignore",
+      "promotion_status": "ignored",
+      "promoted_entity_type": ""
+    },
+    {
+      "input": "New meeting scheduled at 3pm",
+      "classification": "schedule",
+      "promotion_target": "calendar",
+      "promotion_status": "accepted",
+      "promoted_entity_type": "schedule"
+    },
+    {
+      "input": "Team dinner after game",
+      "classification": "fyi",
+      "promotion_target": "ignore",
+      "promotion_status": "ignored",
+      "promoted_entity_type": ""
+    },
+    {
+      "input": "Something changed for tomorrow",
+      "classification": "fyi",
+      "promotion_target": "ignore",
+      "promotion_status": "ignored",
+      "promoted_entity_type": ""
+    },
+    {
+      "input": "Check out our new features!",
+      "classification": "fyi",
+      "promotion_target": "ignore",
+      "promotion_status": "ignored",
+      "promoted_entity_type": ""
+    },
+    {
+      "input": "Weekly newsletter update",
+      "classification": "fyi",
+      "promotion_target": "ignore",
+      "promotion_status": "ignored",
+      "promoted_entity_type": ""
+    }
+  ],
+  "gap_assessment": {
+    "cancellation_handling": "no",
+    "time_shift_handling": "no",
+    "deadline_interpretation": "no",
+    "obligation_interpretation": "no",
+    "ambiguity_to_decision": "no",
+    "dependency_awareness": "no",
+    "conflict_triggered_decision": "no",
+    "promotion_traceability_fields": "no"
+  }
+}

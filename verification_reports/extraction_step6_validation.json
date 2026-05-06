@@ -1,0 +1,99 @@
+{
+  "deleted": [
+    "apps/api/llm/intent_resolver.py",
+    "apps/api/product_surface/chat_gateway_service.py",
+    "apps/api/ingestion/service.py",
+    "apps/api/product_surface/bootstrap_service.py",
+    "archive/decision_engine_v2.py",
+    "ui/server.py"
+  ],
+  "extracted": [
+    "app/adapters/db/session_factory.py",
+    "app/adapters/db/models/event_log.py",
+    "app/adapters/db/event_log_repository.py",
+    "household_os/runtime/event_router.py",
+    "app/services/events/event_log_service.py",
+    "app/services/events/canonical_router_service.py",
+    "app/adapters/providers/google_calendar.py",
+    "app/services/provider_sync/google_calendar_sync.py",
+    "app/services/intent_resolution/gateway_guard.py",
+    "app/services/llm_gateway/email_refinement.py",
+    "app/services/llm_gateway/gateway.py",
+    "app/api/command.py",
+    "app/api/assistant_runtime.py",
+    "app/api/household.py",
+    "app/api/calendar.py",
+    "app/api/identity.py",
+    "app/api/auth.py"
+  ],
+  "remaining_legacy_dependencies": {
+    "status": "present",
+    "count_observed": 19,
+    "examples": [
+      "household_os/core/household_state_graph.py",
+      "household_os/runtime/action_pipeline.py",
+      "household_os/runtime/orchestrator.py",
+      "household_os/runtime/state_reducer.py",
+      "integration_core/__init__.py",
+      "integration_core/state_builder.py"
+    ]
+  },
+  "gateway_violations": [
+    {
+      "file": "archive/apps/api/llm/provider.py",
+      "violation": "Direct OpenAI/AzureOpenAI SDK calls outside canonical app/services llm gateway path",
+      "status": "flagged"
+    },
+    {
+      "file": "archive/apps/api/ingestion/email_priority_llm.py",
+      "violation": "Direct Gemini HTTP endpoint usage outside canonical app/services llm gateway path",
+      "status": "flagged"
+    }
+  ],
+  "api_surface_count": {
+    "active_entrypoint_modules": 1,
+    "active_entrypoints": [
+      "app/main.py"
+    ],
+    "active_router_modules": 1,
+    "active_routers": [
+      "app/api/email.py"
+    ],
+    "phase3_stub_modules": 6,
+    "legacy_archive_entrypoints": 1
+  },
+  "event_log_status": {
+    "db_backed": true,
+    "append_before_dispatch": true,
+    "idempotency_key_check_present": true,
+    "in_memory_only": false,
+    "canonical_files": [
+      "app/adapters/db/models/event_log.py",
+      "app/adapters/db/event_log_repository.py",
+      "household_os/runtime/event_router.py",
+      "app/services/events/event_log_service.py",
+      "app/services/events/canonical_router_service.py"
+    ]
+  },
+  "validation": {
+    "diagnostics": "get_errors clean on newly added/edited canonical files",
+    "task_runs": [
+      {
+        "task": "pytest-targeted-intelligence-fixes",
+        "result": "failed",
+        "reason": "404 on /assistant/run and /assistant/query endpoints in existing tests"
+      },
+      {
+        "task": "pytest-architecture",
+        "result": "failed",
+        "reason": "ModuleNotFoundError: redis (environment dependency)"
+      }
+    ]
+  },
+  "next_blockers": [
+    "Migrate remaining household_os and integration_core imports off archive namespace",
+    "Decide whether to activate Phase 3 API stubs in app/main.py or keep as compile-only placeholders",
+    "Resolve redis package/environment setup for architecture test execution",
+    "Address assistant route expectations in tests requiring /assistant/run and /assistant/query"
+  ]
+}

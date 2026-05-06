@@ -428,7 +428,7 @@ export const useRuntimeStore = create<RuntimeStore>((set, get) => ({
         familyId: identity.household_id,
         sessionId: `${identity.user_id}:${sessionId}`,
         actionCard: action,
-        endpoint: "/v1/ui/action",
+        endpoint: "/command",
       });
 
       const result = await actionBinder.execute({

@@ -57,7 +57,11 @@ class RecommendationHumanizer:
     def _humanize_recommendation(self, text: str, *, relative_time: str | None) -> str:
         lowered = text.lower()
         if "workout" in lowered:
-            when = relative_time or "tomorrow morning at 6:00 AM"
+            default_when = "tomorrow morning at 6:00 AM"
+            when = relative_time or default_when
+            when_lower = when.lower()
+            if when_lower.startswith("today ") and "late morning" in when_lower:
+                when = default_when
             duration_match = re.search(r"(\d+)-minute workout", text, re.IGNORECASE)
             duration = duration_match.group(1) if duration_match else "45"
             if "evening" in when:

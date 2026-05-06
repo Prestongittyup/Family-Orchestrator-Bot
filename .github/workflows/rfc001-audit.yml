@@ -1,0 +1,314 @@
+name: rfc001-audit
+
+on:
+  pull_request:
+
+env:
+  RFC_AUDIT_EXECUTION_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+
+# Branch protection required checks:
+# - rfc001-audit
+# - ci_gate
+# - verify_post
+
+jobs:
+  verify_pre:
+    name: verify_pre
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Enforce architecture validator (blocking)
+        run: |
+          python scripts/ci/architecture_validator.py
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest pytest-timeout
+
+      - name: Stage 1 - VERIFY_PRE audit
+        run: |
+          mkdir -p artifacts
+          python tools/rfc_audit.py --phase verify_pre --execution-id "$RFC_AUDIT_EXECUTION_ID" --output artifacts/verify_pre.json
+
+      - name: Stage 1 - VERIFY_PRE assertion (blocking)
+        run: |
+          python tools/rfc_assert.py artifacts/verify_pre.json
+
+      - name: Upload verify_pre artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verify-pre-json
+          path: artifacts/verify_pre.json
+          if-no-files-found: warn
+
+  implement_validation:
+    name: implement_validation
+    needs: verify_pre
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Stage 2 - IMPLEMENT validation (diff-only, non-mutating)
+        run: |
+          mkdir -p artifacts
+          python tools/rfc_audit.py --phase implement --execution-id "$RFC_AUDIT_EXECUTION_ID" --diff-only --output artifacts/implement.json
+
+      - name: Upload implement artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: implement-json
+          path: artifacts/implement.json
+          if-no-files-found: warn
+
+  ci_gate:
+    name: ci_gate
+    needs: implement_validation
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest pytest-timeout
+
+      - name: Stage 3 - TEST ci_gate (blocking)
+        id: ci_gate_run
+        continue-on-error: true
+        run: |
+          mkdir -p artifacts
+          pytest -m "ci_gate" --maxfail=1 --junitxml=artifacts/ci_gate.junit.xml
+
+      - name: Stage 3 - TEST migration (non-blocking)
+        if: always()
+        run: |
+          mkdir -p artifacts
+          pytest -m "migration" -q --junitxml=artifacts/migration.junit.xml || true
+
+      - name: Stage 3 - TEST reliability (boundary)
+        if: always()
+        run: |
+          mkdir -p artifacts
+          pytest -m "reliability" -q --timeout=300 --junitxml=artifacts/reliability.junit.xml || true
+
+      - name: Stage 3 - TEST phase audit JSON
+        if: always()
+        run: |
+          python tools/rfc_audit.py --phase test --execution-id "$RFC_AUDIT_EXECUTION_ID" \
+            --ci-gate-junit artifacts/ci_gate.junit.xml \
+            --migration-junit artifacts/migration.junit.xml \
+            --reliability-junit artifacts/reliability.junit.xml \
+            --output artifacts/test.json
+
+      - name: Enforce ci_gate blocking behavior
+        if: always()
+        run: |
+          if [ "${{ steps.ci_gate_run.outcome }}" != "success" ]; then
+            echo "ci_gate failed: blocking merge"
+            exit 1
+          fi
+
+      - name: Upload test phase artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-phase-artifacts
+          path: |
+            artifacts/ci_gate.junit.xml
+            artifacts/migration.junit.xml
+            artifacts/reliability.junit.xml
+            artifacts/test.json
+          if-no-files-found: warn
+
+  verify_post:
+    name: verify_post
+    needs: ci_gate
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest pytest-timeout
+
+      - name: Stage 4 - VERIFY_POST audit
+        run: |
+          mkdir -p artifacts
+          python tools/rfc_audit.py --phase verify_post --execution-id "$RFC_AUDIT_EXECUTION_ID" --output artifacts/verify_post.json
+
+      - name: Stage 4 - VERIFY_POST assertion (blocking)
+        run: |
+          python tools/rfc_assert.py artifacts/verify_post.json
+
+      - name: Upload verify_post artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verify-post-json
+          path: artifacts/verify_post.json
+          if-no-files-found: warn
+
+  rfc001-audit:
+    name: rfc001-audit
+    needs:
+      - verify_pre
+      - implement_validation
+      - ci_gate
+      - verify_post
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download phase artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: "*"
+          path: artifacts/incoming
+          merge-multiple: true
+
+      - name: Build final RFC audit report
+        env:
+          VERIFY_PRE_RESULT: ${{ needs.verify_pre.result }}
+          IMPLEMENT_RESULT: ${{ needs.implement_validation.result }}
+          CI_GATE_RESULT: ${{ needs.ci_gate.result }}
+          VERIFY_POST_RESULT: ${{ needs.verify_post.result }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          incoming = Path("artifacts/incoming")
+          incoming.mkdir(parents=True, exist_ok=True)
+
+          def load_json(name: str) -> dict:
+              path = incoming / name
+              if not path.exists():
+                  return {}
+              try:
+                  return json.loads(path.read_text(encoding="utf-8"))
+              except Exception:
+                  return {}
+
+          verify_pre = load_json("verify_pre.json")
+          implement = load_json("implement.json")
+          test = load_json("test.json")
+          verify_post = load_json("verify_post.json")
+
+          blockers: list[str] = []
+
+          if os.getenv("VERIFY_PRE_RESULT") != "success":
+              blockers.append("verify_pre job failed")
+          if os.getenv("IMPLEMENT_RESULT") != "success":
+              blockers.append("implement_validation job failed")
+          if os.getenv("CI_GATE_RESULT") != "success":
+              blockers.append("ci_gate job failed")
+          if os.getenv("VERIFY_POST_RESULT") != "success":
+              blockers.append("verify_post job failed")
+
+          for phase_name, phase_payload in (
+              ("verify_pre", verify_pre),
+              ("implement", implement),
+              ("test", test),
+              ("verify_post", verify_post),
+          ):
+              if not phase_payload:
+                  blockers.append(f"{phase_name} JSON missing")
+                  continue
+              if phase_payload.get("rfc_compliance") is False:
+                  blockers.append(f"{phase_name} reported RFC non-compliance")
+                  for item in phase_payload.get("violations", []):
+                      if not isinstance(item, dict):
+                          continue
+                      vtype = item.get("violation_type", "unknown")
+                      module = item.get("affected_module", "unknown")
+                      section = item.get("rfc_section_violated", "unknown")
+                      blockers.append(f"{phase_name}: {vtype} @ {module} ({section})")
+
+          final_status = "PASS" if not blockers else "FAIL"
+
+          report = {
+              "verify_pre": verify_pre,
+              "implement": implement,
+              "test": test,
+              "verify_post": verify_post,
+              "final_status": final_status,
+              "blockers": blockers,
+          }
+
+          out_path = Path("artifacts/rfc_audit_report.json")
+          out_path.parent.mkdir(parents=True, exist_ok=True)
+          out_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps({"final_status": final_status, "blockers": blockers}, indent=2))
+          PY
+
+      - name: Upload consolidated RFC audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rfc-audit-report
+          path: artifacts/rfc_audit_report.json
+          if-no-files-found: error
+
+      - name: Enforce final report status
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("artifacts/rfc_audit_report.json").read_text(encoding="utf-8"))
+          if report.get("final_status") != "PASS":
+              raise SystemExit(1)
+          PY

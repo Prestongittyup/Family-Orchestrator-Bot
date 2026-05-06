@@ -157,7 +157,7 @@ class RecommendationBuilder:
         description = response.recommended_action.description.lower()
         source = " ".join([signals, title, description])
 
-        if any(token in source for token in ("workout", "fitness", "exercise", "training")):
+        if any(token in source for token in ("workout", "fitness", "exercise", "training", "routine", "consistency session")):
             return "fitness"
         if any(token in source for token in ("cook", "meal", "dinner", "grocery")):
             return "meal"

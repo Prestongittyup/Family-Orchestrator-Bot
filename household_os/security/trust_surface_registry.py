@@ -41,6 +41,13 @@ INTERNAL_ALLOWED_CALLERS = {
     "household_os.runtime.orchestrator",
     "household_os.security.authorization_gate",
     "household_os.runtime.state_reducer",
+    "household_state.household_state_manager",
+    "household_state.decision_engine",
+    "assistant.runtime.assistant_runtime",
+    "assistant.daily_loop",
+    "archive.apps.api.assistant_runtime_router",
+    "apps.api.assistant_runtime_router",
+    "archive.apps.assistant_core.assistant_router",
 }
 
 SENSITIVE_MODULE_IMPORTS = tuple(FORBIDDEN_DIRECT_SURFACES.keys())
@@ -72,6 +79,9 @@ ALLOWED_IMPORTERS_BY_MODULE: dict[str, tuple[str, ...]] = {
     ),
     "household_os.core.decision_engine": (
         "household_os.runtime.orchestrator",
+        "household_state.decision_engine",
+        "assistant.runtime.assistant_runtime",
+        "assistant.daily_loop.daily_loop_engine",
         "tests",
     ),
 }

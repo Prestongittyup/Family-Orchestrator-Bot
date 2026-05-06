@@ -1,0 +1,301 @@
+{
+  "legacy_cleanup_candidates": [
+    {
+      "bucket": "still_relevant_but_outdated_structure",
+      "candidates_for_migration": [
+        "tests/legacy/p1_verification/test_auth_lifecycle.py",
+        "tests/legacy/p1_verification/test_chaos_concurrency.py",
+        "tests/legacy/p1_verification/test_e2e_integration.py",
+        "tests/legacy/p1_verification/test_event_bus_correctness.py",
+        "tests/legacy/p1_verification/test_idempotency_correctness.py",
+        "tests/legacy/p1_verification/test_llm_gateway_failures.py",
+        "tests/legacy/test_actor_type_enforcement.py",
+        "tests/legacy/test_adapter_governance.py",
+        "tests/legacy/test_asgi_admission.py",
+        "tests/legacy/test_auth_realtime_guards.py",
+        "tests/legacy/test_auth_router.py",
+        "tests/legacy/test_backpressure_middleware.py",
+        "tests/legacy/test_behavior_feedback.py",
+        "tests/legacy/test_calendar_events_runtime.py",
+        "tests/legacy/test_chat_events_runtime.py",
+        "tests/legacy/test_col.py",
+        "tests/legacy/test_cqrs_lifecycle_invariants.py",
+        "tests/legacy/test_email_action_summary.py",
+        "tests/legacy/test_email_priority_llm.py",
+        "tests/legacy/test_email_service_actions.py",
+        "tests/legacy/test_env_bootstrap.py",
+        "tests/legacy/test_event_adapter.py",
+        "tests/legacy/test_event_windowing.py",
+        "tests/legacy/test_external_event_normalization.py",
+        "tests/legacy/test_frontend_runtime_contract.py",
+        "tests/legacy/test_fsm_non_authority.py",
+        "tests/legacy/test_google_calendar_full_external_validation.py",
+        "tests/legacy/test_google_calendar_integration_surface.py",
+        "tests/legacy/test_google_calendar_oauth.py",
+        "tests/legacy/test_google_oauth_env_config.py",
+        "tests/legacy/test_google_oauth_missing_config_safe_boot.py",
+        "tests/legacy/test_household_os.py",
+        "tests/legacy/test_household_os_runtime.py",
+        "tests/legacy/test_household_state.py",
+        "tests/legacy/test_household_state_manager.py",
+        "tests/legacy/test_identity_events_runtime.py",
+        "tests/legacy/test_identity_layer.py",
+        "tests/legacy/test_ingestion_events_runtime.py",
+        "tests/legacy/test_ingestion_router.py",
+        "tests/legacy/test_integration_architecture_guard.py",
+        "tests/legacy/test_integration_core.py",
+        "tests/legacy/test_intent_contract.py",
+        "tests/legacy/test_intent_resolver.py",
+        "tests/legacy/test_lifecycle_integrity_invariants.py",
+        "tests/legacy/test_oauth_credential_store.py",
+        "tests/legacy/test_outlook_calendar_provider.py",
+        "tests/legacy/test_pantry_router.py",
+        "tests/legacy/test_policy_guardrails.py",
+        "tests/legacy/test_provider_email_adapter.py",
+        "tests/legacy/test_provider_registry.py",
+        "tests/legacy/test_single_pipeline_enforcement.py",
+        "tests/legacy/test_sse_canonical_only.py",
+        "tests/legacy/test_state_builder_multi_provider.py",
+        "tests/legacy/test_state_machine.py",
+        "tests/legacy/test_task_service_events.py",
+        "tests/legacy/test_trust_boundary_enforcement.py",
+        "tests/legacy/test_ui_bootstrap_router.py",
+        "tests/legacy/test_unified_trust_boundary.py",
+        "tests/legacy/test_xai_layer.py"
+      ]
+    },
+    {
+      "bucket": "redundant_coverage",
+      "candidates_for_deletion": [
+        "tests/legacy/test_evaluation_endpoints.py",
+        "tests/legacy/test_feature_flags.py",
+        "tests/legacy/test_integration_identity_system.py",
+        "tests/legacy/test_operational_mode.py",
+        "tests/legacy/test_security_verification_harness.py",
+        "tests/legacy/test_system_stability_lock.py",
+        "tests/legacy/test_time_normalization.py"
+      ]
+    },
+    {
+      "bucket": "obsolete_removed_functionality",
+      "candidates_for_deletion": [
+        "tests/legacy/decision/test_decision_engine.py",
+        "tests/legacy/test_assistant_core.py",
+        "tests/legacy/test_assistant_runtime.py",
+        "tests/legacy/test_assistant_runtime_router.py",
+        "tests/legacy/test_brief_builder.py",
+        "tests/legacy/test_brief_renderer_v1.py",
+        "tests/legacy/test_daily_loop_engine.py",
+        "tests/legacy/test_decision_engine.py",
+        "tests/legacy/test_decision_engine_integration.py",
+        "tests/legacy/test_manual_priority_adapter.py",
+        "tests/legacy/test_output_governor.py",
+        "tests/legacy/test_recommendation_builder.py"
+      ]
+    }
+  ],
+  "redundant_clusters": [
+    {
+      "cluster": "decision_engine_legacy_stack",
+      "why": "Same decision-engine behavior asserted in multiple legacy files after architecture replacement.",
+      "files": [
+        "tests/legacy/decision/test_decision_engine.py",
+        "tests/legacy/test_decision_engine.py",
+        "tests/legacy/test_decision_engine_integration.py"
+      ],
+      "layers": [
+        "legacy"
+      ]
+    },
+    {
+      "cluster": "assistant_run_endpoint_overlap",
+      "why": "Assistant run/approval routing assertions repeated across legacy runtime tests and newer integration/system behavior tests.",
+      "files": [
+        "tests/legacy/test_assistant_runtime.py",
+        "tests/legacy/test_assistant_runtime_router.py",
+        "tests/legacy/test_household_os.py",
+        "tests/integration/test_sample_household_os_outputs.py",
+        "tests/system/test_intent_confidence_router.py"
+      ],
+      "layers": [
+        "legacy",
+        "integration",
+        "system"
+      ]
+    },
+    {
+      "cluster": "trust_boundary_overlap",
+      "why": "Trust boundary and authorization denial semantics are duplicated between legacy and canonical trust-surface guards.",
+      "files": [
+        "tests/legacy/test_trust_boundary_enforcement.py",
+        "tests/legacy/test_unified_trust_boundary.py",
+        "tests/test_trust_surface_closure.py",
+        "tests/test_trust_surface_final_closure.py"
+      ],
+      "layers": [
+        "legacy",
+        "integration/system-equivalent"
+      ]
+    },
+    {
+      "cluster": "replay_flow_system_vs_chaos",
+      "why": "Replay/watermark/event-flow coverage exists in both deterministic system/integration and stress chaos harnesses.",
+      "files": [
+        "tests/system/test_event_sourcing.py",
+        "tests/system/test_event_store_invariants.py",
+        "tests/integration/test_event_replay_integrity.py",
+        "tests/test_sse_event_closure.py",
+        "tests/chaos/test_household_simulation.py",
+        "tests/chaos/test_p0_torture.py"
+      ],
+      "layers": [
+        "integration",
+        "system",
+        "chaos"
+      ]
+    },
+    {
+      "cluster": "google_oauth_provider_overlap",
+      "why": "OAuth/provider sync contract checks are fragmented across many legacy files with overlapping assertions.",
+      "files": [
+        "tests/legacy/test_google_calendar_oauth.py",
+        "tests/legacy/test_google_oauth_env_config.py",
+        "tests/legacy/test_oauth_credential_store.py",
+        "tests/legacy/test_google_calendar_integration_surface.py",
+        "tests/legacy/test_google_calendar_full_external_validation.py"
+      ],
+      "layers": [
+        "legacy"
+      ]
+    }
+  ],
+  "flaky_root_causes": [
+    {
+      "file": "tests/chaos/test_p0_torture.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/chaos/test_xai_harness_integration.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/integration/test_event_replay_integrity.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/integration/test_intelligence_analytics_dls.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/integration/test_intelligence_routing_resilience.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/p1_verification/test_auth_lifecycle.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/p1_verification/test_chaos_concurrency.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/p1_verification/test_e2e_integration.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/p1_verification/test_idempotency_correctness.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/p1_verification/test_llm_gateway_failures.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/test_auth_router.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/test_google_calendar_integration_surface.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/test_google_calendar_oauth.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/test_google_oauth_env_config.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/test_household_state.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/test_identity_events_runtime.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/test_identity_layer.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/test_ingestion_events_runtime.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/test_security_verification_harness.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/test_sse_canonical_only.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/test_state_machine.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/legacy/test_system_stability_lock.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/system/test_event_sourcing.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    },
+    {
+      "file": "tests/test_sse_event_closure.py",
+      "root_cause": "SSE",
+      "recommendation": "move_to_chaos"
+    }
+  ],
+  "proposed_target_distribution": {
+    "unit": "60-70%",
+    "integration": "20-25%",
+    "system": "7-10%",
+    "chaos": "3-5%",
+    "legacy": "near_zero"
+  }
+}

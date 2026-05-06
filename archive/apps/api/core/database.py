@@ -108,7 +108,8 @@ def _on_checkout(*_: object) -> None:
     global _pool_in_use
     with _pool_lock:
         _pool_in_use += 1
-        metrics.gauge_set("db_pool_in_use", float(_pool_in_use))
+        current_in_use = _pool_in_use
+    metrics.gauge_set("db_pool_in_use", float(current_in_use))
 
 
 @event.listens_for(engine, "checkin")
@@ -116,4 +117,5 @@ def _on_checkin(*_: object) -> None:
     global _pool_in_use
     with _pool_lock:
         _pool_in_use = max(0, _pool_in_use - 1)
-        metrics.gauge_set("db_pool_in_use", float(_pool_in_use))
+        current_in_use = _pool_in_use
+    metrics.gauge_set("db_pool_in_use", float(current_in_use))

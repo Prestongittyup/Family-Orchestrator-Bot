@@ -1,13 +1,17 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
+from app.services.events import CanonicalRouterService, EventLogService
 from assistant.governance.intent_lock import IntentClassification, IntentType
 from household_os.core.lifecycle_state import LifecycleState, enforce_boundary_state
+from household_os.runtime.event_router import CanonicalEventEnvelope
 
 
 @dataclass(frozen=True)
@@ -20,20 +24,27 @@ class LifeState:
 
 
 class LifeStateModel:
-    """Persistent rolling life-state model used as a weighting signal for routing."""
+    """Rolling life-state model backed by canonical event-log snapshots."""
 
-    def __init__(self, life_state_path: Path | None = None) -> None:
-        self.life_state_path = life_state_path or (
-            Path(__file__).resolve().parent.parent.parent / "household_state" / "life_state.json"
-        )
+    def __init__(
+        self,
+        life_state_path: Path | None = None,
+        *,
+        router_service: CanonicalRouterService | None = None,
+        event_log_service: EventLogService | None = None,
+    ) -> None:
+        # Retained for constructor compatibility; file persistence is intentionally disabled.
+        self.life_state_path = life_state_path
+        self._router = router_service or CanonicalRouterService()
+        self._event_log = event_log_service or EventLogService()
 
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
 
     def load(self, household_id: str) -> LifeState:
-        payload = self._read_store()
-        data = payload.get("households", {}).get(household_id, {}).get("life_state", {})
+        house = self._read_household_snapshot(household_id)
+        data = dict(house.get("life_state", {}))
         if not data:
             return self._default_state()
 
@@ -56,8 +67,7 @@ class LifeStateModel:
         timestamp: datetime | None = None,
     ) -> LifeState:
         now = timestamp or self._coerce_datetime(graph.get("reference_time"))
-        payload = self._read_store()
-        house = payload.setdefault("households", {}).setdefault(household_id, {})
+        house = self._read_household_snapshot(household_id)
 
         intent_history = list(house.get("intent_history", []))
         if classification is not None:
@@ -82,7 +92,7 @@ class LifeStateModel:
         house["intent_history"] = intent_history
         house["life_state"] = asdict(life_state)
         house["updated_at"] = self._iso(now)
-        self._write_store(payload)
+        self._write_household_snapshot(household_id=household_id, house_payload=house, timestamp=now)
         return life_state
 
     def update_after_approval(
@@ -93,8 +103,7 @@ class LifeStateModel:
         timestamp: datetime | None = None,
     ) -> LifeState:
         now = timestamp or self._coerce_datetime(graph.get("reference_time"))
-        payload = self._read_store()
-        house = payload.setdefault("households", {}).setdefault(household_id, {})
+        house = self._read_household_snapshot(household_id)
         intent_history = list(house.get("intent_history", []))
 
         cutoff = now - timedelta(days=14)
@@ -107,7 +116,7 @@ class LifeStateModel:
         house["intent_history"] = intent_history
         house["life_state"] = asdict(life_state)
         house["updated_at"] = self._iso(now)
-        self._write_store(payload)
+        self._write_household_snapshot(household_id=household_id, house_payload=house, timestamp=now)
         return life_state
 
     # ------------------------------------------------------------------
@@ -255,7 +264,7 @@ class LifeStateModel:
         return overlaps
 
     # ------------------------------------------------------------------
-    # Persistence helpers
+    # Event-log snapshot helpers
     # ------------------------------------------------------------------
 
     def _default_state(self) -> LifeState:
@@ -267,17 +276,47 @@ class LifeStateModel:
             active_backlog_size=0,
         )
 
-    def _read_store(self) -> dict[str, Any]:
-        if not self.life_state_path.exists():
-            return {"households": {}}
-        try:
-            return json.loads(self.life_state_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            return {"households": {}}
+    def _read_household_snapshot(self, household_id: str) -> dict[str, Any]:
+        rows = self._event_log.get_event_logs(
+            household_id=household_id,
+            event_type="life_state.snapshot",
+            limit=1,
+        )
+        if not rows:
+            return {}
+        payload = dict(rows[0].payload or {}) if isinstance(rows[0].payload, dict) else {}
+        house = payload.get("house")
+        if isinstance(house, dict):
+            return dict(house)
+        return {}
 
-    def _write_store(self, payload: dict[str, Any]) -> None:
-        self.life_state_path.parent.mkdir(parents=True, exist_ok=True)
-        self.life_state_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    def _write_household_snapshot(
+        self,
+        *,
+        household_id: str,
+        house_payload: dict[str, Any],
+        timestamp: datetime,
+    ) -> None:
+        serialized = json.dumps(house_payload, sort_keys=True, separators=(",", ":"), default=str)
+        checksum = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+        envelope = CanonicalEventEnvelope(
+            event_id=str(uuid4()),
+            event_type="life_state.snapshot",
+            user_id="system",
+            household_id=household_id,
+            source="assistant.life_state_model",
+            payload={
+                "house": dict(house_payload),
+                "checksum": checksum,
+                "recorded_at": self._iso(timestamp),
+            },
+            version=1,
+            severity="info",
+            idempotency_key=f"life_state.snapshot:{household_id}:{checksum}",
+            actor_type="system_worker",
+            timestamp=timestamp,
+        )
+        self._router.route(envelope, persist=True, dispatch=False)
 
     @staticmethod
     def _clip01(value: float) -> float:

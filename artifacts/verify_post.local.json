@@ -1,0 +1,87 @@
+{
+  "changed_files": [],
+  "checks": {
+    "event_sourcing": {
+      "ok": true,
+      "violations": []
+    },
+    "fsm_mutation_authority": {
+      "metadata": {
+        "command": "C:\\Users\\fb002895\\Desktop\\Personal\\Family Orchestration Bot\\.venv\\Scripts\\python.exe ci/state_mutation_guard.py apps/",
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "Scoped Lifecycle State Mutation Guard Report\n================================================================================\n\u00e2\u0153\u201c No lifecycle state mutations detected on lifecycle-managed objects."
+      },
+      "ok": true,
+      "violations": []
+    },
+    "gateway_bypass": {
+      "ok": true,
+      "violations": []
+    },
+    "illegal_runtime_mutation": {
+      "ok": true,
+      "violations": []
+    },
+    "llm_advisory_only": {
+      "ok": true,
+      "violations": []
+    },
+    "post_refactor_canonical_health_gate": {
+      "ok": true,
+      "summary": {
+        "derive_health_definitions": [
+          {
+            "line": 101,
+            "module": "core/health/system_health.py",
+            "symbol": "derive_system_health"
+          }
+        ],
+        "forbidden_patterns": [
+          "derive_*health",
+          "_policy_determinism_from_projection",
+          "_saga_completion_validity",
+          "_derive_projection_health",
+          "inline health aggregation logic"
+        ],
+        "forbidden_symbol_hits": [],
+        "inline_health_aggregation_hits": [],
+        "scan_scope": "repository_static_full"
+      },
+      "violations": []
+    },
+    "post_refactor_reverification_consistency": {
+      "ok": true,
+      "summary": {
+        "baseline_available": true,
+        "baseline_phase": "verify_pre",
+        "differences": []
+      },
+      "violations": []
+    },
+    "sse_watermark_invariants": {
+      "ok": true,
+      "violations": []
+    }
+  },
+  "diff_only": false,
+  "generated_at": "2026-04-29T22:07:36.907516Z",
+  "phase": "verify_post",
+  "post_refactor_gate": {
+    "forbidden_patterns": [
+      "derive_*health",
+      "_policy_determinism_from_projection",
+      "_saga_completion_validity",
+      "_derive_projection_health",
+      "inline health aggregation logic"
+    ],
+    "fresh_static_scan_performed": true,
+    "installed": true,
+    "migration_state": "READY_FOR_STEP6",
+    "static_scan_required_before_step6": true,
+    "step6_blocked": false
+  },
+  "rfc_compliance": true,
+  "step6_execution_allowed": true,
+  "violations": []
+}

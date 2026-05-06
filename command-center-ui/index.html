@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Command Center</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="command-center" aria-live="polite">
+      <section class="section section-summary" aria-labelledby="summary-heading">
+        <h1 id="summary-heading" class="section-title">Summary</h1>
+        <p id="summaryText" class="summary-text">Loading command center...</p>
+      </section>
+
+      <section class="section" aria-labelledby="decisions-heading">
+        <h2 id="decisions-heading" class="section-title">Needs Your Decision</h2>
+        <ul id="decisionsList" class="list"></ul>
+      </section>
+
+      <section class="section" aria-labelledby="actions-heading">
+        <h2 id="actions-heading" class="section-title">Actions</h2>
+        <ul id="actionsList" class="list"></ul>
+      </section>
+
+      <section class="section" aria-labelledby="calendar-heading">
+        <h2 id="calendar-heading" class="section-title">Today and Next Events</h2>
+        <ul id="calendarList" class="list"></ul>
+      </section>
+
+      <section class="section section-footer" aria-labelledby="refresh-heading">
+        <h2 id="refresh-heading" class="section-title">Refresh</h2>
+        <div class="footer-row">
+          <button id="refreshButton" type="button">Refresh now</button>
+          <p id="lastUpdated" class="footer-text">Last updated: never</p>
+        </div>
+        <p id="updateStatus" class="footer-text">Waiting for first update...</p>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

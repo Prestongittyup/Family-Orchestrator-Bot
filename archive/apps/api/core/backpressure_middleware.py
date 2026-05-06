@@ -1,3 +1,6 @@
+# ARCHIVE MODULE - NOT PART OF ACTIVE RUNTIME
+# DO NOT IMPORT INTO app/
+
 from __future__ import annotations
 
 import asyncio
@@ -43,11 +46,8 @@ def _get_audit_bootstrap_semaphore() -> asyncio.Semaphore:
 _SSE_PATHS = frozenset({"/v1/realtime/stream"})
 
 _SHORT_PREFIXES = (
-    "/v1/system/",
     "/v1/auth/",
     "/v1/identity/",
-    "/health",
-    "/v1/system/health",
 )
 
 

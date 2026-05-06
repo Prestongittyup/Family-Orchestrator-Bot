@@ -16,11 +16,15 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any, Dict, List
 
 from archive.apps.api.intent_contract.schema import IntentType
 from archive.apps.api.intent_contract.validator import ValidatedIntent, ValidationError_
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 # ---------------------------------------------------------------------------
@@ -64,7 +68,7 @@ class ActionPlan:
     intent_type: IntentType
     actions: List[Action] = field(default_factory=list)
     validated_data: Dict[str, Any] = field(default_factory=dict)
-    generated_at: datetime = field(default_factory=datetime.utcnow)
+    generated_at: datetime = field(default_factory=_utcnow)
 
     def __str__(self):
         return f"ActionPlan({self.intent_type.value}, {len(self.actions)} action(s))"
@@ -108,7 +112,7 @@ class ActionPlanner:
             intent_type=validated.intent_type,
             actions=actions,
             validated_data=validated.validated_data,
-            generated_at=datetime.utcnow(),
+            generated_at=_utcnow(),
         )
 
     def _get_handler(self, intent_type: IntentType):

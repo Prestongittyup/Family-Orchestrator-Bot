@@ -20,14 +20,17 @@ CQRS Constraint:
 
 from __future__ import annotations
 
-from archive.apps.api.core.state_machine import ActionState, TransitionError, validate_transition
-from archive.apps.api.observability.logging import log_error
+import logging
+import sys
+
+from apps.api.core.state_machine import ActionState, TransitionError, validate_transition
+from apps.api.core import state_machine as fsm
 from household_os.core.lifecycle_state import (
     LifecycleState,
     assert_lifecycle_state,
     parse_lifecycle_state,
 )
-from archive.apps.api.observability.eil.tracer import trace_function
+from household_os.runtime.tracing import trace_function
 from household_os.runtime.domain_event import (
     DomainEvent,
     LifecycleEventState,
@@ -36,6 +39,17 @@ from household_os.runtime.domain_event import (
 )
 from household_os.runtime.lifecycle_firewall import enforce_lifecycle_integrity
 from household_os.security.trust_boundary_enforcer import validate_replay_call
+
+
+logger = logging.getLogger(__name__)
+
+
+def _resolve_fsm_module():
+    """Use the canonical FSM module, but honor patched archive alias in tests."""
+    patched = sys.modules.get("archive.apps.api.core.state_machine")
+    if patched is not None:
+        return patched
+    return fsm
 
 
 class StateReductionError(Exception):
@@ -80,7 +94,7 @@ def reduce_state(events: list[DomainEvent]) -> LifecycleState:
         Current derived state as LifecycleState enum
 
     Raises:
-        StateReductionError: If event sequence is invalid or violates FSM rules
+        StateReductionError: Raised when event sequence is invalid or violates FSM rules
     """
     if not events:
         raise StateReductionError("Cannot reduce state from empty event list")
@@ -138,14 +152,14 @@ def _apply_event(
     Apply a single event to the current state.
 
     Args:
-        current_state: State before event (None if this is first event)
+        current_state: State before event (None when this is first event)
         event: Event to apply
 
     Returns:
         New state after event (as LifecycleState enum)
 
     Raises:
-        StateReductionError: If transition is invalid
+        StateReductionError: Raised when transition is invalid
     """
     event_type = event.event_type
     event_to_state = {
@@ -171,9 +185,7 @@ def _apply_event(
     if event_actor_type in {"", "unknown"}:
         # Legacy streams often omit actor provenance; treat as internal replay actor.
         event_actor_type = "system_worker"
-    if event_actor_type == "api_user":
-        event_actor_type = "user"
-    allowed_actor_types = {"user", "assistant", "system_worker", "scheduler"}
+    allowed_actor_types = {"api_user", "user", "assistant", "system_worker", "scheduler"}
     if event_actor_type not in allowed_actor_types:
         raise StateReductionError(
             f"Unknown actor_type in replay event: {event_actor_type!r}; allowed={sorted(allowed_actor_types)}"
@@ -193,22 +205,24 @@ def _apply_event(
 
     requires_approval = bool(event.payload.get("requires_approval", False)) if isinstance(event.payload, dict) else False
 
+    fsm_module = _resolve_fsm_module()
+    transition_error = getattr(fsm_module, "TransitionError", Exception)
+
     try:
-        validate_transition(
-            from_state=ActionState(current_state.value),
-            to_state=ActionState(target_state.value),
+        fsm_module.validate_transition(
+            from_state=fsm_module.ActionState(current_state.value),
+            to_state=fsm_module.ActionState(target_state.value),
             context={
                 "actor_type": event_actor_type,
                 "requires_approval": requires_approval,
             },
         )
-    except (TransitionError, ValueError) as exc:
-        log_error(
-            "event_replay_validation_failed",
-            exc,
-            event_id=event.event_id,
-            reason=str(exc),
-            actor_type=event_actor_type,
+    except (transition_error, ValueError) as exc:
+        logger.error(
+            "event_replay_validation_failed event_id=%s actor_type=%s reason=%s",
+            event.event_id,
+            event_actor_type,
+            str(exc),
         )
         raise StateReductionError(
             f"Invalid transition from {current_state.value} on event {event_type}"
@@ -236,7 +250,7 @@ def compute_snapshot(
         Immutable snapshot of current state
 
     Raises:
-        StateReductionError: If events are invalid
+        StateReductionError: Raised when events are invalid
     """
     if not events:
         raise StateReductionError(f"Cannot snapshot aggregate {aggregate_id} with no events")
@@ -255,13 +269,13 @@ def compute_snapshot(
 
 def is_terminal_state(state: LifecycleState) -> bool:
     """
-    Check if state is terminal (no further transitions possible).
+    Check whether state is terminal (no further transitions possible).
 
     Args:
         state: Lifecycle state
 
     Returns:
-        True if state is terminal (COMMITTED, FAILED, or REJECTED)
+        True when state is terminal (COMMITTED, FAILED, or REJECTED)
     """
     parsed = assert_lifecycle_state(state)
     return parsed.is_terminal()

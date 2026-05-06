@@ -13,7 +13,7 @@ Manages:
 import asyncio
 import json
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Dict, List, Optional, Callable
 import hashlib
 
@@ -26,6 +26,10 @@ from .simulation_engine import (
 from .failure_injector import FailureInjector
 from .invariant_validator import InvariantValidator, InvariantViolation
 from .report_generator import ReportGenerator
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 @dataclass
@@ -108,7 +112,7 @@ class ScenarioRunner:
             ScenarioRunResult with validation results
         """
         self.run_counter += 1
-        run_id = f"{scenario_name}_{self.run_counter}_{datetime.utcnow().timestamp()}"
+        run_id = f"{scenario_name}_{self.run_counter}_{_utcnow().timestamp()}"
         
         if self.verbose:
             print(f"\n[SCENARIO] Starting: {scenario_name}")

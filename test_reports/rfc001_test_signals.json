@@ -1,0 +1,2346 @@
+[
+  {
+    "path": "tests/chaos/test_household_simulation.py",
+    "imports": [
+      "import pytest",
+      "import asyncio",
+      "from pathlib import Path",
+      "from typing import List, Dict, Any",
+      "from tests.harness.simulation_engine import SimulationEngine",
+      "from tests.harness.failure_injector import FailureInjector, FailureInjectionProfile",
+      "from tests.harness.invariant_validator import InvariantValidator",
+      "from tests.harness.scenario_runner import ScenarioRunner"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/chaos/test_llm_gateway_runtime_hardening.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import asyncio",
+      "from collections.abc import AsyncIterator",
+      "from typing import Any",
+      "import pytest",
+      "import app.adapters.llm.gateway as gateway_module",
+      "from app.adapters.llm.gateway import LLMGateway, LLMGatewayRequest"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": true,
+    "has_provider_terms": true,
+    "has_sleep": true,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/chaos/test_p0_torture.py",
+    "imports": [
+      "import asyncio",
+      "import threading",
+      "import time",
+      "import random",
+      "import json",
+      "import logging",
+      "import os",
+      "import socket"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": true,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/chaos/test_xai_harness_integration.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import asyncio",
+      "from pathlib import Path",
+      "from typing import Callable, List",
+      "import pytest",
+      "from tests.harness.failure_injector import FailureInjector",
+      "from tests.harness.invariant_validator import InvariantValidator",
+      "from tests.harness.report_generator import ReportGenerator"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": true,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/architecture/test_dependency_graph.py",
+    "imports": [
+      "import pytest",
+      "import importlib",
+      "import pkgutil",
+      "from .dependency_graph import ALLOWED_DEPENDENCIES"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/architecture/test_fetch_boundary.py",
+    "imports": [
+      "import pytest",
+      "import inspect",
+      "import importlib",
+      "import integration_core.orchestrator as orchestrator",
+      "import integration_core.state_builder as state_builder"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/architecture/test_single_fetch_source.py",
+    "imports": [
+      "import pytest",
+      "import inspect",
+      "import importlib",
+      "import integration_core.orchestrator as orch",
+      "import integration_core.state_builder as sb"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_actor_context_propagation.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from household_os.core.execution_context import ExecutionContext",
+      "from household_os.core.lifecycle_state import LifecycleState",
+      "from household_os.runtime.domain_event import DomainEvent, LIFECYCLE_EVENT_TYPES",
+      "from household_os.runtime.state_reducer import reduce_state"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_boundary_enforcement.py",
+    "imports": [
+      "from __future__ import annotations",
+      "from typing import Any",
+      "import pytest",
+      "from fastapi import FastAPI, HTTPException",
+      "from fastapi.testclient import TestClient",
+      "from household_os.core.lifecycle_state import LifecycleState, enforce_boundary_state, parse_lifecycle_state"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_brief_evaluation.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from artifact_paths import artifact_read_path",
+      "from tests.evaluation.evaluation_runner import run_full_evaluation"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_event_mutation_stress.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from tests.simulation.stress_tests.runner import run_stress_scenarios",
+      "from tests.simulation.stress_tests.stability_metrics import compute_stability_metrics"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_event_replay_integrity.py",
+    "imports": [
+      "from __future__ import annotations",
+      "from datetime import UTC, datetime",
+      "from uuid import uuid4",
+      "import pytest",
+      "from household_os.core.lifecycle_state import LifecycleState",
+      "from household_os.runtime.domain_event import DomainEvent, LIFECYCLE_EVENT_TYPES",
+      "from household_os.runtime.state_reducer import replay_events"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_full_suite_integrity.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import os",
+      "import subprocess",
+      "import sys",
+      "import pytest"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_insight_bridge.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import ast",
+      "from pathlib import Path",
+      "from insights.insight_engine import InsightEngine",
+      "from insights.pattern_analyzer import detect_patterns"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_intelligence_analytics_dls.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import asyncio",
+      "from datetime import UTC, datetime, timedelta",
+      "from app.services.evaluation.analytics import EvaluationAnalyticsService, classify_system_mode",
+      "from app.services.evaluation.comparator import compute_dls"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": true,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_intelligence_routing_resilience.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from app.services.routing.intelligence_routing import IntelligenceRoutingService",
+      "from app.services.usage.limiter import LimitCheck, UsageSnapshot"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": true,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_intent_lock.py",
+    "imports": [
+      "import pytest",
+      "from assistant.governance.intent_lock import IntentLock, IntentType"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_life_state_model.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from datetime import UTC, datetime, timedelta",
+      "from pathlib import Path",
+      "from assistant.governance.intent_lock import IntentClassification, IntentType",
+      "from assistant.governance.intent_router import IntentRouter, RoutingCase",
+      "from assistant.state.life_state_model import LifeState, LifeStateModel"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_lifecycle_surface_consistency_guard.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import ast",
+      "from pathlib import Path"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_live_orchestration_simulation.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from tests.simulation.live_orchestration.engine import run_live_simulation"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_no_legacy_lifecycle_strings.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import ast",
+      "from pathlib import Path"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_no_raw_lifecycle_strings.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import ast",
+      "import pathlib"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_persistence_roundtrip_integrity.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from pathlib import Path",
+      "from household_os.core.household_state_graph import HouseholdStateGraphStore",
+      "from household_os.core.lifecycle_state import LifecycleState"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_policy_engine.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import ast",
+      "from pathlib import Path",
+      "from policy_engine.itinerary_generator import generate_daily_itinerary",
+      "from policy_engine.memory_store import PolicyMemoryStore",
+      "from policy_engine.policy_engine import PolicyRecommendationEngine"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_recommendation_humanization.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import re",
+      "from fastapi.testclient import TestClient",
+      "from app.main import app",
+      "from household_os.presentation.time_formatter import format_relative_datetime"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_root_ui_routing.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from fastapi.routing import APIRoute",
+      "from fastapi.testclient import TestClient",
+      "import app.main as main"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_sample_household_os_outputs.py",
+    "imports": [
+      "import pytest",
+      "import json",
+      "from fastapi.testclient import TestClient",
+      "from app.main import app"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/integration/test_ui_simulation_endpoints.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from fastapi.testclient import TestClient",
+      "from app.main import app"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/decision/test_decision_engine.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from dataclasses import dataclass",
+      "from archive.apps.api.integration_core.decision_engine import DecisionEngine"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/p1_verification/test_auth_lifecycle.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import uuid",
+      "from datetime import datetime, timedelta, timezone",
+      "import pytest",
+      "from archive.apps.api.auth.token_service import TokenService",
+      "from archive.apps.api.identity.repository import IdentityRepository",
+      "from tests.p1_verification.fixtures import TestFixtures, TestHousehold"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/p1_verification/test_chaos_concurrency.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import concurrent.futures",
+      "import threading",
+      "import uuid",
+      "from collections import defaultdict",
+      "import pytest",
+      "from archive.apps.api.core.database import SessionLocal",
+      "from archive.apps.api.identity.repository import IdentityRepository"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": true,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/p1_verification/test_e2e_integration.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import uuid",
+      "from dataclasses import dataclass",
+      "import pytest",
+      "from archive.apps.api.auth.token_service import TokenService",
+      "from archive.apps.api.llm.gateway import LLMGateway",
+      "from archive.apps.api.realtime.event_bus import InMemoryRealtimeEventBus",
+      "from archive.apps.api.services.idempotency_key_service import IdempotencyKeyService"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": true,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/p1_verification/test_event_bus_correctness.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import uuid",
+      "from collections import defaultdict",
+      "import pytest",
+      "from archive.apps.api.realtime.event_bus import InMemoryRealtimeEventBus, RealtimeEvent",
+      "from tests.p1_verification.fixtures import EventCapture, TestFixtures"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/p1_verification/test_idempotency_correctness.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import concurrent.futures",
+      "import threading",
+      "import uuid",
+      "from dataclasses import dataclass",
+      "import pytest",
+      "from archive.apps.api.services.idempotency_key_service import IdempotencyKeyService",
+      "from tests.p1_verification.fixtures import TestFixtures"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/p1_verification/test_llm_gateway_failures.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from archive.apps.api.llm.gateway import LLMGateway",
+      "from tests.p1_verification.fixtures import MockLLMProvider, TestFixtures"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": true,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_actor_type_enforcement.py",
+    "imports": [
+      "from __future__ import annotations",
+      "from pathlib import Path",
+      "from typing import Any",
+      "from uuid import uuid4",
+      "import pytest",
+      "from fastapi import FastAPI, Request",
+      "from fastapi.testclient import TestClient",
+      "from archive.apps.api.core.state_machine import ActionState, StateMachine, TransitionError"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_adapter_governance.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from archive.apps.api.ingestion.adapters.adapter_governance import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_asgi_admission.py",
+    "imports": [
+      "import pytest",
+      "from archive.apps.api.core.asgi_admission import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_assistant_core.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import ast",
+      "from pathlib import Path",
+      "from fastapi.testclient import TestClient",
+      "from app.main import app",
+      "from archive.apps.assistant_core.intent_parser import parse_intent",
+      "from archive.apps.assistant_core.meal_planner import plan_meal"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_assistant_runtime.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from copy import deepcopy",
+      "from fastapi.testclient import TestClient",
+      "from app.main import app",
+      "from archive.apps.api.integration_core.models.household_state import CalendarEvent, HouseholdState",
+      "from archive.apps.assistant_core.planning_engine import _fallback_household_state",
+      "from assistant.runtime.assistant_runtime import AssistantRuntimeEngine"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_assistant_runtime_router.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from pathlib import Path",
+      "from fastapi.testclient import TestClient",
+      "from app.main import app",
+      "from household_os.core.household_state_graph import HouseholdStateGraphStore",
+      "from household_os.core.lifecycle_state import LifecycleState",
+      "from household_os.presentation.lifecycle_presentation_mapper import LifecyclePresentationMapper"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_auth_realtime_guards.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from fastapi.testclient import TestClient",
+      "from starlette.requests import Request",
+      "from archive.apps.api.core.auth_middleware import _extract_request_token"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_auth_router.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import sqlite3",
+      "from datetime import datetime, timedelta, timezone",
+      "from types import SimpleNamespace",
+      "from fastapi.testclient import TestClient",
+      "from sqlalchemy.exc import IntegrityError",
+      "from app.main import app"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_backpressure_middleware.py",
+    "imports": [
+      "import pytest",
+      "from archive.apps.api.core.backpressure_middleware import _classify"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_behavior_feedback.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from pathlib import Path",
+      "from fastapi.testclient import TestClient",
+      "from app.main import app",
+      "from archive.apps.assistant_core.planning_engine import _fallback_household_state",
+      "from household_os.core.household_state_graph import HouseholdStateGraphStore",
+      "from household_os.core.lifecycle_state import LifecycleState"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_brief_builder.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from datetime import UTC, datetime, timedelta",
+      "from fastapi.testclient import TestClient",
+      "import app.main as main",
+      "from archive.apps.api.endpoints import brief_endpoint",
+      "from archive.apps.api.integration_core.brief_builder import BriefBuilder",
+      "from archive.apps.api.integration_core.decision_engine import DecisionEngine"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_brief_renderer_v1.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from copy import deepcopy",
+      "from typing import Any",
+      "from archive.apps.api.endpoints import brief_endpoint",
+      "from archive.apps.api.endpoints.brief_invariants_v1 import validate_brief_v1",
+      "from archive.apps.api.endpoints.brief_renderer_v1 import render_brief_v1"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_calendar_events_runtime.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from archive.apps.api.schemas.event import SystemEvent",
+      "from archive.apps.api.services import calendar_service"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_chat_events_runtime.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from archive.apps.api.schemas.event import SystemEvent",
+      "from archive.apps.api.product_surface import chat_gateway_service"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": true,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_col.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from dataclasses import FrozenInstanceError",
+      "from datetime import datetime",
+      "from typing import Any, Dict, List, Optional",
+      "from archive.apps.api.conversation_orchestration.schema import (",
+      "from archive.apps.api.conversation_orchestration.intent_refinement import (",
+      "from archive.apps.api.conversation_orchestration.state_machine import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_cqrs_lifecycle_invariants.py",
+    "imports": [
+      "import ast",
+      "import inspect",
+      "import re",
+      "from pathlib import Path",
+      "from typing import Any",
+      "import pytest",
+      "from archive.apps.api.core.state_machine import (",
+      "from household_os.presentation.lifecycle_presentation_mapper import LifecyclePresentationMapper"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_daily_loop_engine.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from copy import deepcopy",
+      "from datetime import datetime",
+      "from fastapi.testclient import TestClient",
+      "from app.main import app",
+      "from archive.apps.assistant_core import assistant_router",
+      "from archive.apps.assistant_core.planning_engine import _fallback_household_state"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_decision_engine.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from dataclasses import dataclass",
+      "from archive.apps.api.integration_core.decision_engine import DecisionEngine"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_decision_engine_integration.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from datetime import UTC, datetime",
+      "from archive.apps.api.integration_core.decision_engine import DecisionEngine",
+      "from archive.apps.api.integration_core.models.household_state import CalendarEvent, HouseholdState",
+      "from archive.apps.api.integration_core.orchestrator import Orchestrator"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_email_action_summary.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from datetime import UTC, datetime",
+      "import archive.apps.api.ingestion.email_action_summary as email_action_summary_module",
+      "from archive.apps.api.ingestion.email_action_summary import summarize_email_to_actions"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": true,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_email_priority_llm.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import json",
+      "import archive.apps.api.ingestion.email_priority_llm as email_priority_llm"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": true,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_email_service_actions.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from archive.apps.api.modules.email import email_service",
+      "from archive.apps.api.schemas.events.email_events import EmailReceivedEvent"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_env_bootstrap.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import importlib",
+      "import archive.apps.api.core.env_bootstrap as env_bootstrap",
+      "import archive.apps.api.integration_core.google_oauth_config as google_oauth_config",
+      "import archive.apps.api.core.env_bootstrap as env_bootstrap"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_evaluation_endpoints.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import subprocess",
+      "from fastapi.testclient import TestClient",
+      "import app.main as main",
+      "from archive.apps.api.endpoints import evaluation_router"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_event_adapter.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import copy",
+      "import pytest",
+      "from archive.apps.api.integration_core.event_adapter import adapt_external_events, external_event_to_os1_payload",
+      "from archive.apps.api.integration_core.normalization import ExternalEvent"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_event_windowing.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from datetime import UTC, datetime, timedelta",
+      "from archive.apps.api.integration_core.event_windowing import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_external_event_normalization.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from archive.apps.api.integration_core.normalization import normalize_provider_event, normalize_provider_events"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_feature_flags.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import os",
+      "import pytest",
+      "from archive.apps.api.integration_core.feature_flags import (",
+      "from archive.apps.api.integration_core.normalization import ExternalEvent",
+      "from archive.apps.api.integration_core.os1_bridge import _IdempotencyStore, ingest_external_events"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_frontend_runtime_contract.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from datetime import UTC, datetime",
+      "from archive.apps.api.product_surface.contracts import (",
+      "from archive.apps.api.product_surface.frontend_runtime import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_fsm_non_authority.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from archive.apps.api.core.state_machine import ActionState, validate_transition",
+      "from household_os.core.lifecycle_state import LifecycleState",
+      "from household_os.runtime.domain_event import DomainEvent, LIFECYCLE_EVENT_TYPES",
+      "from household_os.runtime.state_reducer import reduce_state"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_google_calendar_full_external_validation.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import os",
+      "import sys",
+      "import uuid",
+      "from dataclasses import asdict",
+      "from typing import Any",
+      "from unittest.mock import MagicMock",
+      "import pytest"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_google_calendar_integration_surface.py",
+    "imports": [
+      "from __future__ import annotations",
+      "from datetime import UTC, datetime, timedelta",
+      "import urllib.parse",
+      "from unittest.mock import MagicMock",
+      "import pytest",
+      "from fastapi.testclient import TestClient",
+      "from archive.apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential",
+      "from archive.apps.api.integration_core.google_oauth_config import GoogleOAuthClientConfig, OAuthStateStore"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_google_calendar_oauth.py",
+    "imports": [
+      "from __future__ import annotations",
+      "from datetime import UTC, datetime, timedelta",
+      "import urllib.parse",
+      "from unittest.mock import MagicMock",
+      "import pytest",
+      "from fastapi.testclient import TestClient",
+      "from archive.apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential",
+      "from archive.apps.api.integration_core.google_oauth_config import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_google_oauth_env_config.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import importlib",
+      "import urllib.parse",
+      "from datetime import UTC, datetime, timedelta",
+      "from unittest.mock import MagicMock",
+      "import pytest",
+      "from archive.apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential",
+      "from archive.apps.api.integration_core.google_calendar_provider import GoogleCalendarRealProvider"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_google_oauth_missing_config_safe_boot.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from fastapi.testclient import TestClient",
+      "from archive.apps.api.integration_core.credentials import InMemoryOAuthCredentialStore",
+      "from archive.apps.api.integration_core.google_calendar_provider import GoogleCalendarRealProvider",
+      "from archive.apps.api.integration_core.orchestrator import Orchestrator",
+      "from archive.apps.api.integration_core.state_builder import StateBuilder",
+      "import app.main as main"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_household_os.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from fastapi.testclient import TestClient",
+      "from app.main import app",
+      "from archive.apps.api.integration_core.models.household_state import CalendarEvent",
+      "from archive.apps.assistant_core.planning_engine import _fallback_household_state",
+      "from household_os.core.decision_engine import HouseholdOSDecisionEngine",
+      "from household_os.core.household_state_graph import HouseholdStateGraphStore"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_household_os_runtime.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from archive.apps.assistant_core.planning_engine import _fallback_household_state",
+      "from household_os.core.decision_engine import HouseholdOSDecisionEngine",
+      "from household_os.core.household_state_graph import HouseholdStateGraphStore",
+      "from household_os.core.lifecycle_state import LifecycleState",
+      "from household_os.runtime.action_pipeline import ActionPipeline",
+      "from household_os.runtime.daily_cycle import HouseholdDailyCycle"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_household_state.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from datetime import UTC, datetime, timedelta",
+      "from typing import Any",
+      "from archive.apps.api.integration_core.models.household_state import (",
+      "from archive.apps.api.integration_core.event_windowing import OrchestrationView",
+      "from archive.apps.api.integration_core.state_builder import StateBuilder"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_household_state_manager.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from fastapi.testclient import TestClient",
+      "from app.main import app",
+      "from archive.apps.api.integration_core.models.household_state import CalendarEvent",
+      "from archive.apps.assistant_core.planning_engine import _fallback_household_state",
+      "from assistant.runtime.assistant_runtime import AssistantRuntimeEngine"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_identity_events_runtime.py",
+    "imports": [
+      "from __future__ import annotations",
+      "from datetime import UTC, datetime, timedelta",
+      "import sqlite3",
+      "import pytest",
+      "from sqlalchemy.exc import OperationalError",
+      "from archive.apps.api.identity.sqlalchemy_repository import SQLAlchemyIdentityRepository",
+      "from archive.apps.api.schemas.event import SystemEvent",
+      "from archive.apps.api.identity import sqlalchemy_repository as repo_mod"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": true,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_identity_layer.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from datetime import UTC, datetime",
+      "from archive.apps.api.identity.sqlalchemy_repository import SQLAlchemyIdentityRepository",
+      "from archive.apps.api.identity.service import IdentityService",
+      "from archive.apps.api.identity.auth import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_ingestion_events_runtime.py",
+    "imports": [
+      "from __future__ import annotations",
+      "from dataclasses import dataclass, field",
+      "from datetime import datetime, timezone",
+      "import pytest",
+      "from archive.apps.api.ingestion.models import EmailValidationError, IngestionError",
+      "from archive.apps.api.ingestion import service as ingestion_service"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": true,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_ingestion_router.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from fastapi.testclient import TestClient",
+      "from archive.apps.api.ingestion.models import IngestionError",
+      "from app.main import app",
+      "import archive.apps.api.endpoints.ingestion_router as ingestion_router"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_integration_architecture_guard.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from archive.apps.api.integration_core.architecture_guard import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_integration_core.py",
+    "imports": [
+      "from __future__ import annotations",
+      "from dataclasses import dataclass",
+      "import pytest",
+      "from archive.apps.api.integration_core import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_integration_identity_system.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from uuid import UUID",
+      "from archive.apps.api.integration_core import IdentityService, InMemoryIdentityRepository"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_intent_contract.py",
+    "imports": [
+      "import pytest",
+      "from datetime import UTC, datetime, timedelta",
+      "from archive.apps.api.intent_contract.schema import (",
+      "from archive.apps.api.intent_contract.classifier import IntentClassifier",
+      "from archive.apps.api.intent_contract.validator import (",
+      "from archive.apps.api.intent_contract.action_planner import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_intent_resolver.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from archive.apps.api.intent_contract.schema import IntentType",
+      "from archive.apps.api.llm.intent_resolver import _coerce_intent_type"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": true,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_lifecycle_integrity_invariants.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from pathlib import Path",
+      "from archive.apps.api.core.state_machine import ActionState, validate_transition",
+      "from household_os.core.household_state_graph import HouseholdStateGraphStore",
+      "from household_os.core.lifecycle_state import LifecycleState",
+      "from household_os.runtime.domain_event import DomainEvent, LIFECYCLE_EVENT_TYPES",
+      "from household_os.runtime.state_reducer import reduce_state"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_manual_priority_adapter.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from archive.apps.api.ingestion.adapters.manual_priority import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_oauth_credential_store.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from datetime import datetime",
+      "from archive.apps.api.integration_core import InMemoryOAuthCredentialStore, OAuthCredential"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_operational_mode.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from fastapi.testclient import TestClient",
+      "from app.main import app",
+      "from archive.apps.api.endpoints import evaluation_router"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_outlook_calendar_provider.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from datetime import UTC, datetime, timedelta",
+      "from typing import Any",
+      "from archive.apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential",
+      "from archive.apps.api.integration_core.outlook_calendar_provider import OutlookCalendarProvider"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_output_governor.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from pathlib import Path",
+      "from fastapi.testclient import TestClient",
+      "from assistant.governance.output_governor import OutputGovernor",
+      "from app.main import app",
+      "from archive.apps.assistant_core.planning_engine import _fallback_household_state",
+      "from household_os.core.decision_engine import HouseholdOSDecisionEngine"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_pantry_router.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from copy import deepcopy",
+      "from fastapi import FastAPI",
+      "from fastapi.testclient import TestClient",
+      "import archive.apps.api.endpoints.pantry_router as pantry_router",
+      "from archive.apps.api.hpal.projection_builder import ProjectionBuilder"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_policy_guardrails.py",
+    "imports": [
+      "import pytest",
+      "from datetime import datetime",
+      "from archive.apps.api.intent_contract.schema import IntentType",
+      "from archive.apps.api.intent_contract.action_planner import ActionPlan, Action",
+      "from archive.apps.api.policy_engine.schema import (",
+      "from archive.apps.api.policy_engine.evaluator import PolicyEvaluator",
+      "from archive.apps.api.policy_engine.rules import PolicyRules, get_rule_summary"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_provider_email_adapter.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import base64",
+      "from archive.apps.api.ingestion.adapters.provider_email_adapter import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_provider_registry.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from archive.apps.api.integration_core import InMemoryOAuthCredentialStore, OAuthCredential, ProviderRegistry",
+      "from archive.apps.api.integration_core.providers import GmailProviderMock, GoogleCalendarProviderMock"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_recommendation_builder.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import re",
+      "from archive.apps.assistant_core.planning_engine import _fallback_household_state",
+      "from household_os.core.decision_engine import HouseholdOSDecisionEngine",
+      "from household_os.core.household_state_graph import HouseholdStateGraphStore",
+      "from household_os.presentation.recommendation_builder import RecommendationBuilder"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_security_verification_harness.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import uuid",
+      "from pathlib import Path",
+      "from typing import Any",
+      "from unittest.mock import MagicMock, patch, call",
+      "import pytest",
+      "from fastapi import FastAPI, Request",
+      "from fastapi.testclient import TestClient"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_single_pipeline_enforcement.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import ast",
+      "import importlib",
+      "import importlib.util",
+      "import os",
+      "from pathlib import Path",
+      "import pytest",
+      "from archive.apps.api.integration_core.architecture_guard import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_sse_canonical_only.py",
+    "imports": [
+      "from unittest.mock import MagicMock, patch, ANY",
+      "from datetime import UTC, datetime",
+      "import pytest",
+      "from archive.apps.api.realtime.broadcaster import HouseholdBroadcaster",
+      "from archive.apps.api.schemas.canonical_event import CanonicalEventEnvelope",
+      "from archive.apps.api.schemas.event import SystemEvent"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_state_builder_multi_provider.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from datetime import UTC, datetime, timedelta",
+      "from typing import Any",
+      "from archive.apps.api.integration_core.credentials import InMemoryOAuthCredentialStore, OAuthCredential",
+      "from archive.apps.api.integration_core.state_builder import StateBuilder"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_state_machine.py",
+    "imports": [
+      "import pytest",
+      "from datetime import UTC, datetime, timedelta",
+      "from archive.apps.api.core.state_machine import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_system_stability_lock.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import json",
+      "import time",
+      "from datetime import UTC, datetime",
+      "from typing import Any",
+      "from fastapi.testclient import TestClient",
+      "from sqlalchemy import text"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": true,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_task_service_events.py",
+    "imports": [
+      "import pytest",
+      "from unittest.mock import MagicMock, patch, call",
+      "from datetime import UTC, datetime",
+      "from archive.apps.api.services.task_service import update_task_metadata",
+      "from archive.apps.api.models.task import Task"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_time_normalization.py",
+    "imports": [
+      "from __future__ import annotations",
+      "from datetime import datetime, date",
+      "import pytest",
+      "from archive.apps.api.ingestion.adapters.time_normalizer import ("
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_trust_boundary_enforcement.py",
+    "imports": [
+      "from __future__ import annotations",
+      "from pathlib import Path",
+      "import sys",
+      "import types",
+      "import pytest",
+      "from archive.apps.api.core.state_machine import ActionState, StateMachine",
+      "from household_os.core.lifecycle_state import LifecycleState",
+      "from household_os.core.household_state_graph import HouseholdStateGraphStore"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": true,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_ui_bootstrap_router.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import re",
+      "from dataclasses import dataclass",
+      "from datetime import UTC, datetime",
+      "from fastapi.testclient import TestClient",
+      "import app.main as main",
+      "from archive.apps.api.endpoints import ui_bootstrap_router"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/legacy/test_unified_trust_boundary.py",
+    "imports": [
+      "from __future__ import annotations",
+      "from pathlib import Path",
+      "import pytest",
+      "from fastapi import FastAPI, Request",
+      "from fastapi.testclient import TestClient",
+      "from archive.apps.api.core.state_machine import ActionState",
+      "from household_os.core.execution_context import ExecutionContext",
+      "from household_os.core.household_state_graph import HouseholdStateGraphStore"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": true,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/legacy/test_xai_layer.py",
+    "imports": [
+      "from __future__ import annotations",
+      "from datetime import datetime",
+      "import pytest",
+      "from archive.apps.api.xai.causal_mapper import CausalContext, CausalMapper",
+      "from archive.apps.api.xai.schema import (",
+      "from archive.apps.api.xai.templates import TemplateEngine",
+      "from archive.apps.api.xai.validation import XAIValidator"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/system/test_architecture_suite.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from pathlib import Path",
+      "import re"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": true,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/system/test_event_sourcing.py",
+    "imports": [
+      "import pytest",
+      "from datetime import UTC, datetime, timedelta",
+      "from uuid import uuid4",
+      "from household_os.core.lifecycle_state import LifecycleState, parse_lifecycle_state",
+      "from household_os.runtime.domain_event import (",
+      "from household_os.runtime.event_store import (",
+      "from household_os.runtime.state_reducer import (",
+      "from household_os.runtime.command_handler import ("
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/system/test_event_store_invariants.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from household_os.core.lifecycle_state import LifecycleState",
+      "from household_os.runtime.domain_event import DomainEvent, LIFECYCLE_EVENT_TYPES",
+      "from household_os.runtime.event_store import EventStoreError, InMemoryEventStore",
+      "from household_os.runtime.state_reducer import StateReductionError, replay_events",
+      "from household_os.security.trust_boundary_enforcer import SecurityViolation, validate_replay_call",
+      "from household_os.runtime import event_store as event_store_module"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/system/test_intent_confidence_router.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from fastapi.testclient import TestClient",
+      "from assistant.governance.intent_lock import IntentClassification, IntentLock, IntentType",
+      "from assistant.governance.intent_router import (",
+      "from app.main import create_app"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/test_action_event_contracts.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import ast",
+      "import re",
+      "from pathlib import Path",
+      "import pytest",
+      "import yaml"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/test_fsm_immutability_enforcement.py",
+    "imports": [
+      "from __future__ import annotations",
+      "from copy import deepcopy",
+      "from pathlib import Path",
+      "import re",
+      "import pytest",
+      "from household_os.core.household_state_graph import HouseholdStateGraphStore",
+      "from household_os.core.lifecycle_state import LifecycleState, normalize_state",
+      "from household_os.runtime.domain_event import DomainEvent, LIFECYCLE_EVENT_TYPES"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/test_governance_gates.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from pathlib import Path"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/test_hard_freeze_regression.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import fnmatch",
+      "from pathlib import Path"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/test_invariance_enforcement.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import json",
+      "from pathlib import Path",
+      "from uuid import uuid4",
+      "from archive.apps.api.schemas.canonical_event import CanonicalEventEnvelope",
+      "from archive.apps.api.schemas.event import SystemEvent",
+      "from archive.apps.api.services.canonical_event_adapter import CanonicalEventAdapter"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/test_layer_redundancy_guard.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import os",
+      "from pathlib import Path"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/test_migration_cleanliness.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import asyncio",
+      "import gc",
+      "import json",
+      "import sqlite3",
+      "import warnings",
+      "from dataclasses import dataclass",
+      "from pathlib import Path"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/test_no_direct_broadcaster_bypass.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import ast",
+      "from pathlib import Path"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/test_sse_event_closure.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import json",
+      "from datetime import UTC, datetime",
+      "from pathlib import Path",
+      "import pytest",
+      "from archive.apps.api.realtime.broadcaster import HouseholdBroadcaster",
+      "from archive.apps.api.schemas.canonical_event import CanonicalEventEnvelope",
+      "from archive.apps.api.schemas.event import SystemEvent"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/test_static_silent_mutations.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "import ast",
+      "from dataclasses import dataclass",
+      "from pathlib import Path"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/test_trust_surface_closure.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import ast",
+      "import inspect",
+      "from dataclasses import dataclass, field",
+      "from pathlib import Path",
+      "import pytest",
+      "from archive.apps.api.core.state_machine import ActionState, StateMachine",
+      "from household_os.core.lifecycle_state import LifecycleState"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": true,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/test_trust_surface_final_closure.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import ast",
+      "import inspect",
+      "from dataclasses import dataclass",
+      "from pathlib import Path",
+      "import pytest",
+      "from archive.apps.api.core.state_machine import ActionState, StateMachine",
+      "from household_os.core.decision_engine import HouseholdOSDecisionEngine"
+    ],
+    "has_archive_import": true,
+    "has_apps_api_import": true,
+    "has_gateway_handle_request": true,
+    "has_event_log_terms": true,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": true
+  },
+  {
+    "path": "tests/test_ui_canonical_wiring_guard.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import pytest",
+      "from pathlib import Path"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": true,
+    "has_sleep": false,
+    "has_global_mutation": false
+  },
+  {
+    "path": "tests/unit/test_lifecycle_contract_boundary.py",
+    "imports": [
+      "from __future__ import annotations",
+      "import ast",
+      "from pathlib import Path",
+      "import pytest",
+      "from household_os.core.lifecycle_state import LifecycleState, parse_lifecycle_state",
+      "from household_os.presentation.lifecycle_presentation_mapper import LifecyclePresentationMapper"
+    ],
+    "has_archive_import": false,
+    "has_apps_api_import": false,
+    "has_gateway_handle_request": false,
+    "has_event_log_terms": false,
+    "has_llm_terms": false,
+    "has_provider_terms": false,
+    "has_sleep": false,
+    "has_global_mutation": false
+  }
+]

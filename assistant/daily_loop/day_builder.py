@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import UTC, date, datetime
 
 from assistant.contracts.assistant_plan import AssistantPlan as RuntimeAssistantPlan
 from assistant.contracts.assistant_plan import AssistantProposal, MergedConflict, RankedPlanItem
@@ -75,7 +75,7 @@ class DayBuilder:
             return reference_time[:10]
         for event in runtime_plan.state_snapshot.calendar_events:
             return event.start[:10]
-        return datetime.utcnow().date().isoformat()
+        return datetime.now(UTC).date().isoformat()
 
     def _ordered_proposals(self, runtime_plan: RuntimeAssistantPlan) -> list[AssistantProposal]:
         proposal_map = {proposal.proposal_id: proposal for proposal in runtime_plan.proposals}

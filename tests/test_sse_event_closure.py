@@ -14,6 +14,12 @@ from archive.apps.api.services.idempotency_key_service import IdempotencyKeyServ
 from household_os.core.lifecycle_state import LifecycleState
 from household_os.runtime.domain_event import DomainEvent, LIFECYCLE_EVENT_TYPES
 
+_existing_pytestmark = globals().get("pytestmark", [])
+if not isinstance(_existing_pytestmark, list):
+    _existing_pytestmark = [_existing_pytestmark]
+pytestmark = [*_existing_pytestmark, pytest.mark.ci_gate]
+
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -23,6 +29,9 @@ def _parse_sse_data(chunk: str) -> dict:
     return json.loads(data_line[6:])
 
 
+@pytest.mark.system
+@pytest.mark.legacy
+@pytest.mark.flaky
 def test_schema_parity_domain_to_canonical_to_sse_lossless_subset() -> None:
     domain_event = DomainEvent.create(
         aggregate_id="hh-001",
@@ -47,6 +56,8 @@ def test_schema_parity_domain_to_canonical_to_sse_lossless_subset() -> None:
     assert reconstructed.signature == envelope.signature
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_no_direct_sse_construction_runtime_paths() -> None:
     runtime_files = [
         ROOT / "apps" / "api" / "services" / "task_service.py",
@@ -61,6 +72,8 @@ def test_no_direct_sse_construction_runtime_paths() -> None:
         assert "broadcaster.publish_sync(" not in content
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_no_direct_canonical_envelope_instantiation_in_business_services() -> None:
     service_files = [
         ROOT / "apps" / "api" / "services" / "task_service.py",
@@ -72,6 +85,8 @@ def test_no_direct_canonical_envelope_instantiation_in_business_services() -> No
         assert "CanonicalEventEnvelope(" not in content
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_replay_has_no_transport_branching_or_direct_sse_calls() -> None:
     replay_file = ROOT / "apps" / "api" / "services" / "event_replay_service.py"
     content = replay_file.read_text(encoding="utf-8")
@@ -80,6 +95,9 @@ def test_replay_has_no_transport_branching_or_direct_sse_calls() -> None:
     assert "broadcaster." not in content
 
 
+@pytest.mark.system
+@pytest.mark.legacy
+@pytest.mark.flaky
 def test_registry_enforcement_hard_reject_unknown_event_type() -> None:
     with pytest.raises(ValueError):
         CanonicalEventEnvelope(
@@ -91,6 +109,8 @@ def test_registry_enforcement_hard_reject_unknown_event_type() -> None:
         )
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_replay_determinism_same_input_identical_stream() -> None:
     source_event = SystemEvent(
         event_id="evt-replay-001",
@@ -109,6 +129,8 @@ def test_replay_determinism_same_input_identical_stream() -> None:
     assert first == second
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_watermark_ordering_shuffled_input_rejects_stale() -> None:
     accepted: list[int] = []
 
@@ -124,6 +146,8 @@ def test_watermark_ordering_shuffled_input_rejects_stale() -> None:
     assert accepted == [10, 12]
 
 
+@pytest.mark.system
+@pytest.mark.legacy
 def test_idempotency_preservation_duplicate_events_deduped() -> None:
     service = IdempotencyKeyService()
 

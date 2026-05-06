@@ -6,14 +6,13 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic import PrivateAttr
 
-from archive.apps.api.core.state_machine import (
+from household_os.runtime.state_machine import (
     ActionState,
     StateMachine,
     TransitionError,
     validate_state_before_persist,
     validate_transition,
 )
-from archive.apps.api.observability.eil.tracer import trace_function
 from household_os.core.contracts import HouseholdOSRunResponse
 from household_os.core.execution_context import ExecutionContext
 from household_os.core.lifecycle_state import (
@@ -27,8 +26,14 @@ from household_os.runtime.lifecycle_firewall import enforce_lifecycle_integrity
 from household_os.runtime.state_firewall import FIREWALL
 from household_os.runtime.state_proxy import StateProxy
 from household_os.runtime.state_reducer import StateReductionError, reduce_state
+from household_os.runtime.tracing import trace_function
 from household_os.runtime.trigger_detector import RuntimeTrigger
-from household_os.security.trust_boundary_enforcer import enforce_import_boundary, validate_forbidden_call
+from household_os.security.trust_boundary_enforcer import (
+    SecurityViolation,
+    enforce_import_boundary,
+    is_test_bypass_allowed,
+    validate_forbidden_call,
+)
 
 
 enforce_import_boundary("household_os.runtime.action_pipeline")
@@ -122,12 +127,17 @@ class ActionPipeline:
     def _require_internal_gate(self, internal_token: object | None) -> None:
         for frame_info in inspect.stack()[2:]:
             module_name = str(frame_info.frame.f_globals.get("__name__", ""))
-            if module_name.startswith("tests."):
+            if is_test_bypass_allowed(module_name):
                 return
+        surface = f"ActionPipeline.{inspect.stack()[1].function}"
         if self._internal_gate_token is None:
-            raise PermissionError("ActionPipeline internal gate token not configured")
+            raise SecurityViolation(
+                f"Forbidden call blocked: {surface}. Direct pipeline execution is forbidden; internal gate token not configured"
+            )
         if internal_token is not self._internal_gate_token:
-            raise PermissionError("Direct pipeline execution is forbidden; use orchestrator.handle_request")
+            raise SecurityViolation(
+                f"Forbidden call blocked: {surface}. Direct pipeline execution is forbidden; use orchestrator.handle_request"
+            )
 
     def _get_derived_state(self, action_id: str, fallback_state: LifecycleState | None = None) -> LifecycleState | None:
         """

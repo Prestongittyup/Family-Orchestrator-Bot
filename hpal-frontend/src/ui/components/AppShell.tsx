@@ -18,6 +18,7 @@ const GOOGLE_CONNECTED_USER_STORAGE_KEY = "hpal-google-user-id";
 const GOOGLE_CONNECTED_HOUSEHOLD_STORAGE_KEY = "hpal-google-household-id";
 const HOUSEHOLD_NAME_STORAGE_KEY = "hpal-household-name";
 const INBOX_SYNC_MAX_RESULTS = 100;
+const SHADOW_INTEGRATION_ENDPOINTS_ENABLED = false;
 
 type InboxSyncStatusPayload = {
   status: "syncing" | "success" | "failed";
@@ -211,6 +212,12 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   }, [activeHouseholdName, resolvedHouseholdId]);
 
   useEffect(() => {
+    if (!SHADOW_INTEGRATION_ENDPOINTS_ENABLED) {
+      setGoogleStatus("not_connected");
+      hasTriggeredConnectedReconcileRef.current = false;
+      return;
+    }
+
     let isCancelled = false;
 
     const fetchGoogleStatus = async () => {
@@ -227,6 +234,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         for (const candidateUserId of statusCandidateUserIds) {
           let payload: GoogleCalendarStatusResponse | null = null;
           for (let attempt = 0; attempt < 3; attempt += 1) {
+            // TODO: REMOVE_SHADOW_ENDPOINT
             const response = await fetchWithApiFallback(
               `/integrations/google-calendar/status/${encodeURIComponent(candidateUserId)}`,
               { method: "GET" },
@@ -287,6 +295,11 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   }, [statusCandidateKey, resolvedHouseholdId, forceReconcile]);
 
   const onConnectGoogle = () => {
+    if (!SHADOW_INTEGRATION_ENDPOINTS_ENABLED) {
+      setPostConnectSyncError("Google connect is disabled in canonical mode.");
+      return;
+    }
+
     if (!connectUserIdCandidate) {
       setPostConnectSyncError("Unable to resolve your account identity yet. Refresh once and try again.");
       return;
@@ -299,12 +312,21 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       params.set("household_id", resolvedHouseholdId);
     }
     const query = params.toString();
+    // TODO: REMOVE_SHADOW_ENDPOINT
     window.location.href = buildApiUrl(
       `/integrations/google-calendar/connect/${encodedUserId}${query ? `?${query}` : ""}`,
     );
   };
 
   useEffect(() => {
+    if (!SHADOW_INTEGRATION_ENDPOINTS_ENABLED) {
+      hasTriggeredPostConnectSyncRef.current = false;
+      if (callbackStatus === "integration_successful") {
+        setPostConnectSyncError("Google post-connect sync is disabled in canonical mode.");
+      }
+      return;
+    }
+
     const syncCandidateUserIds = Array.from(
       new Set([callbackUserId, activeUserId, linkedGoogleUserForHousehold].filter((value): value is string => Boolean(value))),
     );
@@ -356,6 +378,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
         let connectedUserId: string | null = null;
         for (const candidateUserId of syncCandidateUserIds) {
+          // TODO: REMOVE_SHADOW_ENDPOINT
           const statusResponse = await requestWith429Retry(
             `/integrations/google-calendar/status/${encodeURIComponent(candidateUserId)}`,
             { method: "GET" },
@@ -386,6 +409,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           household_id: syncHouseholdId,
           max_results: String(INBOX_SYNC_MAX_RESULTS),
         });
+        // TODO: REMOVE_SHADOW_ENDPOINT
         const response = await requestWith429Retry(
           `/integrations/google-email/sync/${encodeURIComponent(connectedUserId)}?${params.toString()}`,
           { method: "POST" },
@@ -543,6 +567,9 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           </NavLink>
           <NavLink to="/calendar" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
             Calendar
+          </NavLink>
+          <NavLink to="/analytics" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
+            Analytics
           </NavLink>
           <NavLink to="/inbox" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
             Inbox

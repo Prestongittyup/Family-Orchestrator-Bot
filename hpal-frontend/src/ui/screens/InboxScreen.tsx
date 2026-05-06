@@ -243,6 +243,22 @@ const describeCalendarAddOutcome = (addedCount: number, skippedCount: number): s
   return parts.length > 0 ? `${parts.join(", ")}.` : "No calendar events were added.";
 };
 
+const quickActionLabelForItem = (item: EnrichedEmailDebriefItem): string => {
+  const actionItemCount = parseSignalCount(item.notification.message, "action item");
+  const calendarCandidateCount = parseSignalCount(item.notification.message, "calendar candidate");
+
+  if (calendarCandidateCount > 0 && actionItemCount === 0) {
+    return "Add all to calendar";
+  }
+  if (actionItemCount > 0 && calendarCandidateCount === 0) {
+    return "Generate tasks";
+  }
+  if (actionItemCount > 0 && calendarCandidateCount > 0) {
+    return "Apply actions";
+  }
+  return "Review details";
+};
+
 const formatDateTime = (value: string | undefined): string => {
   const raw = (value || "").trim();
   if (!raw) {
@@ -887,9 +903,17 @@ export const InboxScreen: React.FC = () => {
       setSelectedEmailDetail(detail);
       setSelectedCalendarCandidateIndexes(targetIndexes);
 
+      const hasTaskSignals = detail.action_items.length > 0 || detail.triage_decision === "task";
+
       if (targetIndexes.length === 0) {
-        setCalendarActionMessage(null);
-        setCalendarActionError("No calendar candidates were extracted for this email.");
+        if (hasTaskSignals) {
+          openTaskWorkflowForDetail(detail);
+          setCalendarActionMessage("Opened task workflow from extracted action items.");
+          setCalendarActionError(null);
+        } else {
+          setCalendarActionMessage(null);
+          setCalendarActionError("No calendar candidates were extracted for this email.");
+        }
         return;
       }
 
@@ -953,13 +977,9 @@ export const InboxScreen: React.FC = () => {
     );
   };
 
-  const onGenerateTaskWorkflow = () => {
-    if (!selectedEmailDetail) {
-      return;
-    }
-
-    const actionLines = selectedEmailDetail.action_items.length > 0
-      ? selectedEmailDetail.action_items
+  const openTaskWorkflowForDetail = (detail: EmailDetail) => {
+    const actionLines = detail.action_items.length > 0
+      ? detail.action_items
           .map((item, index) => {
             const due = formatOptionalDateTime(item.due_hint_local || item.due_hint || null);
             return `${index + 1}. ${item.title}${due ? ` (due hint: ${due})` : ""}`;
@@ -969,12 +989,29 @@ export const InboxScreen: React.FC = () => {
 
     openAssistantWorkflow(
       `Use this email debrief to create tasks and reminders.\n` +
-      `Subject: ${selectedEmailDetail.subject}\n` +
-      `Summary: ${selectedEmailDetail.summary}\n` +
+      `Subject: ${detail.subject}\n` +
+      `Summary: ${detail.summary}\n` +
       `Action items:\n${actionLines}\n\n` +
       `Please: (1) turn required items into tasks, (2) suggest reminder timing, (3) ask if Friday/weekend purchase reminders should be created, ` +
       `and (4) ask whether purchase tasks should be placed in free calendar windows.`,
     );
+  };
+
+  const onGenerateTaskWorkflow = () => {
+    if (!selectedEmailDetail) {
+      return;
+    }
+
+    openTaskWorkflowForDetail(selectedEmailDetail);
+  };
+
+  const onQuickApplyEmailAction = async (item: InboxDebriefRow) => {
+    const emailId = (item.emailId || "").trim();
+    if (!emailId) {
+      return;
+    }
+
+    await onQuickAddAllToCalendar(emailId);
   };
 
   const onSyncInbox = async () => {
@@ -1487,9 +1524,9 @@ export const InboxScreen: React.FC = () => {
                                 type="button"
                                 className="dashboard-detail-button"
                                 disabled={calendarActionLoading}
-                                onClick={() => void onQuickAddAllToCalendar(emailId)}
+                                onClick={() => void onQuickApplyEmailAction(item)}
                               >
-                                {calendarActionLoading && selectedEmailId === emailId ? "Adding..." : "Add all to calendar"}
+                                {calendarActionLoading && selectedEmailId === emailId ? "Applying..." : quickActionLabelForItem(item)}
                               </button>
                             </>
                           ) : null}

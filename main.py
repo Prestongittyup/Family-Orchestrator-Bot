@@ -1,3 +1,9 @@
-from archive.apps.api.main import app, create_app
+"""Deprecated root runtime shim.
 
-__all__ = ["app", "create_app"]
+Production backend entrypoint is app.main:app.
+This module intentionally does not expose app objects.
+"""
+
+CANONICAL_ASGI_TARGET = "app.main:app"
+
+__all__ = ["CANONICAL_ASGI_TARGET"]

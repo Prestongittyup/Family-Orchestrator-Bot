@@ -1,0 +1,43 @@
+{
+  "run_id": "replay_concurrent_no_failures",
+  "generated_at": "2026-04-29T19:19:55.177510",
+  "run1_explanation_count": 15,
+  "run2_explanation_count": 15,
+  "added_ids": [
+    "07e1fb1d-fc91-5e6e-96ab-c16b73683258",
+    "0d7dd669-fb38-552e-b43c-d3e157118bc2",
+    "1bca148d-2147-5f9f-bfba-7cd8b69da986",
+    "32e416f1-aef6-543a-a9e1-d0fc17150670",
+    "3bef5d2f-d017-5113-9477-2a02a051a1c0",
+    "3c38efd8-d168-5095-84bb-47943446af42",
+    "4737ece0-d17b-5f8e-863e-2cf6644474e2",
+    "563032fa-3abf-57b9-9ffc-966df0535005",
+    "6171bc81-2088-5faa-bb6e-d104a51e1403",
+    "6ff15ae0-e71b-5072-8473-f52b1816c5ca",
+    "7e95e0cd-d53b-5813-a395-49b91fbbe548",
+    "84ece769-7a26-500c-a99a-5e85e9092b9c",
+    "8b24cea8-1794-5d4f-a975-6d151710efc8",
+    "b885aadd-a3c7-5aaf-89d4-c42fb37e6f31",
+    "f1551ee1-54e6-5aab-bbd0-62bb86c98f5d"
+  ],
+  "removed_ids": [
+    "04323d5f-76fd-517c-b062-29c617bc8b2d",
+    "0cc4ba1b-40e7-5d1b-ace1-e81253392a5f",
+    "140d7a40-15cb-59e5-bb27-b7a364fb441e",
+    "17320749-ebdb-561d-a11c-6ec4c3a52f04",
+    "27b6c643-86b8-5061-b713-6fb1ecd34a09",
+    "4997708f-61f5-598e-9d71-b7d24fda6803",
+    "55c2c370-2a57-593d-b519-660f0c11f663",
+    "6e2e1360-158a-51b6-a993-bad47fda4adb",
+    "6fd7dd2e-f233-5c05-8de3-05fff81e16f6",
+    "7859d0c3-ba0f-5419-b4f7-7dfde926ffd8",
+    "859776c6-62b5-568e-98e8-844a59e23fb4",
+    "b0e06d62-cf1f-591e-9277-406688176ef2",
+    "d925f2b0-0d93-51ab-b5ea-4b93b5a2476c",
+    "e2288fb5-d39d-502a-8888-afa95b9985bf",
+    "efab6d03-250a-5a34-8985-096dc1d8f2ed"
+  ],
+  "text_diffs": [],
+  "deterministic": false,
+  "pass": false
+}

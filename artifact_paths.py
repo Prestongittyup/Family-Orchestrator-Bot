@@ -3,7 +3,9 @@ from __future__ import annotations
 from pathlib import Path
 
 _REPO_ROOT = Path(__file__).resolve().parent
+_CANONICAL_WRITE_DIR = _REPO_ROOT / "verification_reports" / "root_artifacts" / "reports"
 _FALLBACK_READ_DIRS: tuple[Path, ...] = (
+    _CANONICAL_WRITE_DIR,
     _REPO_ROOT,
     _REPO_ROOT / "verification_reports" / "root_artifacts" / "reports",
     _REPO_ROOT / "verification_reports",
@@ -18,13 +20,13 @@ def _normalize_file_name(file_name: str | Path) -> Path:
 
 
 def artifact_write_path(file_name: str | Path) -> Path:
-    """Return canonical write target for generated artifacts inside the repo root."""
+    """Return canonical write target for generated artifacts under verification_reports/root_artifacts/reports."""
     normalized = _normalize_file_name(file_name)
     if normalized.is_absolute():
         normalized.parent.mkdir(parents=True, exist_ok=True)
         return normalized
 
-    target = _REPO_ROOT / normalized
+    target = _CANONICAL_WRITE_DIR / normalized
     target.parent.mkdir(parents=True, exist_ok=True)
     return target
 

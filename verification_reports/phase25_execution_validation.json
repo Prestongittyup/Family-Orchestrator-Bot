@@ -1,0 +1,32 @@
+{
+  "command_path_established": true,
+  "event_log_is_source_of_truth": false,
+  "llm_gateway_enforced": false,
+  "direct_provider_calls_remaining": [
+    "archive/apps/api/llm/provider.py",
+    "archive/apps/api/ingestion/email_priority_llm.py"
+  ],
+  "parallel_state_systems_removed": false,
+  "household_os_integrated": false,
+  "projection_integrity_enforced": true,
+  "tests_status": {
+    "updated": true,
+    "passing": false,
+    "remaining_failures": [
+      "Task shell: pytest-architecture points to missing file tests/test_architecture_suite.py",
+      "Legacy/parallel household_os graph persistence still present and not fully replaced by event-log replay"
+    ]
+  },
+  "architecture_violations_remaining": [
+    "household_os/core/household_state_graph.py persists JSON graph data to data/household_os_state_graph.json",
+    "household_os/runtime/orchestrator.py and household_os/runtime/action_pipeline.py still rely on archive imports",
+    "household_os/runtime/state_reducer.py and household_os/runtime/state_firewall.py still import archive state machine modules",
+    "integration_core package remains archive-bound wrapper layer"
+  ],
+  "next_blockers": [
+    "Migrate household_os/core/household_state_graph.py from file persistence to event-log-derived projections only",
+    "Remove archive dependencies from household_os runtime/core modules and replace with canonical app-layer contracts",
+    "Retire direct archive LLM provider modules or route them through app/services/llm_gateway/gateway.py",
+    "Update or replace shell: pytest-architecture task to point at existing architecture test files"
+  ]
+}

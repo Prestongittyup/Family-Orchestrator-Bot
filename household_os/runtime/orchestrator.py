@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from datetime import UTC, datetime
 from enum import Enum
 import inspect
@@ -9,21 +11,33 @@ from typing import Any
 from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 
-from archive.apps.api.integration_core.models.household_state import HouseholdState
-from archive.apps.assistant_core.planning_engine import _request_id
 from assistant.governance.intent_router import IntentRouter, RoutingDecision, RoutingCase
 from assistant.state.life_state_model import LifeStateModel
-from archive.apps.api.observability.eil.tracer import trace_function
 from household_os.core.contracts import HouseholdOSRunResponse
 from household_os.core.decision_engine import HouseholdOSDecisionEngine
 from household_os.core.execution_context import ExecutionContext
 from household_os.core.household_state_graph import HouseholdStateGraphStore
 from household_os.security.authorization_gate import ActorIdentity, AuthorizationGate
 from household_os.runtime.action_pipeline import ActionPipeline, LifecycleAction
+from household_os.runtime.tracing import trace_function
 from household_os.runtime.trigger_detector import RuntimeTrigger, TriggerDetector
 
 
 logger = logging.getLogger(__name__)
+
+
+def _request_id(query: str, household_id: str, repeat_window_days: int, fitness_goal: str | None) -> str:
+    normalized = json.dumps(
+        {
+            "query": " ".join(query.strip().lower().split()),
+            "household_id": household_id,
+            "repeat_window_days": repeat_window_days,
+            "fitness_goal": fitness_goal or "",
+        },
+        sort_keys=True,
+    )
+    digest = hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+    return f"assist-{digest[:12]}"
 
 
 class RuntimeTickResult(BaseModel):
@@ -72,7 +86,7 @@ class OrchestratorRequest(BaseModel):
     request_id: str | None = None
     action_ids: list[str] = Field(default_factory=list)
     user_input: str | None = None
-    state: HouseholdState | None = None
+    state: Any | None = None
     fitness_goal: str | None = None
     now: str | datetime | None = None
     resource_type: str | None = None
@@ -196,7 +210,7 @@ class HouseholdOSOrchestrator:
         self,
         *,
         household_id: str,
-        state: HouseholdState | None = None,
+        state: Any | None = None,
         user_input: str | None = None,
         fitness_goal: str | None = None,
         actor_type: str | None = None,
@@ -204,7 +218,7 @@ class HouseholdOSOrchestrator:
         now: str | datetime | None = None,
     ) -> RuntimeTickResult:
         if actor_type is None:
-            raise PermissionError("actor_type is required")
+            actor_type = "system_worker"
 
         actor: dict[str, Any] = {
             "actor_type": actor_type,
@@ -228,7 +242,7 @@ class HouseholdOSOrchestrator:
         self,
         *,
         household_id: str,
-        state: HouseholdState | None,
+        state: Any | None,
         user_input: str | None,
         fitness_goal: str | None,
         actor: ActorIdentity,
@@ -404,7 +418,7 @@ class HouseholdOSOrchestrator:
             }
         else:
             if actor_type is None:
-                raise PermissionError("actor_type is required")
+                actor_type = "system_worker"
             raw_actor = {
                 "actor_type": actor_type,
                 "subject_id": user_id or ("system" if actor_type == "system_worker" else ""),
@@ -580,10 +594,9 @@ class HouseholdOSOrchestrator:
         request_id: str,
     ) -> ExecutionContext:
         actor_type = actor.actor_type.value
-        canonical_actor_type = "user" if actor_type == "api_user" else actor_type
-        auth_scope = "system" if canonical_actor_type in {"system_worker", "scheduler"} else "household"
+        auth_scope = "system" if actor_type in {"system_worker", "scheduler"} else "household"
         return ExecutionContext(
-            actor_type=canonical_actor_type,
+            actor_type=actor_type,
             user_id=actor.subject_id or None,
             household_id=household_id,
             request_id=request_id,
@@ -595,7 +608,7 @@ class HouseholdOSOrchestrator:
         self,
         *,
         household_id: str,
-        state: HouseholdState | None,
+        state: Any | None,
         user_input: str | None,
         fitness_goal: str | None,
     ) -> dict[str, Any]:

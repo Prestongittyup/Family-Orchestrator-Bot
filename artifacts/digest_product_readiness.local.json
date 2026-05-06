@@ -1,0 +1,17 @@
+{
+  "does_home_tell_user_what_to_do_right_now": {
+    "answer": "Yes, materially better than baseline.",
+    "evidence": "Decision-first ordering and digest summary now foreground blocking decisions and immediate attention items.",
+    "status": "PASS_WITH_MINOR_GAPS"
+  },
+  "does_it_feel_like_a_daily_digest": {
+    "answer": "Yes, significantly more digest-like.",
+    "evidence": "Summary includes time framing and change awareness, with deterministic merge of actions/calendar/decisions into canonical root keys.",
+    "status": "PASS"
+  },
+  "does_system_react_to_new_inputs": {
+    "answer": "Yes.",
+    "evidence": "POST /ingest/message produces household_message_ingested and household_item_promoted, and promoted artifacts appear in replay + /home refresh flows.",
+    "status": "PASS"
+  }
+}

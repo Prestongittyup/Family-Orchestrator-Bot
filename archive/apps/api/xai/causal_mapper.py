@@ -37,7 +37,7 @@ from __future__ import annotations
 import hashlib
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from archive.apps.api.xai.schema import (
@@ -51,6 +51,10 @@ from archive.apps.api.xai.schema import (
 from archive.apps.api.xai.templates import TemplateEngine
 
 _ENGINE = TemplateEngine()
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 # ---------------------------------------------------------------------------
@@ -341,7 +345,7 @@ class CausalMapper:
         change_type, trigger_type, reason_code = self._resolve(ctx)
 
         explanation_id = self._derive_id(ctx.idempotency_key)
-        timestamp = ctx.timestamp or datetime.utcnow()
+        timestamp = ctx.timestamp or _utcnow()
 
         explanation_text = _ENGINE.render(
             reason_code=reason_code,

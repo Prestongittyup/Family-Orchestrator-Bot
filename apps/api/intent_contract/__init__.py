@@ -1,0 +1,1 @@
+"""Intent contract namespace placeholder."""

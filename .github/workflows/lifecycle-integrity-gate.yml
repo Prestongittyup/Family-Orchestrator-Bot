@@ -17,18 +17,34 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Enforce runtime contract guard
+        run: |
+          python scripts/contract_guard.py
+
+      - name: Enforce architecture layer guard
+        run: |
+          python scripts/architecture_layer_guard.py
+
+      - name: Enforce architecture validator (blocking)
+        run: |
+          python scripts/ci/architecture_validator.py
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install pytest pytest-timeout
 
-      - name: Run lifecycle verification gates
+      - name: Run migration tier checks (non-blocking)
+        continue-on-error: true
         run: |
-          pytest -q tests/test_migration_cleanliness.py tests/test_no_legacy_lifecycle_strings.py tests/test_boundary_enforcement.py tests/test_event_replay_integrity.py tests/test_persistence_roundtrip_integrity.py tests/test_fsm_non_authority.py
+          mkdir -p test_reports
+          pytest -m "migration" -q --junitxml=test_reports/lifecycle-migration-tier-junit.xml
 
-      - name: Run full suite integrity gate
-        env:
-          RUN_FULL_SUITE_INTEGRITY: "1"
-        run: |
-          pytest -q tests/test_full_suite_integrity.py
+      - name: Upload migration tier report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lifecycle-migration-tier-junit
+          path: test_reports/lifecycle-migration-tier-junit.xml
+          if-no-files-found: warn

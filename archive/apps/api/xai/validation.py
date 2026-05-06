@@ -20,13 +20,17 @@ Usage::
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from archive.apps.api.xai.causal_mapper import CausalContext, CausalMapper
 from archive.apps.api.xai.schema import ExplanationSchema
 from archive.apps.api.xai.store import ExplanationStore
 from archive.apps.api.xai.templates import TemplateEngine
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 @dataclass
@@ -149,7 +153,7 @@ class XAIValidator:
 
         return ValidationReport(
             family_id=family_id,
-            checked_at=datetime.utcnow(),
+            checked_at=_utcnow(),
             total_checked=len(contexts) * num_replays,
             failures=failures,
         )
@@ -207,7 +211,7 @@ class XAIValidator:
 
         return ValidationReport(
             family_id=family_id,
-            checked_at=datetime.utcnow(),
+            checked_at=_utcnow(),
             total_checked=len(explanations),
             failures=failures,
         )
@@ -243,7 +247,7 @@ class XAIValidator:
 
         return ValidationReport(
             family_id=expected_family_id,
-            checked_at=datetime.utcnow(),
+            checked_at=_utcnow(),
             total_checked=len(explanations),
             failures=failures,
         )
@@ -286,7 +290,7 @@ class XAIValidator:
 
         return ValidationReport(
             family_id=family_id,
-            checked_at=datetime.utcnow(),
+            checked_at=_utcnow(),
             total_checked=len(contexts),
             failures=failures,
         )
@@ -329,7 +333,7 @@ class XAIValidator:
 
         return ValidationReport(
             family_id=family_id,
-            checked_at=datetime.utcnow(),
+            checked_at=_utcnow(),
             total_checked=len(explanations),
             failures=failures,
         )
@@ -363,7 +367,7 @@ class XAIValidator:
 
         return ValidationReport(
             family_id=family_id,
-            checked_at=datetime.utcnow(),
+            checked_at=_utcnow(),
             total_checked=total_checked,
             failures=all_failures,
         )

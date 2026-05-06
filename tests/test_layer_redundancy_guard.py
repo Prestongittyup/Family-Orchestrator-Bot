@@ -1,7 +1,14 @@
 from __future__ import annotations
+import pytest
 
 import os
 from pathlib import Path
+
+_existing_pytestmark = globals().get("pytestmark", [])
+if not isinstance(_existing_pytestmark, list):
+    _existing_pytestmark = [_existing_pytestmark]
+pytestmark = [*_existing_pytestmark, pytest.mark.ci_gate]
+
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,12 +31,14 @@ INTEGRATION_CORE_FACADE_EXPECTED = {
 }
 
 
+@pytest.mark.integration
 def test_canonical_layer_directories_exist() -> None:
     for directory in CANONICAL_LAYER_DIRS:
         assert directory.exists(), f"Missing canonical layer folder: {directory}"
         assert directory.is_dir(), f"Expected folder but found non-directory path: {directory}"
 
 
+@pytest.mark.integration
 def test_integration_core_facade_is_thin_reexport_only() -> None:
     facade_root = ROOT / "integration_core"
 
@@ -44,6 +53,7 @@ def test_integration_core_facade_is_thin_reexport_only() -> None:
         )
 
 
+@pytest.mark.integration
 def test_integration_core_canonical_files_not_duplicated_in_other_integration_core_folders() -> None:
     canonical_files = {
         "orchestrator.py",
@@ -67,6 +77,7 @@ def test_integration_core_canonical_files_not_duplicated_in_other_integration_co
         "__pycache__",
         ".pytest_cache",
         "node_modules",
+        "archive",
     }
 
     duplicates: list[Path] = []
