@@ -1,0 +1,9 @@
+# runtime secrets / oauth
+data/runtime/oauth/
+
+# credentials and tokens
+*.token
+*.credentials
+*.json
+
+# but be careful: we will re-allow non-sensitive json later if needed
